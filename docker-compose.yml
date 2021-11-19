@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  communication:
+    build:
+      context: ./communication
+      dockerfile: Dockerfile
+    ports:
+      - 3002:3002
+    volumes:
+      - ./communication:/home/node/app/communication
