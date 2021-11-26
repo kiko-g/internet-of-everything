@@ -1,7 +1,7 @@
 # Dependency directories
 node_modules
 jspm_packages
-**/node_modules/**
+**/node_modules/**  
 
 # Dependency files
 # package-lock.json
@@ -11,6 +11,8 @@ jspm_packages
 public
 .cache
 **/.cache
+
+*\build
 
 # Config
 .prettierignore
@@ -83,3 +85,7 @@ yarn-error.log
 
 # Yarn Integrity file
 .yarn-integrity
+*.bin
+*.lock
+*.properties
+*.jar
