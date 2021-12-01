@@ -18,11 +18,9 @@ public abstract class MachineSensor {
         this.brokerURI = "tcp://localhost:1883";
         this.publisherId = UUID.randomUUID().toString();
         this.topic = topic;
-
-        this.init();
     }
 
-    private void init(){
+    protected void init(){
         try {
             System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
 
@@ -35,7 +33,7 @@ public abstract class MachineSensor {
             executor.scheduleWithFixedDelay(new Thread(() -> this.publish()), 0, 1500, TimeUnit.MILLISECONDS);
 
         } catch (MqttException e) {
-            System.out.println("Error connecting to MQTT Broker at " + brokerURI + " - " + e);
+            System.err.println("Error connecting to MQTT Broker at " + brokerURI + " - " + e);
         }
     }
 
@@ -43,12 +41,13 @@ public abstract class MachineSensor {
         MqttConnectOptions mqttOptions = new MqttConnectOptions();
         mqttOptions.setCleanSession(true);
         mqttOptions.setConnectionTimeout(20);
-        mqttOptions.setWill(this.publisher.getTopic(this.topic), "I'm gone ".getBytes(), 2, false);
+        mqttOptions.setWill(this.publisher.getTopic(this.topic), "Sensor disconnected".getBytes(), 2, false);
 
         return mqttOptions;
     }
 
     public void publish(){
+        
         try {
             final MqttTopic temperatureTopic = this.publisher.getTopic(this.topic);
 
@@ -60,10 +59,10 @@ public abstract class MachineSensor {
             System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
 
         } catch (MqttException e) {
-            System.out.println("Error publishing to " + this.topic + " - " + e);
+            System.err.println("Error publishing to " + this.topic + " - " + e);
         }
     }
     
     abstract protected MqttMessage readSensor();
-    
+
 }

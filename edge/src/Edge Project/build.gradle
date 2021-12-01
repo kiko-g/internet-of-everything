@@ -24,3 +24,14 @@ dependencies {
 test {  
     useJUnitPlatform()
 }
+
+task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
+   main = 'MachineListener'
+   classpath = sourceSets.main.runtimeClasspath
+   args 'temperature'
+}
+
+task(runTemperatureSensor, dependsOn: 'classes', type: JavaExec) {
+   main = 'TemperatureSensor'
+   classpath = sourceSets.main.runtimeClasspath
+}
