@@ -1,27 +1,39 @@
 
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-    import org.eclipse.paho.client.mqttv3.MqttMessage;
+import java.util.UUID;
 
-public class MachineListener implements IMqttMessageListener {
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
-    private String[] topics;
-    private final int qos;
+public class MachineListener {
+    private final String brokerURI;
+    private final String subscriberId;
+    private MqttClient subscriber;
+    private String topic;
 
-    public MachineListener(String[] topics, int qos) {
-        this.topics = topics;
-        this.qos = qos; // Quality of Service - 2 for exactly once delivery
+    public MachineListener(String topic) {
+        this.brokerURI = "tcp://localhost:1883";
+        this.subscriberId = UUID.randomUUID().toString();
+        this.topic = topic;
+
+        this.init();
     }
 
-    public void subscribe(MachineSensor sensor){
-        sensor.subscribe(this.qos, this, this.topics);
-    }
+    public void init() {
+        try {
+            System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
 
-    @Override
-    public void messageArrived(String topic, MqttMessage mm) throws Exception {
-        System.out.println("Message received:");
-        System.out.println("\tTopic: " + topic);
-        System.out.println("\tMessage: " + new String(mm.getPayload()));
-        System.out.println("");
+            // Connect to Broker
+            this.subscriber = new MqttClient(this.brokerURI, subscriberId);
+            this.subscriber.setCallback(new SubscribeCallback());
+            this.subscriber.connect();
+
+            //Subscribe to all subtopics of homeautomation
+            this.subscriber.subscribe(topic);
+
+        } catch (MqttException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
 }  
