@@ -1,1 +1,1 @@
-# Communication Layer
+# Communication - Mosquitto MQTT Broker
