@@ -11,7 +11,7 @@ public class MachineListener {
     private String[] topics;
 
     public MachineListener(String[] topics) {
-        this.brokerURI = "tcp://localhost:1883";
+        this.brokerURI = "tcp://mosquitto:1883";
         this.subscriberId = UUID.randomUUID().toString();
         this.topics = topics;
     }

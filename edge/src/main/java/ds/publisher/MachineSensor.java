@@ -17,7 +17,7 @@ public abstract class MachineSensor {
     private final String topic;
 
     public MachineSensor(String topic){
-        this.brokerURI = "tcp://localhost:1883";
+        this.brokerURI = "tcp://mosquitto:1883";
         this.publisherId = UUID.randomUUID().toString();
         this.topic = topic;
     }
