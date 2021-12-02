@@ -1,0 +1,12 @@
+{
+    "name":"CNC Mill Tool",
+    "X1_ActualPosition":198, 
+    "X1_ActualVelocity":-10.8,
+    "X1_ActualAcceleration":-6.25,
+    "X1_CommandPosition":198,
+    "X1_CommandVeloticity":-17.9,
+    "X1_CurrentFeedback":-8.59,
+    "X1_DCBusVoltage":0.14,
+    "X1_OutputCurrent":328,
+    "X1_OutputVoltage":30.6
+}
