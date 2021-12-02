@@ -1,10 +1,10 @@
-FROM python:3.10.0-alpine3.14
+FROM alpine:latest
 
-WORKDIR /home/node/app/edge
+RUN apk add gradle openjdk17
 
-COPY src/ src/
-COPY requirements.txt .
+WORKDIR /home/proj
+COPY . .
 
-RUN pip install -r requirements.txt
+RUN gradle build
 
-CMD ["python3", "-m", "src"]
+ENTRYPOINT [ "java", "-jar", "./app/build/libs/app.jar" ]
