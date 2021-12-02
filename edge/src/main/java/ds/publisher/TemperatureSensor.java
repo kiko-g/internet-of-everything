@@ -1,5 +1,5 @@
+package ds.publisher;
 import java.util.Random;
-
 import org.eclipse.paho.client.mqttv3.*;
 
 public class TemperatureSensor extends MachineSensor {

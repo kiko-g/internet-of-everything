@@ -1,3 +1,4 @@
+package ds.state;
 import java.util.*;
 
 public class TemperatureState {

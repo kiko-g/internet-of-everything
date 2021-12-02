@@ -1,3 +1,4 @@
+package ds.publisher;
 import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
+
 
 public abstract class MachineSensor {
     private final String brokerURI;
@@ -31,7 +33,6 @@ public abstract class MachineSensor {
             // Start Publishing
             ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
             executor.scheduleWithFixedDelay(new Thread(() -> this.publish()), 0, 1500, TimeUnit.MILLISECONDS);
-
         } catch (MqttException e) {
             System.err.println("Error connecting to MQTT Broker at " + brokerURI + " - " + e);
         }

@@ -1,4 +1,4 @@
-
+package ds.state;
 public class MachineState  {
 
     private Integer id;  

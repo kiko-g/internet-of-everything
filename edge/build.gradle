@@ -21,17 +21,17 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
-test {  
+test {
     useJUnitPlatform()
 }
 
 task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
-   main = 'MachineListener'
-   classpath = sourceSets.main.runtimeClasspath
-   args 'temperature'
+    main = 'ds.listener.MachineListener'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'temperature'
 }
 
 task(runTemperatureSensor, dependsOn: 'classes', type: JavaExec) {
-   main = 'TemperatureSensor'
-   classpath = sourceSets.main.runtimeClasspath
+    main = 'ds.publisher.TemperatureSensor'
+    classpath = sourceSets.main.runtimeClasspath
 }

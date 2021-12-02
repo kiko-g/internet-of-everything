@@ -1,6 +1,6 @@
 # How to run (while dockerfile is not setup):
 
-1. Install Mosquitto MQTT Broker *(default port is 1883)* 
+1. Install Mosquitto MQTT Broker *(default port is 1883)*
     > sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
     > sudo apt-get update
     > sudo apt-get install mosquitto
