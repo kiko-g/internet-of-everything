@@ -1,6 +1,7 @@
 version: "3.8"
 services:
-  mqtt:
+  mosquitto:
+    container_name: "mosquitto"
     image: eclipse-mosquitto
     ports:
       - 1883:1883
@@ -8,6 +9,9 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /mqtt:/mqtt
+      - ./mosquitto:/mosquitto
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
 
-      
+
+    
