@@ -1,0 +1,14 @@
+{
+  "machine": {
+    "id": 1,
+    "type": {
+      "name": "cutting",
+      "attributes": {
+        "initialTemperature": [90, "ºC"],
+        "temperatureVariation": [0.1, "ºC"],
+        "speed": [90, "cuts/s"]
+      }
+    },
+    "status": "online"
+  }
+}
