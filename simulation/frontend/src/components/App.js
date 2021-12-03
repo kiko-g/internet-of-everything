@@ -9,6 +9,7 @@ export default function App() {
       <Header siteTitle="Simulation" />
       <div className="min-h-adjusted mx-auto">
         <SimulationSetup />
+        <div className="mx-10 border-t-4 border-bluegray-600 opacity-80"></div>
         <Representation />
       </div>
     </div>
