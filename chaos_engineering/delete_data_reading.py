@@ -8,8 +8,9 @@ import requests
             ) """
 
 
+def main():
+    request = requests.post('http://localhost:8000/fault', json={"key": "value"})
+    #print(request.json())
 
-
-request = requests.post('http://localhost:8000/fault', json={"key": "value"})
-
-#print(request.json())
+if __name__ == '__main__':
+    main()

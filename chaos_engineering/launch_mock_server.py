@@ -22,10 +22,13 @@ def fault_handler():
 def fault_response():
     return "received json data"
 
-server.add_endpoint(endpoint='/machine1', endpoint_name='machine1', response=get_machine1)
-server.add_endpoint(endpoint='/machine2', endpoint_name='machine2', response=get_machine2)
-server.add_endpoint(endpoint='/central', endpoint_name='central', handler=central_handler, response=central_response)
-server.add_endpoint(endpoint='/fault', endpoint_name='fault', handler=fault_handler, response=fault_response)
+def main():
+    server.add_endpoint(endpoint='/machine1', endpoint_name='machine1', response=get_machine1)
+    server.add_endpoint(endpoint='/machine2', endpoint_name='machine2', response=get_machine2)
+    server.add_endpoint(endpoint='/central', endpoint_name='central', handler=central_handler, response=central_response)
+    server.add_endpoint(endpoint='/fault', endpoint_name='fault', handler=fault_handler, response=fault_response)
 
+    server.run()
 
-server.run()
+if __name__ == '__main__':
+    main()
