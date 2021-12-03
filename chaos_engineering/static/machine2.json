@@ -1,0 +1,9 @@
+{
+    "machineID": 20,
+    "reading-time": "2021-10-23T18:25:43.511Z",
+    "properties": {
+        "status": 1,
+        "temperature": 40.5,
+        "piecesProduced": 120
+    }
+}
