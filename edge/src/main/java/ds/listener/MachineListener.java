@@ -1,6 +1,7 @@
 package ds.listener;
-import java.util.UUID;
+import ds.state.State; 
 
+import java.util.UUID;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -8,12 +9,14 @@ public class MachineListener {
     private final String brokerURI;
     private final String subscriberId;
     private MqttClient subscriber;
-    private String[] topics;
+    private String[] topics;  
+    public static State state; 
 
     public MachineListener(String[] topics) {
         this.brokerURI = "tcp://mosquitto:1883";
         this.subscriberId = UUID.randomUUID().toString();
         this.topics = topics;
+
     }
 
     public void init() {

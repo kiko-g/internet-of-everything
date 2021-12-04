@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   mosquitto:
     image: eclipse-mosquitto:1.6
@@ -11,14 +10,14 @@ services:
 
   publisher:
     build: .
-    command: sh -c "gradle runTemperatureSensor"
+    command: sh -c "gradle runMachineSensor"
     volumes:
       - ./src/:/edge/src/
     container_name: "publisher"
 
   edge:
     build: .
-    command: sh -c "gradle runMachineListener
+    command: sh -c "gradle runMachineListener"
     volumes:
       - ./src/:/edge/src/
     container_name: "listener"

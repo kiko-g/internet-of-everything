@@ -1,11 +1,11 @@
 package ds.state;
 public class MachineState  {
 
-    private Integer id;  
+    private String id;  
     private Integer size; 
-    private TemperatureState tempState;  
+    private TemperatureState tempState;
 
-    public MachineState(Integer size, Integer id){ 
+    public MachineState(Integer size, String id){ 
         this.tempState = new TemperatureState(size);  
         this.id = id; 
     }  
@@ -13,6 +13,4 @@ public class MachineState  {
     public TemperatureState getTempState(){
         return this.tempState;
     } 
-    
-    
 }

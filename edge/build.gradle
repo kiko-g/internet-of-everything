@@ -19,6 +19,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 test {
@@ -31,7 +32,7 @@ task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
     args 'temperature'
 }
 
-task(runTemperatureSensor, dependsOn: 'classes', type: JavaExec) {
-    main = 'ds.publisher.TemperatureSensor'
+task(runMachineSensor, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.publisher.MachineSensor'
     classpath = sourceSets.main.runtimeClasspath
 }
