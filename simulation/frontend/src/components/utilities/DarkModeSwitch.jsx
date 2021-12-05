@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { Switch } from '@headlessui/react'
-import { MoonIcon, SunIcon } from '@heroicons/react/solid'
-import useDarkMode from '../hooks/useDarkMode'
+import * as React from "react"
+import { Switch } from "@headlessui/react"
+import { MoonIcon, SunIcon } from "@heroicons/react/solid"
+import useDarkMode from "../../hooks/useDarkMode"
 
 export default function DarkModeSwitch() {
   const [darkTheme, setDarkTheme] = useDarkMode()
@@ -26,15 +26,17 @@ export default function DarkModeSwitch() {
         <Switch
           checked={darkTheme}
           onChange={handleMode}
-          className={`${darkTheme ? "bg-blue-300" : "bg-bluegray-400"
-            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
+          className={`${
+            darkTheme ? "bg-blue-300" : "bg-bluegray-400"
+          } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
         >
           <span
-            className={`${darkTheme ? "translate-x-6" : "translate-x-1"
-              } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+            className={`${
+              darkTheme ? "translate-x-6" : "translate-x-1"
+            } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
           />
         </Switch>
       </div>
     </Switch.Group>
-  );
+  )
 }
