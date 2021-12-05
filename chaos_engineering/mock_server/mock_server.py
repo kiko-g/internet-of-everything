@@ -25,6 +25,6 @@ class MockServer(object):
     def run(self):
         self.app.run(port=self.port)
 
-    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None, response=None):
-        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler, response))
+    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None, response=None, methods=["GET"]):
+        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler, response), methods=methods)
 
