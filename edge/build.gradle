@@ -19,7 +19,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'org.json:json:20171018'
 }
 
 test {

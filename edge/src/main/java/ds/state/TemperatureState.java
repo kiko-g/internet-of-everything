@@ -1,12 +1,11 @@
 package ds.state;
 import ds.listener.MachineListener;
-import ds.listener.SubscribeCallback;
 
 import java.util.*;
 
 public class TemperatureState {
     private Queue<Float> temps;     // The last n temperatures.
-    private Float tempSum;          // Sum of the temperatures.
+    private float tempSum;          // Sum of the temperatures.
 
     public TemperatureState(){
         this.temps= new LinkedList<>();
@@ -18,14 +17,14 @@ public class TemperatureState {
      * queue.
      * @param newTemp The new temperature to be added to the queue.
      */
-    public void add(Float newTemp){ 
+    public void add(float newTemp){ 
         int currSize = temps.size(); 
-        if (currSize < SubscribeCallback.INFO_SIZE){
-            temps.add(newTemp);
+        if (currSize < MachineListener.INFO_SIZE){
+            temps.add(Float.valueOf(newTemp));
             tempSum += newTemp;
         } else {
             Float removedTemp = temps.remove();     // removes the first element.
-            temps.add(newTemp);
+            temps.add(Float.valueOf(newTemp));
             tempSum = tempSum - removedTemp + newTemp; 
         }
     }

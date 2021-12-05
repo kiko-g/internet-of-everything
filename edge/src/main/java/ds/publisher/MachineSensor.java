@@ -6,8 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 import org.eclipse.paho.client.mqttv3.*;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONObject;
 
 public class MachineSensor extends Sensor {
 
@@ -46,11 +45,11 @@ public class MachineSensor extends Sensor {
         propertiesObject.put("rotate", 402.7474);
 
         JSONObject messageObject = new JSONObject();
-        messageObject.put("machineID", machineID);
+        messageObject.put("machineID", String.valueOf(machineID));
         messageObject.put("reading-time", readTime);
         messageObject.put("properties", propertiesObject);
         
-        return messageObject.toJSONString(); 
+        return messageObject.toString(); 
     }
 
     private String getDateTime(){

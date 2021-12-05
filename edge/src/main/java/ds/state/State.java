@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This class is responsible for managing the current state of all machines, the system state.
  */
 public class State {
-    private ConcurrentHashMap<String, MachineState> machineState;
+    private ConcurrentHashMap<String, MachineState> machineState = new ConcurrentHashMap<>();
 
     /**
      * Adds a machine to the system. If the machine already exists the state will be overwritten by the new one.
@@ -31,6 +31,6 @@ public class State {
      * @return True if the machine is being tracked, false otherwise.
      */
     public boolean findMachine(String machineID){
-        return this.machineState.get(machineID) != null;
+        return this.machineState.containsKey(machineID);
     }
 }

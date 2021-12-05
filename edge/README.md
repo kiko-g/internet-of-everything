@@ -9,7 +9,7 @@
 ```
     sudo docker logs publisher --follow
 ``` 
-3. To get the log prints from the listner (edge layer)
+3. To get the log prints from the listener (edge layer)
 ```
     sudo docker logs listener --follow
 ```

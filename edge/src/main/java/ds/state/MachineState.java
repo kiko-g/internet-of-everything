@@ -1,6 +1,6 @@
 package ds.state;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public class MachineState  {
 
@@ -8,9 +8,9 @@ public class MachineState  {
     private TemperatureState tempState;
 
     public MachineState(JSONObject messageParsed){
-        this.id = messageParsed.get("machineID").toString();
+        this.id = messageParsed.getString("machineID");
         this.tempState = new TemperatureState();
-        this.tempState.add(Float.parseFloat(messageParsed.get("temperature").toString()));
+        this.tempState.add(messageParsed.getJSONObject("properties").getFloat("temperature"));
     }
 
     public TemperatureState getTempState(){
