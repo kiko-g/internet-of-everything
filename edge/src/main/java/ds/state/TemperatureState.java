@@ -1,19 +1,26 @@
 package ds.state;
+import ds.listener.MachineListener;
+import ds.listener.SubscribeCallback;
+
 import java.util.*;
 
 public class TemperatureState {
-    private Queue<Float> temps;     // The last "size" temperatures. 
-    private Integer size;           // Max size of the queue. 
-    private Float tempSum;          // Sum of the temperatures in temps. 
+    private Queue<Float> temps;     // The last n temperatures.
+    private Float tempSum;          // Sum of the temperatures.
 
-    public TemperatureState(Integer size){
+    public TemperatureState(){
         this.temps= new LinkedList<>();
-        this.size = size; 
-    } 
+    }
 
+    /**
+     * This function adds a new temperature to the queue.
+     * If the queue is full, the oldest temperature log will be droped and a the new one will be added to the end of the
+     * queue.
+     * @param newTemp The new temperature to be added to the queue.
+     */
     public void add(Float newTemp){ 
         int currSize = temps.size(); 
-        if (currSize < size){
+        if (currSize < SubscribeCallback.INFO_SIZE){
             temps.add(newTemp);
             tempSum += newTemp;
         } else {
@@ -23,6 +30,10 @@ public class TemperatureState {
         }
     }
 
+    /**
+     * Get's the mean temperature of the machine considering the last n.
+     * @return The temperature mean.
+     */
     public Float getMeanTemp(){
         return tempSum / temps.size(); 
     } 

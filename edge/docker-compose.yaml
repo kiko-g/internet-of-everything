@@ -17,7 +17,7 @@ services:
 
   edge:
     build: .
-    command: sh -c "gradle runMachineListener"
+    command: sh -c "gradle runMachineListener --args='temperature'"
     volumes:
       - ./src/:/edge/src/
     container_name: "listener"

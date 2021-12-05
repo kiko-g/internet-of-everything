@@ -1,6 +1,7 @@
 package ds.listener;
-import ds.state.MachineState; 
+import ds.state.MachineState;
 
+import ds.state.State;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -9,52 +10,55 @@ import org.json.simple.parser.JSONParser;
 
 public class SubscribeCallback implements MqttCallback {
 
+    private State state = new State();                // Stores the current state of all machines.
+    // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
+    // temperatures for each machine.
+    public static final Integer INFO_SIZE = 3;
+
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        // TODO: receive message according to the defined format
-        System.out.println("Message received:");
-        System.out.println("\tTopic: " + topic);
-        System.out.println("\tMessage: " + new String(message.getPayload()));
-        System.out.println(""); 
-        this.parseMessage(message);       
+        JSONParser parser = new JSONParser();
+        JSONObject messageParsed = (JSONObject) parser.parse(new String(message.getPayload()));
+        String machineID = messageParsed.get("machineID").toString();
+        System.out.println(machineID);
+
+        try {
+            if (this.state.findMachine(machineID)) {
+                this.addMachineToState(messageParsed);
+            } else {
+                this.updateState(messageParsed);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Creates a new machine state with the current ID and adds to the system state.
+     * @param messageParsed JSONObject with the message content.
+     */
+    public void addMachineToState(JSONObject messageParsed){
+        MachineState machineState = new MachineState(messageParsed);
+        this.state.addMachine(machineState.getId(), machineState);
+        System.out.println("MachineID :: " + machineState.getId()+ "::" + machineState.getTempState().getMeanTemp());
+    }
+
+    /**
+     * Updates a machine state.
+     * @param messageParsed JSONObject with the message content.
+     */
+    public void updateState(JSONObject messageParsed){
+        String machineID = messageParsed.get("machineID").toString();
+        MachineState machineState = this.state.getMachineState(machineID);
+        machineState.addTemperature(Float.parseFloat(messageParsed.get("temperature").toString()));
+        // Replaces the old state to the new one.
+        this.state.addMachine(machineID, machineState);
+        System.out.println("MachineID :: " + machineID + "::" + machineState.getTempState().getMeanTemp());
     }
 
     @Override
     public void connectionLost(Throwable cause) {}
 
     @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {} 
-
-    public void parseMessage(MqttMessage mqttMessage) {
-        String message = new String(mqttMessage.getPayload());
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject json = (JSONObject) parser.parse(message); 
-            String machineID = json.get("machineID").toString();
-            //if (MachineListener.find)
-
-
-        } catch (Exception e){
-            System.out.println("Not possible to retrieve message");
-        }
-
-    } 
-
-    /**
-     * From the message received, extracts the message id. 
-     */
-    public void getMachineId(){
-
-    } 
-
-    /**
-     * If the machine still is not present in the state, create one. 
-     */
-    public void createMachineState(){
-        return;
-    }
-
-    public void updateState(){
-
-    }
+    public void deliveryComplete(IMqttDeliveryToken token) {}
 }
