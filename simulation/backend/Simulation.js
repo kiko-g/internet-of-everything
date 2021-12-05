@@ -8,23 +8,18 @@ export default class Simulation {
     }
 
     run() {
+
+        //TODO: Machines must be read from a JSON
         let cuttingMachine = new CuttingMachine(60, 0.5, 1);
         this.machines[1] = cuttingMachine;
 
         for (let i = 0; i < this.piecesQty; i++) {
             for (const value of Object.values(this.machines)) {
-                //console.log(value);
                 value.update();
             }
         }
 
-        console.log(
-            "Machine final state after cutting " +
-                this.piecesQty +
-                " pieces:\n" +
-                cuttingMachine.getRepresentation()
-        );
-
+        //TODO: Transform Machine Representation into JSON
         return (
             "Machine final state after cutting " +
             this.piecesQty +
@@ -32,12 +27,4 @@ export default class Simulation {
             cuttingMachine.getRepresentation()
         );
     }
-
-    //TODO: Machines must be read from a JSON
-
-    //TODO: Receive user input from front end
-
-    //TODO: Transform Machine Representation into JSON
-
-    //TODO: Send JSON to the front end
 }

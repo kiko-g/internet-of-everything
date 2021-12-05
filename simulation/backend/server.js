@@ -10,10 +10,12 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 
 app.get("/startSimulation", (req, res) => {
+    //TODO: Receive user input from front end
     let simulation = new Simulation("./factory.json", 30);
-    let simu = simulation.run();
-    //console.log(simu);
-    res.send(simu);
+    
+    let endState = simulation.run();
+
+    res.send(endState);
 });
 
 app.listen(PORT, () => console.log("Servidor a executar na porta 8080..."));
