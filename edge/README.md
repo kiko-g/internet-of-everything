@@ -11,7 +11,7 @@
 ``` 
 3. To get the log prints from the listner (edge layer)
 ```
-    sudo docker logs listener
+    sudo docker logs listener --follow
 ```
 4. To stop the project. 
 ```
