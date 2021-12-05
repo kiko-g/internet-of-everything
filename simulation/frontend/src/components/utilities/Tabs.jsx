@@ -1,5 +1,5 @@
 import React from "react"
-import PillDivNest from "./partials/PillDivNest"
+import PillDivNest from "./PillDivNest"
 import tw from "twin.macro"
 const Pill = tw.div`p-4 rounded-lg flex items-center justify-between space-x-8 bg-opacity-90`
 
@@ -35,7 +35,7 @@ class Tabs extends React.Component {
     activeTab: this.props.children[0].props.label,
   }
 
-  changeTab = tab => {
+  changeTab = (tab) => {
     this.setState({ activeTab: tab })
   }
 
@@ -45,7 +45,7 @@ class Tabs extends React.Component {
     return (
       <>
         <PillDivNest color="bg-bluegray-600 dark:bg-bluegray-500 mb-4">
-          {React.Children.map(this.props.children, child => {
+          {React.Children.map(this.props.children, (child) => {
             buttons.push(child.props.label)
             if (child.props.label === this.state.activeTab)
               content = child.props.children

@@ -1,12 +1,15 @@
-import * as React from "react";
-import { Disclosure } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import PropTypes from "prop-types";
-import DarkModeSwitch from "./DarkModeSwitch";
+import * as React from "react"
+import { Disclosure } from "@headlessui/react"
+import { MenuIcon, XIcon } from "@heroicons/react/outline"
+import PropTypes from "prop-types"
+import DarkModeSwitch from "./utilities/DarkModeSwitch"
 
 export default function Header({ siteTitle }) {
   return (
-    <Disclosure as="nav" className="bg-bluegray-700 dark:bg-bluegray-700 text-white space-x-4">
+    <Disclosure
+      as="nav"
+      className="bg-bluegray-700 dark:bg-bluegray-700 text-white space-x-4"
+    >
       {({ open }) => {
         return (
           <>
@@ -59,18 +62,21 @@ export default function Header({ siteTitle }) {
             {/* @@ Mobile view */}
             <Disclosure.Panel className="md:hidden">
               <div className="flex flex-col px-0 pb-3 mr-4 space-y-1 md:block md:px-2">
-                <span key="nav-dark-mode" className="rounded-lg text-lg font-medium h-auto mb-4">
+                <span
+                  key="nav-dark-mode"
+                  className="rounded-lg text-lg font-medium h-auto mb-4"
+                >
                   <DarkModeSwitch />
                 </span>
               </div>
             </Disclosure.Panel>
           </>
-        );
+        )
       }}
     </Disclosure>
-  );
+  )
 }
 
 Header.propTypes = {
   siteTitle: PropTypes.string.isRequired,
-};
+}
