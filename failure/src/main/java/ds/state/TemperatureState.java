@@ -6,6 +6,8 @@ import java.util.*;
 public class TemperatureState {
     private Queue<Float> temps;     // The last n temperatures.
     private float tempSum;          // Sum of the temperatures.
+    private float maxTemp = 100;
+    private float currentTemp;
 
     public TemperatureState(){
         this.temps= new LinkedList<>();
@@ -27,6 +29,7 @@ public class TemperatureState {
             temps.add(Float.valueOf(newTemp));
             tempSum = tempSum - removedTemp + newTemp; 
         }
+        currentTemp = Float.valueOf(newTemp);
     }
 
     /**
@@ -37,4 +40,11 @@ public class TemperatureState {
         return tempSum / temps.size(); 
     } 
 
+    public Float getCurrentTemp() {
+        return currentTemp;
+    }
+    
+    public Float getMaxTemp() {
+        return maxTemp;
+    }
 }

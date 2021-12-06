@@ -3,7 +3,6 @@ package ds.state;
 import org.json.JSONObject;
 
 public class MachineState  {
-
     private String id;  
     private TemperatureState tempState;
 
