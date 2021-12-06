@@ -1,0 +1,13 @@
+version: "3"
+services:
+  mosquitto:
+    image: eclipse-mosquitto:1.6
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/:/mosquitto/
+      - ./mosquitto/data:/mosquitto/data 
+    container_name: "mosquitto"
+
+
+    
