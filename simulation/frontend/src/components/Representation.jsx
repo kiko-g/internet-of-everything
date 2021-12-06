@@ -10,11 +10,18 @@ const Tab = (props) => {
 
 export default class Representation extends React.Component {
   startingPoint = FactoryData[0]
-  representation = FactoryData.slice(1, FactoryData.length)
+  schema = FactoryData.slice(1, FactoryData.length)
 
   render() {
     return (
       <Tabs>
+        <Tab label="Schema">
+          <div className="grid grid-cols-4 space-x-4">
+            {this.schema.map((item, index) => (
+              <Machine key={index} data={item} />
+            ))}
+          </div>
+        </Tab>
         <Tab label="JSON">
           <ReactJson
             indentWidth={4}
@@ -24,7 +31,7 @@ export default class Representation extends React.Component {
             displayObjectSize={false}
             displayDataTypes={false}
             enableClipboard={false}
-            src={this.representation}
+            src={this.schema}
             theme="harmonic"
             style={{
               overflowY: "auto",
@@ -38,13 +45,6 @@ export default class Representation extends React.Component {
               backgroundColor: "#334155",
             }}
           />
-        </Tab>
-        <Tab label="Representation">
-          <div className="grid grid-cols-4 space-x-4">
-            {this.representation.map((item, index) => (
-              <Machine key={index} data={item} />
-            ))}
-          </div>
         </Tab>
       </Tabs>
     )

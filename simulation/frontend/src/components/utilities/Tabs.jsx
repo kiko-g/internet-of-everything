@@ -44,7 +44,7 @@ class Tabs extends React.Component {
     let buttons = []
     return (
       <>
-        <PillDivNest color="bg-bluegray-600 dark:bg-bluegray-500 mb-4">
+        <PillDivNest color="bg-bluegray-700 dark:bg-bluegray-500 mb-4">
           {React.Children.map(this.props.children, (child) => {
             buttons.push(child.props.label)
             if (child.props.label === this.state.activeTab)
