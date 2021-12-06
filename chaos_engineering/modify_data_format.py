@@ -1,8 +1,8 @@
 import requests
 import json
 
-
 def main():
+
     machine_request = requests.get("http://localhost:8000/machine1",
                 headers= {
                     "User-Agent":
@@ -10,13 +10,13 @@ def main():
                 }
             )
     machine_json = machine_request.json()
-    machine_json['machineID'] = None
-    machine_json['reading-time'] = None
-    machine_properties = machine_json['properties']
-
-    for key, _ in machine_properties.items():
-        machine_properties[key] = None
     
+    reading_time = machine_json['reading-time']
+    machine_properties = machine_json['properties']
+    
+    machine_json['reading-time'] = {'time':reading_time,'properties':machine_properties}
+    del machine_json['properties']
+
     final_json = json.dumps(machine_json)
 
     requests.post('http://localhost:8000/fault', final_json)
