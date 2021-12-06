@@ -1,17 +1,13 @@
-version: "3.8"
+version: "3"
 services:
   mosquitto:
-    container_name: "mosquitto"
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:1.6
     ports:
-      - 1883:1883
-      - 9001:9001
-    stdin_open: true
-    tty: true
+      - "1883:1883"
     volumes:
-      - ./mosquitto:/mosquitto
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/:/mosquitto/
+      - ./mosquitto/data:/mosquitto/data 
+    container_name: "mosquitto"
 
 
     
