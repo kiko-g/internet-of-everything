@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'eclipse-wtp'
+    id 'war'
+}
+
+archivesBaseName = 'MqttSample'
+
+group 'org.example'
+version = '0.0.0.1'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.eclipse.org/content/repositories/paho-releases/' }
+}
+
+dependencies {
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'org.json:json:20171018'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.listener.MachineListener'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'temperature'
+}
+
+task(runMachineSensor, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.publisher.MachineSensor'
+    classpath = sourceSets.main.runtimeClasspath
+}
