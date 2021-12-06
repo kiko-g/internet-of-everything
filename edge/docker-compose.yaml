@@ -1,0 +1,23 @@
+version: "3"
+services:
+  mosquitto:
+    image: eclipse-mosquitto:1.6
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/:/mosquitto/
+    container_name: "mosquitto"
+
+  publisher:
+    build: .
+    command: sh -c "gradle runMachineSensor"
+    volumes:
+      - ./src/:/edge/src/
+    container_name: "publisher"
+
+  edge:
+    build: .
+    command: sh -c "gradle runMachineListener --args='temperature'"
+    volumes:
+      - ./src/:/edge/src/
+    container_name: "listener"

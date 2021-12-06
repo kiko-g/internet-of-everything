@@ -1,10 +1,15 @@
-FROM python:3.10.0-alpine3.14
+FROM  alpine:3.15
+LABEL vertical="edge"
 
-WORKDIR /home/node/app/edge
-
+# Set directories
+RUN mkdir -p /edge/
+WORKDIR /edge/
 COPY src/ src/
-COPY requirements.txt .
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
 
-RUN pip install -r requirements.txt
+RUN apk add gradle --no-cache
+RUN apk --no-cache add mosquitto-clients
 
-CMD ["python3", "-m", "src"]
+# To be deleted later
+RUN gradle build
