@@ -9,7 +9,6 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
 public class MachineSensor extends Sensor {
-
     private Random rnd = new Random();
 
     public MachineSensor() throws MqttException {
