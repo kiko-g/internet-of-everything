@@ -11,19 +11,16 @@ export default function RunSection() {
         Here the user should control the simulaion.
       </span>
 
-      {/* <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-        <div class="bg-gray-200 rounded-full dark:bg-gray-700">
-          <div class="bg-sky-600 w-1/3 text-md font-medium text-bluegray-200 text-center p-1.5 leading-none tracking-normal rounded-l-full">
+      <div className="grid grid-cols-1">
+        <div className="bg-gray-200 rounded-md dark:bg-gray-700">
+          <div
+            className="bg-gradient-to-r from-green-400 to-blue-500 text-white 
+            w-1/3 text-xs font-medium text-center p-1 leading-none tracking-normal rounded-l-md"
+          >
             33%
           </div>
         </div>
-        <FlowbiteButton
-          color="bluegray"
-          text="Export JSON"
-          fontsize="xs"
-          py="1"
-        />
-      </div> */}
+      </div>
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-2">
         <FlowbiteButton color="teal" text="Run" />
         <FlowbiteButton color="amber" text="Pause" />
