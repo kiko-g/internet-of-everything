@@ -56,7 +56,7 @@ class Tabs extends React.Component {
             changeTab={this.changeTab}
           />
         </PillDivNest>
-        <Pill className="bg-coolgray-50">{content}</Pill>
+        <Pill className="bg-bluegray-100">{content}</Pill>
       </>
     )
   }

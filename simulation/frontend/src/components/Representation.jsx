@@ -16,9 +16,13 @@ export default class Representation extends React.Component {
     return (
       <Tabs>
         <Tab label="Schema">
-          <div className="grid grid-cols-4 space-x-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
             {this.schema.map((item, index) => (
-              <Machine key={index} data={item} />
+              <Machine
+                propClasses="col-span-1 min-w-full"
+                key={index}
+                data={item}
+              />
             ))}
           </div>
         </Tab>
