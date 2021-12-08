@@ -5,7 +5,7 @@ export default function FlowbiteButton(props) {
   const text = props.text || "Button"
   const icon = props.icon || ""
   const py = props.py || "2"
-  const fontsize = props.fontsize || "sm"
+  const fontsize = props.fontsize || "lg"
 
   return (
     <button

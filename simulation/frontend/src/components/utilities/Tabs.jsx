@@ -1,7 +1,39 @@
 import React from "react"
 import PillDivNest from "./PillDivNest"
-import tw from "twin.macro"
-const Pill = tw.div`p-4 rounded-lg flex items-center justify-between space-x-8 bg-opacity-90`
+
+export default class Tabs extends React.Component {
+  state = {
+    activeTab: this.props.children[0].props.label,
+  }
+
+  changeTab = (tab) => {
+    this.setState({ activeTab: tab })
+  }
+
+  render() {
+    let content
+    let buttons = []
+    return (
+      <>
+        <PillDivNest color="bg-bluegray-900 bg-opacity-75 dark:bg-bluegray-600 mb-4">
+          {React.Children.map(this.props.children, (child) => {
+            buttons.push(child.props.label)
+            if (child.props.label === this.state.activeTab)
+              content = child.props.children
+          })}
+          <TabButtons
+            activeTab={this.state.activeTab}
+            buttons={buttons}
+            changeTab={this.changeTab}
+          />
+        </PillDivNest>
+        <div className="bg-bluegray-100 p-4 rounded-lg flex items-center justify-between space-x-8 bg-opacity-90">
+          {content}
+        </div>
+      </>
+    )
+  }
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -29,37 +61,3 @@ const TabButtons = ({ buttons, changeTab, activeTab }) => {
     </div>
   )
 }
-
-class Tabs extends React.Component {
-  state = {
-    activeTab: this.props.children[0].props.label,
-  }
-
-  changeTab = (tab) => {
-    this.setState({ activeTab: tab })
-  }
-
-  render() {
-    let content
-    let buttons = []
-    return (
-      <>
-        <PillDivNest color="bg-bluegray-700 dark:bg-bluegray-500 mb-4">
-          {React.Children.map(this.props.children, (child) => {
-            buttons.push(child.props.label)
-            if (child.props.label === this.state.activeTab)
-              content = child.props.children
-          })}
-          <TabButtons
-            activeTab={this.state.activeTab}
-            buttons={buttons}
-            changeTab={this.changeTab}
-          />
-        </PillDivNest>
-        <Pill className="bg-bluegray-100">{content}</Pill>
-      </>
-    )
-  }
-}
-
-export default Tabs

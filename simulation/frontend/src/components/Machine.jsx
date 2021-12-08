@@ -11,18 +11,19 @@ export default function Machine(props) {
     <div
       key={`machine-${data.machineID}`}
       className={`${propClasses}
-      bg-sky-900 bg-opacity-75 text-white
+      bg-coolgray-500 dark:bg-bluegray-500 bg-opacity-75 text-white
       w-52 p-3 border-0 rounded-lg shadow-md duration-200 hover:opacity-90`}
     >
       <div className="flex items-center justify-between space-x-3">
-        <h5 class="text-coolgray-50 font-bold text-lg tracking-tight mb-2">
-          Machine#{data.machineID}
+        <h5 class="text-coolgray-50 text-lg tracking-tight mb-2">
+          Machine #{data.machineID}
         </h5>
         <div className="flex flex-col text-right">
           <span className="text-xxs">{data.readingTime.split(" ")[0]}</span>
           <span className="text-xxs">{data.readingTime.split(" ")[1]}</span>
         </div>
       </div>
+
       <ul>
         {Object.keys(properties).map((key, index) => (
           <li
@@ -38,6 +39,7 @@ export default function Machine(props) {
           </li>
         ))}
       </ul>
+
       {isDetailed ? (
         <ul>
           {Object.keys(moreProperties).map((key, index) => (

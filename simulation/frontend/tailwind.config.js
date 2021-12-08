@@ -35,7 +35,7 @@ module.exports = {
         rose: colors.rose,
       },
       fontSize: {
-        xxs: "0.55rem",
+        xxs: "0.6rem",
       },
       minWidth: {
         0: "0",
@@ -66,7 +66,7 @@ module.exports = {
         "6xl": "4rem",
       },
       fontFamily: {
-        inter: ["Inter", ...defaultTheme.fontFamily.sans],
+        inter: ["Inter sans-serif", ...defaultTheme.fontFamily.sans],
         plex: ["IBM Plex Sans", ...defaultTheme.fontFamily.sans],
       },
     },
@@ -74,5 +74,15 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("tailwindcss-font-inter")({
+      // default settings
+      a: -0.0223,
+      b: 0.185,
+      c: -0.1745,
+      baseFontSize: 16,
+      importFontFace: true,
+    }),
+  ],
 }
