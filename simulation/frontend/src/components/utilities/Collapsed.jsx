@@ -32,7 +32,7 @@ export default function Collapsed(props) {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-bluegray-700 dark:text-white">
+            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-bluegray-700">
               {props.children}
             </Disclosure.Panel>
           </Transition>

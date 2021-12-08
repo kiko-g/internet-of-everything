@@ -18,7 +18,7 @@ export default class Representation extends React.Component {
     return (
       <Tabs>
         <Tab label="Schema">
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+          <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
             {this.schema.map((item, index) => (
               <Machine
                 propClasses="col-span-1 min-w-full"
@@ -29,7 +29,7 @@ export default class Representation extends React.Component {
           </div>
         </Tab>
         <Tab label="Detailed">
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+          <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
             {this.schema.map((item, index) => (
               <Machine
                 detailed={true}
@@ -41,7 +41,7 @@ export default class Representation extends React.Component {
           </div>
         </Tab>
         <Tab label="Inspect">
-          <div className="grid grid-cols-1 gap-4 w-full">
+          <div className="grid w-full grid-cols-1 gap-4">
             <BasicInput label="Search" types={["Machine Name", "Machine ID"]} />
             {this.schema.map((item, index) => (
               <Machine
@@ -54,7 +54,7 @@ export default class Representation extends React.Component {
           </div>
         </Tab>
         <Tab label="JSON">
-          <div className="grid grid-cols-1 gap-4 w-full">
+          <div className="grid w-full grid-cols-1 gap-4">
             <div className="grid grid-cols-3 gap-4 w-full">
               <FlowbiteButton
                 color="violet"
