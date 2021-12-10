@@ -5,8 +5,6 @@ import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 
 public class Machine extends MQTTClient {
-
-    MQTTClient mqtt;
     String name;
 
     Machine(String name){

@@ -29,12 +29,12 @@ public abstract class MQTTClient implements MqttCallback {
                     .will(willTopic, new MqttMessage(willContent.getBytes())).topicAliasMaximum(1000).build();
             client.setCallback(this);
 
-            System.out.println("Connecting " + clientId + " to broker: " + broker);
+            System.out.println("[MQTT] Connecting " + clientId + " to broker: " + broker);
 
             client.connect(conOpts);
 
         } catch (MqttException e) {
-            System.err.println("Exception Occurred whilst connecting the client " + clientId + ": ");
+            System.err.println("[MQTT] Exception Occurred whilst connecting the client " + clientId + ": ");
             e.printStackTrace();
         }
     }
@@ -43,7 +43,7 @@ public abstract class MQTTClient implements MqttCallback {
     {
         try {
             this.client.disconnect(5000);
-            System.out.println("Disconnected");
+            System.out.println("[MQTT] Disconnected " + this.clientId);
             this.client.close();
         } catch (MqttException e) {
             e.printStackTrace();
@@ -59,17 +59,19 @@ public abstract class MQTTClient implements MqttCallback {
         MqttMessage message = new MqttMessage(messageContent);
         message.setQos(qos);
         try {
+            System.out.println("[MQTT] Publishing message to \"" + topic + "\": " + message);
             client.publish(topic, message);
         } catch (MqttException e) {
-            System.err.println("Exception Occured whilst publishing the message: " + e.getMessage());
+            System.err.println("[MQTT] Exception Occured whilst publishing the message: " + e.getMessage());
         }
     }
 
     public void subscribeTopic(String topic) {
         try {
+            System.out.println("[MQTT] Subscribing to \"" + topic + "\"");
             client.subscribe(topic, qos);
         } catch (MqttException e) {
-            System.err.println("Exception Occured whilst publishing the message: " + e.getMessage());
+            System.err.println("[MQTT] Exception Occured whilst publishing the message: " + e.getMessage());
         }
     }
 }

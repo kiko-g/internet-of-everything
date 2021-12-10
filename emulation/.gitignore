@@ -90,4 +90,3 @@ yarn-error.log
 *.bin
 *.lock
 *.properties
-*.jar
