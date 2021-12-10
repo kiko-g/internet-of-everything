@@ -46,6 +46,7 @@ public abstract class MQTTClient implements MqttCallback {
             System.out.println("[MQTT] Disconnected " + this.clientId);
             this.client.close();
         } catch (MqttException e) {
+            System.err.println("[MQTT] Exception Occurred whilst finalizing the client " + clientId + ": ");
             e.printStackTrace();
         }
     }
@@ -70,6 +71,15 @@ public abstract class MQTTClient implements MqttCallback {
         try {
             System.out.println("[MQTT] Subscribing to \"" + topic + "\"");
             client.subscribe(topic, qos);
+        } catch (MqttException e) {
+            System.err.println("[MQTT] Exception Occured whilst publishing the message: " + e.getMessage());
+        }
+    }
+
+    public void unsubscribeTopic(String topic) {
+        try {
+            System.out.println("[MQTT] Unsubscribing to \"" + topic + "\"");
+            client.unsubscribe(topic);
         } catch (MqttException e) {
             System.err.println("[MQTT] Exception Occured whilst publishing the message: " + e.getMessage());
         }
