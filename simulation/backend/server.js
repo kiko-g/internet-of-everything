@@ -4,7 +4,7 @@ const { json, urlencoded } = pkg;
 import Simulation from "./Simulation.js";
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.port || 8080;
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
@@ -18,4 +18,4 @@ app.get("/startSimulation", (req, res) => {
     res.send(endState);
 });
 
-app.listen(PORT, () => console.log("Servidor a executar na porta 8080..."));
+app.listen(PORT, () => console.log(`Server listening at http://localhost:${PORT}`));
