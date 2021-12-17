@@ -1,11 +1,10 @@
-package digitalModel;
+package Sensors;
 
 import java.util.ArrayList;
 
-public class SpeedSensor implements Sensor{
+public class VibrationSensor implements Sensor {
 
-
-    digitalModel.Sensor.types type;
+    Type type;
     float baseline;
     float baselineVariance;
     float posX;
@@ -13,11 +12,14 @@ public class SpeedSensor implements Sensor{
     boolean on;
 
 
-    SpeedSensor(float positionX, float positionY) {
-        this.type = digitalModel.Sensor.types.VIBRATION;
+    VibrationSensor(float positionX, float positionY) {
+        this.type = Type.VIBRATION;
         this.posX = positionX;
         this.posY = positionY;
-        this.baseline = 10; //antennas/min
+        this.baseline = 150; //Hz
+        this.baselineVariance = (float) (this.baseline * 0.05); // 5% variation
+        this.on = true;
+
         this.baselineVariance = (float) (this.baseline * 0.05); // 5% variation
         this.on = true;
     }
@@ -44,5 +46,5 @@ public class SpeedSensor implements Sensor{
     public void chaosDownSensor() {
         float down = (float) (this.baseline * 0.1);
         this.baseline -= down;
-    }
+    }    
 }

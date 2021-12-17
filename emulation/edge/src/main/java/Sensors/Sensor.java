@@ -1,10 +1,10 @@
-package digitalModel;
+package Sensors;
 
 import java.util.ArrayList;
 
 public interface Sensor {
 
-    public enum types {
+    public enum Type {
         VIBRATION, TEMPERATURE, POSITION, SPEED
     }
 
