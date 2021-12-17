@@ -22,7 +22,7 @@ export default function RunSection() {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-2">
         <FlowbiteButton
           color="teal"
           text="Run"

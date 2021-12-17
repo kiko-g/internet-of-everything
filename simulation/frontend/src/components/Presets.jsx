@@ -9,7 +9,6 @@ export default function Presets() {
       <div className="mt-2 flex items-end justify-end">
         <button
           type="button"
-          onClick=""
           className="px-3 py-2 text-sm font-medium text-white bg-bluegray-700 rounded-md bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           Add preset&nbsp;
