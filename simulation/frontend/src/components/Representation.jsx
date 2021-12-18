@@ -4,7 +4,7 @@ import Machine from "./Machine"
 import FactoryData from "../factory.json"
 import ReactJson from "react-json-view"
 import BasicInput from "./utilities/BasicInput"
-import FlowbiteButton from "./utilities/FlowbiteButton"
+import CustomButton from "./utilities/CustomButton"
 
 const Tab = (props) => {
   return <div>{props.children}</div>
@@ -55,22 +55,13 @@ export default class Representation extends React.Component {
         </Tab>
         <Tab label="JSON">
           <div className="grid w-full grid-cols-1 gap-4">
-            <div className="grid grid-cols-3 gap-4 w-full">
-              <FlowbiteButton
-                color="violet"
-                text="Export Initial JSON"
-                py="3"
-              />
-              <FlowbiteButton
+            <div className="grid grid-cols-2 gap-4 w-full">
+              <CustomButton
                 color="blue"
-                text="Export Simulation JSON"
+                text="Export Initial State JSON"
                 py="3"
               />
-              <FlowbiteButton
-                color="teal"
-                text="Export Simulation JSON"
-                py="3"
-              />
+              <CustomButton color="violet" text="Export Result JSON" py="3" />
             </div>
             <ReactJson
               indentWidth={4}
