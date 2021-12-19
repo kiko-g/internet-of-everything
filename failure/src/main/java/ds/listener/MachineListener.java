@@ -14,7 +14,6 @@ import org.json.JSONObject;
 public class MachineListener implements MqttCallbackExtended {
     private final String brokerURI;
     private final String subscriberId;
-    private final String[] topics;
 
     private State state = new State();  // Stores the current state of all machines.
     // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
@@ -22,11 +21,9 @@ public class MachineListener implements MqttCallbackExtended {
     public static final Integer INFO_SIZE = 3;
 
 
-    public MachineListener(String[] topics) {
+    public MachineListener() {
         this.brokerURI = "tcp://mosquitto:1883";
         this.subscriberId = UUID.randomUUID().toString();
-        this.topics = topics;
-
     }
 
     public void init() {
@@ -40,10 +37,8 @@ public class MachineListener implements MqttCallbackExtended {
             System.out.println("Connected with success to MQTT Broker at " + this.brokerURI);
 
             //Subscribe to all machine sensors
-            for (String topic: topics) {
-                System.out.println("Subscribed to " + topic);
-                subscriber.subscribe(topic);
-            }
+            subscriber.subscribe("production/machine");
+            System.out.println("Subscribed to machine/*");
 
         } catch (MqttException e) {
             e.printStackTrace();
@@ -55,12 +50,12 @@ public class MachineListener implements MqttCallbackExtended {
 
     public static void main(String[] args) {
 
-        if(args.length == 0){
-            System.err.println("Usage: java MachineListener [sensors...]");
-            System.out.println("e.g. java MachineListener temperature");
+        if(args.length > 0){
+            System.err.println("Usage: java MachineListener");
+            System.out.println("e.g. java MachineListener");
         }
 
-        MachineListener machineListener = new MachineListener(args);
+        MachineListener machineListener = new MachineListener();
         machineListener.init();
         
     }
@@ -115,4 +110,5 @@ public class MachineListener implements MqttCallbackExtended {
 
     @Override
     public void connectionLost(Throwable cause) {}
+
 }

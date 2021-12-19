@@ -12,7 +12,7 @@ public class MachineSensor extends Sensor {
     private Random rnd = new Random();
 
     public MachineSensor() throws MqttException {
-        super("temperature");
+        super("production/machine");
     }
 
     /**

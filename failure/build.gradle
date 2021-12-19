@@ -29,7 +29,6 @@ test {
 task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
     main = 'ds.listener.MachineListener'
     classpath = sourceSets.main.runtimeClasspath
-    args 'temperature'
 }
 
 task(runMachineSensor, dependsOn: 'classes', type: JavaExec) {
