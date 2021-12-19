@@ -50,12 +50,12 @@ public abstract class Sensor {
     public void publish(){
         
         try {
-            final MqttTopic temperatureTopic = this.publisher.getTopic(this.topic);
+            final MqttTopic topicObj = this.publisher.getTopic(this.topic);
 
             MqttMessage msg = readSensor();
             msg.setQos(2);
 
-            temperatureTopic.publish(msg);
+            topicObj.publish(msg);
 
             System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
 
@@ -63,7 +63,16 @@ public abstract class Sensor {
             System.err.println("Error publishing to " + this.topic + " - " + e);
         }
     }
-    
-    abstract protected MqttMessage readSensor();
 
+    protected MqttMessage readSensor() {
+        String message = getMessage();  
+
+        System.out.println(message);
+
+        byte[] payload = message.getBytes();        
+        MqttMessage msg = new MqttMessage(payload); 
+        return msg;
+    }
+    
+    abstract protected String getMessage();
 }
