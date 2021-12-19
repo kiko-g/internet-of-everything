@@ -1,4 +1,4 @@
-name: java-workflow
+name: v3-docker-workflow
  
 on:
   push:
