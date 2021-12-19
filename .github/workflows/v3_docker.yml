@@ -1,0 +1,25 @@
+name: java-workflow
+ 
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches: 
+      - main
+      - dev
+      - V3-Fault-Analysis
+
+  workflow_dispatch:
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    name: "Vertical 3: Test docker-compose"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Run Docker"
+      working-directory: ./failure
+      run: docker-compose up -d
