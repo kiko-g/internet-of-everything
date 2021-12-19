@@ -37,15 +37,14 @@ public class MachineListener implements MqttCallbackExtended {
             System.out.println("Connected with success to MQTT Broker at " + this.brokerURI);
 
             //Subscribe to all machine sensors
-            subscriber.subscribe("production/machine");
-            System.out.println("Subscribed to machine/*");
+            subscriber.subscribe("production/#");
+            System.out.println("Subscribed to production/*");
 
         } catch (MqttException e) {
             e.printStackTrace();
             System.out.println("Failed connecting to MQTT Broker");
             System.exit(1);
         }
-
     }
 
     public static void main(String[] args) {

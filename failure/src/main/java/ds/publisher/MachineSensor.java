@@ -3,19 +3,30 @@ import java.util.Random;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 import ds.publisher.Utils.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MachineSensor extends Sensor {
     private Random rnd = new Random();
+    private ScheduledThreadPoolExecutor executor;
 
     public MachineSensor() throws MqttException {
         super("production/machine");
+        this.executor = new ScheduledThreadPoolExecutor(10);
+    }
+
+    public void init(){
+        super.init();
+
+        // Start Publishing with fixed delay
+        Thread messageGenerator = new Thread(() -> this.sendMessage());
+        executor.scheduleWithFixedDelay(messageGenerator, 0, 1500, TimeUnit.MILLISECONDS);
     }
 
     /**
      * This method simulates reading of the properties of a Machine
      */
-    @Override
-    protected String getMessage(){
+    protected void sendMessage(){
         int machineID = this.rnd.nextInt(4 - 1) + 1;
         double temperature =  Utils.round(80 + this.rnd.nextDouble() * 20.0);
         String readTime = Utils.getDateTime(); 
@@ -34,7 +45,7 @@ public class MachineSensor extends Sensor {
         messageObject.put("reading-time", readTime);
         messageObject.put("properties", propertiesObject);
         
-        return messageObject.toString(); 
+        this.publish(messageObject.toString());
     }
 
     public static void main(String[] args) {

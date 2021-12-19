@@ -1,7 +1,5 @@
 package ds.publisher;
 import java.util.UUID;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -22,7 +20,7 @@ public abstract class Sensor {
         this.topic = topic;
     }
 
-    protected void init(){
+    public void init(){
         try {
             System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
 
@@ -30,9 +28,6 @@ public abstract class Sensor {
             this.publisher = new MqttClient(this.brokerURI, publisherId);
             this.publisher.connect(this.getMQTTOptions());
 
-            // Start Publishing
-            ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
-            executor.scheduleWithFixedDelay(new Thread(() -> this.publish()), 0, 1500, TimeUnit.MILLISECONDS);
         } catch (MqttException e) {
             System.err.println("Error connecting to MQTT Broker at " + brokerURI + " - " + e);
         }
@@ -47,12 +42,12 @@ public abstract class Sensor {
         return mqttOptions;
     }
 
-    public void publish(){
+    public void publish(String rawMsg){
         
         try {
             final MqttTopic topicObj = this.publisher.getTopic(this.topic);
 
-            MqttMessage msg = readSensor();
+            MqttMessage msg = getMqttMessage(rawMsg);
             msg.setQos(2);
 
             topicObj.publish(msg);
@@ -63,16 +58,14 @@ public abstract class Sensor {
             System.err.println("Error publishing to " + this.topic + " - " + e);
         }
     }
-
-    protected MqttMessage readSensor() {
-        String message = getMessage();  
-
+    
+    private MqttMessage getMqttMessage(String message){
         System.out.println(message);
 
         byte[] payload = message.getBytes();        
         MqttMessage msg = new MqttMessage(payload); 
+        msg.setQos(2);
+        
         return msg;
     }
-    
-    abstract protected String getMessage();
 }
