@@ -48,6 +48,7 @@ jobs:
       with:
         node-version: '14'
         cache: 'npm'
+        working-directory: ./emulation/edge
     - name: "npm install"
       working-directory: ./emulation/edge
       run: npm install
