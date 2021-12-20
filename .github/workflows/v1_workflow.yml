@@ -1,0 +1,26 @@
+name: V1-workflow
+ 
+on:
+  push:
+    branches:
+      - V1-Emulator
+      - main
+      - dev
+  pull_request:
+    branches: 
+      - main
+      - dev
+      - V1-Emulator
+
+  workflow_dispatch:
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    name: "Vertical 1: Test docker-compose"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Run Docker"
+      working-directory: ./emulator
+      run: docker-compose up -d
