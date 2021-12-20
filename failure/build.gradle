@@ -36,3 +36,8 @@ task(runMachineSensor, dependsOn: 'classes', type: JavaExec) {
     main = 'ds.publisher.MachineSensor'
     classpath = sourceSets.main.runtimeClasspath
 }
+
+task(graphTest, dependsOn: 'classes', type: JavaExec){
+    main = 'ds.graph.Test'
+    classpath = sourceSets.main.runtimeClasspath
+}
