@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - V2-Simulation
   pull_request:
     branches: 
       - main
