@@ -22,5 +22,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: "Run Docker"
-      working-directory: ./emulator
+      working-directory: ./emulation
       run: docker-compose up -d
