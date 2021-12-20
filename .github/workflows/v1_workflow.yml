@@ -52,8 +52,8 @@ jobs:
     - name: "npm install"
       working-directory: ./emulation/server
       run: npm install
-    - name: "npm build"
-      working-directory: ./emulation/server
-      run: npm build
+#     - name: "npm test"
+#       working-directory: ./emulation/server
+#       run: npm test
    
 
