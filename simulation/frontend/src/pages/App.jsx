@@ -5,7 +5,7 @@ import Representation from "../components/Representation"
 
 export default function App() {
   return (
-    <div className="homepage min-h-screen bg-bluegray-200 dark:bg-coolgray-400 font-inter">
+    <div className="homepage min-h-screen bg-bluegray-200 dark:bg-bluegray-500 font-inter">
       <Header siteTitle="Simulation" />
       <div className="min-h-adjusted mx-auto p-6">
         <div className="grid grid-cols-12 space-x-0 space-y-8 md:space-x-8 md:space-y-0">

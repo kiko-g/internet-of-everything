@@ -13,7 +13,7 @@ export default function Collapsed(props) {
         <>
           <Disclosure.Button
             className={`
-              flex justify-between w-full px-4 py-2 text-sm font-medium text-left rounded-lg duration-300
+              flex justify-between w-full px-4 py-2 text-sm font-medium text-left rounded-xl duration-300
               text-${color}-800 bg-${color}-200 hover:bg-${color}-300 focus-visible:ring focus-visible:ring-${color}-500 focus-visible:ring-opacity-75
               hover:opacity-90 focus:outline-none focus-visible:ring focus:ring-opacity-75`}
           >
@@ -32,9 +32,7 @@ export default function Collapsed(props) {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-bluegray-700">
-              {props.children}
-            </Disclosure.Panel>
+            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-bluegray-700">{props.children}</Disclosure.Panel>
           </Transition>
         </>
       )}

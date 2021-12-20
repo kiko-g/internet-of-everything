@@ -3,7 +3,7 @@ import Collapsed from "./utilities/Collapsed"
 
 export default function Settings() {
   return (
-    <div className="bg-bluegray-100 p-4 rounded-lg w-full space-y-4 mx-auto">
+    <div className="bg-bluegray-100 p-4 rounded-xl w-full space-y-4 mx-auto">
       <Collapsed color="bluegray" headline="Setting A">
         Settings
       </Collapsed>

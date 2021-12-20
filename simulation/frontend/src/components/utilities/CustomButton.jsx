@@ -16,7 +16,7 @@ export default function CustomButton(props) {
     <button
       type="button"
       onClick={action}
-      className={`text-white bg-${color}-400 hover:bg-${color}-500 focus:shadow-lg font-medium rounded text-${fontsize} px-4 py-${py} text-center duration-150`}
+      className={`text-white bg-${color}-500 hover:opacity-80 focus:shadow-lg font-medium rounded text-${fontsize} px-4 py-${py} text-center duration-150`}
     >
       {text}&nbsp;{icon}
     </button>
