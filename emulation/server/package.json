@@ -5,5 +5,4 @@
     "scripts": {
         "start": "node src/server.js"
     }
-
 }
