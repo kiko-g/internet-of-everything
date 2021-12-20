@@ -35,16 +35,11 @@ public class ProductSensor extends Sensor {
         String message = this.getOutputMessage(startMachine);
         this.publish(message);
 
-
-        if(startMachine.getId().equals("m4"))
-            System.out.println(startMachine);
-
         List<MachineNode> nextMachines = startMachine.getNext();
 
         if(nextMachines.size() > 0){
             // Get one of the next machines
             Integer machineIdx = this.rnd.nextInt(nextMachines.size());
-
             MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
 
             nextMachine.addCurrentInput(startMachine.getOutput());
