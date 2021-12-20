@@ -1,14 +1,15 @@
 package ds.graph;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class MachineNode { 
-    private List<MachineNode> prev;     // Machines that output to this machine. 
-    private List<MachineNode> next;     
-    private String id;  
-    HashMap<String, Double> defaultValues; 
+public class MachineNode {  
+
+    private String id;                          
+    private List<MachineNode> prev;             // Parent machines.   [machine receives input from these]
+    private List<MachineNode> next;             // Children machines. [machine output to these]
+    HashMap<String, Double> defaultValues;      // The maximum values allowed by the machine. 
     // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
-    HashMap<String, Integer> inputs;    
+    HashMap<String, Integer> inputs;  
+    String output;    
 
     public MachineNode(String id){
         this.id = id;
@@ -30,7 +31,6 @@ public class MachineNode {
         this.next.add(machineNode);
     } 
 
-   
     public void addDefault(String name, Double value){
         defaultValues.put(name, value); 
     }
@@ -38,6 +38,10 @@ public class MachineNode {
     public void addInput(String id, Integer amount) {
         this.inputs.put(id, amount);
     }
+
+    public void addOutput(String id){
+        this.output = id; 
+    } 
 
     @Override
     public String toString(){
@@ -59,12 +63,12 @@ public class MachineNode {
         defaultValues.keySet().forEach(propertyName -> {
             s.append("- ").append(propertyName).append(" ").append(defaultValues.get(propertyName)).append("\n"); 
         });
-        s.append("\n"); 
         s.append("[INPUT]:\n");
         inputs.keySet().forEach(prodId -> {
             s.append("- ").append(prodId).append(" : ").append(inputs.get(prodId)).append("\n");
         });
-        s.append("\n");
+        s.append("[OUTPUT]:").append(this.output).append("\n"); 
+
         return s.toString();
     }
 

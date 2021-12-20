@@ -5,16 +5,15 @@ import java.nio.file.Files;
 import java.io.IOException; 
 import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap; 
-import java.util.Set;
 
 public class Graph { 
     ConcurrentHashMap<String, MachineNode> nodes; 
     public Graph(String filename){  
         nodes = new ConcurrentHashMap<>(); 
         try{
-            JSONObject json = this.readJsonGraph(filename); 
-            System.out.println(json); 
-            this.build(json);
+            JSONObject json = this.readJsonGraph(filename);  
+            this.addEmptyNodes(json);
+            this.addProperties(json);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -30,12 +29,6 @@ public class Graph {
         return new JSONObject(new String (encoded));
     }
 
-    public void build(JSONObject json){ 
-        this.addEmptyNodes(json);
-        this.addProperties(json);
-        System.out.println(this.toString());
-
-    }
 
     /**
      * Fills the this.nodes variable with empty nodes that just contains the id. 
@@ -48,14 +41,19 @@ public class Graph {
         });
     }
 
+    /**
+     * Adds the property for each node in the graph. 
+     * @param json The json object describing the graph.
+     */
     public void addProperties(JSONObject json) {
         json.keySet().forEach(id -> {
             MachineNode machineNode = nodes.get(id); 
             JSONObject machineJson = json.getJSONObject(id); 
             this.addPrevNodes(machineNode, machineJson.getJSONArray("prev"));       
-            this.addNextNodes(machineNode, machineJson.getJSONObject("next").keySet()); 
+            this.addNextNodes(machineNode, machineJson.getJSONArray("next")); 
             this.addDefaultValues(machineNode, machineJson.getJSONObject("default")); 
             this.addInputs(machineNode, machineJson.getJSONObject("input"));
+            this.addOutput(machineNode, machineJson.getString("output"));
         });
     }
 
@@ -67,7 +65,7 @@ public class Graph {
         });
     }  
 
-    public void addNextNodes(MachineNode machineNode, Set<String> nextNodes){  
+    public void addNextNodes(MachineNode machineNode, JSONArray nextNodes){  
         nextNodes.forEach(id -> {
             MachineNode nextNode = nodes.get(id); 
             if (nextNode != null) 
@@ -87,6 +85,10 @@ public class Graph {
         });
     } 
 
+    public void addOutput(MachineNode machineNode, String prodId){
+        machineNode.addOutput(prodId);
+    }
+
     public String toString(){ 
         StringBuilder s = new StringBuilder(); 
         nodes.keySet().forEach(id-> {
@@ -96,9 +98,5 @@ public class Graph {
 
         return s.toString();
     }
-
-    /*public MachineNode buildNode(JSONObject node){
-        return new MachineNode();        
-    }*/
 
 }
