@@ -51,11 +51,11 @@ public class Graph {
     public void addProperties(JSONObject json) {
         json.keySet().forEach(id -> {
             MachineNode machineNode = nodes.get(id); 
-            this.addPrevNodes(machineNode, json.getJSONObject(id).getJSONArray("prev"));       
-            this.addNextNodes(machineNode, json.getJSONObject(id).getJSONObject("next").keySet()); 
-            this.addDefaultValues(machineNode, json.getJSONObject(id).getJSONObject("default"));
-            //this.addProdsName(machineNode, json.getJSONObject(id).getJSONArray("prod"));
-            //this.addProdsAmount(machineNode, json.getJSONObject(id).getJSONArray("prod_amount"));
+            JSONObject machineJson = json.getJSONObject(id); 
+            this.addPrevNodes(machineNode, machineJson.getJSONArray("prev"));       
+            this.addNextNodes(machineNode, machineJson.getJSONObject("next").keySet()); 
+            this.addDefaultValues(machineNode, machineJson.getJSONObject("default")); 
+            this.addInputs(machineNode, machineJson.getJSONObject("input"));
         });
     }
 
@@ -81,14 +81,11 @@ public class Graph {
         });
     }
 
-    public void addProdsName(MachineNode machineNode, JSONArray prodsName){
-
-    }
-
-    public void addProdsAmount(MachineNode machineNode, JSONArray prodsAmount){
-
-    }
-
+    public void addInputs(MachineNode machineNode, JSONObject inputs){
+        inputs.keySet().forEach(inputId -> {
+            machineNode.addInput(inputId, inputs.getInt(inputId));
+        });
+    } 
 
     public String toString(){ 
         StringBuilder s = new StringBuilder(); 

@@ -5,19 +5,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MachineNode { 
     private List<MachineNode> prev;     // Machines that output to this machine. 
     private List<MachineNode> next;     
-    private List<Integer> prod_amount; 
-    private List<Product> prod;
     private String id;  
-    HashMap<String, Double> defaultValues;
+    HashMap<String, Double> defaultValues; 
+    // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
+    HashMap<String, Integer> inputs;    
 
     public MachineNode(String id){
         this.id = id;
         this.next = new ArrayList<>();
         this.prev = new ArrayList<>();  
         this.defaultValues = new HashMap<>();  
-        // perhaps to change later. 
-        this.prod = new ArrayList<>();
-        this.prod_amount = new ArrayList<>();
+        this.inputs = new HashMap<>();
     }
 
     public String getId(){
@@ -35,6 +33,10 @@ public class MachineNode {
    
     public void addDefault(String name, Double value){
         defaultValues.put(name, value); 
+    }
+
+    public void addInput(String id, Integer amount) {
+        this.inputs.put(id, amount);
     }
 
     @Override
@@ -57,6 +59,12 @@ public class MachineNode {
         defaultValues.keySet().forEach(propertyName -> {
             s.append("- ").append(propertyName).append(" ").append(defaultValues.get(propertyName)).append("\n"); 
         });
+        s.append("\n"); 
+        s.append("[INPUT]:\n");
+        inputs.keySet().forEach(prodId -> {
+            s.append("- ").append(prodId).append(" : ").append(inputs.get(prodId)).append("\n");
+        });
+        s.append("\n");
         return s.toString();
     }
 
