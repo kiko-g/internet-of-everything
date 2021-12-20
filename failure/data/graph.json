@@ -1,0 +1,98 @@
+{
+    "m1":  {
+        "default": {
+            "temperature": 100,
+            "other": 30.2
+        }, 
+        "next": ["m3"], 
+        "prev": [], 
+        "proportion": [2],
+        "prod": ["p1"]
+    },
+    "m2": {
+        "default": {
+            "temperature": 120, 
+            "other": 40
+        },
+        "next": ["m3"], 
+        "prev": [], 
+        "prod_amount": [2],
+        "prod_name": ["p2"]
+
+    },
+
+    "m3": {
+        "default": {
+            "temperature": 98,
+            "other": 2
+        },
+        "next": ["m4"], 
+        "prev": ["m1", "m2"], 
+        "prod_amount": [2],
+        "prod_name": ["p3"]
+
+    }, 
+    "m4": {
+        "default": {
+            "temperature": 58,
+            "other": 45
+        },  
+        "next": ["m5", "m6"], 
+        "prev": ["m3"], 
+        "prod_amount": [1, 1],
+        "prod_name": ["p3", "p3"]
+    }, 
+    "m5": {
+        "default": {
+            "temperature": 78,
+            "other": 50
+        }, 
+        "next": ["m7"], 
+        "prev": ["m4"], 
+        "prod_amount": [2],
+        "prod_name": ["p6"]
+
+    },
+    "m6": {
+        "default": {
+            "temperature": 78, 
+            "other": 50
+        }, 
+        "next": ["m7"], 
+        "prev": ["m9", "m4"], 
+        "prod_amount": [1],
+        "prod_name": ["p5"]
+
+    }, 
+    "m7": {
+        "default": {
+            "temperature": 98,
+            "other": 45
+        }, 
+        "next": ["m8"], 
+        "prev": ["m5", "m6"], 
+        "prod_amount": [1],
+        "prod_name": ["p7"]
+    }, 
+    "m8" : {
+        "default": {
+            "temperature": 98,
+            "other": 45
+        }, 
+        "next": [], 
+        "prev": ["m7"], 
+        "prod_amount": [1],
+        "prod_name": ["p9"]
+
+    }, 
+    "m9": {
+        "default": {
+            "temperature": 98,
+            "other": 45
+        }, 
+        "next": ["m6"], 
+        "prev": [], 
+        "prod_amount": [6],
+        "prod_name": ["p4"]
+    }
+}
