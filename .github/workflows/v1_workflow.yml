@@ -48,12 +48,12 @@ jobs:
       with:
         node-version: '14'
         cache: 'npm'
-        cache-dependency-path: subdir/package-lock.json
+        cache-dependency-path: ./emulation/server/package-lock.json
     - name: "npm install"
-      working-directory: ./emulation/edge
+      working-directory: ./emulation/server
       run: npm install
     - name: "npm build"
-      working-directory: ./emulation/edge
+      working-directory: ./emulation/server
       run: npm build
    
 
