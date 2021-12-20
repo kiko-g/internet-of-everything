@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - V3-Fault-Analysis
   pull_request:
     branches: 
       - main
