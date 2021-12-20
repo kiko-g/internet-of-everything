@@ -37,4 +37,22 @@ jobs:
   #  - name: "Test Edge"
   #    working-directory: ./emulation/edge
   #    run: gradle test
+  
+  npm-build:
+    runs-on: ubuntu-latest
+    name: "Vertical 1: Build and Test Server"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'npm'
+    - name: "npm install"
+      working-directory: ./emulation/edge
+      run: npm install
+    - name: "npm build"
+      working-directory: ./emulation/edge
+      run: npm build
+   
 
