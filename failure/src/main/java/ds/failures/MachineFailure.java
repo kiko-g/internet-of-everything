@@ -1,7 +1,5 @@
-package ds.state;
+package ds.failures;
 import ds.state.MachineState;
-
-import java.util.Random;
 
 /**
  * This class is responsible for processing machine failures

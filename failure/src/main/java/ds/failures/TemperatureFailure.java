@@ -1,8 +1,6 @@
-package ds.state;
+package ds.failures;
 import ds.state.MachineState;
 import ds.state.TemperatureState;
-
-import java.util.Random;
 
 /**
  * This class is responsible for processing temperature machine failures

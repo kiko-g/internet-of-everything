@@ -1,50 +1,19 @@
 package ds.listener;
 import ds.state.MachineState;
 import ds.state.State; 
-
-import java.util.UUID;
-
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
-public class MachineListener implements MqttCallbackExtended {
-    private final String brokerURI;
-    private final String subscriberId;
-
-    private State state = new State();  // Stores the current state of all machines.
+public class MachineListener extends Listener {
+    private State state; // Stores the current state of all machines.
     // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
     // temperatures for each machine.
     public static final Integer INFO_SIZE = 3;
 
 
     public MachineListener() {
-        this.brokerURI = "tcp://mosquitto:1883";
-        this.subscriberId = UUID.randomUUID().toString();
-    }
-
-    public void init() {
-        try {
-            System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
-
-            // Connect to Broker
-            MqttClient subscriber = new MqttClient(this.brokerURI, subscriberId);
-            subscriber.setCallback(this);
-            subscriber.connect();
-            System.out.println("Connected with success to MQTT Broker at " + this.brokerURI);
-
-            //Subscribe to all machine sensors
-            subscriber.subscribe("production/#");
-            System.out.println("Subscribed to production/*");
-
-        } catch (MqttException e) {
-            e.printStackTrace();
-            System.out.println("Failed connecting to MQTT Broker");
-            System.exit(1);
-        }
+        super("production/machine");
+        this.state = new State(); 
     }
 
     public static void main(String[] args) {
@@ -55,8 +24,7 @@ public class MachineListener implements MqttCallbackExtended {
         }
 
         MachineListener machineListener = new MachineListener();
-        machineListener.init();
-        
+        //machineListener.init();  
     }
 
     @Override
@@ -64,7 +32,6 @@ public class MachineListener implements MqttCallbackExtended {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
         System.out.println(messageParsed);
         String machineID = messageParsed.getString("machineID");
-        System.out.println(machineID);
 
         try {
             if (!this.state.findMachine(machineID)) {
@@ -72,7 +39,7 @@ public class MachineListener implements MqttCallbackExtended {
             } else {
                 this.updateState(messageParsed);
             }
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -100,14 +67,5 @@ public class MachineListener implements MqttCallbackExtended {
         this.state.addMachine(machineID, machineState);
         System.out.println("MachineID :: " + machineID + "::" + machineState.getTempState().getMeanTemp());
     }
-
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {}
-
-    @Override
-    public void connectComplete(boolean reconnect, String serverURI) {}
-
-    @Override
-    public void connectionLost(Throwable cause) {}
 
 }

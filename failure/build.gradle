@@ -31,8 +31,18 @@ task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task(runMachineSensor, dependsOn: 'classes', type: JavaExec) {
+task(runProductListener, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.listener.ProductListener'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runMachineSensors, dependsOn: 'classes', type: JavaExec) {
     main = 'ds.publisher.MachineSensor'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runProductSensors, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.publisher.ProductSensor'
     classpath = sourceSets.main.runtimeClasspath
 }
 

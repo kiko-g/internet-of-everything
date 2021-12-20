@@ -2,7 +2,6 @@ package ds.publisher;
 import java.util.Random;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
-import ds.publisher.Utils.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +55,7 @@ public class MachineSensor extends Sensor {
 
         try {
             MachineSensor machineSensor = new MachineSensor();
-            machineSensor.init();
+            //machineSensor.init();
 
         } catch (MqttException e) {
             System.err.println("Error creating Machine Sensor - " + e);

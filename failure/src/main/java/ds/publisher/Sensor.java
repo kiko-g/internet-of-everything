@@ -60,8 +60,6 @@ public abstract class Sensor {
     }
     
     private MqttMessage getMqttMessage(String message){
-        System.out.println(message);
-
         byte[] payload = message.getBytes();        
         MqttMessage msg = new MqttMessage(payload); 
         msg.setQos(2);

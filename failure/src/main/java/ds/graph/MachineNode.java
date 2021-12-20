@@ -1,25 +1,26 @@
 package ds.graph;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MachineNode {  
 
     private String id;                          
     private List<MachineNode> prev;             // Parent machines.   [machine receives input from these]
     private List<MachineNode> next;             // Children machines. [machine output to these]
-    HashMap<String, Double> defaultValues;      // The maximum values allowed by the machine. 
+    ConcurrentHashMap<String, Double> defaultValues;      // The maximum values allowed by the machine. 
     // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
-    HashMap<String, Integer> inputs;            // Produces subproduct. 
+    ConcurrentHashMap<String, Integer> inputs;            // Produces subproduct. 
     String output;    
-    HashMap<String, Integer> currentInput; 
+    ConcurrentHashMap<String, Integer> currentInput; 
     Integer productCounter;                              // How many subproducts were produced. TODO. 
-
 
     public MachineNode(String id){
         this.id = id;
         this.next = new ArrayList<>();
         this.prev = new ArrayList<>();  
-        this.defaultValues = new HashMap<>();  
-        this.inputs = new HashMap<>();
+        this.defaultValues = new ConcurrentHashMap<>();
+        this.inputs = new ConcurrentHashMap<>();
+        this.currentInput = new ConcurrentHashMap<>();
     }
 
     public String getId(){
@@ -30,8 +31,16 @@ public class MachineNode {
         return this.output;
     } 
 
+    public ConcurrentHashMap<String,Integer> getInputs(){
+        return this.inputs;
+    } 
+
     public Integer getProductCount(){
         return this.productCounter;
+    } 
+
+    public List<MachineNode> getNext(){
+        return this.next;
     } 
 
     public void addPrevMachine(MachineNode machineNode){
@@ -48,6 +57,7 @@ public class MachineNode {
 
     public void addInput(String id, Integer amount) {
         this.inputs.put(id, amount);
+        this.currentInput.put(id, 0);
     }
 
     public void addOutput(String id){
@@ -57,7 +67,7 @@ public class MachineNode {
     public void addCurrentInput(String prod){
         Integer currAmountProd = this.currentInput.getOrDefault(prod, 0);
         this.currentInput.put(prod, currAmountProd + 1);  
-        this.updateCounter();
+        //this.updateCounter();
     }
 
     public void updateCounter(){ 
@@ -66,13 +76,19 @@ public class MachineNode {
             Integer expectedAmount = this.inputs.get(key); 
             Integer currAmount = this.currentInput.get(key); 
             this.productCounter = Math.min(this.productCounter, currAmount / expectedAmount);  
-        } 
+        }
     }
 
-    public void cleanCurrentInput(){
+    public void cleanProducedInput(){
         for (String key: this.currentInput.keySet()){
-            this.currentInput.put(key, 0);
+            Integer expectedAmount = this.inputs.get(key); 
+            Integer currAmount = this.currentInput.get(key); 
+
+            Integer remainingInput = currAmount - expectedAmount;
+            System.out.println("======= Remaining input: " + remainingInput);
+            this.currentInput.put(key, remainingInput);
         }
+        System.out.println("======= Input Cleaned ");
     }
 
     public Integer getCurrentInput(String prod){
@@ -88,7 +104,9 @@ public class MachineNode {
             Integer expectedValue = this.inputs.get(key); 
             Integer currentValue = this.currentInput.get(key); 
             if (expectedValue != currentValue) return false; 
-       };    
+        };    
+        
+        System.out.println("=============== " + this.id + " PRODUCED");
         return true; 
     }
 

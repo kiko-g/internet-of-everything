@@ -1,39 +1,76 @@
 package ds.publisher;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
-import ds.publisher.Utils.*;
+
+import ds.graph.Graph;
+import ds.graph.MachineNode;
+
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ProductSensor extends Sensor {
+    private Graph machinesGraph;
     private ScheduledThreadPoolExecutor executor;
+    private Random rnd = new Random();
 
     public ProductSensor() throws MqttException {
         super("production/product");
-        this.executor = new ScheduledThreadPoolExecutor(10);
+        this.executor = new ScheduledThreadPoolExecutor(100);
     }
 
     public void init(){
         super.init();
+        this.machinesGraph = new Graph();
+        
+        for(MachineNode machine: this.machinesGraph.getStartMachines()){
+            int time = this.rnd.nextInt(3000 - 2000) + 2000;
+            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+        }
+    }
 
-        // TODO: Start publishing
-        // executor.scheduleWithFixedDelay(new Thread(() -> this.publish()), 0, 4000, TimeUnit.MILLISECONDS);
+    private void simulateOutput(MachineNode startMachine){
+        // Send output message
+        String message = this.getOutputMessage(startMachine);
+        this.publish(message);
+
+
+        if(startMachine.getId().equals("m4"))
+            System.out.println(startMachine);
+
+        List<MachineNode> nextMachines = startMachine.getNext();
+
+        if(nextMachines.size() > 0){
+            // Get one of the next machines
+            Integer machineIdx = this.rnd.nextInt(nextMachines.size());
+
+            MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
+
+            nextMachine.addCurrentInput(startMachine.getOutput());
+
+            // Received enough subproducts from all child machines to produce its product
+            if(nextMachine.canProduce()){ 
+                // Reset inputs
+                nextMachine.cleanProducedInput();
+
+                // Schedule next machine output message
+                int time = this.rnd.nextInt(2000 - 1000) + 1000;
+                executor.schedule(new Thread(() -> this.simulateOutput(nextMachine)),time,TimeUnit.MILLISECONDS);
+            }
+        }
     }
 
 
     /**
      * This method simulates reading of a product state
      */
-    protected String getMessage(){
-        int machineID = 1; // TODO: generate messages with different machine ids
+    protected String getOutputMessage(MachineNode machine){
         String readTime = Utils.getDateTime(); 
-        // TODO: in the future the product defects can be reported with other states
-        String productState = "out"; // or 'out'
 
         JSONObject messageObject = new JSONObject();
-        messageObject.put("machineID", String.valueOf(machineID));
+        messageObject.put("machineID", machine.getId());
         messageObject.put("reading-time", readTime);
-        messageObject.put("product-state", productState);
         
         return messageObject.toString(); 
     }

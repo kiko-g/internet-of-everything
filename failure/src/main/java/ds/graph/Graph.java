@@ -4,10 +4,17 @@ import org.json.JSONArray;
 import java.nio.file.Files;
 import java.io.IOException; 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap; 
 
 public class Graph { 
     ConcurrentHashMap<String, MachineNode> nodes; 
+
+    public Graph(){
+        this("./data/graph.json");
+    }
+
     public Graph(String filename){  
         nodes = new ConcurrentHashMap<>(); 
         try{
@@ -92,6 +99,19 @@ public class Graph {
     public MachineNode getMachineNode(String machineId){
         return this.nodes.get(machineId); 
     }
+
+    public List<MachineNode> getStartMachines(){
+        List<MachineNode> startMachines = new ArrayList<>();
+
+        for(MachineNode node: this.nodes.values()){
+            if(node.getInputs().isEmpty()){
+                startMachines.add(node);
+            }
+        }
+
+        return startMachines;
+    }
+
     public String toString(){ 
         StringBuilder s = new StringBuilder(); 
         nodes.keySet().forEach(id-> {
