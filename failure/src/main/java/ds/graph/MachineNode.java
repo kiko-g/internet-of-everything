@@ -8,9 +8,11 @@ public class MachineNode {
     private List<MachineNode> next;             // Children machines. [machine output to these]
     HashMap<String, Double> defaultValues;      // The maximum values allowed by the machine. 
     // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
-    HashMap<String, Integer> inputs;  
+    HashMap<String, Integer> inputs;            // Produces subproduct. 
     String output;    
     HashMap<String, Integer> currentInput; 
+    Integer productCounter;                              // How many subproducts were produced. TODO. 
+
 
     public MachineNode(String id){
         this.id = id;
@@ -21,7 +23,15 @@ public class MachineNode {
     }
 
     public String getId(){
-        return id;
+        return this.id;
+    } 
+
+    public String getOutput(){
+        return this.output;
+    } 
+
+    public Integer getProductCount(){
+        return this.productCounter;
     } 
 
     public void addPrevMachine(MachineNode machineNode){
@@ -44,8 +54,19 @@ public class MachineNode {
         this.output = id; 
     } 
 
-    public void setCurrentInput(String prod, Integer amount){
-        this.currentInput.put(prod, amount);
+    public void addCurrentInput(String prod){
+        Integer currAmountProd = this.currentInput.getOrDefault(prod, 0);
+        this.currentInput.put(prod, currAmountProd + 1);  
+        this.updateCounter();
+    }
+
+    public void updateCounter(){ 
+        this.productCounter = Integer.MAX_VALUE; 
+        for (String key: this.inputs.keySet()){ 
+            Integer expectedAmount = this.inputs.get(key); 
+            Integer currAmount = this.currentInput.get(key); 
+            this.productCounter = Math.min(this.productCounter, currAmount / expectedAmount);  
+        } 
     }
 
     public void cleanCurrentInput(){

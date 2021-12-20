@@ -89,6 +89,9 @@ public class Graph {
         machineNode.addOutput(prodId);
     }
 
+    public MachineNode getMachineNode(String machineId){
+        return this.nodes.get(machineId); 
+    }
     public String toString(){ 
         StringBuilder s = new StringBuilder(); 
         nodes.keySet().forEach(id-> {

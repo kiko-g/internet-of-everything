@@ -26,26 +26,26 @@
             "other": 2
         },
         "prev": ["m1", "m2"],  
-        "next": ["m4"],
+        "next": ["m5", "m6"],
         "input": {"p1": 2, "p2": 2},
         "output": "p3" 
     }, 
     "m4": {
         "default": {
-            "temperature": 58,
+            "temperature": 98,
             "other": 45
-        },  
-        "prev": ["m3"],  
-        "next": ["m5", "m6"],
-        "input": {"p3": 2},
-        "output": "p3"
-    }, 
+        }, 
+        "prev": [],  
+        "next": ["m6"],
+        "input": {},
+        "output": "p4"
+    },
     "m5": {
         "default": {
             "temperature": 78,
             "other": 50
         }, 
-        "prev": ["m4"],   
+        "prev": ["m3"],   
         "next": ["m7"],
         "input": {"p3": 1},
         "output": "p6"
@@ -55,7 +55,7 @@
             "temperature": 78, 
             "other": 50
         }, 
-        "prev": ["m9", "m4"],   
+        "prev": ["m4", "m3"],   
         "next": ["m7"],
         "input": {"p3": 1, "p4": 6},
         "output": "p5"
@@ -78,16 +78,6 @@
         "prev": ["m7"],  
         "next": [], 
         "input": {"p7": 1}, 
-        "output": "p9"
-    }, 
-    "m9": {
-        "default": {
-            "temperature": 98,
-            "other": 45
-        }, 
-        "prev": [],  
-        "next": ["m6"],
-        "input": {},
-        "output": "p4"
+        "output": "p8"
     }
 }
