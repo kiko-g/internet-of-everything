@@ -21,7 +21,7 @@ def fault_central_handler(server, fault_storage):
     if req.method == 'POST':
         req_data = json_helper.get_dict_from_req(req)
         fault_storage[int(req_data['machineID'])] = req_data
-        print(f"Received {int(req_data['machineID'])} post", file = sys.stdout)
+        print(f"Received {int(req_data['machineID'])} post", file=sys.stdout)
         return None
 
     if req.method == 'GET' and 'machineID' in req.args:
@@ -43,11 +43,11 @@ def main():
 
     central_lambda = lambda: fault_central_handler(server, central_storage)
     server.add_endpoint(endpoint='/central', endpoint_name='central',
-        handler=central_lambda, methods=['GET', 'POST'])
+                        handler=central_lambda, methods=['GET', 'POST'])
 
     fault_lambda = lambda: fault_central_handler(server, fault_storage)
     server.add_endpoint(endpoint='/fault', endpoint_name='fault',
-        handler=fault_lambda, methods=['GET', 'POST'])
+                        handler=fault_lambda, methods=['GET', 'POST'])
 
     server.run()
 
