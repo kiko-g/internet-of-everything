@@ -41,30 +41,28 @@ public class ProductSensor extends Sensor {
             // Get one of the next machines
             Integer machineIdx = this.rnd.nextInt(nextMachines.size());
             MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
-
-            nextMachine.addCurrentInput(startMachine.getOutput());
-
-            // Received enough subproducts from all child machines to produce its product
-            if(nextMachine.canProduce()){ 
-                // Reset inputs
-                nextMachine.cleanProducedInput();
-
-                // Schedule next machine input message
-                int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
-                executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
-            }
+            
+            // Schedule next machine input message
+            int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
+            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
         }
     }
 
     private void simulateInputOutput(MachineNode machine, String product){
         // Send input message
+        machine.addCurrentInput(product);
         String message = this.getInputMessage(machine, product);
         this.publish(message);
 
-        // Schedule output message
-        int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
-        executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
+        // Received enough subproducts from all child machines to produce its product
+        if(machine.canProduce()){ 
+            // Reset inputs
+            machine.cleanProducedInput();
 
+            // Schedule output message
+            int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
+            executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
+        }
     }
 
 
@@ -92,7 +90,7 @@ public class ProductSensor extends Sensor {
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
         messageObject.put("reading-time", readTime);
-        messageObject.put("product", readTime);
+        messageObject.put("product", product);
         messageObject.put("state", "in");
         
         return messageObject.toString(); 

@@ -5,17 +5,21 @@ import org.json.JSONObject;
 import java.nio.file.Files; 
 import java.io.IOException; 
 import java.nio.file.Paths;
-import java.util.HashMap; 
+import java.util.concurrent.ConcurrentHashMap; 
 
 public class Phases {   
-    private HashMap<String, Phase> phases;
-     private Graph machines;
+    private ConcurrentHashMap<String, Phase> phases;
+    private Graph machines;
+
+    public Phases(Graph machines){
+        this("./data/phases.json", machines); 
+    }
     
     public Phases(String filename, Graph machines){
         this.machines = machines;
         try{
             JSONObject json = this.readJsonFile(filename); 
-            this.phases = new HashMap<>();
+            this.phases = new ConcurrentHashMap<>();
             this.addEmptyPhases(json);
             this.addProperties(json); 
         } catch(Exception e){
@@ -64,12 +68,20 @@ public class Phases {
         });
         return builder.toString();
     }
-    /*public boolean isPhaseComplete(String phaseId){
-        if(this.phases.containsKey(phaseId)){
-            return phases.get(phaseId).isComplete()
-        }
 
-        return false;
-    }*/
+    public void showState(){
+        
+        StringBuilder builder = new StringBuilder(); 
+        builder.append("===============================\n"); 
+        builder.append("====== PRODUCTION STATE =======\n"); 
+        builder.append("===============================\n"); 
+
+        this.phases.keySet().forEach(phaseId -> {
+            builder.append(this.phases.get(phaseId).getState());
+            builder.append("\n=========\n"); 
+        });
+        builder.append("===============================\n");
+        System.out.println(builder.toString());
+    }
 
 }

@@ -1,15 +1,16 @@
 package ds.graph;
-import java.util.HashMap;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Phase {
     private String id; 
-    private HashMap<String, MachineNode> outMachines;
-    private HashMap<String, Integer> amounts; 
+    private ConcurrentHashMap<String, MachineNode> outMachines;
+    private ConcurrentHashMap<String, Integer> amounts; 
     
     public Phase(String id){
         this.id = id; 
-        this.outMachines = new HashMap<>();
-        this.amounts = new HashMap<>();
+        this.outMachines = new ConcurrentHashMap<>();
+        this.amounts = new ConcurrentHashMap<>();
     } 
 
     public void addAmount(String prod, Integer amount){
@@ -20,31 +21,29 @@ public class Phase {
         this.outMachines.put(machineId, machineNode);
     }
 
-    public boolean isComplete(int clientId){
-        HashMap<String, Integer> currentAmounts = new HashMap<>();
+    public int getCompleteProducts(){
+        ConcurrentHashMap<String, Integer> currentAmounts = new ConcurrentHashMap<>();
+        int totalProducts = Integer.MAX_VALUE;
 
         // Get total subproducts produced in this phase
         for(String machineId: outMachines.keySet()){
             MachineNode machine = outMachines.get(machineId);
             String output = machine.getOutput();
-
-            if(amounts.containsKey(output)){
-                Integer currentAmount = currentAmounts.getOrDefault(output,0);
-                currentAmount += machine.getProductCount();
-                currentAmounts.put(output, currentAmount);
-            }
+            
+            Integer currentAmount = currentAmounts.getOrDefault(output,0);
+            currentAmount += machine.getProductCount();
+            currentAmounts.put(output, currentAmount);
         }
 
-        // Verify if enough output products were produced to satisfy the client
+        // Verify how many output products were produced
         for(String output: amounts.keySet()){
             Integer currentAmount = currentAmounts.getOrDefault(output,0);
             Integer producedSubProducts = currentAmount / amounts.get(output);
 
-            if(producedSubProducts < clientId)
-                return false;
+            totalProducts = Math.min(producedSubProducts.intValue(), totalProducts);
         }
 
-        return true;
+        return totalProducts;
     }
 
     public String toString(){
@@ -61,6 +60,16 @@ public class Phase {
             builder.append(machineId).append(": ").append(this.amounts.get(machineId)); 
             builder.append("\n"); 
         });
+        
+        return builder.toString(); 
+    }
+
+    public String getState(){
+        StringBuilder builder = new StringBuilder(); 
+        builder.append("[PRODUCTION PHASE]: ").append(id).append("\n");
+        
+        builder.append("[COMPLETED PRODUCTS]: "); 
+        builder.append(this.getCompleteProducts());
         
         return builder.toString(); 
     }
