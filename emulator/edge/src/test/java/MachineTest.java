@@ -45,6 +45,9 @@ public class MachineTest {
         IMqttToken token = mock(IMqttToken.class);
 
         machine.deliveryComplete(token);
+
+        // TODO: after handle DELIVERY COMPLETED
+        //       check if everything is as supposed to be
     }
 
     @Test
