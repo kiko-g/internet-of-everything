@@ -16,17 +16,6 @@ public class MachineListener extends Listener {
         this.state = new State(); 
     }
 
-    public static void main(String[] args) {
-
-        if(args.length > 0){
-            System.err.println("Usage: java MachineListener");
-            System.out.println("e.g. java MachineListener");
-        }
-
-        MachineListener machineListener = new MachineListener();
-        //machineListener.init();  
-    }
-
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));

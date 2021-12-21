@@ -26,13 +26,8 @@ test {
     useJUnitPlatform()
 }
 
-task(runMachineListener, dependsOn: 'classes', type: JavaExec) {
-    main = 'ds.listener.MachineListener'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task(runProductListener, dependsOn: 'classes', type: JavaExec) {
-    main = 'ds.listener.ProductListener'
+task(runFailureService, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.FailureService'
     classpath = sourceSets.main.runtimeClasspath
 }
 

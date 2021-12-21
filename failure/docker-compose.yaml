@@ -22,17 +22,11 @@ services:
       - ./src/:/edge/src/
     container_name: "product-sensors"
 
-  machine-listener:
+  failure-service:
     build: .
-    command: sh -c "gradle runMachineListener"
+    command: sh -c "gradle runFailureService"
     volumes:
       - ./src/:/edge/src/
-    container_name: "machine-listener"
+    container_name: "failure-service"
 
-  product-listener:
-    build: .
-    command: sh -c "gradle runProductListener"
-    volumes:
-      - ./src/:/edge/src/
-    container_name: "product-listener"
 

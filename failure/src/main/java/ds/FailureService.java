@@ -1,13 +1,17 @@
+package ds;
+import ds.graph.Graph;
 import ds.listener.MachineListener;
 import ds.listener.ProductListener;
 
 public class FailureService {
     MachineListener machineListener;
     ProductListener productListener;
+    Graph machinesGraph;
 
     public FailureService(){
-        machineListener = new MachineListener();
-        productListener = new ProductListener();
+        this.machinesGraph = new Graph();
+        this.machineListener = new MachineListener();
+        this.productListener = new ProductListener(this.machinesGraph); 
     }
 
     public void init(){

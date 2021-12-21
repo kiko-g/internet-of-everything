@@ -12,7 +12,7 @@ public class MachineNode {
     ConcurrentHashMap<String, Integer> inputs;            // Produces subproduct. 
     String output;    
     ConcurrentHashMap<String, Integer> currentInput; 
-    Integer productCounter;                              // How many subproducts were produced. TODO. 
+    Integer productCounter;                              // How many subproducts were produced.
 
     public MachineNode(String id){
         this.id = id;
@@ -66,19 +66,12 @@ public class MachineNode {
     } 
 
     public void addCurrentInput(String prod){
-        Integer currAmountProd = this.currentInput.getOrDefault(prod, 0);
+        Integer currAmountProd = this.currentInput.getOrDefault(prod, 0); 
         this.currentInput.put(prod, currAmountProd + 1);  
-        this.updateCounter();
     }
 
     public void updateCounter(){ 
-        this.productCounter = Integer.MAX_VALUE;
-
-        for (String key: this.inputs.keySet()){ 
-            Integer expectedAmount = this.inputs.get(key); 
-            Integer currAmount = this.currentInput.get(key); 
-            this.productCounter = Math.min(this.productCounter, currAmount / expectedAmount);  
-        }
+        this.productCounter++;
     }
 
     public void cleanProducedInput(){
@@ -100,11 +93,13 @@ public class MachineNode {
      * @return 
      */
     public boolean canProduce(){ 
-        for (String key: this.currentInput.keySet()){ 
+        for (String key: this.inputs.keySet()){ 
             Integer expectedValue = this.inputs.get(key); 
             Integer currentValue = this.currentInput.get(key); 
-            if (expectedValue < currentValue) return false; 
-        };    
+            if (currentValue < expectedValue){
+                return false; 
+            }
+        }    
         return true; 
     }
 
