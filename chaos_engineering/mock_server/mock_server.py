@@ -1,21 +1,27 @@
-from flask import Flask, Response
+"""
+This module contains the mock server class used to test the project's scripts
+"""
+from flask import Flask, Response, request
 
-class EndpointAction(object):
-
-    def __init__(self, action, response):
+class EndpointAction():
+    """ Endpoint action for mock server """
+    def __init__(self, action):
         self.action = action
-        if response:
-            response_content = response()
-        self.response = Response(status=200,
-            headers={}, mimetype='application/json', response=response_content)
 
     def __call__(self, *args):
+        """ return json dump from file """
         if self.action:
-            self.action()
-        return self.response
+            return Response(status=200,
+                            headers={}, mimetype='application/json', response=self.action())
+        return None
+
+    def get_action(self):
+        """ return endpoint action """
+        return self.action
 
 
-class MockServer(object):
+class MockServer():
+    """ Mock web server """
     app = None
 
     def __init__(self, port):
@@ -23,8 +29,13 @@ class MockServer(object):
         self.app = Flask('MockServer')
 
     def run(self):
+        """ starts mock server """
         self.app.run(port=self.port)
 
-    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None, response=None, methods=["GET"]):
-        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler, response), methods=methods)
+    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None, methods=None):
+        """ add endpoint to mock server """
+        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=methods)
 
+def get_last_request():
+    """ get the last http request """
+    return request
