@@ -7,16 +7,15 @@ import org.eclipse.paho.mqttv5.common.MqttMessage;
 
 public abstract class MQTTClient implements MqttCallback {
     // ------ Client Configuration ------ //
-    String willTopic = "will";
-    String willContent = "I've Disconnected, sorry!";
-    int qos = 2; // exactly once delivery
-    String broker = "tcp://localhost:1883";
-    String clientId;
+    private final int qos = 2; // exactly once delivery
+    private final String broker = "tcp://localhost:1883";
+    private String clientId;
     private MqttClient client;
-    private boolean publishing = true;
+    private final String willTopic = "will";
+    private final String willContent = "I've Disconnected, sorry!";
 
 
-    MQTTClient(String clientId){
+    MQTTClient(String clientId) {
         try {
             this.clientId = clientId;
             MemoryPersistence persistence = new MemoryPersistence();
@@ -36,6 +35,7 @@ public abstract class MQTTClient implements MqttCallback {
         } catch (MqttException e) {
             System.err.println("[MQTT] Exception Occurred whilst connecting the client " + clientId + ": ");
             e.printStackTrace();
+            //System.exit(0);
         }
     }
 

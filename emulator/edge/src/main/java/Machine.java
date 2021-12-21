@@ -5,12 +5,11 @@ import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 
 public class Machine extends MQTTClient {
-    String name;
 
-    Machine(String name){
-        super(name);
+    Machine(String id){
+        super(id);
         this.subscribeTopic("testTopic");
-        this.publishMessage("testTopic", ("hello world from " + name).getBytes());
+        this.publishMessage("testTopic", ("hello world from " + id).getBytes());
     }
 
     @Override
@@ -34,7 +33,7 @@ public class Machine extends MQTTClient {
     }
 
     @Override
-    public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+    public void messageArrived(String s, MqttMessage mqttMessage){
         System.out.println("--");
         System.out.println("messageArrived()");
         System.out.println("topic: " + s);
