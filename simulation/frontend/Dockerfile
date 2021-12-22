@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /home/node/app/frontend
+WORKDIR /usr/simulation/frontend
 
 COPY package*.json ./
 COPY yarn.lock ./
