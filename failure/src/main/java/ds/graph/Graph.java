@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap; 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView; 
 
 public class Graph { 
     ConcurrentHashMap<String, MachineNode> nodes; 
@@ -82,7 +83,7 @@ public class Graph {
 
     public void addDefaultValues(MachineNode machineNode, JSONObject defaultValues){
         defaultValues.keySet().forEach(propertyName -> {
-            machineNode.addDefault(propertyName, defaultValues.getDouble(propertyName));
+            machineNode.addDefault(propertyName, defaultValues.getFloat(propertyName));
         });
     }
 
@@ -98,6 +99,10 @@ public class Graph {
 
     public MachineNode getMachineNode(String machineId){
         return this.nodes.get(machineId); 
+    }
+
+    public KeySetView<String, MachineNode> getMachines(){
+        return this.nodes.keySet(); 
     }
 
     public List<MachineNode> getStartMachines(){

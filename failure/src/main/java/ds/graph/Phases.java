@@ -72,15 +72,12 @@ public class Phases {
     public void showState(){
         
         StringBuilder builder = new StringBuilder(); 
-        builder.append("===============================\n"); 
-        builder.append("====== PRODUCTION STATE =======\n"); 
-        builder.append("===============================\n"); 
+        builder.append("\n====== PRODUCTION STATE =======\n"); 
 
         this.phases.keySet().forEach(phaseId -> {
             builder.append(this.phases.get(phaseId).getState());
             builder.append("\n=========\n"); 
         });
-        builder.append("===============================\n");
         System.out.println(builder.toString());
     }
 

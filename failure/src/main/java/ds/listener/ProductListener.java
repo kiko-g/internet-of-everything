@@ -11,14 +11,16 @@ import ds.graph.MachineNode;
 import ds.graph.Phases;
 
 public class ProductListener extends Listener {
-    Graph machinesGraph;
     Phases phases;
     ScheduledThreadPoolExecutor executor;
 
     public ProductListener(Graph graph) {
-        super("production/product");
-        this.machinesGraph = graph; 
+        super("production/product", graph); 
         this.phases = new Phases(graph);
+    }
+
+    public void init(){
+        super.init();
         this.executor = new ScheduledThreadPoolExecutor(5);
         executor.scheduleWithFixedDelay(new Thread(() -> this.phases.showState()), 0, 5000, TimeUnit.MILLISECONDS);
     }
@@ -26,12 +28,10 @@ public class ProductListener extends Listener {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
+        //System.out.println(messageParsed);
 
         String machineID = messageParsed.getString("machineID");
         String state = messageParsed.getString("state");
-        String product = messageParsed.getString("product");
-        
         MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
         // New sub-product was produced by the machine
@@ -41,6 +41,7 @@ public class ProductListener extends Listener {
         }
         // New subproduct was received by the machine
         else if(state.equals("in")){
+            String product = messageParsed.getString("product");
             machine.addCurrentInput(product);
         }
     }

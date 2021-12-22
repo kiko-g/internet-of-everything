@@ -1,6 +1,4 @@
 package ds.listener;
-import ds.state.MachineState;
-import ds.state.State; 
 
 import java.util.UUID;
 
@@ -11,15 +9,19 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
+import ds.graph.Graph;
+
 public class Listener implements MqttCallbackExtended {
     private final String brokerURI;
     private final String subscriberId;
     private String topic;
+    protected Graph machinesGraph;
 
-    public Listener(String topic) {
+    public Listener(String topic, Graph graph) {
         this.brokerURI = "tcp://mosquitto:1883";
         this.subscriberId = UUID.randomUUID().toString();
         this.topic = topic;
+        this.machinesGraph = graph;
     }
 
     public void init() {

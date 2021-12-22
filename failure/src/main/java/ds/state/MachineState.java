@@ -1,22 +1,23 @@
 package ds.state;
 
-import org.json.JSONObject;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MachineState  {
     private String id;  
     private TemperatureState tempState;
 
-    public MachineState(JSONObject messageParsed){
-        this.id = messageParsed.getString("machineID");
-        this.tempState = new TemperatureState();
-        this.tempState.add(messageParsed.getJSONObject("properties").getFloat("temperature"));
+
+    public MachineState(String id, ConcurrentHashMap<String, Float> defaultValues){
+        this.id = id;
+        float tempDefault = defaultValues.get("temperature").floatValue();
+        this.tempState = new TemperatureState(tempDefault);
     }
 
     public TemperatureState getTempState(){
         return this.tempState;
     }
 
-    public void addTemperature(Float temperature){
+    public void addTemperature(float temperature){
         this.tempState.add(temperature);
     }
 

@@ -7,7 +7,7 @@ public class MachineNode {
     private String id;                          
     private List<MachineNode> prev;             // Parent machines.   [machine receives input from these]
     private List<MachineNode> next;             // Children machines. [machine output to these]
-    ConcurrentHashMap<String, Double> defaultValues;      // The maximum values allowed by the machine. 
+    ConcurrentHashMap<String, Float> defaultValues;      // The maximum values allowed by the machine. 
     // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
     ConcurrentHashMap<String, Integer> inputs;            // Produces subproduct. 
     String output;    
@@ -36,6 +36,10 @@ public class MachineNode {
         return this.inputs;
     } 
 
+    public ConcurrentHashMap<String, Float> getDefaults(){
+        return this.defaultValues;
+    } 
+
     public Integer getProductCount(){
         return this.productCounter;
     } 
@@ -52,7 +56,7 @@ public class MachineNode {
         this.next.add(machineNode);
     } 
 
-    public void addDefault(String name, Double value){
+    public void addDefault(String name, Float value){
         defaultValues.put(name, value); 
     }
 

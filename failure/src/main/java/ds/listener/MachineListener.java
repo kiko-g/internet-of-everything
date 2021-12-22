@@ -1,4 +1,6 @@
 package ds.listener;
+import ds.failures.TemperatureFailure;
+import ds.graph.Graph;
 import ds.state.MachineState;
 import ds.state.State; 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -6,41 +8,25 @@ import org.json.JSONObject;
 
 public class MachineListener extends Listener {
     private State state; // Stores the current state of all machines.
-    // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
-    // temperatures for each machine.
-    public static final Integer INFO_SIZE = 3;
+    public static final Integer INFO_SIZE = 3; // Number of previous states to save
+    private TemperatureFailure temperatureFailure;
 
-
-    public MachineListener() {
-        super("production/machine");
-        this.state = new State(); 
+    public MachineListener(Graph graph) {
+        super("production/machine", graph);
+        this.state = new State(graph); 
+        this.temperatureFailure = new TemperatureFailure();
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
-        String machineID = messageParsed.getString("machineID");
+        //System.out.println(messageParsed);
 
         try {
-            if (!this.state.findMachine(machineID)) {
-                this.addMachineToState(messageParsed);
-            } else {
-                this.updateState(messageParsed);
-            }
+            this.updateState(messageParsed);
         } catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-     /**
-     * Creates a new machine state with the current ID and adds to the system state.
-     * @param messageParsed JSONObject with the message content.
-     */
-    public void addMachineToState(JSONObject messageParsed){
-        MachineState machineState = new MachineState(messageParsed);
-        this.state.addMachine(machineState.getId(), machineState);
-        System.out.println("MachineID :: " + machineState.getId()+ "::" + machineState.getTempState().getMeanTemp());
     }
 
     /**
@@ -54,7 +40,11 @@ public class MachineListener extends Listener {
         machineState.addTemperature(messageParsed.getJSONObject("properties").getFloat("temperature"));
         // Replaces the old state to the new one.
         this.state.addMachine(machineID, machineState);
-        System.out.println("MachineID :: " + machineID + "::" + machineState.getTempState().getMeanTemp());
-    }
+        
+        System.out.println("MachineID :: " + machineID + 
+        "\n\t:: mean temperature :: " + machineState.getTempState().getMeanTemp() + 
+        "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
 
+        this.temperatureFailure.checkMachine(machineState);
+    }
 }
