@@ -5,6 +5,7 @@ LABEL vertical="edge"
 RUN mkdir -p /edge/
 WORKDIR /edge/
 COPY src/ src/
+COPY data/ data/
 COPY build.gradle build.gradle
 COPY settings.gradle settings.gradle
 

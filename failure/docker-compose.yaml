@@ -8,16 +8,25 @@ services:
       - ./mosquitto/:/mosquitto/
     container_name: "mosquitto"
 
-  publisher:
+  machines:
     build: .
-    command: sh -c "gradle runMachineSensor"
+    command: sh -c "gradle runMachineSensors"
     volumes:
       - ./src/:/edge/src/
-    container_name: "publisher"
+    container_name: "machine-sensors"
 
-  edge:
+  products:
     build: .
-    command: sh -c "gradle runMachineListener --args='temperature'"
+    command: sh -c "gradle runProductSensors"
     volumes:
       - ./src/:/edge/src/
-    container_name: "listener"
+    container_name: "product-sensors"
+
+  failure-service:
+    build: .
+    command: sh -c "gradle runFailureService"
+    volumes:
+      - ./src/:/edge/src/
+    container_name: "failure-service"
+
+

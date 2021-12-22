@@ -1,11 +1,26 @@
 package ds.state;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ds.graph.Graph;
+
 /**
  * This class is responsible for managing the current state of all machines, the system state.
  */
 public class State {
-    private ConcurrentHashMap<String, MachineState> machineState = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, MachineState> machineState;
+    
+    public State(Graph machines){
+        this.machineState = new ConcurrentHashMap<>();
+        
+        this.initMachineStates(machines);
+    }
+
+    public void initMachineStates(Graph machines){
+        for(String machineID : machines.getMachines()){
+            this.addMachine(machineID, new MachineState(machineID, 
+                machines.getMachineNode(machineID).getDefaults()));
+        }
+    }
 
     /**
      * Adds a machine to the system. If the machine already exists the state will be overwritten by the new one.
