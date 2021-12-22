@@ -35,7 +35,7 @@ export default function PresetsRadio() {
                 `${active ? "ring-2 ring-offset-2 ring-offset-sky-300 ring-white ring-opacity-60" : ""}
                 ${
                   checked ? "bg-sky-900 bg-opacity-75 text-white" : "bg-white"
-                } relative rounded-xl shadow-md px-4 py-3 cursor-pointer flex focus:outline-none`
+                } relative rounded-xl shadow-md px-3 py-2 cursor-pointer flex focus:outline-none`
               }
             >
               {({ active, checked }) => (
@@ -43,11 +43,16 @@ export default function PresetsRadio() {
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center">
                       <div className="text-sm">
-                        <RadioGroup.Label as="p" className={`font-medium  ${checked ? "text-white" : "text-gray-900"}`}>
+                        <RadioGroup.Label as="p" className={`font-medium  ${checked ? "text-white" : "text-gray-700"}`}>
                           {plan.name}
                         </RadioGroup.Label>
-                        <RadioGroup.Description as="span" className={`inline ${checked ? "text-sky-100" : "text-gray-500"}`}>
-                          <span>{plan.details}</span> <span aria-hidden="true">&middot;</span> <span>{plan.specs}</span>
+                        <RadioGroup.Description
+                          as="span"
+                          className={`inline text-xs ${checked ? "text-sky-100" : "text-gray-500"}`}
+                        >
+                          <span>{plan.details}</span>
+                          <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+                          <span>{plan.specs}</span>
                         </RadioGroup.Description>
                       </div>
                     </div>

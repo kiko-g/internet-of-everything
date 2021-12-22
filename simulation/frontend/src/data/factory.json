@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "readingTime": "19:53 2021-12-07",
-    "name": "cutting",
     "status": 0,
+    "name": "cutting",
     "temperature": "90 ºC",
-    "in": {
+    "readingTime": "19:53 2021-12-07",
+    "input": {
       "a": 1
     },
-    "out": {
+    "output": {
       "b": 2,
       "c": 3
     },
@@ -22,44 +22,44 @@
   },
   {
     "id": 2,
-    "readingTime": "19:53 2021-12-07",
+    "status": 1,
     "name": "heating",
-    "status": 0,
     "temperature": "90 ºC",
-    "in": {
+    "readingTime": "19:53 2021-12-07",
+    "input": {
       "a": 1
     },
-    "out": {
+    "output": {
       "b": 2,
       "c": 3
     },
+    "links": [3],
     "properties": {
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
-      "rotate": 920
-    },
-    "links": [3]
+      "volt": 135.9,
+      "vibration": 34.8,
+      "pressure": 20.8,
+      "rotate": 1040
+    }
   },
   {
     "id": 3,
-    "status": 0,
+    "status": 2,
     "name": "transformer",
-    "temperature": "90 ºC",
+    "temperature": "110 ºC",
     "readingTime": "19:53 2021-12-07",
-    "in": {
-      "a": 1
-    },
-    "out": {
-      "b": 2,
-      "c": 3
+    "input": {
+      "b": 1
     },
     "links": [],
+    "output": {
+      "d": 2,
+      "e": 3
+    },
     "properties": {
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
-      "rotate": 920
+      "volt": 347.3,
+      "vibration": 43.1,
+      "pressure": 24.6,
+      "rotate": 2820
     }
   }
 ]

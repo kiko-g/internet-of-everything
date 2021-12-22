@@ -22,7 +22,18 @@ export default class Tabs extends React.Component {
           })}
           <TabButtons activeTab={this.state.activeTab} buttons={buttons} changeTab={this.changeTab} />
         </PillDivNest>
-        <div className="bg-bluegray-100 p-4 rounded-xl flex items-center justify-between space-x-8 bg-opacity-90">{content}</div>
+        <div
+          className="bg-bluegray-100 p-4 rounded-xl flex items-start justify-between space-x-8 bg-opacity-90"
+          style={{
+            overflowY: "auto",
+            overflowX: "hidden",
+            padding: "1em",
+            width: "100%",
+            maxHeight: "75vh",
+          }}
+        >
+          {content}
+        </div>
       </>
     )
   }
