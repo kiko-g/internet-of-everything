@@ -31,11 +31,15 @@ public class VibrationSensor implements Sensor {
     public void switchOff(){ this.on = false;}
 
     public ArrayList<Float> getData() {
-        if (!this.on) return (float) -1.0;
+        ArrayList<Float> vibration = new ArrayList<>();
+        if (!this.on){
+            vibration.add((float) -1.0);
+        }
         else {
             float random = (float) (-this.baselineVariance + Math.random() *  (this.baselineVariance + this.baselineVariance));
-            return this.baseline + random;
+            vibration.add(this.baseline + random);
         }
+        return vibration;
     }
 
     public void chaosUpSensor() {

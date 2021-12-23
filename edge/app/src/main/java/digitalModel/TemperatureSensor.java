@@ -28,11 +28,15 @@ public class TemperatureSensor implements Sensor{
     public void switchOff(){ this.on = false;}
 
     public ArrayList<Float> getData() {
-        if (!this.on) return (float) -1.0;
+        ArrayList<Float> temperature = new ArrayList<>();
+        if (!this.on){
+            temperature.add((float) -1.0);
+        }
         else {
             float random = (float) (-this.baselineVariance + Math.random() *  (this.baselineVariance + this.baselineVariance));
-            return this.baseline + random;
+            temperature.add(this.baseline + random);
         }
+        return temperature;
     }
 
     public void chaosUpSensor() {
