@@ -1,10 +1,10 @@
-package digitalModel;
+package Sensors;
 
 import java.util.ArrayList;
 
 public class VibrationSensor implements Sensor {
 
-    digitalModel.Sensor.types type;
+    Type type;
     float baseline;
     float baselineVariance;
     float posX;
@@ -13,7 +13,7 @@ public class VibrationSensor implements Sensor {
 
 
     VibrationSensor(float positionX, float positionY) {
-        this.type = digitalModel.Sensor.types.VIBRATION;
+        this.type = Type.VIBRATION;
         this.posX = positionX;
         this.posY = positionY;
         this.baseline = 150; //Hz
