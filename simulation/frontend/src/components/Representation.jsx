@@ -5,14 +5,14 @@ import Tabs from "./utilities/Tabs"
 import BasicInput from "./utilities/BasicInput"
 import FactoryFloor from "../data/factory.json"
 import DetailedSwitch from "./utilities/DetailedSwitch"
-import { DocumentDownloadIcon } from "@heroicons/react/solid"
+import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 
 export default function Representation() {
   const [detailed, setDetailed] = React.useState(false)
   const factoryInitial = FactoryFloor
   const factorySimulation = []
-  const Tab = (props) => <div className={props.propClass}>{props.children}</div>
+  const Tab = (props) => <div>{props.children}</div>
 
   return (
     <Tabs>
@@ -50,12 +50,7 @@ export default function Representation() {
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
-              <button className="absolute right-8 top-4 z-50 bg-gradient-to-br from-teal-300 via-blue-300 to-violet-300 hover:opacity-80 duration-200 text-white p-1.5 rounded-full">
-                <span className="flex">
-                  &nbsp;Export&nbsp;
-                  <DocumentDownloadIcon className="w-6 h-6" />
-                </span>
-              </button>
+              <CopyClipboard json={factoryInitial} />
               <ReactJson
                 indentWidth={4}
                 iconStyle="triangle"
@@ -82,12 +77,7 @@ export default function Representation() {
             </div>
             {/* Final JSON */}
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
-              <button className="absolute right-8 top-4 z-50 bg-gradient-to-br from-teal-300 via-blue-300 to-violet-300 hover:opacity-80 duration-200 text-white p-1.5 rounded-full">
-                <span className="flex">
-                  &nbsp;Export&nbsp;
-                  <DocumentDownloadIcon className="w-6 h-6" />
-                </span>
-              </button>
+              <CopyClipboard json={factorySimulation} />
               <ReactJson
                 indentWidth={4}
                 iconStyle="triangle"
