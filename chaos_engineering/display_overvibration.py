@@ -9,11 +9,11 @@ import requests
 
 def main():
     """ Launch display over-vibration script """
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
+    user_agent2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
     request = requests.get("http://localhost:8000/machine2",
                            headers={
                                "User-Agent":
-                               user_agent
+                               user_agent2
                            }
                            )
     machine_json = request.json()
@@ -30,3 +30,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+ 
