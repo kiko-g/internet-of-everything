@@ -10,10 +10,11 @@ export default function Settings() {
         <div className="grid gap-2">
           <BasicInput placeholder="Start Machine ID" />
           <BasicInput placeholder="Start Machine Input (x: {a, b}, y: {c, d})" />
-          <BasicInput placeholder="Max Temperature (ºC)" />
+          <BasicInput placeholder="Expected Output (goal: {a, b})" />
         </div>
       </Collapsed>
       <Collapsed open={false} color="bluegray" headline="Extra Settings">
+        <BasicInput placeholder="Max Temperature (ºC)" />
         <BasicInput placeholder="Breakpoints (format TBD)" />
       </Collapsed>
       {/* <div className="grid grid-cols-2 space-x-2">
