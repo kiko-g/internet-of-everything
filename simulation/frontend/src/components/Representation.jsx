@@ -6,23 +6,19 @@ import BasicInput from "./utilities/BasicInput"
 import FactoryFloor from "../data/factory.json"
 import DetailedSwitch from "./utilities/DetailedSwitch"
 import { DocumentDownloadIcon } from "@heroicons/react/solid"
+import ForceGraph from "./ForceGraph"
 
 export default function Representation() {
   const [detailed, setDetailed] = React.useState(false)
-  const graph = []
   const factoryInitial = FactoryFloor
   const factorySimulation = []
-  const Tab = (props) => <div>{props.children}</div>
+  const Tab = (props) => <div className={props.propClass}>{props.children}</div>
 
   return (
     <Tabs>
       {/* Graph schema */}
       <Tab label="Graph">
-        <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          {graph.map((item, index) => (
-            <Machine data={item} key={`schema-${index}`} propClasses="col-span-1 min-w-full" />
-          ))}
-        </div>
+        <ForceGraph factory={factoryInitial} />
       </Tab>
       {/* Detailed list view */}
       <Tab label="Detailed">
