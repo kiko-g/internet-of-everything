@@ -6,9 +6,10 @@ export default function Collapsed(props) {
   const headline = props.headline || "Headline Text"
   const classNames = props.classNames || ""
   const color = props.color || "purple"
+  const open = props.open || false
 
   return (
-    <Disclosure as="div" className={`duration-200 ${classNames}`}>
+    <Disclosure defaultOpen={open} as="div" className={`duration-200 ${classNames}`}>
       {({ open }) => (
         <>
           <Disclosure.Button
