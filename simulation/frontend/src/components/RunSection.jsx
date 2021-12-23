@@ -1,5 +1,6 @@
 import * as React from "react"
 import { PlayIcon } from "@heroicons/react/solid"
+import SimSettings from "../data/config.json"
 import axios from "axios"
 
 const instance = axios.create({
@@ -11,7 +12,7 @@ const instance = axios.create({
 const requestStart = () => {
   instance
     .post("/startSimulation", {
-      piecesQty: 100,
+      settings: SimSettings,
     })
     .then(function (response) {
       console.log(response.data)

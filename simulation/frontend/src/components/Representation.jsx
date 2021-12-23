@@ -3,23 +3,22 @@ import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
 import BasicInput from "./utilities/BasicInput"
-import SimSettings from "../data/config.json"
 import FactoryFloor from "../data/factory.json"
+import DetailedSwitch from "./utilities/DetailedSwitch"
 import { DocumentDownloadIcon } from "@heroicons/react/solid"
 
 export default function Representation() {
+  const [detailed, setDetailed] = React.useState(false)
   const graph = []
   const factoryInitial = FactoryFloor
   const factorySimulation = []
-  const settings = SimSettings
   const Tab = (props) => <div>{props.children}</div>
 
   return (
     <Tabs>
       {/* Graph schema */}
-      <Tab label="Schema">
+      <Tab label="Graph">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          {console.log(settings)}
           {graph.map((item, index) => (
             <Machine data={item} key={`schema-${index}`} propClasses="col-span-1 min-w-full" />
           ))}
@@ -28,8 +27,11 @@ export default function Representation() {
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+          <div className="col-span-4 min-w-full">
+            <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
+          </div>
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`detailed-${index}`} propClasses="col-span-1 min-w-full" detailed={true} />
+            <Machine data={item} key={`detailed-${index}`} propClasses="col-span-1 min-w-full" detailed={detailed} />
           ))}
         </div>
       </Tab>
