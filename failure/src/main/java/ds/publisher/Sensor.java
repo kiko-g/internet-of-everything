@@ -1,7 +1,5 @@
 package ds.publisher;
 import java.util.UUID;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -22,7 +20,7 @@ public abstract class Sensor {
         this.topic = topic;
     }
 
-    protected void init(){
+    public void init(){
         try {
             System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
 
@@ -30,9 +28,6 @@ public abstract class Sensor {
             this.publisher = new MqttClient(this.brokerURI, publisherId);
             this.publisher.connect(this.getMQTTOptions());
 
-            // Start Publishing
-            ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
-            executor.scheduleWithFixedDelay(new Thread(() -> this.publish()), 0, 1500, TimeUnit.MILLISECONDS);
         } catch (MqttException e) {
             System.err.println("Error connecting to MQTT Broker at " + brokerURI + " - " + e);
         }
@@ -47,15 +42,15 @@ public abstract class Sensor {
         return mqttOptions;
     }
 
-    public void publish(){
+    public void publish(String rawMsg){
         
         try {
-            final MqttTopic temperatureTopic = this.publisher.getTopic(this.topic);
+            final MqttTopic topicObj = this.publisher.getTopic(this.topic);
 
-            MqttMessage msg = readSensor();
+            MqttMessage msg = getMqttMessage(rawMsg);
             msg.setQos(2);
 
-            temperatureTopic.publish(msg);
+            topicObj.publish(msg);
 
             System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
 
@@ -64,6 +59,11 @@ public abstract class Sensor {
         }
     }
     
-    abstract protected MqttMessage readSensor();
-
+    private MqttMessage getMqttMessage(String message){
+        byte[] payload = message.getBytes();        
+        MqttMessage msg = new MqttMessage(payload); 
+        msg.setQos(2);
+        
+        return msg;
+    }
 }

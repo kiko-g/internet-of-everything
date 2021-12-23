@@ -6,11 +6,14 @@ import java.util.*;
 public class TemperatureState {
     private Queue<Float> temps;     // The last n temperatures.
     private float tempSum;          // Sum of the temperatures.
-    private float maxTemp = 100;
+    private float maxTemp;
     private float currentTemp;
 
-    public TemperatureState(){
+    public TemperatureState(float maxTemp){
         this.temps= new LinkedList<>();
+        this.maxTemp = maxTemp;
+        this.currentTemp = maxTemp;
+        this.tempSum = 0;
     }
 
     /**
@@ -20,16 +23,17 @@ public class TemperatureState {
      * @param newTemp The new temperature to be added to the queue.
      */
     public void add(float newTemp){ 
-        int currSize = temps.size(); 
+        int currSize = this.temps.size(); 
+
         if (currSize < MachineListener.INFO_SIZE){
-            temps.add(Float.valueOf(newTemp));
-            tempSum += newTemp;
+            this.temps.add(Float.valueOf(newTemp));
+            this.tempSum += newTemp;
         } else {
-            Float removedTemp = temps.remove();     // removes the first element.
-            temps.add(Float.valueOf(newTemp));
-            tempSum = tempSum - removedTemp + newTemp; 
+            Float removedTemp = this.temps.remove();     // removes the first element.
+            this.temps.add(Float.valueOf(newTemp));
+            this.tempSum = this.tempSum - removedTemp + newTemp; 
         }
-        currentTemp = Float.valueOf(newTemp);
+        this.currentTemp = newTemp;
     }
 
     /**
@@ -41,10 +45,10 @@ public class TemperatureState {
     } 
 
     public Float getCurrentTemp() {
-        return currentTemp;
+        return this.currentTemp;
     }
     
     public Float getMaxTemp() {
-        return maxTemp;
+        return this.maxTemp;
     }
 }
