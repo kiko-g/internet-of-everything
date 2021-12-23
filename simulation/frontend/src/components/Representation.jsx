@@ -36,7 +36,7 @@ export default function Representation() {
         <div className="grid w-full grid-cols-1 gap-4">
           <BasicInput label="Search" types={["Machine Name", "Machine ID"]} />
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`inspect-${index}`} propClasses="min-w-full col-span-1" detailed={true} />
+            <Machine data={item} key={`inspect-${index}`} propClasses="col-span-1 min-w-full" detailed={true} />
           ))}
         </div>
       </Tab>

@@ -6,10 +6,10 @@
     "temperature": "90 ºC",
     "readingTime": "19:53 2021-12-07",
     "input": {
-      "a": 1
+      "a": 1,
+      "b": 2
     },
     "output": {
-      "b": 2,
       "c": 3
     },
     "links": [2, 3],
@@ -27,11 +27,10 @@
     "temperature": "90 ºC",
     "readingTime": "19:53 2021-12-07",
     "input": {
-      "a": 1
+      "c": 3
     },
     "output": {
-      "b": 2,
-      "c": 3
+      "d": 2
     },
     "links": [3, 4],
     "properties": {

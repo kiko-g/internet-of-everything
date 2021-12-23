@@ -27,7 +27,7 @@ export default class Tabs extends React.Component {
           style={{
             overflowY: "auto",
             overflowX: "hidden",
-            maxHeight: "75vh",
+            maxHeight: "74vh",
           }}
         >
           {content}
