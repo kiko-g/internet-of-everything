@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: "Run Docker"
-      working-directory: ./emulation
+      working-directory: ./emulator
       run: docker-compose up -d
      
   gradle_build:
@@ -31,12 +31,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: "Build Edge"
-      working-directory: ./emulation/edge
-      run: gradle build
-  #  - name: "Test Edge"
-  #    working-directory: ./emulation/edge
-  #    run: gradle test
+    - name: "Build and Test Edge"
+      working-directory: ./emulator/edge
+      run: gradle test
   
   npm-build:
     runs-on: ubuntu-latest
@@ -48,12 +45,11 @@ jobs:
       with:
         node-version: '14'
         cache: 'npm'
-        cache-dependency-path: emulation/server/package-lock.json
+        cache-dependency-path: emulator/server/package-lock.json
     - name: "npm install"
-      working-directory: ./emulation/server
+      working-directory: ./emulator/server
       run: npm install
 #     - name: "npm test"
-#       working-directory: ./emulation/server
+#       working-directory: ./emulator/server
 #       run: npm test
    
-
