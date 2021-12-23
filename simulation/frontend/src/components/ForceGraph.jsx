@@ -2,8 +2,9 @@ import React, { Component } from "react"
 import Graph from "react-graph-vis"
 
 export default class ForceGraph extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    this.factory = this.props.factory
     this.state = {
       options: {
         layout: {
@@ -11,6 +12,20 @@ export default class ForceGraph extends Component {
         },
         edges: {
           color: "#28303b",
+          smooth: {
+            enabled: true,
+            type: "dynamic",
+            roundness: 1,
+          },
+          arrows: {
+            from: {
+              enabled: true,
+              scaleFactor: 0.7,
+            },
+            to: {
+              enabled: false,
+            },
+          },
         },
         nodes: {
           shape: "box",
@@ -37,22 +52,23 @@ export default class ForceGraph extends Component {
   }
 
   createNodes() {
-    return [
-      { id: 1, label: "1" },
-      { id: 2, label: "2" },
-      { id: 3, label: "3" },
-      { id: 4, label: "4" },
-      { id: 5, label: "5" },
-    ]
+    let nodes = []
+    this.factory.forEach((element) => {
+      nodes.push({ id: element.id, label: `M${element.id}` })
+    })
+
+    return nodes
   }
 
   createEdges() {
-    return [
-      { from: 1, to: 2 },
-      { from: 1, to: 3 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 },
-    ]
+    let edges = []
+    this.factory.forEach((element) => {
+      element.links.forEach((node) => {
+        edges.push({ from: element.id, to: node })
+      })
+    })
+
+    return edges
   }
 
   events = {
