@@ -1,20 +1,27 @@
-import requests
+"""
+This module POSTs a machine json with properties with different formats
+"""
+
 import json
+import requests
+
 
 def main():
+    """ Launch modify data format script"""
+    browser_type = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
 
     machine_request = requests.get("http://localhost:8000/machine1",
-                headers= {
-                    "User-Agent":
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
-                }
-            )
+                                   headers={
+                                       "User-Agent":
+                                       browser_type
+                                       })
+
     machine_json = machine_request.json()
-    
+
     reading_time = machine_json['reading-time']
     machine_properties = machine_json['properties']
-    
-    machine_json['reading-time'] = {'time':reading_time,'properties':machine_properties}
+
+    machine_json['reading-time'] = {'time':reading_time, 'properties':machine_properties}
     del machine_json['properties']
 
     final_json = json.dumps(machine_json)
