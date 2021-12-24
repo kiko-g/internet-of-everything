@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /home/node/app/frontend
+WORKDIR /usr/simulation/frontend
 
 COPY package*.json ./
 COPY yarn.lock ./
@@ -9,6 +9,6 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 3000
 
 CMD [ "yarn", "start" ]
