@@ -1,4 +1,5 @@
 import CuttingMachine from "./CuttingMachine.js";
+import JSONParser from "./JSONParser.js";
 
 export default class Simulation {
   constructor(file, piecesQty) {
@@ -8,11 +9,11 @@ export default class Simulation {
   }
 
   run() {
-    //TODO: Machines must be read from a JSON
-    let cuttingMachine = new CuttingMachine(60, 0.5, 1);
-    this.machines[1] = cuttingMachine;
+    
+    let jsonParser = new JSONParser();
+    this.machines = jsonParser.parse(this.file);
 
-    for (let i = 0; i < this.piecesQty; i++) {
+    for (let i = 0; i < this.piecesQty; i++) {  // stub 
       for (const value of Object.values(this.machines)) {
         value.update();
       }
@@ -23,7 +24,7 @@ export default class Simulation {
       "Machine final state after cutting " +
       this.piecesQty +
       " pieces:\n" +
-      cuttingMachine.getRepresentation()
+      this.machines[0].getRepresentation()
     );
   }
 }

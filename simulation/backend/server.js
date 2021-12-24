@@ -23,7 +23,7 @@ app.post("/startSimulation", (req, res) => {
   /* else if (isNaN(machineID))
         res.status(400).send("A ID da máquina tem de ser um número."); */ else {
     //TODO: Receive user input from front end
-    let simulation = new Simulation("./factory.json", piecesQty);
+    let simulation = new Simulation("factory.json", piecesQty);
 
     let endState = simulation.run();
 
