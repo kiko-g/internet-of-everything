@@ -8,11 +8,11 @@
     "properties": {
       "name": "cutting",
       "status": 0,
-      "temperature": "90 ºC",
+      "temperature": 90,
       "piecesProduced": 10,
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
       "rotate": 920
     },
     "links": [2]
@@ -23,11 +23,11 @@
     "properties": {
       "name": "different",
       "status": 0,
-      "temperature": "90 ºC",
+      "temperature": 90,
       "piecesProduced": 10,
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
       "rotate": 920
     },
     "links": [3]
@@ -38,11 +38,11 @@
     "properties": {
       "name": "ola",
       "status": 0,
-      "temperature": "90 ºC",
+      "temperature": 90,
       "piecesProduced": 10,
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
       "rotate": 920
     },
     "links": []
