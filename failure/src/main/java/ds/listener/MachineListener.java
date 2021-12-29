@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class MachineListener extends Listener {
     private State state; // Stores the current state of all machines.
-    public static final Integer INFO_SIZE = 3; // Number of previous states to save
+    public static final Integer INFO_SIZE = 5; // Number of previous states to save
     private TemperatureFailure temperatureFailure;
 
     public MachineListener(Graph graph) {
@@ -46,5 +46,6 @@ public class MachineListener extends Listener {
         "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
 
         this.temperatureFailure.checkMachine(machineState);
+        this.temperatureFailure.futureBehaviour(machineState);
     }
 }

@@ -7,5 +7,7 @@ import ds.state.MachineState;
 public abstract class MachineFailure {
     abstract public void checkMachine(MachineState currentState);
 
+    abstract public void futureBehaviour(MachineState machineState);
+
     abstract public void takeAction(String machineID);
 }

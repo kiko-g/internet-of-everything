@@ -6,7 +6,6 @@ public class MachineState  {
     private String id;  
     private TemperatureState tempState;
 
-
     public MachineState(String id, ConcurrentHashMap<String, Float> defaultValues){
         this.id = id;
         float tempDefault = defaultValues.get("temperature").floatValue();

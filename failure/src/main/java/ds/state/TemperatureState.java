@@ -48,6 +48,10 @@ public class TemperatureState {
         return this.currentTemp;
     }
     
+    public Queue<Float> getTempQueue() {
+        return temps;
+    }
+
     public Float getMaxTemp() {
         return this.maxTemp;
     }
