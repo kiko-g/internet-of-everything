@@ -12,17 +12,17 @@ public class VibrationSensor extends Sensor {
     float vibrationNormalDeviation;
 
 
-    VibrationSensor(float averageVibration, float vibrationNormalDeviation, int updateInterval) {
-        super(updateInterval);
+    public VibrationSensor(String name, float averageVibration, float vibrationNormalDeviation, int updateInterval) {
+        super(name, updateInterval);
         this.type = Type.VIBRATION;
-        this.currentVibration = 150; //Hz
+        this.currentVibration = 0; //Hz
         this.averageVibration = averageVibration;
         this.vibrationNormalDeviation = vibrationNormalDeviation;
     }
 
     @Override
     public void generateData() {
-
+        System.out.println("Generate data " + this.getName());
     }
 
     public ArrayList<Float> getData() {

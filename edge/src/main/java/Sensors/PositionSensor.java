@@ -8,8 +8,8 @@ public class PositionSensor extends Sensor {
     float posX;
     float posY;
 
-    public PositionSensor(float positionX, float positionY, int updateInterval) {
-        super(updateInterval);
+    public PositionSensor(String name, float positionX, float positionY, int updateInterval) {
+        super(name, updateInterval);
         this.type = Type.POSITION;
         this.posX = positionX;
         this.posY = positionY;
@@ -17,7 +17,7 @@ public class PositionSensor extends Sensor {
 
     @Override
     public void generateData() {
-
+        System.out.println("Generate data " + this.getName());
     }
 
     public ArrayList<Float> getData() {

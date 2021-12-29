@@ -1,5 +1,4 @@
-import Sensors.PositionSensor;
-import Sensors.Sensor;
+import Sensors.*;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
 import org.eclipse.paho.mqttv5.common.MqttException;
@@ -8,21 +7,43 @@ import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 
 import java.util.ArrayList;
 
-public class Machine extends MQTTClient {
-    ArrayList<Sensor> sensors;
+public class Machine extends MQTTClient implements Runnable {
+    Thread thread;
+    String name;
+    ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
 
     Machine(String id) {
         super(id);
+        this.name = id;
         this.subscribeTopic("testTopic");
         this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
 
-        this.sensors = getSensors();
+        this.sensors = getSensors(); // only to get some sensors while there are no configuration files
+    }
+
+    public void start() {
+        System.out.println("Machine " + this.name + " started working.");
+        if(this.thread == null) {
+            this.thread = new Thread (this, this.name);
+            this.thread.start();
+        }
     }
 
     public void run() {
         for (Sensor sensor: this.sensors) {
-            sensor.run();
+            sensor.start();
         }
+    }
+
+    private ArrayList<Sensor> getSensors() {
+        // only to get some sensors while there are no configuration files
+
+        sensors = new ArrayList<>();
+        sensors.add(new PositionSensor("pos1", 1, 1, 1000));
+        sensors.add(new ProductionSpeedSensor("prodSpeed1", 1, 1, 3000));
+        sensors.add(new TemperatureSensor("temp1", 1, 1, 4000));
+        sensors.add(new VibrationSensor("vib1", 1, 1, 2000));
+        return sensors;
     }
 
     @Override
@@ -86,11 +107,5 @@ public class Machine extends MQTTClient {
         System.out.println("--");
 
         //TODO: handle auth packet arrived
-    }
-
-    private ArrayList<Sensor> getSensors() {
-        sensors = new ArrayList<>();
-        sensors.add(new PositionSensor(1,1, 1000));
-        return sensors;
     }
 }
