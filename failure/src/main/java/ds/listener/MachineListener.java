@@ -1,96 +1,32 @@
 package ds.listener;
+import ds.failures.TemperatureFailure;
+import ds.graph.Graph;
 import ds.state.MachineState;
 import ds.state.State; 
-
-import java.util.UUID;
-
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
-public class MachineListener implements MqttCallbackExtended {
-    private final String brokerURI;
-    private final String subscriberId;
-    private final String[] topics;
+public class MachineListener extends Listener {
+    private State state; // Stores the current state of all machines.
+    public static final Integer INFO_SIZE = 3; // Number of previous states to save
+    private TemperatureFailure temperatureFailure;
 
-    private State state = new State();  // Stores the current state of all machines.
-    // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
-    // temperatures for each machine.
-    public static final Integer INFO_SIZE = 3;
-
-
-    public MachineListener(String[] topics) {
-        this.brokerURI = "tcp://mosquitto:1883";
-        this.subscriberId = UUID.randomUUID().toString();
-        this.topics = topics;
-
-    }
-
-    public void init() {
-        try {
-            System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
-
-            // Connect to Broker
-            MqttClient subscriber = new MqttClient(this.brokerURI, subscriberId);
-            subscriber.setCallback(this);
-            subscriber.connect();
-            System.out.println("Connected with success to MQTT Broker at " + this.brokerURI);
-
-            //Subscribe to all machine sensors
-            for (String topic: topics) {
-                System.out.println("Subscribed to " + topic);
-                subscriber.subscribe(topic);
-            }
-
-        } catch (MqttException e) {
-            e.printStackTrace();
-            System.out.println("Failed connecting to MQTT Broker");
-            System.exit(1);
-        }
-
-    }
-
-    public static void main(String[] args) {
-
-        if(args.length == 0){
-            System.err.println("Usage: java MachineListener [sensors...]");
-            System.out.println("e.g. java MachineListener temperature");
-        }
-
-        MachineListener machineListener = new MachineListener(args);
-        machineListener.init();
-        
+    public MachineListener(Graph graph) {
+        super("production/machine", graph);
+        this.state = new State(graph); 
+        this.temperatureFailure = new TemperatureFailure();
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
-        String machineID = messageParsed.getString("machineID");
-        System.out.println(machineID);
+        //System.out.println(messageParsed);
 
         try {
-            if (!this.state.findMachine(machineID)) {
-                this.addMachineToState(messageParsed);
-            } else {
-                this.updateState(messageParsed);
-            }
-        }catch(Exception e){
+            this.updateState(messageParsed);
+        } catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-     /**
-     * Creates a new machine state with the current ID and adds to the system state.
-     * @param messageParsed JSONObject with the message content.
-     */
-    public void addMachineToState(JSONObject messageParsed){
-        MachineState machineState = new MachineState(messageParsed);
-        this.state.addMachine(machineState.getId(), machineState);
-        System.out.println("MachineID :: " + machineState.getId()+ "::" + machineState.getTempState().getMeanTemp());
     }
 
     /**
@@ -104,15 +40,11 @@ public class MachineListener implements MqttCallbackExtended {
         machineState.addTemperature(messageParsed.getJSONObject("properties").getFloat("temperature"));
         // Replaces the old state to the new one.
         this.state.addMachine(machineID, machineState);
-        System.out.println("MachineID :: " + machineID + "::" + machineState.getTempState().getMeanTemp());
+        
+        System.out.println("MachineID :: " + machineID + 
+        "\n\t:: mean temperature :: " + machineState.getTempState().getMeanTemp() + 
+        "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
+
+        this.temperatureFailure.checkMachine(machineState);
     }
-
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {}
-
-    @Override
-    public void connectComplete(boolean reconnect, String serverURI) {}
-
-    @Override
-    public void connectionLost(Throwable cause) {}
 }

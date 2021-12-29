@@ -1,1 +1,0 @@
-# Communication - Mosquitto MQTT Broker

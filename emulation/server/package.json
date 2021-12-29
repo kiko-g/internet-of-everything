@@ -1,9 +1,0 @@
-{
-    "dependencies": {
-        "mqtt": "^4.2.8"
-    },
-    "scripts": {
-        "start": "node src/server.js"
-    }
-
-}
