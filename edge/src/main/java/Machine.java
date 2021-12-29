@@ -11,12 +11,18 @@ import java.util.ArrayList;
 public class Machine extends MQTTClient {
     ArrayList<Sensor> sensors;
 
-    Machine(String id){
+    Machine(String id) {
         super(id);
         this.subscribeTopic("testTopic");
-        this.publishMessage("testTopic", ("hello world from " + id).getBytes());
+        this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
 
         this.sensors = getSensors();
+    }
+
+    public void run() {
+        for (Sensor sensor: this.sensors) {
+            sensor.run();
+        }
     }
 
     @Override
@@ -82,9 +88,9 @@ public class Machine extends MQTTClient {
         //TODO: handle auth packet arrived
     }
 
-    private ArrayList<Sensor> getSensors(){
+    private ArrayList<Sensor> getSensors() {
         sensors = new ArrayList<>();
-        sensors.add(new PositionSensor(1,1));
+        sensors.add(new PositionSensor(1,1, 1000));
         return sensors;
     }
 }

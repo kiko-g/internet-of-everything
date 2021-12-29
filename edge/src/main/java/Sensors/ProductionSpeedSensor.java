@@ -12,27 +12,28 @@ public class ProductionSpeedSensor extends Sensor {
     float speedNormalDeviation;
 
 
-    ProductionSpeedSensor(float averageSpeed, float speedNormalDeviation) {
-        super();
+    ProductionSpeedSensor(float averageSpeed, float speedNormalDeviation, int updateInterval) {
+        super(updateInterval);
         this.type = Type.PRODUCTION_SPEED;
         this.currentSpeed = 0; //antennas/min
         this.averageSpeed = averageSpeed;
         this.speedNormalDeviation = speedNormalDeviation;
     }
 
-    @Override
-    public void generateData() {
-
-    }
 
     public ArrayList<Float> getData() {
         ArrayList<Float> speed = new ArrayList<>();
-        if (!this.on) {
+        if (!this.isOn) {
             speed.add(null);
         }
         else {
             speed.add(this.currentSpeed);
         }
         return speed;
+    }
+
+    @Override
+    public void generateData() {
+
     }
 }

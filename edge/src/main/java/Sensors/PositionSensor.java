@@ -8,8 +8,8 @@ public class PositionSensor extends Sensor {
     float posX;
     float posY;
 
-    public PositionSensor(float positionX, float positionY) {
-        super();
+    public PositionSensor(float positionX, float positionY, int updateInterval) {
+        super(updateInterval);
         this.type = Type.POSITION;
         this.posX = positionX;
         this.posY = positionY;
@@ -24,7 +24,7 @@ public class PositionSensor extends Sensor {
         //should have a configuration file with paths??
         //for now, dummy movements:
         ArrayList<Float> position = new ArrayList<>();
-        if (!this.on){
+        if (!this.isOn){
             position.add(null);
             position.add(null);
         }

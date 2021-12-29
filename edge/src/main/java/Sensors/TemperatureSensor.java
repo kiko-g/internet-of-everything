@@ -12,8 +12,8 @@ public class TemperatureSensor extends Sensor {
     float temperatureNormalDeviation;
 
 
-    TemperatureSensor(float averageTemperature, float temperatureNormalDeviation) {
-        super();
+    TemperatureSensor(float averageTemperature, float temperatureNormalDeviation, int updateInterval) {
+        super(updateInterval);
         this.type = Type.TEMPERATURE;
         this.currentTemperature = 0; //ºC
         this.averageTemperature = averageTemperature;
@@ -27,7 +27,7 @@ public class TemperatureSensor extends Sensor {
 
     public ArrayList<Float> getData() {
         ArrayList<Float> temperature = new ArrayList<>();
-        if (!this.on){
+        if (!this.isOn){
             temperature.add(null);
         }
         else {

@@ -12,8 +12,8 @@ public class VibrationSensor extends Sensor {
     float vibrationNormalDeviation;
 
 
-    VibrationSensor(float averageVibration, float vibrationNormalDeviation) {
-        super();
+    VibrationSensor(float averageVibration, float vibrationNormalDeviation, int updateInterval) {
+        super(updateInterval);
         this.type = Type.VIBRATION;
         this.currentVibration = 150; //Hz
         this.averageVibration = averageVibration;
@@ -27,7 +27,7 @@ public class VibrationSensor extends Sensor {
 
     public ArrayList<Float> getData() {
         ArrayList<Float> vibration = new ArrayList<>();
-        if (!this.on){
+        if (!this.isOn){
             vibration.add(null);
         }
         else {
