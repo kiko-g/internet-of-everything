@@ -10,6 +10,7 @@ class MQTTClient {
         this.client = mqtt.connect('mqtt://localhost', MQTT_OPTIONS);
         
         this.client.on('connect', function () {
+            console.log("[MQTT] Connected.");
             this.subscribe('edge/#');
             this.publish('emulator/hello', 'Emulator server is online!');
         });
