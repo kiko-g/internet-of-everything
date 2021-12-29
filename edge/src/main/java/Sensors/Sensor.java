@@ -11,7 +11,7 @@ public abstract class Sensor {
     }
 
     public enum Type {
-        VIBRATION, TEMPERATURE, POSITION, SPEED
+        VIBRATION, TEMPERATURE, POSITION, PRODUCTION_SPEED
     }
 
     public void switchPower(){ this.on = !on;}
@@ -22,6 +22,4 @@ public abstract class Sensor {
 
     public abstract void generateData();
     public abstract ArrayList<Float> getData();
-    public abstract void chaosUpSensor();
-    public abstract void chaosDownSensor();
 }
