@@ -1,15 +1,22 @@
+import Sensors.PositionSensor;
+import Sensors.Sensor;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 
+import java.util.ArrayList;
+
 public class Machine extends MQTTClient {
+    ArrayList<Sensor> sensors;
 
     Machine(String id){
         super(id);
         this.subscribeTopic("testTopic");
         this.publishMessage("testTopic", ("hello world from " + id).getBytes());
+
+        this.sensors = getSensors();
     }
 
     @Override
@@ -73,5 +80,11 @@ public class Machine extends MQTTClient {
         System.out.println("--");
 
         //TODO: handle auth packet arrived
+    }
+
+    private ArrayList<Sensor> getSensors(){
+        sensors = new ArrayList<>();
+        sensors.add(new PositionSensor(1,1));
+        return sensors;
     }
 }

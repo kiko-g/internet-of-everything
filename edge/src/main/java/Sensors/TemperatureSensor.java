@@ -2,30 +2,28 @@ package Sensors;
 
 import java.util.ArrayList;
 
-public class TemperatureSensor implements Sensor{
+public class TemperatureSensor extends Sensor {
 
     Type type;
     float baseline;
     float baselineVariance;
     float posX;
     float posY;
-    boolean on;
 
 
     TemperatureSensor(float positionX, float positionY) {
+        super();
         this.type = Type.VIBRATION;
         this.posX = positionX;
         this.posY = positionY;
         this.baseline = 40; //ºC
         this.baselineVariance = (float) (this.baseline * 0.05); // 5% variation
-        this.on = true;
     }
 
-    public void switchPower(){ this.on = !this.on;}
+    @Override
+    public void generateData() {
 
-    public void switchOn(){ this.on = true;}
-
-    public void switchOff(){ this.on = false;}
+    }
 
     public ArrayList<Float> getData() {
         ArrayList<Float> temperature = new ArrayList<>();

@@ -2,30 +2,33 @@ package Sensors;
 
 import java.util.ArrayList;
 
-public class PositionSensor implements Sensor{
+public class PositionSensor extends Sensor {
 
     Type type;
     float baselineVarianceY;
     float baselineVarianceX;
     float posX;
     float posY;
-    boolean on;
 
-
-    PositionSensor(float positionX, float positionY) {
+    public PositionSensor(float positionX, float positionY) {
+        super();
         this.type = Type.VIBRATION;
         this.posX = positionX;
         this.posY = positionY;
         this.baselineVarianceX = (float) (this.posX * 0.05); // 5% variation
         this.baselineVarianceY = (float) (this.posY * 0.05);
-        this.on = true;
     }
 
-    public void switchPower(){ this.on = !this.on;}
+    public void switchPower() { this.on = !this.on;}
 
-    public void switchOn(){ this.on = true;}
+    public void switchOn() { this.on = true;}
 
-    public void switchOff(){ this.on = false;}
+    public void switchOff() { this.on = false;}
+
+    @Override
+    public void generateData() {
+
+    }
 
     public ArrayList<Float> getData() {
         //should have a configuration file with paths??
