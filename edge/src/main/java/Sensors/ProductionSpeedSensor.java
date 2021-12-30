@@ -3,37 +3,30 @@ package Sensors;
 import java.util.ArrayList;
 
 public class ProductionSpeedSensor extends Sensor {
-
     Type type;
-    float currentSpeed;
+    Double currentSpeed;
 
-    // for generation of values
-    float averageSpeed;
-    float speedNormalDeviation;
-
-
-    public ProductionSpeedSensor(String name, float averageSpeed, float speedNormalDeviation, int updateInterval) {
-        super(name, updateInterval);
+    public ProductionSpeedSensor(String name, double averageSpeed, double speedStandardDeviation, int updateInterval) {
+        super(name, averageSpeed, speedStandardDeviation, updateInterval);
         this.type = Type.PRODUCTION_SPEED;
-        this.currentSpeed = 0; //antennas/min
-        this.averageSpeed = averageSpeed;
-        this.speedNormalDeviation = speedNormalDeviation;
+        this.currentSpeed = null; //antennas/min
     }
 
-
-    public ArrayList<Float> getData() {
-        ArrayList<Float> speed = new ArrayList<>();
+    public String getData() {
+        ArrayList<Double> speed = new ArrayList<>();
         if (!this.isOn) {
             speed.add(null);
         }
         else {
             speed.add(this.currentSpeed);
         }
-        return speed;
+        return "";
     }
 
     @Override
     public void generateData() {
-        System.out.println("Generate data " + this.getName());
+        if(Math.random() * 100 < ERROR_PROBABILITY)
+            this.currentSpeed = null;
+        else this.currentSpeed = this.generateRandomDataNormalDistribution();
     }
 }

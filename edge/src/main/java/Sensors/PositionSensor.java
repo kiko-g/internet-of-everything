@@ -3,12 +3,11 @@ package Sensors;
 import java.util.ArrayList;
 
 public class PositionSensor extends Sensor {
-
     Type type;
-    float posX;
-    float posY;
+    Double posX;
+    Double posY;
 
-    public PositionSensor(String name, float positionX, float positionY, int updateInterval) {
+    public PositionSensor(String name, double positionX, double positionY, int updateInterval) {
         super(name, updateInterval);
         this.type = Type.POSITION;
         this.posX = positionX;
@@ -17,13 +16,13 @@ public class PositionSensor extends Sensor {
 
     @Override
     public void generateData() {
-        System.out.println("Generate data " + this.getName());
+        // do nothing, for now machines are static
     }
 
-    public ArrayList<Float> getData() {
+    public String getData() {
         //should have a configuration file with paths??
         //for now, dummy movements:
-        ArrayList<Float> position = new ArrayList<>();
+        ArrayList<Double> position = new ArrayList<>();
         if (!this.isOn){
             position.add(null);
             position.add(null);
@@ -37,6 +36,6 @@ public class PositionSensor extends Sensor {
                 position.add(this.posX);
             }
         }
-        return position;
+        return "";
     }
 }

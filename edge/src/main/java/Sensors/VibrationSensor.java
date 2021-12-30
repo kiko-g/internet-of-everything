@@ -3,36 +3,30 @@ package Sensors;
 import java.util.ArrayList;
 
 public class VibrationSensor extends Sensor {
-
     Type type;
-    float currentVibration;
+    Double currentVibration;
 
-    // for generation of values
-    float averageVibration;
-    float vibrationNormalDeviation;
-
-
-    public VibrationSensor(String name, float averageVibration, float vibrationNormalDeviation, int updateInterval) {
-        super(name, updateInterval);
+    public VibrationSensor(String name, double averageVibration, double vibrationStandardDeviation, int updateInterval) {
+        super(name, averageVibration, vibrationStandardDeviation, updateInterval);
         this.type = Type.VIBRATION;
-        this.currentVibration = 0; //Hz
-        this.averageVibration = averageVibration;
-        this.vibrationNormalDeviation = vibrationNormalDeviation;
+        this.currentVibration = null; // Hertz
     }
 
     @Override
     public void generateData() {
-        System.out.println("Generate data " + this.getName());
+        if(Math.random() * 100 < ERROR_PROBABILITY)
+            this.currentVibration = null;
+        else this.currentVibration = this.generateRandomDataNormalDistribution();
     }
 
-    public ArrayList<Float> getData() {
-        ArrayList<Float> vibration = new ArrayList<>();
+    public String getData() {
+        ArrayList<Double> vibration = new ArrayList<>();
         if (!this.isOn){
             vibration.add(null);
         }
         else {
             vibration.add(this.currentVibration);
         }
-        return vibration;
+        return "";
     }
 }

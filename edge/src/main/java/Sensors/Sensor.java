@@ -1,13 +1,18 @@
 package Sensors;
 
-import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Sensor extends Thread {
 
     String id;
     boolean isOn;
     int interval; // update interval in milliseconds
-    int ERROR_PROBABILITY = 10; // %
+    static int ERROR_PROBABILITY = 10; // %
+
+    // for generation of data
+    double averageValue;
+    double standardDeviation;
+    Random random;
 
     public enum Type {
         POSITION,
@@ -25,6 +30,15 @@ public abstract class Sensor extends Thread {
         this.id = id;
         this.isOn = true;
         this.interval = updateInterval;
+    }
+
+    Sensor(String id, double averageValue, double standardDeviation, int updateInterval) {
+        this.setName(id);
+        this.id = id;
+        this.isOn = true;
+        this.interval = updateInterval;
+        this.averageValue = averageValue;
+        this.standardDeviation = standardDeviation;
     }
 
     public String getID() {
@@ -54,6 +68,10 @@ public abstract class Sensor extends Thread {
         }
     }
 
+    public double generateRandomDataNormalDistribution() {
+        return random.nextGaussian() * this.standardDeviation + this.averageValue;
+    }
+
     public abstract void generateData();
-    public abstract ArrayList<Float> getData();
+    public abstract String getData();
 }
