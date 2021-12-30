@@ -4,25 +4,34 @@ import ds.state.TemperatureState;
 
 import java.util.*;
 
+import org.json.JSONObject;
+
 /**
  * This class is responsible for processing temperature machine failures
  */
 public class TemperatureFailure extends MachineFailure {
-    public static final Integer FUTURE_BEHAVIOUR = 3; // Number of states with increasing temperature to be sent a warning 
+    private static final Integer NOERROR_NUM = 1;
+    private static final Integer UNKNOW_ERROR_NUM = 0;
+    private static final Integer ERROR_NUM = 1; 
+
+    private static final Integer FUTURE_BEHAVIOUR = 3; // Number of states with increasing temperature to be sent a warning 
     
     @Override
     public void checkMachine(MachineState currentState) {
         TemperatureState tempState = currentState.getTempState();
         Float currentTemp = tempState.getCurrentTemp();
-        if(currentTemp > tempState.getMaxTemp()){
+        if(currentTemp > tempState.getMaxTemp()) {
             System.out.println("MachineID :: " + currentState.getId() + 
             ":: Temperature surpassed " + currentTemp + "/" + tempState.getMaxTemp());
+
             this.takeAction(currentState.getId());
+        } else {
+            futureBehaviour(currentState);
         }
     }
 
     @Override
-    public void futureBehaviour(MachineState currentState) {
+    public String futureBehaviour(MachineState currentState) {
         TemperatureState tempState = currentState.getTempState(); 
         
         Queue<Float> temps = tempState.getTempQueue();    
@@ -41,27 +50,27 @@ public class TemperatureFailure extends MachineFailure {
             prevTemp = currentTemp;
         }
         System.out.println("\n Consecutive Increase: " + numConsecutive);
-
-        // TODO: Check if the machine is close to the max temperature
-        /* 
-        if (close) {
+        float close = tempState.getMaxTemp() - tempState.getCurrentTemp();
+        if (close < 10.0) {
             if (numConsecutive > FUTURE_BEHAVIOUR) {
-                DANGER POSSIBLE SHUTDOWN FOR A WHILE TO PREVENT DAMAGING COMPONENTS
+                System.out.println("\n Immeninent user case");
+                return getResponseMessage(currentState.getId(), "Critical", NOERROR_NUM);
             } else {
-                WARNING
+                System.out.println("\n Temperature close to the limit");
+                return getResponseMessage(currentState.getId(), "Warning", NOERROR_NUM);
             }
-        } else if (numConsecutive > FUTURE_BEHAVIOUR) { */
-        if (numConsecutive > FUTURE_BEHAVIOUR) { 
+        } else if (numConsecutive > FUTURE_BEHAVIOUR) {
             System.out.println("\n Possibility of overheating soon");
-
-            // Alert Machines
+            return getResponseMessage(currentState.getId(), "Warning", NOERROR_NUM);
         }
+
+        return getResponseMessage(currentState.getId(), "Ok", NOERROR_NUM);
     }
 
     @Override
-    public void takeAction(String machineID) {
+    public String takeAction(String machineID) {
         System.out.println("MachineID :: " + machineID + " :: Cooling up the Machine");
-        // Stop production
-        // Alert other machines
+
+        return getResponseMessage(machineID, "Failed", ERROR_NUM);
     }
 }

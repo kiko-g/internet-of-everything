@@ -3,6 +3,8 @@ import ds.failures.TemperatureFailure;
 import ds.graph.Graph;
 import ds.state.MachineState;
 import ds.state.State; 
+import ds.publisher.Utils;
+
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
@@ -46,6 +48,5 @@ public class MachineListener extends Listener {
         "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
 
         this.temperatureFailure.checkMachine(machineState);
-        this.temperatureFailure.futureBehaviour(machineState);
     }
 }
