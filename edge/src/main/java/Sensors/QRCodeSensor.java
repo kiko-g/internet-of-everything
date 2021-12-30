@@ -1,5 +1,5 @@
 package Sensors;
-
+import org.json.JSONObject;
 public class QRCodeSensor extends Sensor {
     Type type;
     int materialID;
@@ -12,14 +12,16 @@ public class QRCodeSensor extends Sensor {
         this.defectProbability = defectProbability;
     }
 
-    public String getData() {
+    public JSONObject getData() {
+        JSONObject obj = new JSONObject();
         if (!this.isOn) {
-
+            obj.put("value", "null");
         }
         else {
-
+            this.generateData();
+            obj.put("value", this.materialID);
         }
-        return "";
+        return obj;
     }
 
     @Override

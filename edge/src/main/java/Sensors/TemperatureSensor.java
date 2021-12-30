@@ -1,7 +1,7 @@
 package Sensors;
 
 import java.util.ArrayList;
-
+import org.json.JSONObject;
 public class TemperatureSensor extends Sensor {
     Type type;
     Double currentTemperature;
@@ -19,14 +19,15 @@ public class TemperatureSensor extends Sensor {
         else this.currentTemperature = this.generateRandomDataNormalDistribution();
     }
 
-    public String getData() {
-        ArrayList<Double> temperature = new ArrayList<>();
-        if (!this.isOn){
-            temperature.add(null);
+    public JSONObject getData() {
+        JSONObject obj = new JSONObject();
+        if (!this.isOn) {
+            obj.put("value", "null");
         }
         else {
-            temperature.add(this.currentTemperature);
+            this.generateData();
+            obj.put("value", this.currentTemperature);
         }
-        return "";
+        return obj;
     }
 }

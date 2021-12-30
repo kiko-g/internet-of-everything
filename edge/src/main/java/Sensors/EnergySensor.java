@@ -2,6 +2,7 @@ package Sensors;
 
 import java.util.ArrayList;
 import java.util.Random;
+import org.json.JSONObject;
 
 public class EnergySensor extends Sensor {
     Type type;
@@ -13,15 +14,16 @@ public class EnergySensor extends Sensor {
         this.currentEnergy = null; // Watt
     }
 
-    public String getData() {
-        ArrayList<Double> speed = new ArrayList<>();
+    public JSONObject getData() {
+        JSONObject obj = new JSONObject();
         if (!this.isOn) {
-            speed.add(null);
+            obj.put("value", "null");
         }
         else {
-            speed.add(this.currentEnergy);
+            this.generateData();
+            obj.put("value", this.currentEnergy);
         }
-        return "";
+        return obj;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package Sensors;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class PositionSensor extends Sensor {
     Type type;
@@ -19,23 +20,19 @@ public class PositionSensor extends Sensor {
         // do nothing, for now machines are static
     }
 
-    public String getData() {
+    public JSONObject getData() {
         //should have a configuration file with paths??
         //for now, dummy movements:
-        ArrayList<Double> position = new ArrayList<>();
+        JSONObject obj = new JSONObject();
         if (!this.isOn){
-            position.add(null);
-            position.add(null);
+            obj.put("posX", "null");
+            obj.put("posY", "null");
         }
         else {
-            float random = (float) Math.random();
-            if (random > 0.8){
-                position.add(this.posY);
-            }
-            else {
-                position.add(this.posX);
-            }
+            this.generateData();
+            obj.put("posX", this.posX);
+            obj.put("posY", this.posY);
         }
-        return "";
+        return obj;
     }
 }

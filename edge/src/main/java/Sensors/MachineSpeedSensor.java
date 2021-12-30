@@ -1,6 +1,7 @@
 package Sensors;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class MachineSpeedSensor extends Sensor {
     Type type;
@@ -12,15 +13,16 @@ public class MachineSpeedSensor extends Sensor {
         this.currentSpeed = null; // meters/s
     }
 
-    public String getData() {
-        ArrayList<Double> speed = new ArrayList<>();
+    public JSONObject getData() {
+        JSONObject obj = new JSONObject();
         if (!this.isOn) {
-            speed.add(null);
+            obj.put("value", "null");
         }
         else {
-            speed.add(this.currentSpeed);
+            this.generateData();
+            obj.put("value", this.currentSpeed);
         }
-        return "";
+        return obj;
     }
 
     @Override

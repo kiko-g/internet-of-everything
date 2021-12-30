@@ -1,7 +1,7 @@
 package Sensors;
 
 import java.util.ArrayList;
-
+import org.json.JSONObject;
 public class VibrationSensor extends Sensor {
     Type type;
     Double currentVibration;
@@ -19,14 +19,15 @@ public class VibrationSensor extends Sensor {
         else this.currentVibration = this.generateRandomDataNormalDistribution();
     }
 
-    public String getData() {
-        ArrayList<Double> vibration = new ArrayList<>();
+    public JSONObject getData() {
+        JSONObject obj = new JSONObject();
         if (!this.isOn){
-            vibration.add(null);
+            obj.put("value", "null");
         }
         else {
-            vibration.add(this.currentVibration);
+            this.generateData();
+            obj.put("value", this.currentVibration);
         }
-        return "";
+        return obj;
     }
 }

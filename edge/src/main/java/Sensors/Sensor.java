@@ -1,5 +1,7 @@
 package Sensors;
 
+import org.json.JSONObject;
+
 import java.util.Random;
 
 public abstract class Sensor extends Thread {
@@ -73,5 +75,5 @@ public abstract class Sensor extends Thread {
     }
 
     public abstract void generateData();
-    public abstract String getData();
+    public abstract JSONObject getData();
 }
