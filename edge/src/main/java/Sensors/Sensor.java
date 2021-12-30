@@ -76,4 +76,26 @@ public abstract class Sensor extends Thread {
 
     public abstract void generateData();
     public abstract JSONObject getData();
+
+    public JSONObject createJSON(String machineID, String sensorID, String sensorType, double... values) {
+        JSONObject obj = new JSONObject();
+        obj.put("machineID", machineID);
+        obj.put("sensorID", sensorID);
+        obj.put("sensorType", sensorType);
+        return obj;
+    }
 }
+        /*                       Message format to send to machine
+        {
+        "machineID": String,         # Unique identifier of each machine
+        "sensorID": String,          # Unique identifier of each sensor
+        "sensorType": String,        # Type of the sensor
+        "values": [                  # Values read by the sensor
+        "valueName1": float,
+        "valueName2": float,
+        (...)
+        "valueNameN": float,
+        ],
+        "readingTime": datetime(mmhhYYYYMMDD)      # Time of the reading
+        }
+        */
