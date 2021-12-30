@@ -47,6 +47,9 @@ public class MachineListener extends Listener {
         "\n\t:: mean temperature :: " + machineState.getTempState().getMeanTemp() + 
         "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
 
-        this.temperatureFailure.checkMachine(machineState);
+        String responseTemperature = this.temperatureFailure.checkMachine(machineState);
+        System.out.println("Temperature Status: " + responseTemperature);
+        
+        // Send response to publisher
     }
 }
