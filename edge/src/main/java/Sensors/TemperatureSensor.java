@@ -1,13 +1,12 @@
 package Sensors;
 
-import java.util.ArrayList;
 import org.json.JSONObject;
 public class TemperatureSensor extends Sensor {
     Type type;
     Double currentTemperature;
 
-    public TemperatureSensor(String name, double averageTemperature, double temperatureStandardDeviation, int updateInterval) {
-        super(name, averageTemperature, temperatureStandardDeviation, updateInterval);
+    public TemperatureSensor(String name, String machineId, double averageTemperature, double temperatureStandardDeviation, int updateInterval) {
+        super(name, machineId, averageTemperature, temperatureStandardDeviation, updateInterval);
         this.type = Type.TEMPERATURE;
         this.currentTemperature = null; //ºC
     }
@@ -19,16 +18,18 @@ public class TemperatureSensor extends Sensor {
         else this.currentTemperature = this.generateRandomDataNormalDistribution();
     }
 
-    public JSONObject getData() {
-        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+    public JSONObject readData() {
+        this.setNewData(false);
+
         JSONObject values = new JSONObject();
-        if (!this.isOn) {
+        if (!this.isOn || this.currentTemperature == null) {
             values.put("temperature", "null");
         }
         else {
-            this.generateData();
-            obj.put("temperature", this.currentTemperature);
+            values.put("temperature", this.currentTemperature);
         }
+
+        JSONObject obj = createBaseJSON();
         obj.put("values", values);
         return obj;
     }

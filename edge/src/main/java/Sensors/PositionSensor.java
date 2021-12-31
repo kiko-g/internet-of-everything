@@ -1,18 +1,17 @@
 package Sensors;
 
-import java.util.ArrayList;
 import org.json.JSONObject;
 
 public class PositionSensor extends Sensor {
     Type type;
-    Double posX;
-    Double posY;
+    Double x;
+    Double y;
 
-    public PositionSensor(String name, double positionX, double positionY, int updateInterval) {
-        super(name, updateInterval);
+    public PositionSensor(String name, String machineId, double x, double y, int updateInterval) {
+        super(name, machineId, updateInterval);
         this.type = Type.POSITION;
-        this.posX = positionX;
-        this.posY = positionY;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
@@ -20,20 +19,20 @@ public class PositionSensor extends Sensor {
         // do nothing, for now machines are static
     }
 
-    public JSONObject getData() {
-        //should have a configuration file with paths??
-        //for now, dummy movements:
-        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+    public JSONObject readData() {
+        this.setNewData(false);
+
         JSONObject values = new JSONObject();
-        if (!this.isOn){
-            values.put("posX", "null");
-            values.put("posY", "null");
+        if (!this.isOn || this.x == null || this.y == null){
+            values.put("x", "null");
+            values.put("y", "null");
         }
         else {
-            this.generateData();
-            values.put("posX", this.posX);
-            values.put("posY", this.posY);
+            values.put("x", this.x);
+            values.put("y", this.y);
         }
+
+        JSONObject obj = createBaseJSON();
         obj.put("values", values);
         return obj;
     }

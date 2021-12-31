@@ -4,12 +4,14 @@ import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class Machine extends MQTTClient implements Runnable {
     Thread thread;
     String name;
+    String publishTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
 
     Machine(String id) {
@@ -17,7 +19,7 @@ public class Machine extends MQTTClient implements Runnable {
         this.name = id;
         this.subscribeTopic("testTopic");
         this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
-
+        this.publishTopic = "edge/" + id;
         this.sensors = getSensors(); // only to get some sensors while there are no configuration files
     }
 
@@ -25,13 +27,29 @@ public class Machine extends MQTTClient implements Runnable {
         System.out.println("Machine " + this.name + " started working.");
         if(this.thread == null) {
             this.thread = new Thread (this, this.name);
-            this.thread.start();
+            this.thread.start(); //this calls run() in a new Thread
         }
     }
 
     public void run() {
+        this.startSensors();
+        this.checkSensorsForNewDataForever();
+    }
+
+    private void startSensors() {
         for (Sensor sensor: this.sensors) {
             sensor.start();
+        }
+    }
+
+    private void checkSensorsForNewDataForever() {
+        while(true) {
+            for (Sensor sensor: this.sensors) {
+                if(sensor.hasNewData()) {
+                    JSONObject data = sensor.readData();
+                    this.publishMessage(this.publishTopic, data.toString().getBytes());
+                }
+            }
         }
     }
 
@@ -39,10 +57,10 @@ public class Machine extends MQTTClient implements Runnable {
         // only to get some sensors while there are no configuration files
 
         sensors = new ArrayList<>();
-        sensors.add(new PositionSensor("pos1", 1, 1, 1000));
-        sensors.add(new ProductionSpeedSensor("prodSpeed1", 1, 1, 3000));
-        sensors.add(new TemperatureSensor("temp1", 1, 1, 4000));
-        sensors.add(new VibrationSensor("vib1", 1, 1, 2000));
+        sensors.add(new PositionSensor("pos1", this.name, 1, 1, 1000));
+        sensors.add(new ProductionSpeedSensor("prodSpeed1", this.name, 1, 1, 3000));
+        sensors.add(new TemperatureSensor("temp1", this.name, 1, 1, 4000));
+        sensors.add(new VibrationSensor("vib1", this.name, 1, 1, 2000));
         return sensors;
     }
 

@@ -2,14 +2,16 @@ package Sensors;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public abstract class Sensor extends Thread {
 
     String id;
+    String machineId;
     boolean isOn;
+    boolean newData;
     int interval; // update interval in milliseconds
     static int ERROR_PROBABILITY = 10; // %
 
@@ -20,7 +22,7 @@ public abstract class Sensor extends Thread {
 
     public enum Type {
         POSITION,
-        MACHINE_SPEED,
+        VELOCITY,
         MACHINE_DIRECTION,
         TEMPERATURE,
         VIBRATION,
@@ -29,20 +31,24 @@ public abstract class Sensor extends Thread {
         QR_CODE
     }
 
-    Sensor(String id, int updateInterval) {
+    Sensor(String id, String machineId, int updateInterval) {
         this.setName(id);
         this.id = id;
+        this.machineId = machineId;
         this.isOn = true;
+        this.newData = false;
         this.interval = updateInterval;
     }
 
-    Sensor(String id, double averageValue, double standardDeviation, int updateInterval) {
+    Sensor(String id, String machineId, double averageValue, double standardDeviation, int updateInterval) {
         this.setName(id);
         this.id = id;
+        this.machineId = machineId;
         this.isOn = true;
         this.interval = updateInterval;
         this.averageValue = averageValue;
         this.standardDeviation = standardDeviation;
+        this.random = new Random();
     }
 
     public String getID() {
@@ -61,6 +67,14 @@ public abstract class Sensor extends Thread {
         this.isOn = false;
     }
 
+    public void setNewData(boolean newData) {
+        this.newData = newData;
+    }
+
+    public boolean hasNewData() {
+        return this.newData;
+    }
+
     public void run() {
         System.out.println("Sensor " + this.id + " started to run.");
         long lastExecution = System.currentTimeMillis();
@@ -77,17 +91,14 @@ public abstract class Sensor extends Thread {
     }
 
     public abstract void generateData();
-    public abstract JSONObject getData();
+    public abstract JSONObject readData();
 
-    public JSONObject createJSON(String machineID, String sensorID, String sensorType) {
+    public JSONObject createBaseJSON() {
         JSONObject obj = new JSONObject();
         //prepare reading time
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-        String readingTime = formatter.format(now);
-        obj.put("machineID", machineID);
-        obj.put("sensorID", sensorID);
-        obj.put("sensorType", sensorType);
+        String readingTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.ns"));
+        obj.put("machineID", this.machineId);
+        obj.put("sensorID", this.id);
         obj.put("readingTime", readingTime);
         return obj;
     }

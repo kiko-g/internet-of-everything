@@ -35,7 +35,9 @@ public abstract class MQTTClient implements MqttCallback {
         } catch (MqttException e) {
             System.err.println("[MQTT] Exception Occurred whilst connecting the client " + clientId + ": ");
             e.printStackTrace();
-            //System.exit(0);
+            System.err.println();
+            System.err.println("A possibility is that mosquitto is not running...");
+            System.exit(0);
         }
     }
 

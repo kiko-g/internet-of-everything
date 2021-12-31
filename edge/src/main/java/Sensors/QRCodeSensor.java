@@ -1,27 +1,39 @@
 package Sensors;
 import org.json.JSONObject;
 public class QRCodeSensor extends Sensor {
+    enum Action {IN, OUT}
+
     Type type;
-    int materialID;
+    Integer materialID;
+    Action action;
+    boolean defect;
     int defectProbability;
 
-    public QRCodeSensor(String name, int defectProbability, int updateInterval) {
-        super(name, updateInterval);
+    public QRCodeSensor(String name, String machineId, Action action, int defectProbability, int updateInterval) {
+        super(name, machineId, updateInterval);
         this.type = Type.QR_CODE;
-        this.materialID = 0;
+        this.materialID = null;
+        this.action = action;
+        this.defect = false;
         this.defectProbability = defectProbability;
     }
 
-    public JSONObject getData() {
-        JSONObject obj = createJSON("MachineID", this.id, String.valueOf(this.type));
+    public JSONObject readData() {
+        this.setNewData(false);
+
         JSONObject values = new JSONObject();
-        if (!this.isOn) {
-            values.put("QRcode", "null");
+        if (!this.isOn || this.materialID == null) {
+            values.put("materialID", "null");
+            values.put("action", "null");
+            values.put("defect", "null");
         }
         else {
-            this.generateData();
-            values.put("QRcode", this.materialID);
+            values.put("materialID", this.materialID);
+            values.put("action", this.action.name());
+            values.put("defect", this.defect);
         }
+
+        JSONObject obj = createBaseJSON();
         obj.put("values", values);
         return obj;
     }

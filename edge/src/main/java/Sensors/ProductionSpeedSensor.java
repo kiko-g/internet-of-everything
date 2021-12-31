@@ -1,28 +1,29 @@
 package Sensors;
 
-import java.util.ArrayList;
 import org.json.JSONObject;
 
 public class ProductionSpeedSensor extends Sensor {
     Type type;
     Double currentSpeed;
 
-    public ProductionSpeedSensor(String name, double averageSpeed, double speedStandardDeviation, int updateInterval) {
-        super(name, averageSpeed, speedStandardDeviation, updateInterval);
+    public ProductionSpeedSensor(String name, String machineId, double averageSpeed, double speedStandardDeviation, int updateInterval) {
+        super(name, machineId, averageSpeed, speedStandardDeviation, updateInterval);
         this.type = Type.PRODUCTION_SPEED;
         this.currentSpeed = null; //antennas/min
     }
 
-    public JSONObject getData() {
-        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+    public JSONObject readData() {
+        this.setNewData(false);
+
         JSONObject values = new JSONObject();
-        if (!this.isOn) {
-            values.put("production", "null");
+        if (!this.isOn || this.currentSpeed == null) {
+            values.put("productionSpeed", "null");
         }
         else {
-            this.generateData();
-            values.put("production", this.currentSpeed);
+            values.put("productionSpeed", this.currentSpeed);
         }
+
+        JSONObject obj = createBaseJSON();
         obj.put("values", values);
         return obj;
     }
