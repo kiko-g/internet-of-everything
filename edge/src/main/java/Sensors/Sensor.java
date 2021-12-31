@@ -39,6 +39,7 @@ public abstract class Sensor extends Thread {
         this.interval = updateInterval;
         this.averageValue = averageValue;
         this.standardDeviation = standardDeviation;
+        this.random = new Random();
     }
 
     public String getID() {
