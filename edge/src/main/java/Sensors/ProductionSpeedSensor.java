@@ -14,14 +14,16 @@ public class ProductionSpeedSensor extends Sensor {
     }
 
     public JSONObject getData() {
-        JSONObject obj = new JSONObject();
+        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+        JSONObject values = new JSONObject();
         if (!this.isOn) {
-            obj.put("value", "null");
+            values.put("production", "null");
         }
         else {
             this.generateData();
-            obj.put("value", this.currentSpeed);
+            values.put("production", this.currentSpeed);
         }
+        obj.put("values", values);
         return obj;
     }
 

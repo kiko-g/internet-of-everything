@@ -23,16 +23,18 @@ public class PositionSensor extends Sensor {
     public JSONObject getData() {
         //should have a configuration file with paths??
         //for now, dummy movements:
-        JSONObject obj = new JSONObject();
+        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+        JSONObject values = new JSONObject();
         if (!this.isOn){
-            obj.put("posX", "null");
-            obj.put("posY", "null");
+            values.put("posX", "null");
+            values.put("posY", "null");
         }
         else {
             this.generateData();
-            obj.put("posX", this.posX);
-            obj.put("posY", this.posY);
+            values.put("posX", this.posX);
+            values.put("posY", this.posY);
         }
+        obj.put("values", values);
         return obj;
     }
 }

@@ -15,14 +15,16 @@ public class EnergySensor extends Sensor {
     }
 
     public JSONObject getData() {
-        JSONObject obj = new JSONObject();
+        JSONObject obj = createJSON("MachineID", this.id, String.valueOf(this.type));
+        JSONObject values = new JSONObject();
         if (!this.isOn) {
-            obj.put("value", "null");
+            values.put("energy", "null");
         }
         else {
             this.generateData();
-            obj.put("value", this.currentEnergy);
+            values.put("energy", this.currentEnergy);
         }
+        obj.put("values", values);
         return obj;
     }
 
