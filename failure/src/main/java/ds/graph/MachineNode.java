@@ -10,7 +10,7 @@ import ds.graph.sensor.Sensor;
 // TODO - delete unused variables
 public class MachineNode {  
     
-    private int id;                         
+    private String id;                         
     private MachineNode next;             // Children machines. [machine output to these] 
 
     ConcurrentHashMap<String, Float> defaultValues;      // The maximum values allowed by the machine. 
@@ -20,18 +20,18 @@ public class MachineNode {
 
 
     // NEW NEW
-    ConcurrentHashMap<Integer, Sensor> sensorProperties;
+    ConcurrentHashMap<String, Sensor> sensorProperties;
     String input;           // Type of material to be received by the machine. 
     String output;          // Type of material to be produced by the machine.
 
-    public MachineNode(int id, String input, String output){
+    public MachineNode(String id, String input, String output){
         this.id = id; 
         this.input = input;
         this.output = output;
         this.sensorProperties = new ConcurrentHashMap<>();
     }
 
-    public int getId(){
+    public String getId(){
         return this.id;
     } 
 
@@ -57,7 +57,7 @@ public class MachineNode {
 
     //###############################################
     public void addSensor(JSONObject sensorJson){
-        int id = sensorJson.getInt("id");
+        String id = sensorJson.getString("id");
         this.sensorProperties.put(id, new Sensor(id,sensorJson.getJSONObject("attributes")));
     }
 
@@ -135,4 +135,3 @@ public class MachineNode {
     }
 
 }
-    

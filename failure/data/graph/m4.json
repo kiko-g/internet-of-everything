@@ -1,11 +1,10 @@
 {
-    "id": 4,
+    "id": "m4",
     "status": 0,
-    "name": "m4",
     "defectProbability": 0,
     "sensors": [
       { 
-        "id": 1,
+        "id": "temperature5",
         "type": "TEMPERATURE",
         "attributes": { 
           "temperature": {
@@ -17,7 +16,7 @@
         }
       },  
       {
-        "id": 2,
+        "id": "energy4",
         "type": "ENERGY",
         "attributes": { 
           "energy": {
@@ -29,7 +28,7 @@
         }
       },
     {
-        "id": 3,
+        "id": "productionSpeed4",
         "type": "PRODUCTION_SPEED",
         "attributes": { 
           "productionSpeed": {
@@ -41,7 +40,7 @@
         }
       }, 
       {
-        "id": 4,
+        "id": "vibration4",
         "type": "VIBRATION",
         "attributes": { 
           "vibration": {
@@ -55,5 +54,5 @@
     ],
     "input": "material4",
     "output": "material5",
-    "nextMachineID": 5
+    "nextMachineID": "m5"
 } 

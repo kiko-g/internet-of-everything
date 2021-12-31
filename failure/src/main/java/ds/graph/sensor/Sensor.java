@@ -4,10 +4,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONObject; 
 
 public class Sensor { 
-    private int id; 
+    private String id; 
     private ConcurrentHashMap<String, Values> values;
 
-    public Sensor(int id, JSONObject valuesJson){ 
+    public Sensor(String id, JSONObject valuesJson){ 
         this.id = id; 
         this.values = new ConcurrentHashMap<>();
         this.init(valuesJson);
@@ -22,7 +22,7 @@ public class Sensor {
         }
     }
 
-    public float getId(){
+    public String getId(){
         return this.id;  
     }
 

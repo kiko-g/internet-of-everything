@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 
 public class Graph { 
-    ConcurrentHashMap<Integer, MachineNode> nodes; 
+    ConcurrentHashMap<String, MachineNode> nodes; 
 
     public Graph(){
         this("./data/graph/");
@@ -61,7 +61,7 @@ public class Graph {
         for(JSONObject machineJson : machinesJson){
             String input = machineJson.getString("input"); 
             String output = machineJson.getString("output"); 
-            int id  = machineJson.getInt("id");
+            String id  = machineJson.getString("id");
             this.nodes.put(id, new MachineNode(id, input, output)); 
         }
     }
@@ -72,17 +72,17 @@ public class Graph {
      */
     public void addProperties(List<JSONObject> machinesJson) {
         for(JSONObject machineJson : machinesJson){
-            int id = machineJson.getInt("id");
+            String id = machineJson.getString("id");
             MachineNode machineNode = nodes.get(id);  
 
             if(machineJson.has("nextmachineID")){
-                int nextId = machineJson.getInt("nextMachineID");
+                String nextId = machineJson.getString("nextMachineID");
                 MachineNode next = this.nodes.get(nextId);
                 machineNode.setNext(next);
             }
 
             JSONArray sensors = machineJson.getJSONArray("sensors");
-            for(Object sensorJson: sensors) {
+            for(Object sensorJson: sensors) { 
                 machineNode.addSensor((JSONObject)sensorJson);
             }
         }
