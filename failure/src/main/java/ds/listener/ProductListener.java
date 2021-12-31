@@ -21,28 +21,28 @@ public class ProductListener extends Listener {
 
     public void init(){
         super.init();
-        this.executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleWithFixedDelay(new Thread(() -> this.phases.showState()), 0, 5000, TimeUnit.MILLISECONDS);
+        // this.executor = new ScheduledThreadPoolExecutor(5);
+        // executor.scheduleWithFixedDelay(new Thread(() -> this.phases.showState()), 0, 5000, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        //System.out.println(messageParsed);
+        // JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
+        // //System.out.println(messageParsed);
 
-        String machineID = messageParsed.getString("machineID");
-        String state = messageParsed.getString("state");
-        MachineNode machine = this.machinesGraph.getMachineNode(machineID);
+        // String machineID = messageParsed.getString("machineID");
+        // String state = messageParsed.getString("state");
+        // MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
-        // New sub-product was produced by the machine
-        if(state.equals("out")){
-            machine.updateCounter();
-            //System.out.println("=== Machine " + machineID + " total products = " + machine.getProductCount() + " ===");
-        }
-        // New subproduct was received by the machine
-        else if(state.equals("in")){
-            String product = messageParsed.getString("product");
-            machine.addCurrentInput(product);
-        }
+        // // New sub-product was produced by the machine
+        // if(state.equals("out")){
+        //     machine.updateCounter();
+        //     //System.out.println("=== Machine " + machineID + " total products = " + machine.getProductCount() + " ===");
+        // }
+        // // New subproduct was received by the machine
+        // else if(state.equals("in")){
+        //     String product = messageParsed.getString("product");
+        //     machine.addCurrentInput(product);
+        // }
     }
 }

@@ -24,46 +24,46 @@ public class ProductSensor extends Sensor {
         super.init();
         this.machinesGraph = new Graph();
         
-        for(MachineNode machine: this.machinesGraph.getStartMachines()){
-            int time = this.rnd.nextInt(3000 - 2000) + 2000;
-            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateOutput(machine)), time, time, TimeUnit.MILLISECONDS);
-        }
+        // for(MachineNode machine: this.machinesGraph.getStartMachines()){
+        //     int time = this.rnd.nextInt(3000 - 2000) + 2000;
+        //     executor.scheduleWithFixedDelay(new Thread(() -> this.simulateOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+        // }
     }
 
-    private void simulateOutput(MachineNode startMachine){
-        // Send output message
-        String message = this.getOutputMessage(startMachine);
-        this.publish(message);
+    // private void simulateOutput(MachineNode startMachine){
+    //     // Send output message
+    //     String message = this.getOutputMessage(startMachine);
+    //     this.publish(message);
 
-        List<MachineNode> nextMachines = startMachine.getNext();
+    //     List<MachineNode> nextMachines = startMachine.getNext();
 
-        if(nextMachines.size() > 0){
-            // Get one of the next machines
-            Integer machineIdx = this.rnd.nextInt(nextMachines.size());
-            MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
+    //     if(nextMachines.size() > 0){
+    //         // Get one of the next machines
+    //         Integer machineIdx = this.rnd.nextInt(nextMachines.size());
+    //         MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
             
-            // Schedule next machine input message
-            int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
-        }
-    }
+    //         // Schedule next machine input message
+    //         int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
+    //         executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
+    //     }
+    // }
 
-    private void simulateInputOutput(MachineNode machine, String product){
-        // Send input message
-        machine.addCurrentInput(product);
-        String message = this.getInputMessage(machine, product);
-        this.publish(message);
+    // private void simulateInputOutput(MachineNode machine, String product){
+    //     // Send input message
+    //     machine.addCurrentInput(product);
+    //     String message = this.getInputMessage(machine, product);
+    //     this.publish(message);
 
-        // Received enough subproducts from all child machines to produce its product
-        if(machine.canProduce()){ 
-            // Reset inputs
-            machine.cleanProducedInput();
+    //     // Received enough subproducts from all child machines to produce its product
+    //     if(machine.canProduce()){ 
+    //         // Reset inputs
+    //         machine.cleanProducedInput();
 
-            // Schedule output message
-            int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
-        }
-    }
+    //         // Schedule output message
+    //         int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
+    //         executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
+    //     }
+    // }
 
 
     /**

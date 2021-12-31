@@ -1,0 +1,59 @@
+{
+    "id": 4,
+    "status": 0,
+    "name": "m4",
+    "defectProbability": 0,
+    "sensors": [
+      { 
+        "id": 1,
+        "type": "TEMPERATURE",
+        "attributes": { 
+          "temperature": {
+            "avg": 90, 
+            "min": 70,
+            "max": 120,
+            "standardDeviation": 2
+          }
+        }
+      },  
+      {
+        "id": 2,
+        "type": "ENERGY",
+        "attributes": { 
+          "energy": {
+            "avg": 40,
+            "max": 60, 
+            "min": 20, 
+            "standardDeviation": 9
+          }
+        }
+      },
+    {
+        "id": 3,
+        "type": "PRODUCTION_SPEED",
+        "attributes": { 
+          "productionSpeed": {
+            "avg": 23.5,
+            "max": 60, 
+            "min": 0, 
+            "standardDeviation": 9
+          }
+        }
+      }, 
+      {
+        "id": 4,
+        "type": "VIBRATION",
+        "attributes": { 
+          "vibration": {
+            "avg": 3.2, 
+            "min": 5,
+            "max": 2,
+            "standardDeviation": 1
+          }
+       }
+      }
+    ],
+    "input": "material4",
+    "output": "material5",
+    "nextMachineID": 5
+} 

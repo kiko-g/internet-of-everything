@@ -16,10 +16,10 @@ public class State {
     }
 
     public void initMachineStates(Graph machines){
-        for(String machineID : machines.getMachines()){
-            this.addMachine(machineID, new MachineState(machineID, 
-                machines.getMachineNode(machineID).getDefaults()));
-        }
+        // for(String machineID : machines.getMachines()){
+        //     this.addMachine(machineID, new MachineState(machineID, 
+        //         machines.getMachineNode(machineID).getDefaults()));
+        // }
     }
 
     /**

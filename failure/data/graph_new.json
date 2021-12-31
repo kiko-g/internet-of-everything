@@ -1,0 +1,32 @@
+{
+    "machineID": 1,
+    "status": 0,
+    "name": "m1",
+    "defectProbability": "2",
+    "sensors": [
+      {
+        "name": "temperature1",   
+        "type": "temperature",
+        "attributes": {
+          "avg": "90", 
+          "min": "70",
+          "max": "120",
+          "standardDeviation": "2"
+        }
+      },
+      {
+        "name": "position1",
+        "type": "position",
+        "attributes": {
+          "avgX": "10", 
+          "avgY": "10",
+          "minX": "0",
+          "maxX": "20",
+          "minY": "0",
+          "maxY": "20",
+          "standardDeviationX": "1",
+          "standardDeviationY": "1"
+        }
+      }
+    ]
+} 

@@ -1,0 +1,60 @@
+{
+    "id": 3,
+    "status": 0,
+    "name": "m3",
+    "defectProbability": 20,
+    "sensors": [
+      { 
+        "id": 1,
+        "type": "TEMPERATURE",
+        "attributes": { 
+          "temperature": {
+            "avg": 90, 
+            "min": 70,
+            "max": 120,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "VIBRATION",
+        "attributes": { 
+          "vibration": {
+            "avg": 3.2, 
+            "min": 5,
+            "max": 2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "PRODUCTION_SPEED",
+        "attributes": {
+          "productionSpeed":{
+            "avg": 23.5,
+            "max": 60, 
+            "min": 0, 
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "ENERGY",
+        "attributes": { 
+          "energy": {
+            "avg": 40,
+            "max": 60, 
+            "min": 20,  
+
+            "standardDeviation": 9
+          }
+        }
+      }
+    ],
+    "input": "material3",
+    "output": "material4",
+    "nextMachineID": 4
+} 
