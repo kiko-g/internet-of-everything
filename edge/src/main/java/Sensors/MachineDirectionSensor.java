@@ -14,14 +14,16 @@ public class MachineDirectionSensor extends Sensor {
     }
 
     public JSONObject getData() {
-        JSONObject obj = new JSONObject();
+        JSONObject obj = createJSON("machineID", this.id, String.valueOf(this.type));
+        JSONObject values = new JSONObject();
         if (!this.isOn) {
-            obj.put("value", "null");
+            values.put("direction", "null");
         }
         else {
             this.generateData();
-            obj.put("value", this.currentDirection);
+            values.put("direction", this.currentDirection);
         }
+        obj.put("values", values);
         return obj;
     }
 

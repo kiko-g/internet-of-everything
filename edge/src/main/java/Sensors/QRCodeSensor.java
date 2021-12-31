@@ -13,14 +13,16 @@ public class QRCodeSensor extends Sensor {
     }
 
     public JSONObject getData() {
-        JSONObject obj = new JSONObject();
+        JSONObject obj = createJSON("MachineID", this.id, String.valueOf(this.type));
+        JSONObject values = new JSONObject();
         if (!this.isOn) {
-            obj.put("value", "null");
+            values.put("QRcode", "null");
         }
         else {
             this.generateData();
-            obj.put("value", this.materialID);
+            values.put("QRcode", this.materialID);
         }
+        obj.put("values", values);
         return obj;
     }
 

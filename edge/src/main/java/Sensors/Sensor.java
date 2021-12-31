@@ -2,6 +2,8 @@ package Sensors;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public abstract class Sensor extends Thread {
@@ -77,11 +79,16 @@ public abstract class Sensor extends Thread {
     public abstract void generateData();
     public abstract JSONObject getData();
 
-    public JSONObject createJSON(String machineID, String sensorID, String sensorType, double... values) {
+    public JSONObject createJSON(String machineID, String sensorID, String sensorType) {
         JSONObject obj = new JSONObject();
+        //prepare reading time
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        String readingTime = formatter.format(now);
         obj.put("machineID", machineID);
         obj.put("sensorID", sensorID);
         obj.put("sensorType", sensorType);
+        obj.put("readingTime", readingTime);
         return obj;
     }
 }
