@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class MachineListener extends Listener {
     private State state; // Stores the current state of all machines.
     public static final Integer INFO_SIZE = 3; // Number of previous states to save
-    FailurePublisher failurePublisher; 
+    private FailurePublisher failurePublisher; 
 
     public MachineListener(Graph graph) {
         super("production/machine", graph);

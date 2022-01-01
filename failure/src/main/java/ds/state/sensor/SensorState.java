@@ -5,8 +5,8 @@ import ds.graph.sensor.Values;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SensorState{
-    ConcurrentHashMap<String, MeasureState> measureStates;
-    String id; 
+    private ConcurrentHashMap<String, MeasureState> measureStates;
+    private String id; 
 
     public SensorState(Sensor sensor){
         this.id = sensor.getId();

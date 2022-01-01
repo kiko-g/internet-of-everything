@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MachineState  {
     private String id;                                          
-    ConcurrentHashMap<String, SensorState> sensorsState;        // (sensorId, SensorState Class)
+    private ConcurrentHashMap<String, SensorState> sensorsState;        // (sensorId, SensorState Class)
 
     public MachineState(String id, ConcurrentHashMap<String, Sensor> sensors){
         this.id = id;

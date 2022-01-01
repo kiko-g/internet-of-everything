@@ -13,14 +13,14 @@ import java.util.*;
  * statistics.
  */
 public class MeasureState {
-    Queue<Float> lastMeasures;          // The last n values.
-    float sumMeasures;                  // The total sum of the values in the queue.
-    float mostRecentMeasure; 
+    private Queue<Float> lastMeasures;          // The last n values.
+    private float sumMeasures;                  // The total sum of the values in the queue.
+    private float mostRecentMeasure; 
 
-    Integer nMeasures;                  // The number of measures received until now.
-    Integer nUnallowedMeasures;         // The number of measures not allowed until now (i.e measure not within the min and max bounds).
+    private Integer nMeasures;                  // The number of measures received until now.
+    private Integer nUnallowedMeasures;         // The number of measures not allowed until now (i.e measure not within the min and max bounds).
 
-    Values expectedValues;              // The expected values for a sensor.
+    private Values expectedValues;              // The expected values for a sensor.
 
     public MeasureState(Values values) {
         this.expectedValues = values;

@@ -16,7 +16,6 @@ public class State {
         this.initMachineStates(machines);
     }
     
-    // Sensor => Values(x) e Values(y)
     public void initMachineStates(Graph machines){
         for(String machineID : machines.getMachines()){
             ConcurrentHashMap<String, Sensor>  sensors = machines.getMachineNode(machineID).getSensors();
