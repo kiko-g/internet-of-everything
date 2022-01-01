@@ -4,6 +4,10 @@ import ds.graph.sensor.Sensor;
 import ds.state.sensor.SensorState;
 
 import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * This class is resposible for administrating the machine state and its sensors. 
+ */
 public class MachineState  {
     private String id;                                          
     ConcurrentHashMap<String, SensorState> sensorsState;        // (sensorId, SensorState Class)
@@ -13,7 +17,10 @@ public class MachineState  {
         this.sensorsState = new ConcurrentHashMap<>();
         this.initSensorState(sensors);
     } 
-
+    /**
+     * Initializes teh sensorsState. 
+     * @param sensors HashMap containing the machine sensors id as key and its configurations as value. 
+     */
     private void initSensorState(ConcurrentHashMap<String, Sensor> sensors){
         sensors.forEach((key, sensor) -> {
             sensorsState.put(key, new SensorState(sensor));
