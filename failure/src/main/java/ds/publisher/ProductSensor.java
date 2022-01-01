@@ -30,14 +30,25 @@ public class ProductSensor extends SensorSimulator {
     }
 
     private void simulateOutput(MachineNode startMachine){
+
+        // Simulate defective product
+        boolean higherDefectProbability = (rnd.nextInt(20) == 0);
+        float defectProbability = 0;
+        if(higherDefectProbability){
+            float randomDeviation = Utils.getRandomFloat(10, 50);
+            defectProbability = (startMachine.getDefectProbability() + randomDeviation)/100;
+        } else {
+            defectProbability = startMachine.getDefectProbability()/100;
+        }
+        boolean hasDefect = Utils.getRandomFloat(0, 1) >  ( 1 - defectProbability) ? true: false; 
+
         // Send output message
-        String message = this.getOutputMessage(startMachine);
+        String message = this.getOutputMessage(startMachine, hasDefect);
         this.publish(message);
 
+        // Schedule next machine input message
         MachineNode nextMachine = startMachine.getNext();
-
-        if(nextMachine != null){            
-            // Schedule next machine input message
+        if(nextMachine != null && !hasDefect){            
             int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
             executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine)),timeIn,TimeUnit.MILLISECONDS);
         }
@@ -58,7 +69,7 @@ public class ProductSensor extends SensorSimulator {
     /**
      * This method simulates reading of a product state
      */
-    protected String getOutputMessage(MachineNode machine){
+    protected String getOutputMessage(MachineNode machine, boolean hasDefect){
         String readTime = Utils.getDateTime(); 
 
         JSONObject messageObject = new JSONObject();
@@ -68,6 +79,7 @@ public class ProductSensor extends SensorSimulator {
         JSONObject values = new JSONObject();
         values.put("materialID", 0);
         values.put("action", "OUT");
+        values.put("defect", hasDefect);
         messageObject.put("readingTime", readTime);
         messageObject.put("values", values);
         
@@ -87,6 +99,7 @@ public class ProductSensor extends SensorSimulator {
         JSONObject values = new JSONObject();
         values.put("materialID", 0);
         values.put("action", "IN");
+        values.put("defect", false);
         messageObject.put("readingTime", readTime);
         messageObject.put("values", values);
         

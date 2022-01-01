@@ -60,7 +60,8 @@ public class Graph {
             String input = machineJson.getString("input"); 
             String output = machineJson.getString("output"); 
             String id  = machineJson.getString("id");
-            this.nodes.put(id, new MachineNode(id, input, output)); 
+            float defectProbability  = machineJson.getFloat("defectProbability");
+            this.nodes.put(id, new MachineNode(id, input, output, defectProbability)); 
         }
     }
 

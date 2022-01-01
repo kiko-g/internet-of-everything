@@ -1,5 +1,4 @@
 package ds.graph;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONObject;
@@ -8,24 +7,26 @@ import ds.graph.sensor.Sensor;
 public class MachineNode {  
     
     private String id;                         
-    private MachineNode next;             // Children machine. [machine sends output to this] 
-    private MachineNode prev;             // Parent machines. [machine receives input from this] 
-    ConcurrentHashMap<String, Sensor> sensorProperties; //Machine sensors
-    String input;           // Type of material to be received by the machine. 
-    String output;          // Type of material to be produced by the machine.
+    private MachineNode next;   // Children machine. [machine sends output to this] 
+    private MachineNode prev;   // Parent machines. [machine receives input from this] 
+    ConcurrentHashMap<String, Sensor> sensorProperties; // Machine sensors
+    String input;            // Type of material to be received by the machine. 
+    String output;           // Type of material to be produced by the machine.
+    float defectProbability; // Defect probability in percentage
 
-    // ConcurrentHashMap<String, Float> defaultValues;      // The maximum values allowed by the machine. 
-    // // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
     Integer inCounter; 
-    Integer outCounter;                              // How many subproducts were produced.
+    Integer outCounter;  // How many subproducts were produced.
+    Integer defectiveProducts;
 
-    public MachineNode(String id, String input, String output){
+    public MachineNode(String id, String input, String output, float defectProbability){
         this.id = id; 
+        this.sensorProperties = new ConcurrentHashMap<>();
         this.input = input;
         this.output = output;
-        this.outCounter = 0; 
         this.inCounter = 0; 
-        this.sensorProperties = new ConcurrentHashMap<>();
+        this.outCounter = 0; 
+        this.defectiveProducts = 0;
+        this.defectProbability = defectProbability;
     }
 
     public String getId(){
@@ -46,6 +47,21 @@ public class MachineNode {
 
     public MachineNode getPrev(){
         return this.prev;
+    } 
+
+    public float getDefectProbability(){
+        return this.defectProbability;
+    } 
+
+    public Integer getDefectiveCount(){
+        return this.defectiveProducts;
+    } 
+
+    public float getDefectRate(){
+        if(this.outCounter == 0)
+            return 0;
+        
+        return (float)this.defectiveProducts/this.outCounter;
     } 
 
     public ConcurrentHashMap<String, Sensor> getSensors(){
@@ -72,11 +88,17 @@ public class MachineNode {
     public void addOutput(String id){
         this.output = id; 
     } 
+    
     public void updateInCounter(){ 
         this.inCounter++;
     }
+
     public void updateOutCounter(){ 
         this.outCounter++;
+    }
+
+    public void addDefectiveProduct(){ 
+        this.defectiveProducts++;
     }
 
     @Override

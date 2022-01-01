@@ -52,7 +52,7 @@ public abstract class SensorSimulator {
 
             topicObj.publish(msg);
 
-            System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
+            //System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
 
         } catch (MqttException e) {
             System.err.println("Error publishing to " + this.topic + " - " + e);

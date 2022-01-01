@@ -42,7 +42,6 @@ public class MachineListener extends Listener {
 
         // Replaces the old state with the new one.
         this.state.updateMachine(machineID, machineState);
-        System.out.println(machineState);
 
         /*       
         System.out.println("MachineID :: " + machineID + 
