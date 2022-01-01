@@ -1,7 +1,6 @@
 package ds.graph;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import org.json.JSONObject;
 import ds.graph.sensor.Sensor;
@@ -17,13 +16,15 @@ public class MachineNode {
 
     // ConcurrentHashMap<String, Float> defaultValues;      // The maximum values allowed by the machine. 
     // // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
-    // ConcurrentHashMap<String, Integer> currentInput; 
-    // Integer productCounter;                              // How many subproducts were produced.
+    Integer inCounter; 
+    Integer outCounter;                              // How many subproducts were produced.
 
     public MachineNode(String id, String input, String output){
         this.id = id; 
         this.input = input;
         this.output = output;
+        this.outCounter = 0; 
+        this.inCounter = 0; 
         this.sensorProperties = new ConcurrentHashMap<>();
     }
 
@@ -35,13 +36,9 @@ public class MachineNode {
         return this.output;
     } 
 
-    // public ConcurrentHashMap<String, Float> getDefaults(){
-    //     return this.defaultValues;
-    // } 
-
-    // public Integer getProductCount(){
-    //     return this.productCounter;
-    // } 
+    public Integer getOutCount(){
+        return this.outCounter;
+    } 
 
     public MachineNode getNext(){
         return this.next;
@@ -59,11 +56,6 @@ public class MachineNode {
         return this.sensorProperties.get(sensorID);
     } 
 
-    // public void addDefault(String name, Float value){
-    //     defaultValues.put(name, value); 
-    // }
-
-    //###############################################
     public void addSensor(JSONObject sensorJson){
         String id = sensorJson.getString("id");
         this.sensorProperties.put(id, new Sensor(id,sensorJson.getJSONObject("attributes")));
@@ -77,49 +69,15 @@ public class MachineNode {
         this.prev = prevMachine;
     }
 
-    //###############################################
-
     public void addOutput(String id){
         this.output = id; 
     } 
-
-    // public void addCurrentInput(String prod){
-    //     Integer currAmountProd = this.currentInput.getOrDefault(prod, 0); 
-    //     this.currentInput.put(prod, currAmountProd + 1);  
-    // }
-
-    // public void updateCounter(){ 
-    //     this.productCounter++;
-    // }
-
-    // public void cleanProducedInput(){
-    //     for (String key: this.currentInput.keySet()){
-    //         Integer expectedAmount = this.inputs.get(key); 
-    //         Integer currAmount = this.currentInput.get(key); 
-
-    //         Integer remainingInput = currAmount - expectedAmount;
-    //         this.currentInput.put(key, remainingInput);
-    //     }
-    // }
-
-    // public Integer getCurrentInput(String prod){
-    //     return this.currentInput.get(prod);
-    // }
-
-    /**
-     * Case the product can be produced.
-     * @return 
-     */
-    // public boolean canProduce(){ 
-    //     for (String key: this.inputs.keySet()){ 
-    //         Integer expectedValue = this.inputs.get(key); 
-    //         Integer currentValue = this.currentInput.get(key); 
-    //         if (currentValue < expectedValue){
-    //             return false; 
-    //         }
-    //     }    
-    //     return true; 
-    // }
+    public void updateInCounter(){ 
+        this.inCounter++;
+    }
+    public void updateOutCounter(){ 
+        this.outCounter++;
+    }
 
     @Override
     public String toString(){
@@ -138,11 +96,7 @@ public class MachineNode {
             s.append("\n");
         }
 
-        // TODO - change this, sensor to string secalhar
-        // s.append("[DFLT]:\n"); 
-        // defaultValues.keySet().forEach(propertyName -> {
-        //     s.append("- ").append(propertyName).append(" ").append(defaultValues.get(propertyName)).append("\n"); 
-        // });
+        this.sensorProperties.forEach((key, value) -> System.out.println(value));
 
         s.append("[INPUT]:").append(this.input).append("\n");
 

@@ -21,12 +21,12 @@ services:
       - ./src/:/edge/src/
     container_name: "machine-sensors"
 
-  # products:
-  #   build: .
-  #   command: sh -c "gradle runProductSensors"
-  #   volumes:
-  #     - ./src/:/edge/src/
-  #   container_name: "product-sensors"
+  products:
+    build: .
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./src/:/edge/src/
+    container_name: "product-sensors"
 
   failure-service:
     build: .
