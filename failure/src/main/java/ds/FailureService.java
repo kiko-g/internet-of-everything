@@ -11,12 +11,12 @@ public class FailureService {
     public FailureService(){
         this.machinesGraph = new Graph();
         this.machineListener = new MachineListener(this.machinesGraph);
-        this.productListener = new ProductListener(this.machinesGraph); 
+        //this.productListener = new ProductListener(this.machinesGraph); 
     }
 
     public void init(){
         this.machineListener.init();
-        this.productListener.init();
+        //this.productListener.init();
     }
 
     public static void main(String[] args) {

@@ -2,13 +2,13 @@
     "f1": {
         "out_machine": ["m3"],
         "amount": {
-            "m4": 1
+            "material4": 1
         }
     },
     "f2": {
         "out_machine": ["m5"],
         "amount": {
-            "p6": 1
+            "material6": 1
         }
     }
 }

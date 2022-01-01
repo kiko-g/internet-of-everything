@@ -37,14 +37,20 @@ public class MachineListener extends Listener {
         String machineID = messageParsed.get("machineID").toString();
         MachineState machineState = this.state.getMachineState(machineID);
 
-        machineState.addTemperature(messageParsed.getJSONObject("properties").getFloat("temperature"));
-        // Replaces the old state to the new one.
-        this.state.addMachine(machineID, machineState);
-        
+        // TODO: update machine state/sensor state
+        // machineState.addTemperature(messageParsed.getJSONObject("values").getFloat("temperature"));
+
+        // Replaces the old state with the new one.
+        this.state.updateMachine(machineID, machineState);
+        System.out.println(machineState);
+
+        /*       
         System.out.println("MachineID :: " + machineID + 
         "\n\t:: mean temperature :: " + machineState.getTempState().getMeanTemp() + 
         "\n\t:: last temperature :: " + machineState.getTempState().getCurrentTemp());
+        */
 
-        this.temperatureFailure.checkMachine(machineState);
+        // TODO: check values of the sensor against the expected values - FAILURE ANALYSIS
+        //this.temperatureFailure.checkMachine(machineState);
     }
 }

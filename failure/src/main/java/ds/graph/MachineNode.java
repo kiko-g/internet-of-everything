@@ -53,7 +53,11 @@ public class MachineNode {
 
     public ConcurrentHashMap<String, Sensor> getSensors(){
         return this.sensorProperties;
-    }
+    } 
+
+    public Sensor getSensor(String sensorID){
+        return this.sensorProperties.get(sensorID);
+    } 
 
     // public void addDefault(String name, Float value){
     //     defaultValues.put(name, value); 

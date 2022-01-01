@@ -16,6 +16,6 @@ public class Values {
     } 
 
     public String toString() {
-        return "[" + this.max + "," + this.min + "]";
+        return "[" + this.min + "," + this.max+ "]";
     }
 }

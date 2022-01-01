@@ -18,7 +18,7 @@ public final class Utils {
 
     public static float getRandomFloat(float min, float max){
         return round(min + rnd.nextFloat() * (max - min));
-    }
+    } 
 
     public static float round(float value) {
         BigDecimal bd = new BigDecimal(Float.toString(value));

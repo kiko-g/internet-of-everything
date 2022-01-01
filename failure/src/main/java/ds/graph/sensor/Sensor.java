@@ -26,11 +26,16 @@ public class Sensor {
         return this.id;  
     }
 
+    public ConcurrentHashMap<String,Values> getValues(){
+        return values;
+    }
+
     public String toString(){
         StringBuilder builder = new StringBuilder();
-        builder.append("====== SENSOR PROPERTIES ======");
+        builder.append("\n- Sensor properties").append("\n");
         values.forEach((propertyName, propertyValues) -> {
             builder.append(propertyName + ": " + propertyValues);
+            builder.append("\n");
         });
         return builder.toString();
     }

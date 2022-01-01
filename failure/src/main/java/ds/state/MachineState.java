@@ -1,16 +1,17 @@
 package ds.state;
 
-import java.util.concurrent.ConcurrentHashMap;
+import ds.graph.sensor.Sensor;
 
+import java.util.concurrent.ConcurrentHashMap;
 public class MachineState  {
     private String id;  
     private TemperatureState tempState;
+    ConcurrentHashMap<String, Sensor> sensors; 
 
 
-    public MachineState(String id, ConcurrentHashMap<String, Float> defaultValues){
+    public MachineState(String id, ConcurrentHashMap<String, Sensor> sensors){
         this.id = id;
-        float tempDefault = defaultValues.get("temperature").floatValue();
-        this.tempState = new TemperatureState(tempDefault);
+        this.sensors = sensors;
     }
 
     public TemperatureState getTempState(){
@@ -24,4 +25,14 @@ public class MachineState  {
     public String getId() {
         return id;
     }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder(); 
+        builder.append("== MACHINE STATE:").append(this.id).append("\n");
+        sensors.forEach((id, sensor) -> {
+            builder.append(sensor.toString()); 
+        });
+        return builder.toString();
+    }
+
 }

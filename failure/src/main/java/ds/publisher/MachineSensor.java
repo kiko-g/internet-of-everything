@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 import ds.graph.sensor.Sensor;
-
+import ds.graph.sensor.Values;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -23,15 +23,15 @@ public class MachineSensor extends SensorSimulator {
         super("production/machine");
         this.machinesGraph = new Graph();
         this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
-        // this.executor = new ScheduledThreadPoolExecutor(10);
+        this.executor = new ScheduledThreadPoolExecutor(10);
     }
 
     public void init(){
         super.init();
 
-        // Start Publishing with fixed delay
-        // Thread messageGenerator = new Thread(() -> this.sendMessage());
-        // executor.scheduleWithFixedDelay(messageGenerator, 0, 1500, TimeUnit.MILLISECONDS);
+        //Start Publishing with fixed delay
+        Thread messageGenerator = new Thread(() -> this.sendMessage());
+        executor.scheduleWithFixedDelay(messageGenerator, 0, 1500, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -41,32 +41,40 @@ public class MachineSensor extends SensorSimulator {
         int machineIdx = this.rnd.nextInt(this.machineIds.size());
         MachineNode machine = this.machinesGraph.getMachineNode(this.machineIds.get(machineIdx));
         String readTime = Utils.getDateTime(); 
-
-        ConcurrentHashMap<String,Sensor> sensors = machine.getSensors();
-
-        // Generate random values for each sensor
-        // float max = machine.getDefaults().get("temperature") + 3;
-        // float min = machine.getDefaults().get("temperature") - 5;
-        // float temperature =  Utils.getRandomFloat(min, max);
-        // for(Sensor sensor: machineSensors){
-
-        // }
         
-        // JSONObject propertiesObject = new JSONObject();
-
-        // propertiesObject.put("temperature", temperature);
-        // propertiesObject.put("piecesProduced", 0);
-        // propertiesObject.put("volt",16);
-        // propertiesObject.put("vibration", 35.1788);
-        // propertiesObject.put("pressure",109.2486);
-        // propertiesObject.put("rotate", 402.7474);
-
-        // JSONObject messageObject = new JSONObject();
-        // messageObject.put("machineID", machine.getId());
-        // messageObject.put("reading-time", readTime);
-        // messageObject.put("properties", propertiesObject);
+        List<String> sensorIds = new ArrayList<String>(machine.getSensors().keySet());
+        int sensorIdx = this.rnd.nextInt(sensorIds.size());
+        Sensor sensor = machine.getSensor(sensorIds.get(sensorIdx));
         
-        // this.publish(messageObject.toString());
+        //Generate random values for each sensor
+        JSONObject valuesJson = new JSONObject(); 
+        double errorProbability = 0.3; 
+        ConcurrentHashMap<String, Values> values = sensor.getValues();  
+        values.forEach((key, value) -> {
+            boolean hasError = Utils.getRandomFloat(0, 1) >  ( 1 - errorProbability) ? true: false; 
+            float min = value.getMin();  
+            float max = value.getMax();  
+            float currentValue = 0; 
+
+            if (hasError){
+                float randomDeviation = Utils.getRandomFloat(1, 20);
+                if (this.rnd.nextInt(1) == 0) 
+                    currentValue = min - randomDeviation;  
+                else 
+                    currentValue = max + randomDeviation; 
+            }  else {
+                currentValue = Utils.getRandomFloat(min, max);
+            }
+            valuesJson.put(key, currentValue);
+        });
+
+        JSONObject messageObject = new JSONObject();
+        messageObject.put("machineID", machine.getId());
+        messageObject.put("sensorID", sensor.getId());
+        messageObject.put("reading-time", readTime);
+        messageObject.put("values", valuesJson);
+        
+        this.publish(messageObject.toString());
     }
 
     public static void main(String[] args) {

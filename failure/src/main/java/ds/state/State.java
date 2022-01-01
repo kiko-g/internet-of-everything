@@ -2,6 +2,7 @@ package ds.state;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ds.graph.Graph;
+import ds.graph.sensor.Sensor;
 
 /**
  * This class is responsible for managing the current state of all machines, the system state.
@@ -15,11 +16,12 @@ public class State {
         this.initMachineStates(machines);
     }
 
+    // Sensor => Values(x) e Values(y)
     public void initMachineStates(Graph machines){
-        // for(String machineID : machines.getMachines()){
-        //     this.addMachine(machineID, new MachineState(machineID, 
-        //         machines.getMachineNode(machineID).getDefaults()));
-        // }
+        for(String machineID : machines.getMachines()){
+            ConcurrentHashMap<String, Sensor>  sensors = machines.getMachineNode(machineID).getSensors();
+            machineState.put(machineID, new MachineState(machineID, sensors));
+        }
     }
 
     /**
@@ -27,8 +29,12 @@ public class State {
      * @param machineID The machine identification.
      * @param state The new machine state.
      */
-    public void addMachine(String machineID, MachineState state){
-        machineState.put(machineID, state);
+    public boolean updateMachine(String machineID, MachineState state){
+        if(this.machineState.containsKey(machineID)){
+            machineState.put(machineID, state);
+            return true; 
+        }
+        return false;
     }
 
     /**
