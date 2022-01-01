@@ -5,12 +5,11 @@ import org.json.JSONObject;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*; 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProductSensor extends Sensor {
+public class ProductSensor extends SensorSimulator {
     private Graph machinesGraph;
     private ScheduledThreadPoolExecutor executor;
     private Random rnd = new Random();
@@ -35,34 +34,24 @@ public class ProductSensor extends Sensor {
         String message = this.getOutputMessage(startMachine);
         this.publish(message);
 
-        List<MachineNode> nextMachines = startMachine.getNext();
+        MachineNode nextMachine = startMachine.getNext();
 
-        if(nextMachines.size() > 0){
-            // Get one of the next machines
-            Integer machineIdx = this.rnd.nextInt(nextMachines.size());
-            MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
-            
+        if(nextMachine != null){            
             // Schedule next machine input message
             int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
+            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine)),timeIn,TimeUnit.MILLISECONDS);
         }
     }
 
-    private void simulateInputOutput(MachineNode machine, String product){
+    private void simulateInputOutput(MachineNode machine){
+
         // Send input message
-        machine.addCurrentInput(product);
-        String message = this.getInputMessage(machine, product);
+        String message = this.getInputMessage(machine);
         this.publish(message);
 
-        // Received enough subproducts from all child machines to produce its product
-        if(machine.canProduce()){ 
-            // Reset inputs
-            machine.cleanProducedInput();
-
-            // Schedule output message
-            int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
-        }
+        // Schedule output message
+        int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
+        executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
     }
 
 
@@ -74,9 +63,13 @@ public class ProductSensor extends Sensor {
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
-        messageObject.put("reading-time", readTime);
-        messageObject.put("product", machine.getOutput());
-        messageObject.put("state", "out");
+        messageObject.put("sensorID", "qrCodeOut");
+
+        JSONObject values = new JSONObject();
+        values.put("materialID", 0);
+        values.put("action", "OUT");
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
         
         return messageObject.toString(); 
     }
@@ -84,14 +77,18 @@ public class ProductSensor extends Sensor {
         /**
      * This method simulates reading of a product state
      */
-    protected String getInputMessage(MachineNode machine, String product){
+    protected String getInputMessage(MachineNode machine){
         String readTime = Utils.getDateTime(); 
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
-        messageObject.put("reading-time", readTime);
-        messageObject.put("product", product);
-        messageObject.put("state", "in");
+        messageObject.put("sensorID", "qrCodeIn");
+
+        JSONObject values = new JSONObject();
+        values.put("materialID", 0);
+        values.put("action", "IN");
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
         
         return messageObject.toString(); 
     }

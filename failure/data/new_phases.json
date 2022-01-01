@@ -1,0 +1,14 @@
+{
+    "f1": {
+        "out_machine": ["m3"],
+        "amount": {
+            "material4": 1
+        }
+    },
+    "f2": {
+        "out_machine": ["m5"],
+        "amount": {
+            "material6": 1
+        }
+    }
+}
