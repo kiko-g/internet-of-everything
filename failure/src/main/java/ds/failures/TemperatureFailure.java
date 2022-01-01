@@ -1,6 +1,6 @@
 package ds.failures;
 import ds.state.MachineState;
-import ds.state.TemperatureState;
+//import ds.state.TemperatureState;
 
 /**
  * This class is responsible for processing temperature machine failures
@@ -9,13 +9,13 @@ public class TemperatureFailure extends MachineFailure {
 
     @Override
     public void checkMachine(MachineState currentState) {
-        TemperatureState tempState = currentState.getTempState();
+       /* TemperatureState tempState = currentState.getTempState();
         Float currentTemp = tempState.getCurrentTemp();
         if(currentTemp > tempState.getMaxTemp()){
             System.out.println("MachineID :: " + currentState.getId() + 
             ":: Temperature surpassed " + currentTemp + "/" + tempState.getMaxTemp());
             this.takeAction(currentState.getId());
-        }
+        }*/
 
     }
 
