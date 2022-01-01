@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProductSensor extends Sensor {
+public class ProductSensor extends SensorSimulator {
     private Graph machinesGraph;
     private ScheduledThreadPoolExecutor executor;
     private Random rnd = new Random();

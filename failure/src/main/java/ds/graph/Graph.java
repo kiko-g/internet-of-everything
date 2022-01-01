@@ -3,9 +3,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import java.nio.file.Files;
 import java.io.IOException; 
-import java.nio.file.Paths;
 import java.io.File;
-import java.util.stream.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView; 
@@ -75,10 +73,12 @@ public class Graph {
             String id = machineJson.getString("id");
             MachineNode machineNode = nodes.get(id);  
 
-            if(machineJson.has("nextmachineID")){
+
+            if(machineJson.has("nextMachineID")){
                 String nextId = machineJson.getString("nextMachineID");
                 MachineNode next = this.nodes.get(nextId);
                 machineNode.setNext(next);
+                next.setPrev(machineNode);
             }
 
             JSONArray sensors = machineJson.getJSONArray("sensors");
@@ -87,29 +87,6 @@ public class Graph {
             }
         }
     }
-    /*
-    public void addPrevNodes(MachineNode machineNode, JSONArray prevNodes){  
-        prevNodes.forEach(id -> {
-            MachineNode prevNode = nodes.get(id); 
-            if (prevNode != null) 
-                machineNode.addPrevMachine(prevNode);
-        });
-    }  */
-/*
-    public void addNextNodes(MachineNode machineNode, JSONArray nextNodes){  
-        nextNodes.forEach(id -> {
-            MachineNode nextNode = nodes.get(id); 
-            if (nextNode != null) 
-                machineNode.addNextMachine(nextNode);
-        });
-    } 
-
-    public void addDefaultValues(MachineNode machineNode, JSONObject defaultValues){
-        defaultValues.keySet().forEach(propertyName -> {
-            machineNode.addDefault(propertyName, defaultValues.getFloat(propertyName));
-        });
-    }
-
 
     public MachineNode getMachineNode(String machineId){
         return this.nodes.get(machineId); 
@@ -123,13 +100,13 @@ public class Graph {
         List<MachineNode> startMachines = new ArrayList<>();
 
         for(MachineNode node: this.nodes.values()){
-            if(node.getInputs().isEmpty()){
+            if(node.getPrev() == null){
                 startMachines.add(node);
             }
         }
 
         return startMachines;
-    }*/
+    }
 
     public String toString(){ 
         StringBuilder s = new StringBuilder(); 

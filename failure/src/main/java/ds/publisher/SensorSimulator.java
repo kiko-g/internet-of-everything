@@ -8,13 +8,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
 
-public abstract class Sensor {
+public abstract class SensorSimulator {
     private final String brokerURI;
     private final String publisherId;
     private MqttClient publisher;
     private final String topic;
 
-    public Sensor(String topic){
+    public SensorSimulator(String topic){
         this.brokerURI = "tcp://mosquitto:1883";
         this.publisherId = UUID.randomUUID().toString();
         this.topic = topic;

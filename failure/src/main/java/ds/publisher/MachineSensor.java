@@ -7,11 +7,13 @@ import org.json.JSONObject;
 
 import ds.graph.Graph;
 import ds.graph.MachineNode;
+import ds.graph.sensor.Sensor;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MachineSensor extends Sensor {
+public class MachineSensor extends SensorSimulator {
     private Graph machinesGraph;
     private List<String> machineIds;
     private Random rnd = new Random();
@@ -19,8 +21,8 @@ public class MachineSensor extends Sensor {
 
     public MachineSensor() throws MqttException {
         super("production/machine");
-        // this.machinesGraph = new Graph();
-        // this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
+        this.machinesGraph = new Graph();
+        this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
         // this.executor = new ScheduledThreadPoolExecutor(10);
     }
 
@@ -35,32 +37,37 @@ public class MachineSensor extends Sensor {
     /**
      * This method simulates reading of the properties of a Machine
      */
-    // protected void sendMessage(){
-    //     int machineIdx = this.rnd.nextInt(this.machineIds.size());
-    //     MachineNode machine = this.machinesGraph.getMachineNode(this.machineIds.get(machineIdx));
-    //     String readTime = Utils.getDateTime(); 
+    protected void sendMessage(){
+        int machineIdx = this.rnd.nextInt(this.machineIds.size());
+        MachineNode machine = this.machinesGraph.getMachineNode(this.machineIds.get(machineIdx));
+        String readTime = Utils.getDateTime(); 
 
-    //     // Generate random temperature
-    //     float max = machine.getDefaults().get("temperature") + 3;
-    //     float min = machine.getDefaults().get("temperature") - 5;
-    //     float temperature =  Utils.getRandomFloat(min, max);
+        ConcurrentHashMap<String,Sensor> sensors = machine.getSensors();
+
+        // Generate random values for each sensor
+        // float max = machine.getDefaults().get("temperature") + 3;
+        // float min = machine.getDefaults().get("temperature") - 5;
+        // float temperature =  Utils.getRandomFloat(min, max);
+        // for(Sensor sensor: machineSensors){
+
+        // }
         
-    //     JSONObject propertiesObject = new JSONObject();
+        // JSONObject propertiesObject = new JSONObject();
 
-    //     propertiesObject.put("temperature", temperature);
-    //     propertiesObject.put("piecesProduced", 0);
-    //     propertiesObject.put("volt",16);
-    //     propertiesObject.put("vibration", 35.1788);
-    //     propertiesObject.put("pressure",109.2486);
-    //     propertiesObject.put("rotate", 402.7474);
+        // propertiesObject.put("temperature", temperature);
+        // propertiesObject.put("piecesProduced", 0);
+        // propertiesObject.put("volt",16);
+        // propertiesObject.put("vibration", 35.1788);
+        // propertiesObject.put("pressure",109.2486);
+        // propertiesObject.put("rotate", 402.7474);
 
-    //     JSONObject messageObject = new JSONObject();
-    //     messageObject.put("machineID", machine.getId());
-    //     messageObject.put("reading-time", readTime);
-    //     messageObject.put("properties", propertiesObject);
+        // JSONObject messageObject = new JSONObject();
+        // messageObject.put("machineID", machine.getId());
+        // messageObject.put("reading-time", readTime);
+        // messageObject.put("properties", propertiesObject);
         
-    //     this.publish(messageObject.toString());
-    // }
+        // this.publish(messageObject.toString());
+    }
 
     public static void main(String[] args) {
 
