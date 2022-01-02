@@ -9,10 +9,10 @@ public class MachineNode {
     private String id;                         
     private MachineNode next;   // Children machine. [machine sends output to this] 
     private MachineNode prev;   // Parent machines. [machine receives input from this] 
-    ConcurrentHashMap<String, Sensor> sensorProperties; // Machine sensors
-    String input;            // Type of material to be received by the machine. 
-    String output;           // Type of material to be produced by the machine.
-    float defectProbability; // Defect probability in percentage
+    private ConcurrentHashMap<String, Sensor> sensorProperties; // Machine sensors
+    private String input;            // Type of material to be received by the machine. 
+    private String output;           // Type of material to be produced by the machine.
+    private float defectProbability; // Defect probability in percentage
 
     Integer inCounter; 
     Integer outCounter;  // How many subproducts were produced.
