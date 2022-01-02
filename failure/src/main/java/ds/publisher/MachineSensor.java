@@ -71,7 +71,7 @@ public class MachineSensor extends SensorSimulator {
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
         messageObject.put("sensorID", sensor.getId());
-        messageObject.put("reading-time", readTime);
+        messageObject.put("readingTime", readTime);
         messageObject.put("values", valuesJson);
         
         this.publish(messageObject.toString());
