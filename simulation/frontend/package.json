@@ -8,7 +8,7 @@
     "build": "react-scripts  build",
     "test": "react-scripts  test",
     "lint": "npx eslint .",
-    "style:all": "npm run style:write && npm run lint",
+    "style:all": "yarn style:write && yarn lint",
     "style:check": "npx prettier --check .",
     "style:write": "npx prettier --write .",
     "eject": "react-scripts eject"
