@@ -2,6 +2,7 @@ package ds.listener;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,30 +18,17 @@ import ds.graph.MachineNode;
 
 public class ProductListener extends Listener {
     private ScheduledThreadPoolExecutor executor;
-    private ConcurrentHashMap<String, Queue<LocalDateTime>> inputTimes;
-    private ConcurrentHashMap<String, LocalDateTime> firstInputTimes;
-    private ConcurrentHashMap<String, Long> productionTimes;
+    private ProductionState productionState;
 
     public ProductListener(Graph graph) {
         super("product", graph);
-        this.initTimes();
+        this.productionState = new ProductionState(new ArrayList<String>(this.machinesGraph.getMachines()));
     }
 
     public void init(){
         super.init();
         this.executor = new ScheduledThreadPoolExecutor(5);
         executor.scheduleWithFixedDelay(new Thread(() -> this.showState()), 0, 5000, TimeUnit.MILLISECONDS);
-    }
-
-    public void initTimes(){
-        this.inputTimes = new ConcurrentHashMap<>();
-        this.productionTimes = new ConcurrentHashMap<>();
-        this.firstInputTimes = new ConcurrentHashMap<>();
-
-        for(String machineID: this.machinesGraph.getMachines()){
-            this.inputTimes.put(machineID, new LinkedList<>());
-            this.productionTimes.put(machineID, Long.valueOf(0));
-        }
     }
 
     @Override
@@ -60,7 +48,7 @@ public class ProductListener extends Listener {
         if(action.equals("OUT")){
             machine.updateOutCounter();
 
-            this.saveProductionTime(machineID, readTime);
+            this.productionState.saveProductionTime(machineID, readTime);
 
             if(defect){
                 machine.addDefectiveProduct();
@@ -70,41 +58,8 @@ public class ProductListener extends Listener {
         // New subproduct was received by the machine
         else if(action.equals("IN")){
             machine.updateInCounter();
-            this.saveInputTime(machineID, readTime);
+            this.productionState.saveInputTime(machineID, readTime);
         }
-    }
-
-    public void saveProductionTime(String machineID, LocalDateTime outputDt){
-        if(this.inputTimes.containsKey(machineID)){
-            LocalDateTime inputDt = this.inputTimes.get(machineID).poll();
-            Long sumTime = this.productionTimes.get(machineID);
-            if(inputDt != null){
-                long newTime = sumTime.longValue() + ChronoUnit.MILLIS.between(inputDt, outputDt);
-                this.productionTimes.put(machineID, Long.valueOf(newTime));
-            }
-        }
-    }
-
-    public void saveInputTime(String machineID, LocalDateTime readTime){
-        if(!this.inputTimes.containsKey(machineID)) return;
-
-        this.inputTimes.get(machineID).add(readTime);
-        if(!this.firstInputTimes.containsKey(machineID))
-            this.firstInputTimes.put(machineID, readTime);
-    }
-
-    public double getProductionTime(MachineNode machine){
-        if(machine.getOutCount() == 0) return 0;
-        return (double) this.productionTimes.get(machine.getId()).longValue()/ machine.getOutCount();
-    }
-
-    public double getProductionRate(MachineNode machine){
-        if(machine.getOutCount() == 0) return 0;
-
-        int qualityProducts = machine.getOutCount().intValue() - machine.getDefectiveCount().intValue();
-        LocalDateTime firstInputDt = this.firstInputTimes.get(machine.getId());
-        long timeUntilNow = ChronoUnit.MILLIS.between(firstInputDt, LocalDateTime.now());
-        return (double) (1000*qualityProducts)/timeUntilNow;
     }
 
     public void showState(){
@@ -123,8 +78,8 @@ public class ProductListener extends Listener {
                 machine.getDefectiveCount(), 
                 machine.getDefectRate(), 
                 machine.getOutCount(), 
-                Utils.formatDouble(this.getProductionTime(machine)) + " ms",
-                Utils.formatDouble(this.getProductionRate(machine)) + "/s"));    
+                Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
+                Utils.formatDouble(this.productionState.getProductionRate(machine)) + "/s"));    
         }
 
         sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
