@@ -5,6 +5,7 @@ import java.util.Random;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
+import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 import ds.graph.sensor.Sensor;
@@ -20,7 +21,7 @@ public class MachineSensor extends SensorSimulator {
     private ScheduledThreadPoolExecutor executor;
 
     public MachineSensor() throws MqttException {
-        super("production/machine");
+        super("machine");
         this.machinesGraph = new Graph();
         this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
         this.executor = new ScheduledThreadPoolExecutor(10);
