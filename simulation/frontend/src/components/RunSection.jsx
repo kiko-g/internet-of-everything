@@ -28,12 +28,12 @@ const requestStart = () => {
 
 export default function RunSection() {
   return (
-    <div className="relative group bg-bluegray-100 w-full p-4 rounded-xl space-y-3">
-      <h5 className="text-coolgray-700 font-bold text-2xl tracking-tight">Run Section</h5>
+    <div className="relative group bg-slate-100 w-full p-4 rounded-xl space-y-3">
+      <h5 className="text-zinc-700 font-bold text-2xl tracking-tight">Run Section</h5>
       <span className="text-sm">Here the user should control the simulaion.</span>
 
       <div className="grid grid-cols-1">
-        <div className="bg-coolgray-200 dark:bg-coolgray-300 rounded-xl">
+        <div className="bg-zinc-200 dark:bg-zinc-300 rounded-xl">
           <div
             className="bg-gradient-to-r from-teal-300 via-blue-300 to-violet-300 text-white  
             w-1/3 text-sm font-medium text-center p-1 leading-none tracking-normal rounded-l-md"

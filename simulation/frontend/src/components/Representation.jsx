@@ -44,8 +44,8 @@ export default function Representation() {
       <Tab label="JSON">
         <div className="grid w-full grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center text-white tracking-wider capitalize bg-bluegray-400 p-3 rounded-lg ">Initial State</div>
-            <div className="text-center text-white tracking-wider capitalize bg-bluegray-400 p-3 rounded-lg ">Final State</div>
+            <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Initial State</div>
+            <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Final State</div>
           </div>
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">

@@ -12,7 +12,7 @@ export default function DarkModeSwitch() {
       <div className="flex items-center">
         <Switch.Label passive className="mr-2">
           {darkTheme ? (
-            <MoonIcon className="block h-6 w-6 transition duration-200 ease text-bluegray-300" aria-hidden="true" />
+            <MoonIcon className="block h-6 w-6 transition duration-200 ease text-slate-300" aria-hidden="true" />
           ) : (
             <SunIcon className="block h-6 w-6 transition duration-200 ease text-orange-300" aria-hidden="true" />
           )}
@@ -21,7 +21,7 @@ export default function DarkModeSwitch() {
           checked={darkTheme}
           onChange={handleMode}
           className={`${
-            darkTheme ? "bg-blue-300" : "bg-bluegray-400"
+            darkTheme ? "bg-blue-300" : "bg-slate-400"
           } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
         >
           <span

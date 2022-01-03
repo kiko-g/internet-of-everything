@@ -78,7 +78,7 @@ export default class ForceGraph extends Component {
 
   render() {
     return (
-      <div id="graph" className="w-full bg-bluegray-300 rounded-md" style={{ height: "65vh" }}>
+      <div id="graph" className="w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
         <Graph graph={this.state.graph} options={this.state.options} events={this.state.events} />
       </div>
     )

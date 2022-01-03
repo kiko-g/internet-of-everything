@@ -9,13 +9,13 @@ export default function DetailedSwitch(props) {
     <Switch.Group>
       <div className="flex items-center">
         <Switch.Label passive className="mr-2">
-          <span className="font-bold text-bluegray-500">Details</span>
+          <span className="font-bold text-slate-500">Details</span>
         </Switch.Label>
         <Switch
           checked={detailed}
           onChange={toggleDetailed}
           className={`${
-            detailed ? "bg-blue-300" : "bg-bluegray-400"
+            detailed ? "bg-blue-300" : "bg-slate-400"
           } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
         >
           <span

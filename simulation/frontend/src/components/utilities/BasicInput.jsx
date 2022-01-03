@@ -8,7 +8,7 @@ export default function BasicInput(props) {
 
   return (
     <div className={style}>
-      <label htmlFor="price" className="block text-lg font-bold text-bluegray-700">
+      <label htmlFor="price" className="block text-lg font-bold text-slate-700">
         {label}
       </label>
       <div className="mt-1 relative rounded-xl shadow-sm">
@@ -16,7 +16,7 @@ export default function BasicInput(props) {
           type="text"
           name="price"
           id="price"
-          className="bg-coolgray-100 focus:bg-white focus:ring-sky-500 focus:border-sky-500 block w-full sm:text-sm text-gray-700 border-gray-300 rounded-xl"
+          className="bg-zinc-100 focus:bg-white focus:ring-sky-500 focus:border-sky-500 block w-full sm:text-sm text-gray-700 border-gray-300 rounded-xl"
           placeholder={placeholder}
         />
         {types.length !== 0 ? (

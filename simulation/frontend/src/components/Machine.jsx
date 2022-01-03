@@ -20,11 +20,11 @@ export default function Machine(props) {
   return (
     <div
       key={`machine-${data.id}`}
-      className={`${classnames} bg-bluegray-500 dark:bg-bluegray-600 text-white p-3 border-0 rounded-xl shadow-md`}
+      className={`${classnames} bg-slate-500 dark:bg-slate-600 text-white p-3 border-0 rounded-xl shadow-md`}
     >
       {/* Headline */}
       <div className="flex items-center justify-between space-x-3">
-        <h5 className="text-coolgray-50 text-lg tracking-tight mb-2">Machine #{data.id}</h5>
+        <h5 className="text-zinc-50 text-lg tracking-tight mb-2">Machine #{data.id}</h5>
         <div className="flex flex-col text-right">
           <span className="text-xxs">{data.readingTime.split(" ")[0]}</span>
           <span className="text-xxs">{data.readingTime.split(" ")[1]}</span>
