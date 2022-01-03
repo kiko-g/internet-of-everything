@@ -24,9 +24,13 @@ public class ProductSensor extends SensorSimulator {
         super.init();
         this.machinesGraph = new Graph();
         
-        for(MachineNode machine: this.machinesGraph.getStartMachines()){
+        MachineNode machine;
+        try {
+            machine = this.machinesGraph.getStartMachine();
             int time = this.rnd.nextInt(2000 - 1000) + 1000;
             executor.scheduleWithFixedDelay(new Thread(() -> this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

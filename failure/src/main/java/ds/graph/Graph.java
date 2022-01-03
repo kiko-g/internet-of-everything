@@ -97,16 +97,14 @@ public class Graph {
         return this.nodes.keySet(); 
     }
 
-    public List<MachineNode> getStartMachines(){
-        List<MachineNode> startMachines = new ArrayList<>();
+    public MachineNode getStartMachine() throws Exception{
 
         for(MachineNode node: this.nodes.values()){
             if(node.getPrev() == null){
-                startMachines.add(node);
+                return node;
             }
         }
-
-        return startMachines;
+        throw new Exception("Missing Start Node");
     }
 
     public String toString(){ 
