@@ -6,7 +6,7 @@ export const factories = [
       defectProbability: 0.74,
       input: "material1",
       output: "material2",
-      pevMachineID: "null",
+      prevMachineID: "null",
       nextMachineID: "machine2",
       sensors: [
         {
@@ -119,7 +119,7 @@ export const factories = [
       defectProbability: 0.34,
       input: "material2",
       output: "material3",
-      pevMachineID: "machine2",
+      prevMachineID: "machine1",
       nextMachineID: "machine3",
       sensors: [
         {
@@ -232,7 +232,7 @@ export const factories = [
       defectProbability: 1.03,
       input: "material3",
       output: "material4",
-      pevMachineID: "machine2",
+      prevMachineID: "machine2",
       nextMachineID: "machine4",
       sensors: [
         {
@@ -345,7 +345,7 @@ export const factories = [
       defectProbability: 5.02,
       input: "material4",
       output: "material5",
-      pevMachineID: "machine3",
+      prevMachineID: "machine3",
       nextMachineID: "machine5",
       sensors: [
         {
@@ -458,7 +458,7 @@ export const factories = [
       defectProbability: 2.48,
       input: "material5",
       output: "material6",
-      pevMachineID: "machine4",
+      prevMachineID: "machine4",
       nextMachineID: "machine6",
       sensors: [
         {
@@ -571,7 +571,7 @@ export const factories = [
       defectProbability: 4.21,
       input: "material6",
       output: "material7",
-      pevMachineID: "machine5",
+      prevMachineID: "machine5",
       nextMachineID: "machine7",
       sensors: [
         {
@@ -684,7 +684,7 @@ export const factories = [
       defectProbability: 1.31,
       input: "material7",
       output: "material8",
-      pevMachineID: "machine6",
+      prevMachineID: "machine6",
       nextMachineID: "machine8",
       sensors: [
         {
@@ -797,7 +797,7 @@ export const factories = [
       defectProbability: 3.74,
       input: "material8",
       output: "material9",
-      pevMachineID: "machine7",
+      prevMachineID: "machine7",
       nextMachineID: "machine9",
       sensors: [
         {
@@ -910,8 +910,8 @@ export const factories = [
       defectProbability: 1.52,
       input: "material9",
       output: "material10",
-      pevMachineID: "machine8",
-      nextMachineID: "machine10",
+      prevMachineID: "machine8",
+      nextMachineID: "null",
       sensors: [
         {
           id: "temperature1",
@@ -1025,7 +1025,7 @@ export const factories = [
       defectProbability: 0.74,
       input: "material1",
       output: "material2",
-      pevMachineID: "null",
+      prevMachineID: "null",
       nextMachineID: "machine2",
       sensors: [
         {
@@ -1138,7 +1138,7 @@ export const factories = [
       defectProbability: 0.34,
       input: "material2",
       output: "material3",
-      pevMachineID: "machine2",
+      prevMachineID: "machine2",
       nextMachineID: "machine3",
       sensors: [
         {
@@ -1251,7 +1251,7 @@ export const factories = [
       defectProbability: 1.03,
       input: "material3",
       output: "material4",
-      pevMachineID: "machine2",
+      prevMachineID: "machine2",
       nextMachineID: "machine4",
       sensors: [
         {
@@ -1364,7 +1364,7 @@ export const factories = [
       defectProbability: 5.02,
       input: "material4",
       output: "material5",
-      pevMachineID: "machine3",
+      prevMachineID: "machine3",
       nextMachineID: "machine5",
       sensors: [
         {
@@ -1477,7 +1477,7 @@ export const factories = [
       defectProbability: 2.48,
       input: "material5",
       output: "material6",
-      pevMachineID: "machine4",
+      prevMachineID: "machine4",
       nextMachineID: "machine6",
       sensors: [
         {
@@ -1590,7 +1590,7 @@ export const factories = [
       defectProbability: 4.21,
       input: "material6",
       output: "material7",
-      pevMachineID: "machine5",
+      prevMachineID: "machine5",
       nextMachineID: "machine7",
       sensors: [
         {
@@ -1703,7 +1703,7 @@ export const factories = [
       defectProbability: 1.31,
       input: "material7",
       output: "material8",
-      pevMachineID: "machine6",
+      prevMachineID: "machine6",
       nextMachineID: "machine8",
       sensors: [
         {

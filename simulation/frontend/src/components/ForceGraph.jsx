@@ -1,10 +1,15 @@
 import React, { Component } from "react"
 import Graph from "react-graph-vis"
+import { colors } from "../utils"
 
 export default class ForceGraph extends Component {
   constructor(props) {
     super(props)
     this.factory = this.props.factory
+    this.colors = colors.sort(() => Math.random() - 0.5)
+    this.getRandomColor = () => {
+      return this.colors[Math.floor(Math.random() * this.colors.length)]
+    }
     this.state = {
       options: {
         layout: {
@@ -30,7 +35,7 @@ export default class ForceGraph extends Component {
         nodes: {
           shape: "box",
           font: {
-            face: "Consolas",
+            face: "JetBrains Mono, Fira Code, Consolas",
             color: "#fff",
             size: 20,
           },
@@ -52,23 +57,40 @@ export default class ForceGraph extends Component {
   }
 
   createNodes() {
+    let order = 0
     let nodes = []
-    this.factory.forEach((element) => {
-      nodes.push({ id: element.id, label: `M${element.id}` })
+    let startMachine
+    this.links = []
+    this.factory.forEach((machine, index) => {
+      if (machine.prevMachineID === "null") {
+        startMachine = machine
+        nodes.push({ id: order, label: machine.id, color: this.colors[order % this.colors.length] })
+      }
     })
+
+    let nextID = startMachine.nextMachineID
+    while (nextID !== "null") {
+      this.links.push({ from: order + 1, to: order })
+      for (let i = 0; i < this.factory.length; i++) {
+        if (nextID !== this.factory[i].id) continue
+        else {
+          order++
+          nextID = this.factory[i].nextMachineID
+          nodes.push({
+            id: order,
+            label: this.factory[i].id,
+            color: this.colors[order % this.colors.length],
+          })
+          break
+        }
+      }
+    }
 
     return nodes
   }
 
   createEdges() {
-    let edges = []
-    this.factory.forEach((element) => {
-      element.links.forEach((node) => {
-        edges.push({ from: element.id, to: node })
-      })
-    })
-
-    return edges
+    return this.links
   }
 
   events = {

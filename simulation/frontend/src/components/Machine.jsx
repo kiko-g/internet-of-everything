@@ -7,7 +7,10 @@ export default function Machine({ data, classnames, isDetailed }) {
     input: data.input,
     output: data.output,
   }
-  const next = data.nextMachineID
+  const links = {
+    prev: data.prevMachineID,
+    next: data.nextMachineID,
+  }
   const sensors = data.sensors
 
   return (
@@ -37,16 +40,24 @@ export default function Machine({ data, classnames, isDetailed }) {
         ))}
       </ul>
 
-      {/* Next */}
+      {/* Links */}
       <ul>
-        <li className="flex justify-between my-1" key={`next-machine-${data.id}`}>
-          <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-50 dark:text-rose-800">
-            {"next".toUpperCase().slice(0, 6)}
-          </span>
-          <span className="text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-            {next === "" ? <span className="text-rose-700">none</span> : <span>{next}</span>}
-          </span>
-        </li>
+        {Object.keys(links).map((link, index) => (
+          <li className="flex items-center justify-between my-1" key={`${link}-machine-${data.id}`}>
+            <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-50 dark:text-rose-800">
+              {link.toUpperCase().slice(0, 6)}
+            </span>
+            {links[link] === "null" ? (
+              <span className="text-right bg-rose-600 text-gray-50 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-600 dark:text-gray-50">
+                <span className="font-bold">none</span>
+              </span>
+            ) : (
+              <span className="text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                <span>{links[link]}</span>
+              </span>
+            )}
+          </li>
+        ))}
       </ul>
 
       {/* Sensors */}
