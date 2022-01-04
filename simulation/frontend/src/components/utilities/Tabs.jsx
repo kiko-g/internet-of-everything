@@ -3,7 +3,7 @@ import PillDivNest from "./PillDivNest"
 
 export default class Tabs extends React.Component {
   state = {
-    activeTab: this.props.children[0].props.label,
+    activeTab: this.props.children[1].props.label,
   }
 
   changeTab = (tab) => {

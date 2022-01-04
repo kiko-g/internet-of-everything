@@ -27,7 +27,7 @@ export default function Representation() {
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
           </div>
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`detailed-${index}`} propClasses="col-span-1 min-w-full" detailed={detailed} />
+            <Machine data={item} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
           ))}
         </div>
       </Tab>
@@ -36,7 +36,7 @@ export default function Representation() {
         <div className="grid w-full grid-cols-1 gap-4">
           <BasicInput label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" />
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`inspect-${index}`} propClasses="col-span-1 min-w-full" detailed={true} />
+            <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDtailed={true} />
           ))}
         </div>
       </Tab>

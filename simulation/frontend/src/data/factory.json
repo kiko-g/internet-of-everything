@@ -1,83 +1,1122 @@
 [
   {
-    "id": 1,
+    "id": "machine1",
     "status": 0,
-    "name": "cutting",
-    "temperature": "90 ºC",
-    "readingTime": "19:53 2021-12-07",
-    "input": {
-      "a": 1,
-      "b": 2
-    },
-    "output": {
-      "c": 3
-    },
-    "links": [2, 3],
-    "properties": {
-      "volt": 290.5,
-      "vibration": 14.3,
-      "pressure": 10.3,
-      "rotate": 920
-    }
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
   },
   {
-    "id": 2,
-    "status": 1,
-    "name": "heating",
-    "temperature": "90 ºC",
-    "readingTime": "19:53 2021-12-07",
-    "input": {
-      "c": 3
-    },
-    "output": {
-      "d": 2
-    },
-    "links": [3, 4],
-    "properties": {
-      "volt": 135.9,
-      "vibration": 34.8,
-      "pressure": 20.8,
-      "rotate": 1040
-    }
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
   },
   {
-    "id": 3,
-    "status": 2,
-    "name": "transformer",
-    "temperature": "110 ºC",
-    "readingTime": "19:53 2021-12-07",
-    "input": {
-      "b": 1
-    },
-    "links": [4],
-    "output": {
-      "d": 2
-    },
-    "properties": {
-      "volt": 347.3,
-      "vibration": 43.1,
-      "pressure": 24.6,
-      "rotate": 2820
-    }
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
   },
   {
-    "id": 4,
-    "status": 1,
-    "name": "assembler",
-    "temperature": "55 ºC",
-    "readingTime": "19:53 2021-12-07",
-    "input": {
-      "b": 1
-    },
-    "links": [],
-    "output": {
-      "x": 1
-    },
-    "properties": {
-      "volt": 347.3,
-      "vibration": 43.1,
-      "pressure": 24.6,
-      "rotate": 2820
-    }
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "machine1",
+    "status": 0,
+    "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "machine2",
+    "sensors": [
+      {
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 70,
+            "max": 120,
+            "avg": 90,
+            "standardDeviation": 2
+          }
+        }
+      },
+      {
+        "id": "position1",
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10,
+            "standardDeviation": 7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY",
+        "attributes": {
+          "velocity": {
+            "min": 50,
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration": {
+            "min": 5,
+            "max": 2,
+            "avg": 3.2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "speed1",
+        "type": "SPEED",
+        "attributes": {
+          "productionSpeed": {
+            "max": 60,
+            "min": 0,
+            "avg": 23.5,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": {
+          "energy": {
+            "max": 60,
+            "min": 20,
+            "avg": 40,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": {
+          "orientation": {
+            "max": 360,
+            "min": 0,
+            "avg": 40.5,
+            "standardDeviation": 9
+          }
+        }
+      },
+      {
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature": {
+            "min": 60,
+            "max": 110,
+            "avg": 95,
+            "standardDeviation": 2
+          }
+        }
+      }
+    ]
   }
 ]
