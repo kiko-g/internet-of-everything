@@ -1,4 +1,4 @@
-import CuttingMachine from "./CuttingMachine.js";
+import Machine from "./Machine.js";
 import fs from "fs";
 export default class JSONParser {
 
@@ -13,7 +13,7 @@ export default class JSONParser {
         for (let i = 1; i < Object.keys(machineDictionary).length; i++) {
             let machineInfo = machineDictionary[i];
             
-            let machine = new CuttingMachine(machineInfo['machineID'], machineInfo['readingTime'], machineInfo['links'])
+            let machine = new Machine(machineInfo['machineID'], machineInfo['readingTime'], machineInfo['links'])
             
             machine.setName(machineInfo['properties']['name']);
             machine.setStatus(machineInfo['properties']['status']);
