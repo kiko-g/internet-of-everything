@@ -19,7 +19,7 @@ public class Machine extends MQTTClient implements Runnable {
         this.name = id;
         this.subscribeTopic("testTopic");
         this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
-        this.publishTopic = "edge/" + id;
+        this.publishTopic = "machine/" + id;
         this.sensors = getSensors(); // only to get some sensors while there are no configuration files
     }
 
@@ -33,7 +33,7 @@ public class Machine extends MQTTClient implements Runnable {
 
     public void run() {
         this.startSensors();
-        this.checkSensorsForNewDataForever();
+        this.checkSensorsForNewDataForeverAndPublish();
     }
 
     private void startSensors() {
@@ -42,12 +42,15 @@ public class Machine extends MQTTClient implements Runnable {
         }
     }
 
-    private void checkSensorsForNewDataForever() {
+    private void checkSensorsForNewDataForeverAndPublish() {
         while(true) {
             for (Sensor sensor: this.sensors) {
                 if(sensor.hasNewData()) {
                     JSONObject data = sensor.readData();
-                    this.publishMessage(this.publishTopic, data.toString().getBytes());
+                    if(sensor.getClass() == QRCodeSensor.class)
+                        this.publishMessage("product/" + this.name, data.toString().getBytes());
+                    else
+                        this.publishMessage(this.publishTopic, data.toString().getBytes());
                 }
             }
         }
