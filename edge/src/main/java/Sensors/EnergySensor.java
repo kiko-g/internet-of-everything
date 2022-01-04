@@ -1,27 +1,31 @@
 package Sensors;
 
-import java.util.ArrayList;
-import java.util.Random;
+import org.json.JSONObject;
 
 public class EnergySensor extends Sensor {
     Type type;
     Double currentEnergy;
 
-    public EnergySensor(String name, float averageEnergy, float energyStandardDeviation, int updateInterval) {
-        super(name, averageEnergy, energyStandardDeviation, updateInterval);
+    public EnergySensor(String name, String machineId, float averageEnergy, float energyStandardDeviation, int updateInterval) {
+        super(name, machineId, averageEnergy, energyStandardDeviation, updateInterval);
         this.type = Type.ENERGY;
         this.currentEnergy = null; // Watt
     }
 
-    public String getData() {
-        ArrayList<Double> speed = new ArrayList<>();
-        if (!this.isOn) {
-            speed.add(null);
+    public JSONObject readData() {
+        this.setNewData(false);
+
+        JSONObject values = new JSONObject();
+        if (!this.isOn || this.currentEnergy == null) {
+            values.put("energy", "null");
         }
         else {
-            speed.add(this.currentEnergy);
+            values.put("energy", this.currentEnergy);
         }
-        return "";
+
+        JSONObject obj = createBaseJSON();
+        obj.put("values", values);
+        return obj;
     }
 
     @Override
