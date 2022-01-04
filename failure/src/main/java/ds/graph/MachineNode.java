@@ -106,13 +106,13 @@ public class MachineNode {
         StringBuilder s = new StringBuilder();  
         s.append("[ID]: ").append(this.id).append("\n"); 
 
-        if(this.prev != null){
+        if(isStartMachine()){
             s.append("[PREV]: ");
             s.append(this.prev.getId()).append(" ");
             s.append("\n");
         }
 
-        if(this.next != null){
+        if(isEndMachine()){
             s.append("[NEXT]: ");
             s.append(this.next.getId()).append(" ");
             s.append("\n");
@@ -127,4 +127,11 @@ public class MachineNode {
         return s.toString();
     }
 
+    public boolean isEndMachine(){
+        return this.next == null;
+    }
+
+    public boolean isStartMachine(){
+        return this.prev == null;
+    }
 }

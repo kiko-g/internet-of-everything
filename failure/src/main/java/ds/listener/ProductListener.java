@@ -2,6 +2,7 @@ package ds.listener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +19,14 @@ public class ProductListener extends Listener {
 
     public ProductListener(Graph graph) {
         super("product", graph);
-        this.productionState = new ProductionState(new ArrayList<String>(this.machinesGraph.getMachines()));
+        try {
+            String startMachineID = this.machinesGraph.getStartMachine().getId();
+            MachineNode endMachine = this.machinesGraph.getEndMachine();
+            List<String> machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
+            this.productionState = new ProductionState(machineIds, startMachineID, endMachine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void init(){
@@ -66,8 +74,17 @@ public class ProductListener extends Listener {
      * Output details regarding the production (e.g. number of defective products, production rate, ...)
      */
     public void showState(){
-        String leftAlignFormat = "| %-7s | %-7d | %-11f | %-8d | %-20s | %-15s |%n";
+        String leftAlignFormat1 = "| %-15s |%n";
+        String leftAlignFormat2 = "| %-7s | %-7d | %-11f | %-8d | %-20s | %-15s |%n";
         StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("%n+-----------------+%n"));
+        sb.append(String.format("| Production Rate |%n"));
+        sb.append(String.format("+-----------------+%n"));
+
+        sb.append(String.format(leftAlignFormat1,
+            Utils.formatDouble(this.productionState.getTotalProductionRate()) + " / 10s"));   
+        sb.append(String.format("+-----------------+%n"));
 
         sb.append(String.format("%n+---------+---------+-------------+----------+----------------------+-----------------+%n"));
         sb.append(String.format("| Machine | Defects | Defect Rate | Products | Mean Production Time | Production Rate |%n"));
@@ -76,13 +93,13 @@ public class ProductListener extends Listener {
         for(String machineID : this.machinesGraph.getMachines()){
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
-            sb.append(String.format(leftAlignFormat,
+            sb.append(String.format(leftAlignFormat2,
                 machineID, 
                 machine.getDefectiveCount(), 
                 machine.getDefectRate(), 
                 machine.getOutCount(), 
                 Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
-                Utils.formatDouble(this.productionState.getProductionRate(machine)) + "/s"));    
+                Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));    
         }
 
         sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));

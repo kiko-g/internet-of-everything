@@ -100,11 +100,19 @@ public class Graph {
     public MachineNode getStartMachine() throws Exception{
 
         for(MachineNode node: this.nodes.values()){
-            if(node.getPrev() == null){
+            if(node.isStartMachine())
                 return node;
-            }
         }
         throw new Exception("Missing Start Node");
+    }
+
+    public MachineNode getEndMachine() throws Exception{
+
+        for(MachineNode node: this.nodes.values()){
+            if(node.isEndMachine())
+                return node;
+        }
+        throw new Exception("Missing End Node");
     }
 
     public String toString(){ 
