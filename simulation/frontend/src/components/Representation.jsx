@@ -3,14 +3,14 @@ import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
 import BasicInput from "./utilities/BasicInput"
-import FactoryFloor from "../data/factory.json"
 import DetailedSwitch from "./utilities/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
+import { factories } from "../data"
 
 export default function Representation() {
   const [detailed, setDetailed] = React.useState(false)
-  const factoryInitial = FactoryFloor
+  const factoryInitial = factories[0]
   const factorySimulation = []
   const Tab = (props) => <div>{props.children}</div>
 
