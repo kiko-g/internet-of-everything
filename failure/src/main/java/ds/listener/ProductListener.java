@@ -1,11 +1,7 @@
 package ds.listener;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +23,8 @@ public class ProductListener extends Listener {
 
     public void init(){
         super.init();
+
+        // Show the production state every 5 seconds
         this.executor = new ScheduledThreadPoolExecutor(5);
         executor.scheduleWithFixedDelay(new Thread(() -> this.showState()), 0, 5000, TimeUnit.MILLISECONDS);
     }
@@ -37,31 +35,36 @@ public class ProductListener extends Listener {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
         //System.out.println(messageParsed);
 
+        // Get message values
         String machineID = messageParsed.getString("machineID");
-        MachineNode machine = this.machinesGraph.getMachineNode(machineID);
-
         String action = messageParsed.getJSONObject("values").getString("action");
         boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
         LocalDateTime readTime = Utils.parseDateTime(messageParsed.getString("readingTime"));
 
-        // New sub-product was produced by the machine
+        MachineNode machine = this.machinesGraph.getMachineNode(machineID);
+
+        // Process output messages - new sub-product was produced by a machine
         if(action.equals("OUT")){
             machine.updateOutCounter();
 
-            this.productionState.saveProductionTime(machineID, readTime);
+            this.productionState.saveProductionTime(machine, readTime);
 
+            // Identify defective product
             if(defect){
                 machine.addDefectiveProduct();
                 System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
             }
         }
-        // New subproduct was received by the machine
+        // Process input messages - new subproduct was received by a machine
         else if(action.equals("IN")){
             machine.updateInCounter();
             this.productionState.saveInputTime(machineID, readTime);
         }
     }
 
+    /**
+     * Output details regarding the production (e.g. number of defective products, production rate, ...)
+     */
     public void showState(){
         String leftAlignFormat = "| %-7s | %-7d | %-11f | %-8d | %-20s | %-15s |%n";
         StringBuilder sb = new StringBuilder();

@@ -2,17 +2,22 @@ package ds.listener;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 import ds.graph.MachineNode;
 
+/**
+ * Information regarding the production
+ */
 public class ProductionState {
-    private ConcurrentHashMap<String, Queue<LocalDateTime>> inputTimes;
-    private ConcurrentHashMap<String, LocalDateTime> firstInputTimes;
-    private ConcurrentHashMap<String, Long> productionTimes;
+    private ConcurrentHashMap<String, ConcurrentLinkedQueue<LocalDateTime>> inputTimes; // Input times of each machine
+    private ConcurrentHashMap<String, LocalDateTime> firstInputTimes; // First Input time of each machine
+    private ConcurrentHashMap<String, Long> productionTimes; // Sum of all production times
+    // AtomicLong totalProductionTimes; // Sum of the production times of the end product 
 
     public ProductionState(List<String> machineIds){
         this.inputTimes = new ConcurrentHashMap<>();
@@ -23,19 +28,20 @@ public class ProductionState {
 
     public void init(List<String> machineIds){
         for(String machineID: machineIds){
-            this.inputTimes.put(machineID, new LinkedList<>());
+            this.inputTimes.put(machineID, new ConcurrentLinkedQueue<>());
             this.productionTimes.put(machineID, Long.valueOf(0));
         }
     }
 
-    public void saveProductionTime(String machineID, LocalDateTime outputDt){
+    public void saveProductionTime(MachineNode machine, LocalDateTime outputDt){
+        String machineID = machine.getId();
+
         if(this.inputTimes.containsKey(machineID)){
             LocalDateTime inputDt = this.inputTimes.get(machineID).poll();
-            Long sumTime = this.productionTimes.get(machineID);
-            if(inputDt != null){
-                long newTime = sumTime.longValue() + ChronoUnit.MILLIS.between(inputDt, outputDt);
-                this.productionTimes.put(machineID, Long.valueOf(newTime));
-            }
+            
+            if(inputDt != null)
+                this.productionTimes.compute(machineID, (key, val) -> val + ChronoUnit.MILLIS.between(inputDt, outputDt)); 
+            // if(machine.isEndMachine())
         }
     }
 
@@ -60,4 +66,14 @@ public class ProductionState {
         long timeUntilNow = ChronoUnit.MILLIS.between(firstInputDt, LocalDateTime.now());
         return (double) (1000*qualityProducts)/timeUntilNow;
     }
+
+
+    public double getTotalProductionTime(){
+        return 0;
+    }
+
+    public double getTotalProductionRate(){
+        return 0;
+    }
+
 }
