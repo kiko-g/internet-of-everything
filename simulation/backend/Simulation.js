@@ -1,4 +1,4 @@
-import CuttingMachine from "./CuttingMachine.js";
+import Machine from "./Machine.js";
 import JSONParser from "./JSONParser.js";
 export default class Simulation {
   constructor(file, piecesQty) {
