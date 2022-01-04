@@ -1,5 +1,4 @@
 import React from "react"
-import PillDivNest from "./PillDivNest"
 
 export default class Tabs extends React.Component {
   state = {
@@ -15,13 +14,13 @@ export default class Tabs extends React.Component {
     let buttons = []
     return (
       <>
-        <PillDivNest color="bg-slate-100 dark:bg-slate-700 mb-4">
+        <div className="p-4 rounded-xl flex items-center justify-start space-x-3 bg-slate-100 dark:bg-slate-700 mb-4">
           {React.Children.map(this.props.children, (child) => {
             buttons.push(child.props.label)
             if (child.props.label === this.state.activeTab) content = child.props.children
           })}
           <TabButtons activeTab={this.state.activeTab} buttons={buttons} changeTab={this.changeTab} />
-        </PillDivNest>
+        </div>
         <div
           className="bg-slate-100 p-4 rounded-xl flex items-start justify-between space-x-8 bg-opacity-90 w-full"
           style={{

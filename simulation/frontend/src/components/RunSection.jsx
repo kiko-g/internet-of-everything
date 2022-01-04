@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { PlayIcon } from "@heroicons/react/solid"
 import { factories } from "../data"
 import axios from "axios"

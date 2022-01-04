@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { useState } from "react"
 import { RadioGroup } from "@headlessui/react"
 import { PlusCircleIcon } from "@heroicons/react/solid"

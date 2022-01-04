@@ -1,15 +1,14 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { ClipboardIcon, ClipboardCheckIcon } from "@heroicons/react/solid"
 
-export default function CopyClipboard(props) {
-  const json = props.json || []
-  const [copied, setCopied] = React.useState(false)
+export default function CopyClipboard({ json = {} }) {
+  const [copied, setCopied] = useState(false)
   const handleCopied = () => {
     setCopied(!copied)
     navigator.clipboard.writeText(JSON.stringify(json))
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (copied)
       setTimeout(() => {
         setCopied(!copied)

@@ -1,13 +1,8 @@
-import * as React from "react"
+import React from "react"
 
-export default function BasicInput(props) {
-  const label = props.label || ""
-  const types = props.types || []
-  const style = props.parentSyle || ""
-  const placeholder = props.placeholder || "..."
-
+export default function InputBox({ label = "Label", types = [], classnames = "", placeholder = "..." }) {
   return (
-    <div className={style}>
+    <div className={`${classnames}`}>
       <label htmlFor="price" className="block text-lg font-bold text-slate-700">
         {label}
       </label>

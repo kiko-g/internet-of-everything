@@ -1,8 +1,8 @@
-import * as React from "react"
+import React from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
-import BasicInput from "./utilities/BasicInput"
+import InputBox from "./utilities/InputBox"
 import DetailedSwitch from "./utilities/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
@@ -34,7 +34,7 @@ export default function Representation() {
       {/* Inspect view with search */}
       <Tab label="Inspect">
         <div className="grid w-full grid-cols-1 gap-4">
-          <BasicInput label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" />
+          <InputBox label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" />
           {factoryInitial.map((item, index) => (
             <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDtailed={true} />
           ))}
@@ -55,7 +55,7 @@ export default function Representation() {
                 indentWidth={4}
                 iconStyle="triangle"
                 name={false}
-                collapsed={false}
+                collapsed={true}
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
@@ -82,7 +82,7 @@ export default function Representation() {
                 indentWidth={4}
                 iconStyle="triangle"
                 name={false}
-                collapsed={false}
+                collapsed={true}
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}

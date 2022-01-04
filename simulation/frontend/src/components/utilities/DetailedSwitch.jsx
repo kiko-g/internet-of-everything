@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { Switch } from "@headlessui/react"
 
 export default function DetailedSwitch(props) {

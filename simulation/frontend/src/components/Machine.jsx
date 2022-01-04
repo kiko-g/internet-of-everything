@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { getStatus } from "../utils"
 
 export default function Machine({ data, classnames, isDetailed }) {
