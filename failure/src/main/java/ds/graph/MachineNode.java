@@ -106,13 +106,13 @@ public class MachineNode {
         StringBuilder s = new StringBuilder();  
         s.append("[ID]: ").append(this.id).append("\n"); 
 
-        if(isStartMachine()){
+        if(!isStartMachine()){
             s.append("[PREV]: ");
             s.append(this.prev.getId()).append(" ");
             s.append("\n");
         }
 
-        if(isEndMachine()){
+        if(!isEndMachine()){
             s.append("[NEXT]: ");
             s.append(this.next.getId()).append(" ");
             s.append("\n");
