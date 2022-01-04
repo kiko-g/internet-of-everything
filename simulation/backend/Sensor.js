@@ -10,8 +10,8 @@ export default class Sensor {
     }
 
     update(){
-        for(var attribute in this.attributes){
-            attribute.generateNewValue();
+        for(let [key, val] of Object.entries(this.attributes)){
+            val.generateNewValue();
         }
     }
 

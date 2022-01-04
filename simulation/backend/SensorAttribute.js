@@ -7,15 +7,17 @@ export default class SensorAttribute {
       this.max = max;
       this.avg = avg;
       this.stdDeviation=stdDeviation;
-      this.value=randomNormal(this.avg);
-      console.log(this.value);
+      this.value=randomNormal({mean: this.avg, dev: this.stdDeviation});
+     
     }
 
     generateNewValue(){
         this.value= randomNormal({mean: this.avg, dev: this.stdDeviation});
+        
     }
 
     getValue(){
         return this.value;
+
     }
 }
