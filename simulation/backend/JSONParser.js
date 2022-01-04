@@ -1,32 +1,32 @@
-import Machine from "./Machine.js";
-import fs from "fs";
+import Machine from "./Machine.js"
+import Sensor from "./Sensor.js"
+import fs from "fs"
 export default class JSONParser {
+  constructor() {}
 
-    constructor(){}
+  parse(jsonFile) {
+    let json = fs.readFileSync(jsonFile)
+    const machineDictionary = JSON.parse(json).machines
+    let machines = []
 
-    parse(jsonFile){
-        let json = fs.readFileSync(jsonFile);
-        const machineDictionary = JSON.parse(json);
-        let machines = [];
-        let statingMachineID = machineDictionary[0]["startMachineID"];
-        machineDictionary.shift();
-        for (let i = 1; i < Object.keys(machineDictionary).length; i++) {
-            let machineInfo = machineDictionary[i];
-            
-            let machine = new Machine(machineInfo['machineID'], machineInfo['readingTime'], machineInfo['links'])
-            
-            machine.setName(machineInfo['properties']['name']);
-            machine.setStatus(machineInfo['properties']['status']);
-            machine.setTemperature(machineInfo['properties']['temperature']);
-            machine.setPiecesProduced(machineInfo['properties']['piecesProduced']);
-            machine.setVolt(machineInfo['properties']['volt']);
-            machine.setVibration(machineInfo['properties']['vibration']);
-            machine.setPressure(machineInfo['properties']['pressure']); 
-            machine.setRotate(machineInfo['properties']['rotate']);
+    for (let i = 0; i < Object.keys(machineDictionary).length; i++) {
+      let machineInfo = machineDictionary[i]
+      let machine = new Machine(machineInfo.id)
 
-            machines.push(machine);
-        }      
-        
-        return machines;
-    }    
+      machine.setStatus(machineInfo.status)
+      machine.setDefectProbability(machineInfo.defectProbability)
+      machine.setInput(machineInfo.input)
+      machine.setOutput(machineInfo.output)
+      machine.setNextMachineID(machineInfo.nextMachineID)
+
+      for (const sensorInfo of Object.values(machineInfo.sensors)) {
+        machine.addSensor(
+          new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.attributes)
+        )
+      }
+      machines.push(machine)
+    }
+
+    return machines
+  }
 }
