@@ -57,7 +57,6 @@ public class MachineListener extends Listener {
     private void analyseFutureBehavior(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
         String readingTime = messageParsed.get("readingTime").toString();
-        float measureValue = messageParsed.getJSONObject("values").getFloat(measureType);
         Failure failure = new Failure(sensorState, machineID, readingTime); 
         MeasureState measureState = sensorState.getMeasureState(measureType);
         
@@ -68,10 +67,8 @@ public class MachineListener extends Listener {
         int numIncrease = 0;
         int numDecrease = 0;
 
-        System.out.println("Values: \n-> " + prevVal);
         while (iterator.hasNext()) {
             Float currentVal = iterator.next();
-            System.out.print("-> " + currentVal + "\n");
 
             if (currentVal >= prevVal) {
                 numIncrease += 1;
@@ -84,11 +81,13 @@ public class MachineListener extends Listener {
 
             prevVal = currentVal;
         }
-        System.out.println("\n Consecutive Increase: " + numIncrease);
+
+        System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
+            "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
+
         float proximityMax = measureState.getMaxProximity();
         this.sendFailureFuture(failure, proximityMax, numIncrease, FailureType.ABOVE_EXPECTED, "increasing");
 
-        System.out.println("\n Consecutive Decrease: " + numDecrease);
         float proximityMin = measureState.getMinProximity();
         this.sendFailureFuture(failure, proximityMin, numDecrease, FailureType.UNDER_EXPECTED, "decreasing");
     }
