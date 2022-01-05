@@ -5,6 +5,8 @@ import { colors } from "../utils"
 export default class ForceGraph extends Component {
   constructor(props) {
     super(props)
+    this.nodes = []
+    this.edges = []
     this.factory = this.props.factory
     this.colors = colors.sort(() => Math.random() - 0.5)
     this.getRandomColor = () => {
@@ -12,41 +14,83 @@ export default class ForceGraph extends Component {
     }
     this.state = {
       options: {
+        clickToUse: false,
         layout: {
-          hierarchical: false,
+          hierarchical: {
+            enabled: false,
+            direction: "UD",
+            sortMethod: "hubsize",
+            shakeTowards: "roots",
+            levelSeparation: 150,
+            nodeSpacing: 150,
+            treeSpacing: 200,
+          },
+        },
+        interaction: {
+          hover: true,
+          dragView: true,
+          keyboard: false,
+          multiselect: true,
+          tooltipDelay: 10000,
+          navigationButtons: true,
+          hoverConnectedEdges: false,
+        },
+        physics: {
+          enabled: true,
+          orceAtlas2Based: {
+            gravitationalConstant: -26,
+            centralGravity: 0.005,
+            springLength: 230,
+            springConstant: 0.18,
+            avoidOverlap: 1.5,
+          },
+          maxVelocity: 146,
+          solver: "forceAtlas2Based",
+          timestep: 0.1,
+          stabilization: {
+            enabled: true,
+            iterations: 1000,
+            updateInterval: 25,
+          },
         },
         edges: {
-          color: "#28303b",
+          width: 1.5,
+          length: 150,
+          color: "#273241",
           smooth: {
             enabled: true,
             type: "dynamic",
-            roundness: 1,
+            roundness: true,
           },
           arrows: {
             from: {
-              enabled: true,
-              scaleFactor: 0.7,
+              enabled: false,
             },
             to: {
-              enabled: false,
+              enabled: true,
+              scaleFactor: 1,
             },
           },
         },
         nodes: {
-          shape: "box",
+          color: "#334155",
           font: {
             face: "JetBrains Mono, Fira Code, Consolas",
             color: "#fff",
             size: 20,
           },
-          color: "#334155",
-        },
-        physics: {
-          enabled: true,
-        },
-        interaction: {
-          multiselect: true,
-          dragView: true,
+          shape: "box",
+          size: 25,
+          scaling: {
+            type: "incomingAndOutgoingConnections",
+            min: 10,
+            max: 60,
+            label: {
+              enabled: true,
+              min: 20,
+              max: 32,
+            },
+          },
         },
       },
       graph: {
@@ -58,25 +102,24 @@ export default class ForceGraph extends Component {
 
   createNodes() {
     let order = 0
-    let nodes = []
     let startMachine
-    this.links = []
     this.factory.forEach((machine, index) => {
       if (machine.prevMachineID === "null") {
         startMachine = machine
-        nodes.push({ id: order, label: machine.id, color: this.colors[order % this.colors.length] })
+        this.nodes.push({ id: order, label: machine.id, color: this.colors[order % this.colors.length] })
       }
     })
 
     let nextID = startMachine.nextMachineID
     while (nextID !== "null") {
-      this.links.push({ from: order + 1, to: order })
+      this.edges.push({ from: order, to: order + 1 })
+
       for (let i = 0; i < this.factory.length; i++) {
         if (nextID !== this.factory[i].id) continue
         else {
           order++
           nextID = this.factory[i].nextMachineID
-          nodes.push({
+          this.nodes.push({
             id: order,
             label: this.factory[i].id,
             color: this.colors[order % this.colors.length],
@@ -86,22 +129,18 @@ export default class ForceGraph extends Component {
       }
     }
 
-    return nodes
+    return this.nodes
   }
 
   createEdges() {
-    return this.links
-  }
-
-  events = {
-    dragStart: (event) => {},
-    dragEnd: (event) => {},
+    return this.edges
   }
 
   render() {
     return (
-      <div id="graph" className="w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
+      <div id="graph" className="relative group w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
         <Graph graph={this.state.graph} options={this.state.options} events={this.state.events} />
+        <div className="hidden absolute top-4 right-4">Selected machine drawer content</div>
       </div>
     )
   }
