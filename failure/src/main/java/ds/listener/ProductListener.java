@@ -8,21 +8,18 @@ import org.json.JSONObject;
 
 import ds.graph.Graph;
 import ds.graph.MachineNode;
-import ds.graph.Phases;
 
 public class ProductListener extends Listener {
-    Phases phases;
     ScheduledThreadPoolExecutor executor;
 
     public ProductListener(Graph graph) {
-        super("production/product", graph); 
-        this.phases = new Phases(graph);
+        super("production/product", graph);
     }
 
     public void init(){
         super.init();
         this.executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleWithFixedDelay(new Thread(() -> this.phases.showState()), 0, 5000, TimeUnit.MILLISECONDS);
+        executor.scheduleWithFixedDelay(new Thread(() -> this.showState()), 0, 5000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -31,18 +28,44 @@ public class ProductListener extends Listener {
         //System.out.println(messageParsed);
 
         String machineID = messageParsed.getString("machineID");
-        String state = messageParsed.getString("state");
         MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
+        String action = messageParsed.getJSONObject("values").getString("action");
+        boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
+
         // New sub-product was produced by the machine
-        if(state.equals("out")){
-            machine.updateCounter();
-            //System.out.println("=== Machine " + machineID + " total products = " + machine.getProductCount() + " ===");
+        if(action.equals("OUT")){
+            machine.updateOutCounter();
+            if(defect){
+                machine.addDefectiveProduct();
+                System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
+            }
         }
         // New subproduct was received by the machine
-        else if(state.equals("in")){
-            String product = messageParsed.getString("product");
-            machine.addCurrentInput(product);
+        else if(action.equals("IN")){
+            machine.updateInCounter();
         }
+    }
+
+    public void showState(){
+        try {
+            String leftAlignFormat = "| %-7s | %-9d | %-11f | %-7d |%n";
+
+            System.out.format("\n+---------+-----------+------------+----------+%n");
+            System.out.format("| Machine | Defective | Defect Rate |  Total  |%n");
+            System.out.format("+---------+-----------+-------------+---------+%n");
+    
+            for(String machineID : this.machinesGraph.getMachines()){
+                MachineNode machine = this.machinesGraph.getMachineNode(machineID);
+    
+                System.out.format(leftAlignFormat, machineID, machine.getDefectiveCount(), 
+                    machine.getDefectRate(), machine.getOutCount());    
+            }
+    
+            System.out.format("+---------+-----------+-------------+---------+%n\n");
+        } catch(Exception e){
+            System.out.println(e.toString());
+        }
+       
     }
 }

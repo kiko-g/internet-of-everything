@@ -1,4 +1,4 @@
-package ds.publisher;
+package ds.failures;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -8,14 +8,14 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
 
-public abstract class Sensor {
+public class FailurePublisher {
     private final String brokerURI;
     private final String publisherId;
     private MqttClient publisher;
     private final String topic;
 
-    public Sensor(String topic){
-        this.brokerURI = "tcp://mosquitto:1883";
+    public FailurePublisher(String topic){
+        this.brokerURI = "tcp://mosquitto:1889";
         this.publisherId = UUID.randomUUID().toString();
         this.topic = topic;
     }
@@ -37,22 +37,18 @@ public abstract class Sensor {
         MqttConnectOptions mqttOptions = new MqttConnectOptions();
         mqttOptions.setCleanSession(true);
         mqttOptions.setConnectionTimeout(20);
-        mqttOptions.setWill(this.publisher.getTopic(this.topic), "Sensor disconnected".getBytes(), 2, false);
+        mqttOptions.setWill(this.publisher.getTopic(this.topic), "Failure publisher disconnected".getBytes(), 2, false);
 
         return mqttOptions;
     }
 
     public void publish(String rawMsg){
-        
         try {
             final MqttTopic topicObj = this.publisher.getTopic(this.topic);
 
             MqttMessage msg = getMqttMessage(rawMsg);
             msg.setQos(2);
-
             topicObj.publish(msg);
-
-            System.out.println(String.format("Published to %s. %s", this.topic, msg.toString()));
 
         } catch (MqttException e) {
             System.err.println("Error publishing to " + this.topic + " - " + e);

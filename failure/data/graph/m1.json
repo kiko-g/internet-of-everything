@@ -1,0 +1,112 @@
+{
+    "id": "m1",
+    "status": 0,
+    "defectProbability": 2,
+    "sensors": [
+      { 
+        "id": "temperature1",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature":{
+            "avg": 90, 
+            "min": 70,
+            "max": 120,
+            "standardDeviation": 2
+          }
+        }
+      },  
+      {
+        "id": "position1", 
+        "type": "POSITION",
+        "attributes": {
+          "x": {
+            "avg": 10, 
+            "min": 0,
+            "max": 20,
+            "standardDeviation":7
+          },
+          "y": {
+            "avg": 10, 
+            "min": 0,
+            "max": 20,
+            "standardDeviation":7
+          }
+        }
+      },
+      {
+        "id": "velocity1",
+        "type": "VELOCITY", 
+        "attributes": {
+          "velocity":{
+            "avg": 100,
+            "min": 50, 
+            "max": 120,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration1",
+        "type": "VIBRATION",
+        "attributes": {
+          "vibration":{
+            "avg": 3.2, 
+            "min": 5,
+            "max": 2,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "productionSpeed1",
+        "type": "PRODUCTION_SPEED",
+        "attributes": { 
+          "productionSpeed": {
+            "avg": 23.5, 
+            "max": 60,  
+            "min": 0,  
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy1",
+        "type": "ENERGY",
+        "attributes": { 
+          "energy": {
+            "avg": 40, 
+            "max": 60,  
+            "min": 20,  
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "orientation1",
+        "type": "ORIENTATION",
+        "attributes": { 
+          "orientation": {
+            "avg": 40.5,
+            "max": 360, 
+            "min": 0, 
+            "standardDeviation": 9
+          }
+        }
+      },
+      { 
+        "id": "temperature2",
+        "type": "TEMPERATURE",
+        "attributes": {
+          "temperature":{
+            "avg": 95, 
+            "min": 60,
+            "max": 110,
+            "standardDeviation": 2 
+          }
+        }
+      }
+    ],
+    "input": "material1",
+    "output": "material2",
+    "nextMachineID": "m2"
+} 
