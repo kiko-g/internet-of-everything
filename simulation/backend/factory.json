@@ -1,15 +1,15 @@
 {
   "batches": 10,
-  "startMachineID": 1,
+  "startMachineID": "0",
   "machines": [ 
     {
-      "id": "machine1",            
+      "id": "0",            
       "status": 0,                
       "defectProbability": 2,      
       "input": "material1",
       "output": "material2",
       "timePerBatch": 1000,
-      "nextMachineID": "machine2",  
+      "nextMachineID": "",  
       "sensors": [                 
         { 
           "id": "temperature1",       

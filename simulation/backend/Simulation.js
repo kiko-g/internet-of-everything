@@ -6,6 +6,7 @@ export default class Simulation {
     this.file = file
     this.piecesQty = piecesQty
     this.machines = {}
+    this.completedBatches = [];
   }
 
   run() {
@@ -18,11 +19,41 @@ export default class Simulation {
 
     this.createBatches();
 
-    // for (let i = 0; i < this.piecesQty; i++) {  // stub
-    //   for (const value of Object.values(this.machines)) {
-    //     value.update();
-    //   }
-    // }
+    while(Object.values(this.batches).length > 0){
+      let batchToDelete = -1;
+      this.iterations++;
+      for (const [batchID, batch] of Object.entries(this.batches)){
+
+        let batchMachine = this.machines[batch.currentMachineID];
+
+        if(batchMachine.isOccupied){
+          continue;
+        }
+
+        let newBatch = batchMachine.treatBatch(batch);
+
+        //end of production line
+        if(newBatch.getCurrentMachineID() === ""){
+          this.completedBatches.push(newBatch);
+          batchToDelete = batchID;
+        }
+        else{
+          this.batches[batchID] = newBatch;
+        }
+
+      }
+
+      if(batchToDelete != -1){
+        delete this.batches[batchToDelete]
+
+      }
+
+      // Unoccupy machines
+      for(const machine of Object.values(this.machines)){
+        machine.toggleOccupationOff();
+      }
+
+    }
 
     //TODO: Transform Machine Representation into JSON
     return (
@@ -34,9 +65,10 @@ export default class Simulation {
   }
 
   createBatches(){
-    this.batches = [];
+    this.batches = {};
     for(let i = 0; i < this.nBatches; i++){
-      this.batches.push(new Batch(this.startMachineID));
+      let batch = new Batch(this.startMachineID);
+      this.batches[batch.getID()] = batch;
     }
   }
 }

@@ -11,6 +11,26 @@ export default class Batch {
         
     }
 
+    getID(){
+        return this.id;
+    }
+
+    getCurrentMachineID(){
+        return this.currentMachineID;
+    }
+
+    setCurrentMachineID(machineID){
+        this.currentMachineID = machineID;
+    }
+
+    setHasDefect(defect){
+        this.hasDefect = defect;
+    }
+
+    setMaterialName(name){
+        this.materialName = name;
+    }
+
     update() {
         
     }

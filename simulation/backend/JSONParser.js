@@ -10,7 +10,7 @@ export default class JSONParser {
     let batches = parsedJson.batches;
     let startMachineID = parsedJson.startMachineID;
     const machineDictionary = parsedJson.machines
-    let machines = []
+    let machines = {}
 
     for (let i = 0; i < Object.keys(machineDictionary).length; i++) {
       let machineInfo = machineDictionary[i]
@@ -28,7 +28,7 @@ export default class JSONParser {
           new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.attributes)
         )
       }
-      machines.push(machine)
+      machines[machine.id] = machine;
     }
 
 
