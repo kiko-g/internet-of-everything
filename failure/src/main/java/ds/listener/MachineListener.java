@@ -54,29 +54,6 @@ public class MachineListener extends Listener {
         });
     }
 
-    public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
-        String machineID = messageParsed.get("machineID").toString(); 
-        String readingTime = messageParsed.get("readingTime").toString();
-        float measureValue = messageParsed.getJSONObject("values").getFloat(measureType);
-        Failure failure = new Failure(sensorState, machineID, readingTime); 
-        Values expectedValues = sensorState.getMeasureState(measureType).getExpectedValues();
-
-        //TODO: change severity according to what the clients considers high priority.
-        if (measureValue > expectedValues.getMax()) {
-            failure.setFailureType(FailureType.ABOVE_EXPECTED);
-            failure.setFailureSeverity(FailureSeverity.HIGH);
-            failure.setDescription("Detected value: " + measureValue);
-        }
-        else if (measureValue < expectedValues.getMin()) {
-            failure.setFailureType(FailureType.UNDER_EXPECTED);
-            failure.setFailureSeverity(FailureSeverity.HIGH);
-            failure.setDescription("Detected value: " + measureValue);
-        }
-
-        System.out.println(failure.getMessage());
-        this.failurePublisher.publish(failure.getMessage());
-    }
-
     private void analyseFutureBehavior(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
         String readingTime = messageParsed.get("readingTime").toString();
