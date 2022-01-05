@@ -7,6 +7,8 @@ export default class JSONParser {
   parse(jsonFile) {
     let json = fs.readFileSync(jsonFile)
     let parsedJson = JSON.parse(json);
+    let batches = parsedJson.batches;
+    let startMachineID = parsedJson.startMachineID;
     const machineDictionary = parsedJson.machines
     let machines = []
 
@@ -29,6 +31,7 @@ export default class JSONParser {
       machines.push(machine)
     }
 
-    return machines
+
+    return [batches, startMachineID, machines]
   }
 }
