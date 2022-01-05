@@ -5,13 +5,15 @@ import ds.state.*;
 import ds.state.sensor.*;
 import ds.failures.*;
 
-
+import java.util.*;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 public class MachineListener extends Listener {
     private State state; // Stores the current state of all machines.
-    public static final Integer INFO_SIZE = 3; // Number of previous states to save
+    public static final Integer INFO_SIZE = 5; // Number of previous states to save 
+    public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
+
     private FailurePublisher failurePublisher; 
 
     public MachineListener(Graph graph) {
@@ -46,10 +48,11 @@ public class MachineListener extends Listener {
         measureValues.keySet().forEach((key) -> {
             float measureValue = measureValues.getFloat(key);
             boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
+
             if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
+            else analyseFutureBehavior(messageParsed, sensorState, key);
         });
     }
-
 
     public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
@@ -74,4 +77,65 @@ public class MachineListener extends Listener {
         this.failurePublisher.publish(failure.getMessage());
     }
 
+    private void analyseFutureBehavior(JSONObject messageParsed, SensorState sensorState, String measureType){  
+        String machineID = messageParsed.get("machineID").toString(); 
+        String readingTime = messageParsed.get("readingTime").toString();
+        float measureValue = messageParsed.getJSONObject("values").getFloat(measureType);
+        Failure failure = new Failure(sensorState, machineID, readingTime); 
+        MeasureState measureState = sensorState.getMeasureState(measureType);
+        
+        Queue<Float> measures = measureState.getLastMeasures();    
+        Iterator<Float> iterator = measures.iterator();
+
+        Float prevVal = iterator.next();
+        int numIncrease = 0;
+        int numDecrease = 0;
+
+        System.out.println("Values: \n-> " + prevVal);
+        while (iterator.hasNext()) {
+            Float currentVal = iterator.next();
+            System.out.print("-> " + currentVal + "\n");
+
+            if (currentVal >= prevVal) {
+                numIncrease += 1;
+                numDecrease = 0;
+            } 
+            else {
+                numDecrease += 1;
+                numIncrease = 0;
+            } 
+
+            prevVal = currentVal;
+        }
+        System.out.println("\n Consecutive Increase: " + numIncrease);
+        float proximityMax = measureState.getMaxProximity();
+        this.sendFailureFuture(failure, proximityMax, numIncrease, FailureType.ABOVE_EXPECTED, "increasing");
+
+        System.out.println("\n Consecutive Decrease: " + numDecrease);
+        float proximityMin = measureState.getMinProximity();
+        this.sendFailureFuture(failure, proximityMin, numDecrease, FailureType.UNDER_EXPECTED, "decreasing");
+    }
+
+    private void sendFailureFuture(Failure failure, float proximity, int numConsecutive, FailureType type, String log) {
+        if (proximity < 10.0) {
+            if (numConsecutive > FUTURE_BEHAVIOR) {          
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.MEDIUM);
+                failure.setDescription("Values " + log + " too fast and near the max limit");
+            } else {
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.LOW);
+                failure.setDescription("Values near the max limit");
+            }
+        } else if (numConsecutive > FUTURE_BEHAVIOR) {
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.LOW);
+                failure.setDescription("Values " + log + " too fast");
+        } else {
+            return;
+        }
+
+        System.out.println(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage());
+    }
 }
