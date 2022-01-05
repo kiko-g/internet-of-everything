@@ -8,10 +8,6 @@ export default class Machine {
     this.isOccupied = false;
   }
 
-  isOccupied(){
-    return this.isOccupied;
-  }
-  
   setStatus(status) {
     this.status = status
   }
@@ -31,6 +27,7 @@ export default class Machine {
   setTimePerBatch(time){
     this.timePerBatch =time;
   }
+
   setNextMachineID(id) {
     this.nextMachineID = id
   }
@@ -41,6 +38,10 @@ export default class Machine {
 
   toggleOccupationOff(){
     this.isOccupied = false;
+  }
+
+  getTimePerBatch(){
+    return this.timePerBatch;
   }
 
   update() {

@@ -1,6 +1,7 @@
 import Machine from "./Machine.js"
 import Batch from "./Batch.js"
 import JSONParser from "./JSONParser.js"
+
 export default class Simulation {
   constructor(file, piecesQty) {
     this.file = file
@@ -16,12 +17,15 @@ export default class Simulation {
     this.nBatches = parsedJson[0];
     this.startMachineID = parsedJson[1];
     this.machines = parsedJson[2];
+    this.factoryWorkingTime = 0;
 
     this.createBatches();
 
     while(Object.values(this.batches).length > 0){
       let batchToDelete = -1;
+      let maxTimePerBatch = 0;
       this.iterations++;
+
       for (const [batchID, batch] of Object.entries(this.batches)){
 
         let batchMachine = this.machines[batch.currentMachineID];
@@ -31,6 +35,10 @@ export default class Simulation {
         }
 
         let newBatch = batchMachine.treatBatch(batch);
+
+        if(batchMachine.getTimePerBatch() > maxTimePerBatch){
+          maxTimePerBatch = batchMachine.getTimePerBatch();
+        }
 
         //end of production line
         if(newBatch.getCurrentMachineID() === ""){
@@ -43,6 +51,8 @@ export default class Simulation {
 
       }
 
+      this.factoryWorkingTime += maxTimePerBatch;
+
       if(batchToDelete != -1){
         delete this.batches[batchToDelete]
 
@@ -54,7 +64,7 @@ export default class Simulation {
       }
 
     }
-
+    console.log(this.factoryWorkingTime);
     //TODO: Transform Machine Representation into JSON
     return (
       "Machine final state after cutting " +
