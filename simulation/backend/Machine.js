@@ -21,6 +21,9 @@ export default class Machine {
     this.output = out
   }
 
+  setTimePerBatch(time){
+    this.timePerBatch =time;
+  }
   setNextMachineID(id) {
     this.nextMachineID = id
   }

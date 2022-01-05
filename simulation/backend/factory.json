@@ -1,4 +1,6 @@
 {
+  "batches": 10,
+  "startMachineID": 1,
   "machines": [ 
     {
       "id": "machine1",            
@@ -6,6 +8,7 @@
       "defectProbability": 2,      
       "input": "material1",
       "output": "material2",
+      "timePerBatch": 1000,
       "nextMachineID": "machine2",  
       "sensors": [                 
         { 
