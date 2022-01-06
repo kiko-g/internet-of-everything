@@ -28,7 +28,6 @@ export default class Simulation {
       this.simulateSensorsBehaviour(simulationDuration)
     }
 
-    console.log(this.machines)
     //TODO: Transform Machine Representation into JSON
     return (
       "Machine final state after cutting " +
@@ -55,7 +54,7 @@ export default class Simulation {
 
   simulateFactoryCycle() {
     let maxTimePerBatch = 0
-    let batchToDelete = -1
+    let batchesToDelete = []
 
     for (const [batchID, batch] of Object.entries(this.batches)) {
       let batchMachine = this.machines[batch.currentMachineID]
@@ -71,16 +70,19 @@ export default class Simulation {
       }
 
       //end of production line
-      if (newBatch.getCurrentMachineID() === "") {
+      if (newBatch.getCurrentMachineID() === "" || newBatch.hasDefect) {
         this.completedBatches.push(newBatch)
-        batchToDelete = batchID
+        batchesToDelete.push(batchID)
+
       } else {
         this.batches[batchID] = newBatch
       }
     }
 
-    if (batchToDelete != -1) {
-      delete this.batches[batchToDelete]
+    if (batchesToDelete.length != 0) {
+      for(let i = 0; i < batchesToDelete.length; i++){
+        delete this.batches[batchesToDelete[i]]
+      }
     }
 
     return maxTimePerBatch

@@ -60,8 +60,10 @@ export default class Machine {
   treatBatch(batch){
     let rand = Math.floor(Math.random() * 101);
     this.totalWorkingTime += this.timePerBatch;
+
     if(rand < this.defectProbability){
       batch.setHasDefect(true);
+      batch.setMachineDefect(this.id)
     }
 
     batch.setMaterialName(this.output);
@@ -72,10 +74,8 @@ export default class Machine {
     return batch;
   }
 
-  //TODO: Add more information about the machine
   getRepresentation() {
 
-   
     let sensorsDict=[]
     for (let i = 0; i < this.sensors.length; i++) {
       let attr={}

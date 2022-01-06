@@ -32,7 +32,6 @@ export default class Sensor {
 
     this.timeAfterLastUpdate += duration
     if (this.timeAfterLastUpdate < this.updateInterval) {
-      console.log("NOT UPDATING")
       return
     }
 

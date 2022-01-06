@@ -7,6 +7,7 @@ export default class Batch {
 
         this.currentMachineID=currentMachineID;
         this.hasDefect=false;
+        this.machineDefect = "";
         this.materialName='' //TODO: add material
         
     }
@@ -23,6 +24,10 @@ export default class Batch {
         this.currentMachineID = machineID;
     }
 
+    setMachineDefect(name){
+        this.machineDefect = name;
+    }
+
     setHasDefect(defect){
         this.hasDefect = defect;
     }
@@ -31,7 +36,11 @@ export default class Batch {
         this.materialName = name;
     }
 
-    
+    getRepresentation() {
+
+        let representation={"id":this.id,"hasDefect": this.hasDefect, "materialName":this.materialName}
+        return JSON.stringify(representation)
+      }
 
 
 }
