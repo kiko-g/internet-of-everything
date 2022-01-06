@@ -1,0 +1,37 @@
+package Sensors;
+
+import org.json.JSONObject;
+
+public class ProductionSpeedSensor extends Sensor {
+    Type type;
+    Double currentSpeed;
+
+    public ProductionSpeedSensor(String name, String machineId, double averageSpeed, double speedStandardDeviation, int updateInterval) {
+        super(name, machineId, averageSpeed, speedStandardDeviation, updateInterval);
+        this.type = Type.PRODUCTION_SPEED;
+        this.currentSpeed = null; //antennas/min
+    }
+
+    public JSONObject readData() {
+        this.setNewData(false);
+
+        JSONObject values = new JSONObject();
+        if (!this.isOn || this.currentSpeed == null) {
+            values.put("productionSpeed", "null");
+        }
+        else {
+            values.put("productionSpeed", this.currentSpeed);
+        }
+
+        JSONObject obj = createBaseJSON();
+        obj.put("values", values);
+        return obj;
+    }
+
+    @Override
+    public void generateData() {
+        if(Math.random() * 100 < ERROR_PROBABILITY)
+            this.currentSpeed = null;
+        else this.currentSpeed = this.generateRandomDataNormalDistribution();
+    }
+}
