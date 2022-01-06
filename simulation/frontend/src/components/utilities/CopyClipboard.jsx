@@ -19,7 +19,7 @@ export default function CopyClipboard({ json = {} }) {
     <button
       onClick={handleCopied}
       className={`
-        absolute right-4 top-4 z-50 text-white p-1 rounded-full
+        absolute right-4 top-4 z-10 text-white p-1 rounded-full
         bg-gradient-to-br hover:opacity-80 duration-200
         ${copied ? `from-rose-300 via-rose-500 to-rose-800` : `from-teal-300 via-blue-300 to-violet-300`}`}
     >

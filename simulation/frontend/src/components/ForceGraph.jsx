@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 import Graph from "react-graph-vis"
 import { colors } from "../utils"
+import Machine from "./Machine"
+
+let id = 0
 
 export default class ForceGraph extends Component {
   constructor(props) {
@@ -13,6 +16,7 @@ export default class ForceGraph extends Component {
       return this.colors[Math.floor(Math.random() * this.colors.length)]
     }
     this.state = {
+      open: false,
       options: {
         clickToUse: false,
         layout: {
@@ -37,7 +41,7 @@ export default class ForceGraph extends Component {
         },
         physics: {
           enabled: true,
-          orceAtlas2Based: {
+          forceAtlas2Based: {
             gravitationalConstant: -26,
             centralGravity: 0.005,
             springLength: 230,
@@ -60,7 +64,7 @@ export default class ForceGraph extends Component {
           smooth: {
             enabled: true,
             type: "dynamic",
-            roundness: true,
+            roundness: 20,
           },
           arrows: {
             from: {
@@ -82,7 +86,6 @@ export default class ForceGraph extends Component {
           shape: "box",
           size: 25,
           scaling: {
-            type: "incomingAndOutgoingConnections",
             min: 10,
             max: 60,
             label: {
@@ -98,6 +101,14 @@ export default class ForceGraph extends Component {
         edges: this.createEdges(),
       },
     }
+  }
+
+  componentDidMount() {
+    document.addEventListener("click", (e) => {
+      this.setState({
+        open: !this.state.open,
+      })
+    })
   }
 
   createNodes() {
@@ -139,8 +150,26 @@ export default class ForceGraph extends Component {
   render() {
     return (
       <div id="graph" className="relative group w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
-        <Graph graph={this.state.graph} options={this.state.options} events={this.state.events} />
-        <div className="hidden absolute top-4 right-4">Selected machine drawer content</div>
+        <Graph
+          graph={this.state.graph}
+          options={this.state.options}
+          events={this.state.events}
+          getNetwork={(network) => {
+            // console.log(network)
+            network.on("click", function (properties) {
+              if (properties.nodes[0] !== undefined) {
+                document.getElementById("drawer").classList.remove("hidden")
+                id = properties.nodes[0]
+              } else {
+                let drawer = document.getElementById("drawer")
+                if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
+              }
+            })
+          }}
+        />
+        <div id="drawer" className={`hidden absolute bottom-4 right-4 min-w-1/4`}>
+          <Machine data={this.factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
+        </div>
       </div>
     )
   }
