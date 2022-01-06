@@ -24,11 +24,9 @@ public class Machine extends MQTTClient implements Runnable {
         this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
         this.publishTopic = "edge/" + id;
 
-        String config_topic = "configTopic";
         try {
             byte[] config = this.getConfigContent();
-            this.subscribeTopic(config_topic);
-            this.publishMessage(config_topic, config);
+            this.publishMessage("startup", config);
         } catch (IOException e) {
             System.err.println("Machine Configuration Not Found.");
             System.exit(-1);
@@ -66,6 +64,13 @@ public class Machine extends MQTTClient implements Runnable {
                 }
             }
         }
+    }
+
+    private byte[] getConfigContent() throws IOException{
+        String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
+        File file = new File(file_name);     
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        return bytes;
     }
 
     private ArrayList<Sensor> getSensors() {
@@ -142,10 +147,5 @@ public class Machine extends MQTTClient implements Runnable {
         //TODO: handle auth packet arrived
     }
 
-    private byte[] getConfigContent() throws IOException{
-        String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
-        File file = new File(file_name);     
-        byte[] bytes = Files.readAllBytes(file.toPath());
-        return bytes;
-    }
+
 }

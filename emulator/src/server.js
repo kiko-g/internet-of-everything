@@ -12,19 +12,17 @@ const client  = mqtt.connect('mqtt://localhost', MQTT_OPTIONS);
 const floor = new FactoryFloor(FACTORY_FLOOR_WIDTH, FACTORY_FLOOR_HEIGHT);
 
 client.on('connect', function () {
-  client.subscribe('presence', function (err) {
-    if (!err) {
-      client.publish('presence', 'Hello mqtt');
+  client.subscribe('startup', function(err){
+    if (err) {
+      console.error('Failed to subscribe to startup.');
     }
   });
-
-  client.subscribe('configTopic', function(err){});
 });
 
 client.on('message', function (topic, message) {
   // message is Buffer
   switch(topic) {
-    case "configTopic":
+    case 'startup':
       const json_config = JSON.parse(message.toString());
       console.log(json_config);
       break;
