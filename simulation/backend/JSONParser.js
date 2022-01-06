@@ -6,8 +6,11 @@ export default class JSONParser {
 
   parse(jsonFile) {
     let json = fs.readFileSync(jsonFile)
-    const machineDictionary = JSON.parse(json).machines
-    let machines = []
+    let parsedJson = JSON.parse(json);
+    let batches = parsedJson.batches;
+    let startMachineID = parsedJson.startMachineID;
+    const machineDictionary = parsedJson.machines
+    let machines = {}
 
     for (let i = 0; i < Object.keys(machineDictionary).length; i++) {
       let machineInfo = machineDictionary[i]
@@ -17,6 +20,7 @@ export default class JSONParser {
       machine.setDefectProbability(machineInfo.defectProbability)
       machine.setInput(machineInfo.input)
       machine.setOutput(machineInfo.output)
+      machine.setTimePerBatch(machineInfo.timePerBatch);
       machine.setNextMachineID(machineInfo.nextMachineID)
 
       for (const sensorInfo of Object.values(machineInfo.sensors)) {
@@ -24,9 +28,10 @@ export default class JSONParser {
           new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.attributes)
         )
       }
-      machines.push(machine)
+      machines[machine.id] = machine;
     }
 
-    return machines
+
+    return [batches, startMachineID, machines]
   }
 }
