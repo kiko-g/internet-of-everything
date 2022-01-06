@@ -16,11 +16,20 @@ client.on('connect', function () {
     if (!err) {
       client.publish('presence', 'Hello mqtt');
     }
-  })
+  });
+
+  client.subscribe('configTopic', function(err){});
 });
 
 client.on('message', function (topic, message) {
   // message is Buffer
-  console.log(message.toString());
-  client.end();
+  switch(topic) {
+    case "configTopic":
+      const json_config = JSON.parse(message.toString());
+      console.log(json_config);
+      break;
+    default:
+      console.log(message.toString());
+  }
+  // client.end();
 });

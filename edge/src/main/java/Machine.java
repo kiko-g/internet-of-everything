@@ -5,6 +5,9 @@ import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 import org.json.JSONObject;
+import java.io.IOException;
+import java.io.File;
+import java.nio.file.Files;
 
 import java.util.ArrayList;
 
@@ -20,11 +23,23 @@ public class Machine extends MQTTClient implements Runnable {
         this.subscribeTopic("testTopic");
         this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
         this.publishTopic = "edge/" + id;
+
+        String config_topic = "configTopic";
+        try {
+            byte[] config = this.getConfigContent();
+            this.subscribeTopic(config_topic);
+            this.publishMessage(config_topic, config);
+        } catch (IOException e) {
+            System.err.println("Machine Configuration Not Found.");
+            System.exit(-1);
+        }
+
         this.sensors = getSensors(); // only to get some sensors while there are no configuration files
     }
 
     public void start() {
         System.out.println("Machine " + this.name + " started working.");
+
         if(this.thread == null) {
             this.thread = new Thread (this, this.name);
             this.thread.start(); //this calls run() in a new Thread
@@ -125,5 +140,12 @@ public class Machine extends MQTTClient implements Runnable {
         System.out.println("--");
 
         //TODO: handle auth packet arrived
+    }
+
+    private byte[] getConfigContent() throws IOException{
+        String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
+        File file = new File(file_name);     
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        return bytes;
     }
 }
