@@ -20,7 +20,7 @@ export default class Simulation {
     this.factoryWorkingTime = 0;
 
     this.createBatches();
-
+    console.log(this.machines[0].getRepresentation);
     while(Object.values(this.batches).length > 0){
       let batchToDelete = -1;
       let maxTimePerBatch = 0;
