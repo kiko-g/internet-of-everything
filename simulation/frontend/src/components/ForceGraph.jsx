@@ -62,7 +62,7 @@ export default class ForceGraph extends Component {
           smooth: {
             enabled: true,
             type: "dynamic",
-            roundness: 20,
+            roundness: 2000,
           },
           arrows: {
             from: {
@@ -142,7 +142,7 @@ export default class ForceGraph extends Component {
   render() {
     let id = 0
     return (
-      <div id="graph" className="relative group w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
+      <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
         {this.state.graph.nodes.length !== 0 ? (
           <>
             <Graph

@@ -20,15 +20,15 @@ export default function Machine({ data, classnames, isDetailed }) {
   return (
     <div
       key={`machine-${data.id}`}
-      className={`${classnames} hero-alt bg-opacity-80 dark:bg-opacity-100 text-white p-3 border-0 rounded-xl shadow-md`}
+      className={`relative group bg-gray-50 border-2 dark:bg-slate-600 text-slate-700 dark:text-white p-3 rounded-xl shadow-lg dark:shadow-slate-400/50 ${classnames} `}
     >
       {/* Headline */}
       <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
-        <h5 className="mt-0 uppercase tracking-tight text-zinc-50 text-lg">{data.id}</h5>
+        <h5 className="mt-0 uppercase tracking-wide text-lg font-mono">{data.id}</h5>
         <span className="flex items-start text-sm">
           {resolveStatus(status)}
           {status ? (
-            <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-teal-200 dark:text-teal-400" />
+            <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-teal-400 dark:text-teal-400" />
           ) : (
             <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-rose-400 dark:text-rose-500" />
           )}

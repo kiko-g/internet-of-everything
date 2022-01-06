@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
@@ -8,6 +8,7 @@ import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import { factories } from "../data"
 import PhaseSwitch from "./utilities/PhaseSwitch"
+import { TrashIcon } from "@heroicons/react/outline"
 
 export default function Representation() {
   const factoryInitial = factories[0]
@@ -22,7 +23,7 @@ export default function Representation() {
     else setDisplayFactory(factoryInitial)
   }, [factory, factoryInitial, phase])
 
-  const Tab = (props) => <div>{props.children}</div>
+  const Tab = (props) => <>{props.children}</>
 
   return (
     <Tabs>
@@ -47,8 +48,22 @@ export default function Representation() {
       {/* Inspect view with search */}
       <Tab label="Inspect">
         <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="col-span-1 lg:col-span-2 min-w-full">
-            <InputBox label="Search" types={["Machine ID"]} placeholder="Search" state={[searchValue, setSearchValue]} />
+          <div className="flex items-center justify-between space-x-2 col-span-1 lg:col-span-2 min-w-full">
+            <InputBox
+              label=""
+              classnames="flex-1"
+              types={["Machine ID"]}
+              placeholder={`What are you searching for?`}
+              state={[searchValue, setSearchValue]}
+            />
+            <button
+              type="button"
+              title="Clear input"
+              onClick={() => setSearchValue("")}
+              className="h-full bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 hover:opacity-75 p-3 rounded text-white font-semibold duration-200"
+            >
+              <TrashIcon className="h-6 w-6" />
+            </button>
           </div>
           {displayFactory
             .filter((machine, index) => {

@@ -18,7 +18,7 @@ export default function PresetsModal() {
       <button
         type="button"
         onClick={openModal}
-        className="ml-1 font-sans text-sm tracking-normal w-full text-slate-600 rounded-b-xl opacity-50 hover:opacity-100 duration-200"
+        className="ml-1 font-medium font-sans text-sm tracking-normal w-full text-slate-600 rounded-b-xl opacity-75 hover:opacity-100 duration-200"
       >
         Need help?
       </button>
