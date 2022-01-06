@@ -46,6 +46,18 @@ public class MeasureState {
         return this.expectedValues;
     }
 
+    public Queue<Float> getLastMeasures() {
+        return lastMeasures;
+    }
+
+    public Float getMaxProximity() {
+        return this.expectedValues.max - this.mostRecentMeasure;
+    }
+
+    public Float getMinProximity() {
+        return this.mostRecentMeasure - this.expectedValues.min;
+    }
+
     private void updateUnallowedMeasures(float measure){
         this.nUnallowedMeasures += this.isMeasureAcceptable(measure) ? 1: 0; 
     }
