@@ -31,7 +31,7 @@ export default class Batch {
         this.materialName = name;
     }
 
-    update() {
-        
-    }
+    
+
+
 }

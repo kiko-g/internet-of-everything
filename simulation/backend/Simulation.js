@@ -93,4 +93,12 @@ export default class Simulation {
       this.batches[batch.getID()] = batch
     }
   }
+
+  createMachinesRepresentation(){
+    representation={batches: this.nBatches, startMachineID: this.startMachineID, totalFactoryRuntime: this.factoryWorkingTime}
+    for (let i = 0; i < array.length; i++) {
+      const element = array[i];
+      
+    }
+  }
 }
