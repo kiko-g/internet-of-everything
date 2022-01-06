@@ -16,6 +16,8 @@ public class TemperatureSensor extends Sensor {
         if(Math.random() * 100 < ERROR_PROBABILITY)
             this.currentTemperature = null;
         else this.currentTemperature = this.generateRandomDataNormalDistribution();
+
+        this.setNewData(true);
     }
 
     public JSONObject readData() {
