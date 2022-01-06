@@ -20,7 +20,7 @@ export default function Machine({ data, classnames, isDetailed }) {
   return (
     <div
       key={`machine-${data.id}`}
-      className={`${classnames} bg-slate-500 dark:bg-slate-700 text-white p-3 border-0 rounded-xl shadow-md`}
+      className={`${classnames} hero-alt bg-opacity-80 dark:bg-opacity-100 text-white p-3 border-0 rounded-xl shadow-md`}
     >
       {/* Headline */}
       <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
@@ -28,9 +28,9 @@ export default function Machine({ data, classnames, isDetailed }) {
         <span className="flex items-start text-sm">
           {resolveStatus(status)}
           {status ? (
-            <StatusOnlineIcon className="h-6 w-6 ml-1 py-0.5 text-teal-200 dark:text-teal-400" />
+            <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-teal-200 dark:text-teal-400" />
           ) : (
-            <StatusOnlineIcon className="h-6 w-6 ml-1 py-0.5 text-rose-400 dark:text-rose-600" />
+            <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-rose-400 dark:text-rose-500" />
           )}
         </span>
       </div>
@@ -39,10 +39,10 @@ export default function Machine({ data, classnames, isDetailed }) {
       <ul>
         {Object.keys(info).map((key, index) => (
           <li className="flex justify-between mt-1" key={`info-machine-${data.id}-${key}`}>
-            <span className="uppercase bg-blue-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-400 dark:text-sky-50">
+            <span className="uppercase bg-opacity-60 bg-blue-400 text-sky-50 dark:bg-opacity-80 dark:bg-blue-400 dark:text-sky-50 text-xs font-semibold px-2 py-0.5 rounded">
               {key.slice(0, 7)}
             </span>
-            <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+            <span className="lowercase bg-gray-100 text-gray-700 dark:bg-gray-100 dark:text-gray-700 text-right text-xs font-semibold px-2 py-0.5 rounded">
               {info[key]}
             </span>
           </li>
@@ -53,7 +53,7 @@ export default function Machine({ data, classnames, isDetailed }) {
       <ul>
         {Object.keys(links).map((link, index) => (
           <li className="flex items-center justify-between mt-1" key={`${link}-machine-${data.id}`}>
-            <span className="uppercase bg-teal-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-teal-500 dark:text-white">
+            <span className="uppercase bg-opacity-60 bg-teal-400 text-teal-50 dark:bg-opacity-80 dark:bg-teal-400 dark:text-sky-50 text-xs font-semibold px-2 py-0.5 rounded">
               {link.slice(0, 6)}
             </span>
             {links[link] === "null" ? (
@@ -78,8 +78,8 @@ export default function Machine({ data, classnames, isDetailed }) {
                 .filter((k, i) => k === "type")
                 .map((k, i) => (
                   <li className="flex justify-between my-1" key={`sensor-${data.id}-${index}-${k}`}>
-                    <span className="uppercase bg-slate-400 text-white text-xs font-semibold px-2 py-0.5 rounded dark:bg-slate-400 dark:text-gray-50">
-                      {`sens-type`}
+                    <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-semibold px-2 py-0.5 rounded">
+                      {`type`}
                     </span>
                     <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                       {`${sensors[key][k]}`}

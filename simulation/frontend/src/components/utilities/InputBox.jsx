@@ -1,6 +1,7 @@
 import React from "react"
 
-export default function InputBox({ label = "Label", types = [], classnames = "", placeholder = "..." }) {
+export default function InputBox({ state, label = "Label", types = [], classnames = "", placeholder = "..." }) {
+  const [value, setValue] = state
   return (
     <div className={`${classnames}`}>
       <label htmlFor="price" className="block text-lg font-bold text-slate-700">
@@ -13,6 +14,8 @@ export default function InputBox({ label = "Label", types = [], classnames = "",
           id="price"
           className="bg-zinc-100 focus:bg-white focus:ring-sky-500 focus:border-sky-500 block w-full sm:text-sm text-gray-700 border-gray-300 rounded-xl"
           placeholder={placeholder}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
         />
         {types.length !== 0 ? (
           <div className="absolute inset-y-0 right-0 flex items-center">

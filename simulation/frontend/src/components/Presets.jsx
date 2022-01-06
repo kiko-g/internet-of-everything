@@ -3,6 +3,7 @@ import { useState } from "react"
 import { RadioGroup } from "@headlessui/react"
 import { PlusCircleIcon } from "@heroicons/react/solid"
 import { factories } from "../data"
+import PresetsModal from "./utilities/PresetsModal"
 
 export default function Presets() {
   const [selected, setSelected] = useState(factories[0])
@@ -60,7 +61,8 @@ export default function Presets() {
           </div>
         </RadioGroup>
       </div>
-      <div className="mt-2 flex items-end justify-end">
+      <div className="mt-2 flex items-center justify-between">
+        <PresetsModal />
         <button
           type="button"
           className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"

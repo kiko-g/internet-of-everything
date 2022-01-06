@@ -9,6 +9,7 @@ import ForceGraph from "./ForceGraph"
 import { factories } from "../data"
 
 export default function Representation() {
+  const [value, setValue] = React.useState("")
   const [detailed, setDetailed] = React.useState(false)
   const factoryInitial = factories[0]
   const factorySimulation = []
@@ -20,10 +21,11 @@ export default function Representation() {
       <Tab label="Graph">
         <ForceGraph factory={factoryInitial} />
       </Tab>
+
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="col-span-4 min-w-full">
+          <div className="col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
           </div>
           {factoryInitial.map((item, index) => (
@@ -31,15 +33,19 @@ export default function Representation() {
           ))}
         </div>
       </Tab>
+
       {/* Inspect view with search */}
       <Tab label="Inspect">
-        <div className="grid w-full grid-cols-1 gap-4">
-          <InputBox label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" />
+        <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="col-span-1 lg:col-span-2 min-w-full">
+            <InputBox label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" state={[value, setValue]} />
+          </div>
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDtailed={true} />
+            <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDetailed={true} />
           ))}
         </div>
       </Tab>
+
       {/* JSON Representations */}
       <Tab label="JSON">
         <div className="grid w-full grid-cols-1 gap-4">
