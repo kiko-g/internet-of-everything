@@ -26,12 +26,16 @@ def on_message(client, userdata, msg):
         msg_dict = json.loads(msg_str)
     except ValueError as e:
         return
+
     machine_id = msg_dict['machineID']
-    if machine_id in machines:
-        machines[machine_id]['readingTime'] = msg_dict['readingTime']
-        machines[machine_id]['values'].update(msg_dict['values'])
-    else:
-        machines[machine_id] = msg_dict
+    if machine_id not in machines:
+        machines[machine_id] = {}
+        machines[machine_id]['sensorID'] = {}
+
+    machines[machine_id]['machineID'] = str(msg_dict['machineID'])
+    machines[machine_id]['readingTime'] = str(msg_dict['readingTime'])
+    values = machines[machine_id]['sensorID']
+    values[msg_dict['sensorID']] = dict(msg_dict['values'])
 
 
 class MQTTHandler:
