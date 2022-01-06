@@ -3,8 +3,6 @@ import Graph from "react-graph-vis"
 import { colors } from "../utils"
 import Machine from "./Machine"
 
-let id = 0
-
 export default class ForceGraph extends Component {
   constructor(props) {
     super(props)
@@ -103,15 +101,8 @@ export default class ForceGraph extends Component {
     }
   }
 
-  componentDidMount() {
-    document.addEventListener("click", (e) => {
-      this.setState({
-        open: !this.state.open,
-      })
-    })
-  }
-
   createNodes() {
+    if (this.factory.length === 0) return []
     let order = 0
     let startMachine
     this.factory.forEach((machine, index) => {
@@ -144,32 +135,42 @@ export default class ForceGraph extends Component {
   }
 
   createEdges() {
+    if (this.factory.length === 0) return []
     return this.edges
   }
 
   render() {
+    let id = 0
     return (
       <div id="graph" className="relative group w-full bg-slate-300 rounded-md" style={{ height: "65vh" }}>
-        <Graph
-          graph={this.state.graph}
-          options={this.state.options}
-          events={this.state.events}
-          getNetwork={(network) => {
-            // console.log(network)
-            network.on("click", function (properties) {
-              if (properties.nodes[0] !== undefined) {
-                document.getElementById("drawer").classList.remove("hidden")
-                id = properties.nodes[0]
-              } else {
-                let drawer = document.getElementById("drawer")
-                if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
-              }
-            })
-          }}
-        />
-        <div id="drawer" className={`hidden absolute bottom-4 right-4 min-w-1/4`}>
-          <Machine data={this.factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
-        </div>
+        {this.state.graph.nodes.length !== 0 ? (
+          <>
+            <Graph
+              graph={this.state.graph}
+              options={this.state.options}
+              events={this.state.events}
+              getNetwork={(network) => {
+                // console.log(network)
+                network.on("click", function (properties) {
+                  if (properties.nodes[0] !== undefined) {
+                    document.getElementById("drawer").classList.remove("hidden")
+                    id = properties.nodes[0]
+                  } else {
+                    let drawer = document.getElementById("drawer")
+                    if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
+                  }
+                })
+              }}
+            />
+            <div id="drawer" className={`hidden absolute top-4 right-4 min-w-1/4 opacity-80`}>
+              <Machine data={this.factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
+            </div>
+          </>
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <p className="">Graph is empty!</p>
+          </div>
+        )}
       </div>
     )
   }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useMemo } from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
@@ -7,29 +7,39 @@ import DetailedSwitch from "./utilities/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import { factories } from "../data"
+import PhaseSwitch from "./utilities/PhaseSwitch"
 
 export default function Representation() {
-  const [value, setValue] = React.useState("")
-  const [detailed, setDetailed] = React.useState(false)
   const factoryInitial = factories[0]
-  const factorySimulation = []
+  const [factory, setFactory] = React.useState([])
+  const [displayFactory, setDisplayFactory] = React.useState(factoryInitial)
+  const [phase, setPhase] = React.useState(false) //false is initial, true is final
+  const [detailed, setDetailed] = React.useState(false)
+  const [searchValue, setSearchValue] = React.useState("")
+
+  useMemo(() => {
+    if (phase) setDisplayFactory(factory)
+    else setDisplayFactory(factoryInitial)
+  }, [factory, factoryInitial, phase])
+
   const Tab = (props) => <div>{props.children}</div>
 
   return (
     <Tabs>
       {/* Graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={factoryInitial} />
+        <ForceGraph factory={displayFactory} />
       </Tab>
 
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
+          <div className="flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
+            <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
           </div>
-          {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
+          {displayFactory.map((machine, index) => (
+            <Machine data={machine} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
           ))}
         </div>
       </Tab>
@@ -38,11 +48,20 @@ export default function Representation() {
       <Tab label="Inspect">
         <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="col-span-1 lg:col-span-2 min-w-full">
-            <InputBox label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" state={[value, setValue]} />
+            <InputBox label="Search" types={["Machine ID"]} placeholder="Search" state={[searchValue, setSearchValue]} />
           </div>
-          {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDetailed={true} />
-          ))}
+          {displayFactory
+            .filter((machine, index) => {
+              if (searchValue === "") return true
+              else {
+                let a = searchValue.toUpperCase()
+                let b = machine.id.toUpperCase()
+                return b.includes(a)
+              }
+            })
+            .map((machine, index) => {
+              return <Machine data={machine} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDetailed={true} />
+            })}
         </div>
       </Tab>
 
@@ -83,7 +102,7 @@ export default function Representation() {
             </div>
             {/* Final JSON */}
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
-              <CopyClipboard json={factorySimulation} />
+              <CopyClipboard json={factory} />
               <ReactJson
                 indentWidth={4}
                 iconStyle="triangle"
@@ -92,7 +111,7 @@ export default function Representation() {
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
-                src={factorySimulation}
+                src={factory}
                 theme="threezerotwofour"
                 style={{
                   overflowY: "auto",
