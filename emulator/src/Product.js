@@ -1,64 +1,27 @@
-const State = {
-	METAL_BAR: "METAL_BAR",
-	METAL_STRAW: "METAL_STRAW",
-	ANTENA: "ANTENA",
-	GLASS: "GLASS",
-	SCREEN: "SCREEN"
-}
-
-function nextState(state){
-	switch(state){
-		case State.METAL_BAR:
-			return State.METAL_STRAW;
-		
-		case State.METAL_STRAW:
-			return State.ANTENA;
-
-		case State.GLASS:
-			return State.SCREEN;
-		
-		default:
-			return "FINAL_STATE";
-	}		
-}
-
-class Size{
-	constructor(width, height, depth){
-		this.width = width;
-		this.height = height; 
-		this.depth = depth;
-	}
-}
-
 class Product{
 
-	constructor(id, machineID, state, fault, weight, size){
+	constructor(id, machineID, state, fault, weight){
 		this.id = id;
-		this.position = machineID; //MachineID
+		this.location = machineID; //MachineID
 		this.state = state;
 		this.weight = weight;
 		this.fault = fault;
-		this.size = size;
 	}
 
 	getState(){
 		return this.state;
 	}
 
-	updateState(to){
-		if(nextState(this.state) == to){
-			this.state = to;
-			return true;
-		}
-		return false;
+	setState(to){
+		this.state = to;
 	}
 
-	getPosition(){
-		return this.position;
+	getLocation(){
+		return this.location;
 	}
 
-	updatePosition(position){
-		this.position = position;
+	updateLocation(location){
+		this.location = location;
 	}
 
 	hasFault(){
@@ -82,5 +45,4 @@ class Product{
 	}
 }
 
-export const ProductState = State;
-export const Product = Product;
+export default Product;
