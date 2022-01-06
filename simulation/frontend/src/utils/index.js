@@ -1,4 +1,4 @@
-export const getStatus = (status) => {
+export const resolveStatus = (status) => {
   switch (status) {
     case 0:
       return "offline"

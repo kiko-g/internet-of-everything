@@ -1,11 +1,15 @@
 import React from "react"
-import { getStatus } from "../utils"
+import { resolveStatus } from "../utils"
+import { StatusOnlineIcon } from "@heroicons/react/outline"
 
 export default function Machine({ data, classnames, isDetailed }) {
+  const status = data.status
   const info = {
-    status: getStatus(data.status),
     input: data.input,
     output: data.output,
+    defect: data.defectProbability + "%",
+    timeBatch: data.timePerBatch + "ms",
+    sensors: data.sensors.length,
   }
   const links = {
     prev: data.prevMachineID,
@@ -16,24 +20,29 @@ export default function Machine({ data, classnames, isDetailed }) {
   return (
     <div
       key={`machine-${data.id}`}
-      className={`${classnames} bg-slate-500 dark:bg-slate-600 text-white p-3 border-0 rounded-xl shadow-md`}
+      className={`${classnames} bg-slate-500 dark:bg-slate-700 text-white p-3 border-0 rounded-xl shadow-md`}
     >
       {/* Headline */}
-      <div className="flex items-center justify-between space-x-3">
-        <h5 className="text-zinc-50 text-lg tracking-tight mb-2">Machine #{data.id}</h5>
-        <div className="flex flex-col text-right">
-          <span className="text-xs">{data.defectProbability}%</span>
-        </div>
+      <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
+        <h5 className="mt-0 uppercase tracking-tight text-zinc-50 text-lg">{data.id}</h5>
+        <span className="flex items-start text-sm">
+          {resolveStatus(status)}
+          {status ? (
+            <StatusOnlineIcon className="h-6 w-6 ml-1 py-0.5 text-teal-200 dark:text-teal-400" />
+          ) : (
+            <StatusOnlineIcon className="h-6 w-6 ml-1 py-0.5 text-rose-400 dark:text-rose-600" />
+          )}
+        </span>
       </div>
 
       {/* Info */}
       <ul>
         {Object.keys(info).map((key, index) => (
-          <li className="flex justify-between my-1" key={`info-machine-${data.id}-${key}`}>
-            <span className="bg-blue-100 text-sky-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-100 dark:text-sky-800">
-              {key.toUpperCase().slice(0, 6)}
+          <li className="flex justify-between mt-1" key={`info-machine-${data.id}-${key}`}>
+            <span className="uppercase bg-blue-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-400 dark:text-sky-50">
+              {key.slice(0, 7)}
             </span>
-            <span className="text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+            <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
               {info[key]}
             </span>
           </li>
@@ -43,16 +52,16 @@ export default function Machine({ data, classnames, isDetailed }) {
       {/* Links */}
       <ul>
         {Object.keys(links).map((link, index) => (
-          <li className="flex items-center justify-between my-1" key={`${link}-machine-${data.id}`}>
-            <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-50 dark:text-rose-800">
-              {link.toUpperCase().slice(0, 6)}
+          <li className="flex items-center justify-between mt-1" key={`${link}-machine-${data.id}`}>
+            <span className="uppercase bg-teal-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-teal-500 dark:text-white">
+              {link.slice(0, 6)}
             </span>
             {links[link] === "null" ? (
-              <span className="text-right bg-rose-600 text-gray-50 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-600 dark:text-gray-50">
+              <span className="lowercase text-right bg-rose-600 text-gray-50 text-xs font-semibold px-2 py-0.5 rounded dark:bg-rose-700 dark:text-gray-50">
                 <span className="font-bold">none</span>
               </span>
             ) : (
-              <span className="text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+              <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                 <span>{links[link]}</span>
               </span>
             )}
@@ -69,11 +78,11 @@ export default function Machine({ data, classnames, isDetailed }) {
                 .filter((k, i) => k === "type")
                 .map((k, i) => (
                   <li className="flex justify-between my-1" key={`sensor-${data.id}-${index}-${k}`}>
-                    <span className="bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-teal-50 dark:text-teal-800">
-                      {`sensor|${k}`.toUpperCase().slice(0, 12)}
+                    <span className="uppercase bg-slate-400 text-white text-xs font-semibold px-2 py-0.5 rounded dark:bg-slate-400 dark:text-gray-50">
+                      {`sens-type`}
                     </span>
-                    <span className="text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-                      {sensors[key][k].toLowerCase().slice(0, 12)}
+                    <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                      {`${sensors[key][k]}`}
                     </span>
                   </li>
                 ))}

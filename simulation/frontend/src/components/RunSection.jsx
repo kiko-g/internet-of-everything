@@ -28,9 +28,14 @@ export default function RunSection() {
   }
 
   return (
-    <div className="relative group bg-slate-100 w-full p-4 rounded-xl space-y-3">
-      <h5 className="text-zinc-700 font-bold text-2xl tracking-tight">Run Section</h5>
-      <span className="text-sm">Here the user should control the simulaion.</span>
+    <div className="relative group bg-slate-100 w-full p-4 rounded-xl space-y-4">
+      <div>
+        <h5 className="text-slate-700 font-bold text-2xl">Run Section</h5>
+        <p className="font-normal text-gray-500 text-sm">
+          The button below will trigger a simulation that will generate a final factory depending on the initial state represented
+          in a JSON file. In the section below it you can control the initial state of the factory.
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-1 gap-2">
         <button
