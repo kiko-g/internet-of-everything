@@ -1,11 +1,12 @@
 import Batch from "./Batch.js"
 
 export default class Machine {
-  //TODO: Add more arguments based on the factory.json
+
   constructor(machineID) {
     this.id = machineID
     this.sensors = []
     this.isOccupied = false;
+    this.workingTime = 0;
   }
 
   setStatus(status) {
@@ -44,13 +45,21 @@ export default class Machine {
     return this.timePerBatch;
   }
 
+  getSensors(){
+    return this.sensors;
+  }
+
+  getStatus(){
+    return this.status;
+  }
+
   update() {
     console.log("updating")
   }
 
   treatBatch(batch){
     let rand = Math.floor(Math.random() * 101);
-
+    this.workingTime += this.timePerBatch;
     if(rand < this.defectProbability){
       batch.setHasDefect(true);
     }
