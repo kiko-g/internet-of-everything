@@ -91,6 +91,6 @@ export default class Machine {
       sensorsDict.push(sensor);
     }
     let representation={"id":this.id,"status": this.status, "totalWorkingTime":this.totalWorkingTime, "sensors":sensorsDict}
-    return JSON.stringify(representation)
+    return representation
   }
 }

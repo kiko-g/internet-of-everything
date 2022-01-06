@@ -28,13 +28,7 @@ export default class Simulation {
       this.simulateSensorsBehaviour(simulationDuration)
     }
 
-    //TODO: Transform Machine Representation into JSON
-    return (
-      "Machine final state after cutting " +
-      this.piecesQty +
-      " pieces:\n" +
-      this.machines[0].getRepresentation()
-    )
+    return this.createFactoryRepresentation();
   }
 
   simulateSensorsBehaviour(duration) {
@@ -96,11 +90,20 @@ export default class Simulation {
     }
   }
 
-  createMachinesRepresentation(){
-    representation={batches: this.nBatches, startMachineID: this.startMachineID, totalFactoryRuntime: this.factoryWorkingTime}
-    for (let i = 0; i < array.length; i++) {
-      const element = array[i];
-      
+  createFactoryRepresentation(){
+    let representation={nBatches: this.nBatches, startMachineID: this.startMachineID, totalFactoryRuntime: this.factoryWorkingTime}
+    let machines = []
+    for (const machine of Object.values(this.machines)){
+      machines.push(machine.getRepresentation())
     }
+
+    let batches = []
+    for (let i = 0; i < this.completedBatches; i++) {
+      batches.push(this.completedBatches[i].getRepresentation())
+    }
+    representation["machines"]=machines
+    representation["batches"]=batches
+
+    return JSON.stringify(representation)
   }
 }

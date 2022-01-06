@@ -8,7 +8,7 @@ export default class Batch {
         this.currentMachineID=currentMachineID;
         this.hasDefect=false;
         this.machineDefect = "";
-        this.materialName='' //TODO: add material
+        this.materialName=''
         
     }
 
@@ -37,9 +37,8 @@ export default class Batch {
     }
 
     getRepresentation() {
-
         let representation={"id":this.id,"hasDefect": this.hasDefect, "materialName":this.materialName}
-        return JSON.stringify(representation)
+        return representation
       }
 
 
