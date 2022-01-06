@@ -33,5 +33,7 @@ public class EnergySensor extends Sensor {
         if(Math.random() * 100 < ERROR_PROBABILITY)
             this.currentEnergy = null;
         else this.currentEnergy = this.generateRandomDataNormalDistribution();
+
+        this.setNewData(true);
     }
 }
