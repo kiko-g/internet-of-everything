@@ -25,7 +25,7 @@ export default class JSONParser {
 
       for (const sensorInfo of Object.values(machineInfo.sensors)) {
         machine.addSensor(
-          new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.attributes)
+          new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.updateInterval, sensorInfo.attributes)
         )
       }
       machines[machine.id] = machine;
