@@ -150,7 +150,6 @@ export default class ForceGraph extends Component {
               options={this.state.options}
               events={this.state.events}
               getNetwork={(network) => {
-                // console.log(network)
                 network.on("click", function (properties) {
                   if (properties.nodes[0] !== undefined) {
                     document.getElementById("drawer").classList.remove("hidden")

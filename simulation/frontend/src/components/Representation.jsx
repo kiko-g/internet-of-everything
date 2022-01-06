@@ -3,11 +3,11 @@ import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
 import InputBox from "./utilities/InputBox"
-import DetailedSwitch from "./utilities/DetailedSwitch"
+import DetailedSwitch from "./utilities/switches/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import { factories } from "../data"
-import PhaseSwitch from "./utilities/PhaseSwitch"
+import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
 
 export default function Representation() {
@@ -29,13 +29,16 @@ export default function Representation() {
     <Tabs>
       {/* Graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={displayFactory} />
+        <ForceGraph factory={displayFactory} phaseHook={[phase, setPhase]} />
+        <div className={`absolute top-8 left-8 min-w-1/4 z-50`}>
+          <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} />
+        </div>
       </Tab>
 
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
+          <div className="p-1 flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
           </div>
@@ -64,6 +67,7 @@ export default function Representation() {
             >
               <TrashIcon className="h-6 w-6" />
             </button>
+            <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} compact={true} />
           </div>
           {displayFactory
             .filter((machine, index) => {
