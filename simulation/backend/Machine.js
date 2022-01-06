@@ -71,18 +71,17 @@ export default class Machine {
     for (let i = 0; i < this.sensors.length; i++) {
       let attr={}
       
-      for (let j = 0; j < this.sensors[i].attributes; j++) {
+      for (let j = 0; j < this.sensors[i].attributes.length; j++) {
         let name=this.sensors[i].attributes[j].name
         let value=this.sensors[i].attributes[j].value
-        console.log(name, value)
-        attr={...attr, name:value}
+        attr[name]=value
         
       }
       //,"updateInterval":this.sensors[i].updateInterval
       let sensor = {"id":this.sensors[i].id, "type":this.sensors[i].type,"attributes":attr}
       sensorsDict.push(sensor);
     }
-    let representation={"id":this.machineID,"status": this.status, "sensors":sensorsDict}
+    let representation={"id":this.id,"status": this.status, "sensors":sensorsDict}
     return JSON.stringify(representation)
   }
 }
