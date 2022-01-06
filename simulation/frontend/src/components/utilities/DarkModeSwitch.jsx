@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { Switch } from "@headlessui/react"
 import { MoonIcon, SunIcon } from "@heroicons/react/solid"
 import useDarkMode from "../../hooks/useDarkMode"

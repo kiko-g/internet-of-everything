@@ -1,16 +1,17 @@
-import * as React from "react"
+import React from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
-import BasicInput from "./utilities/BasicInput"
-import FactoryFloor from "../data/factory.json"
+import InputBox from "./utilities/InputBox"
 import DetailedSwitch from "./utilities/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
+import { factories } from "../data"
 
 export default function Representation() {
+  const [value, setValue] = React.useState("")
   const [detailed, setDetailed] = React.useState(false)
-  const factoryInitial = FactoryFloor
+  const factoryInitial = factories[0]
   const factorySimulation = []
   const Tab = (props) => <div>{props.children}</div>
 
@@ -20,26 +21,31 @@ export default function Representation() {
       <Tab label="Graph">
         <ForceGraph factory={factoryInitial} />
       </Tab>
+
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="col-span-4 min-w-full">
+          <div className="col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
           </div>
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`detailed-${index}`} propClasses="col-span-1 min-w-full" detailed={detailed} />
+            <Machine data={item} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
           ))}
         </div>
       </Tab>
+
       {/* Inspect view with search */}
       <Tab label="Inspect">
-        <div className="grid w-full grid-cols-1 gap-4">
-          <BasicInput label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" />
+        <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="col-span-1 lg:col-span-2 min-w-full">
+            <InputBox label="Search" types={["Machine Name", "Machine ID"]} placeholder="Search" state={[value, setValue]} />
+          </div>
           {factoryInitial.map((item, index) => (
-            <Machine data={item} key={`inspect-${index}`} propClasses="col-span-1 min-w-full" detailed={true} />
+            <Machine data={item} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDetailed={true} />
           ))}
         </div>
       </Tab>
+
       {/* JSON Representations */}
       <Tab label="JSON">
         <div className="grid w-full grid-cols-1 gap-4">
@@ -55,7 +61,7 @@ export default function Representation() {
                 indentWidth={4}
                 iconStyle="triangle"
                 name={false}
-                collapsed={false}
+                collapsed={true}
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
@@ -82,7 +88,7 @@ export default function Representation() {
                 indentWidth={4}
                 iconStyle="triangle"
                 name={false}
-                collapsed={false}
+                collapsed={true}
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
