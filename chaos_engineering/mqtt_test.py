@@ -9,6 +9,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 
 def main():
     """ Launch mqtt test """
+    # 172.18.0.6 - mosquitto in docker
     mqtt = MQTTHandler("localhost", 1883, True)
     mqtt.start()  # mqtt starts the client in another thread
     # m1 starts being updated by messages in the background
