@@ -6,7 +6,7 @@ export default class Machine {
     this.id = machineID
     this.sensors = []
     this.isOccupied = false;
-    this.workingTime = 0;
+    this.totalWorkingTime = 0;
   }
 
   setStatus(status) {
@@ -59,9 +59,11 @@ export default class Machine {
 
   treatBatch(batch){
     let rand = Math.floor(Math.random() * 101);
-    this.workingTime += this.timePerBatch;
+    this.totalWorkingTime += this.timePerBatch;
+
     if(rand < this.defectProbability){
       batch.setHasDefect(true);
+      batch.setMachineDefect(this.id)
     }
 
     batch.setMaterialName(this.output);
@@ -72,9 +74,23 @@ export default class Machine {
     return batch;
   }
 
-  //TODO: Add more information about the machine
   getRepresentation() {
-    let representation = `I'm okay;`
+
+    let sensorsDict=[]
+    for (let i = 0; i < this.sensors.length; i++) {
+      let attr={}
+      
+      for (let j = 0; j < this.sensors[i].attributes.length; j++) {
+        let name=this.sensors[i].attributes[j].name
+        let value=this.sensors[i].attributes[j].value
+        attr[name]=value
+        
+      }
+      
+      let sensor = {"id":this.sensors[i].id,"failureTimes":this.sensors[i].failureTimes, "updateInterval":this.sensors[i].updateInterval, "type":this.sensors[i].type,"attributes":attr}
+      sensorsDict.push(sensor);
+    }
+    let representation={"id":this.id,"status": this.status, "totalWorkingTime":this.totalWorkingTime, "sensors":sensorsDict}
     return representation
   }
 }

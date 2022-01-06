@@ -28,14 +28,7 @@ export default class Simulation {
       this.simulateSensorsBehaviour(simulationDuration)
     }
 
-    console.log(this.machines)
-    //TODO: Transform Machine Representation into JSON
-    return (
-      "Machine final state after cutting " +
-      this.piecesQty +
-      " pieces:\n" +
-      this.machines[0].getRepresentation()
-    )
+    return this.createFactoryRepresentation();
   }
 
   simulateSensorsBehaviour(duration) {
@@ -55,7 +48,7 @@ export default class Simulation {
 
   simulateFactoryCycle() {
     let maxTimePerBatch = 0
-    let batchToDelete = -1
+    let batchesToDelete = []
 
     for (const [batchID, batch] of Object.entries(this.batches)) {
       let batchMachine = this.machines[batch.currentMachineID]
@@ -71,16 +64,19 @@ export default class Simulation {
       }
 
       //end of production line
-      if (newBatch.getCurrentMachineID() === "") {
+      if (newBatch.getCurrentMachineID() === "" || newBatch.hasDefect) {
         this.completedBatches.push(newBatch)
-        batchToDelete = batchID
+        batchesToDelete.push(batchID)
+
       } else {
         this.batches[batchID] = newBatch
       }
     }
 
-    if (batchToDelete != -1) {
-      delete this.batches[batchToDelete]
+    if (batchesToDelete.length != 0) {
+      for(let i = 0; i < batchesToDelete.length; i++){
+        delete this.batches[batchesToDelete[i]]
+      }
     }
 
     return maxTimePerBatch
@@ -92,5 +88,22 @@ export default class Simulation {
       let batch = new Batch(this.startMachineID)
       this.batches[batch.getID()] = batch
     }
+  }
+
+  createFactoryRepresentation(){
+    let representation={nBatches: this.nBatches, startMachineID: this.startMachineID, totalFactoryRuntime: this.factoryWorkingTime}
+    let machines = []
+    for (const machine of Object.values(this.machines)){
+      machines.push(machine.getRepresentation())
+    }
+
+    let batches = []
+    for (let i = 0; i < this.completedBatches; i++) {
+      batches.push(this.completedBatches[i].getRepresentation())
+    }
+    representation["machines"]=machines
+    representation["batches"]=batches
+
+    return JSON.stringify(representation)
   }
 }
