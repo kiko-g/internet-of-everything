@@ -11,15 +11,15 @@ import java.util.ArrayList;
 public class Machine extends MQTTClient implements Runnable {
     Thread thread;
     String name;
-    String publishTopic;
+    String machineTopic;
+    String productTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
 
     Machine(String id) {
         super(id);
         this.name = id;
-        this.subscribeTopic("testTopic");
-        this.publishMessage("testTopic", ("Hello world from " + id).getBytes());
-        this.publishTopic = "machine/" + id;
+        this.machineTopic = "machine/" + id;
+        this.productTopic = "product/" + id;
         this.sensors = getSensors(); // only to get some sensors while there are no configuration files
     }
 
@@ -48,9 +48,9 @@ public class Machine extends MQTTClient implements Runnable {
                 if(sensor.hasNewData()) {
                     JSONObject data = sensor.readData();
                     if(sensor.getClass() == QRCodeSensor.class)
-                        this.publishMessage("product/" + this.name, data.toString().getBytes());
+                        this.publishMessage(this.productTopic, data.toString().getBytes());
                     else
-                        this.publishMessage(this.publishTopic, data.toString().getBytes());
+                        this.publishMessage(this.machineTopic, data.toString().getBytes());
                 }
             }
         }
