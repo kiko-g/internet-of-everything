@@ -2,6 +2,7 @@ package ds.publisher;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
+import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 
@@ -15,7 +16,7 @@ public class ProductSensor extends SensorSimulator {
     private Random rnd = new Random();
 
     public ProductSensor() throws MqttException {
-        super("production/product");
+        super("product");
         this.executor = new ScheduledThreadPoolExecutor(100);
     }
 
@@ -23,9 +24,13 @@ public class ProductSensor extends SensorSimulator {
         super.init();
         this.machinesGraph = new Graph();
         
-        for(MachineNode machine: this.machinesGraph.getStartMachines()){
-            int time = this.rnd.nextInt(3000 - 2000) + 2000;
-            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+        MachineNode machine;
+        try {
+            machine = this.machinesGraph.getStartMachine();
+            int time = this.rnd.nextInt(2000 - 1000) + 1000;
+            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

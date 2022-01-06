@@ -31,8 +31,8 @@ public class MeasureState {
     } 
 
     /**
-     * Get's the mean temperature of the machine considering the last n.
-     * @return The temperature mean.
+     * Get's the mean value of the machine considering the last n.
+     * @return The value mean.
      */
     public Float getMeanMeasure() {
         return sumMeasures/ lastMeasures.size();
@@ -52,11 +52,11 @@ public class MeasureState {
 
     /**
      * This function adds a new values to the queue.
-     * If the queue is full, the oldest temperature log will be droped and a the new
+     * If the queue is full, the oldest value log will be droped and a the new
      * one will be added to the end of the
      * queue.
      * 
-     * @param newTemp The new temperature to be added to the queue.
+     * @param newMeasure The new measure to be added to the queue.
      */
     public boolean add(float newMeasure) {
         int numMeasures = this.lastMeasures.size();

@@ -97,16 +97,22 @@ public class Graph {
         return this.nodes.keySet(); 
     }
 
-    public List<MachineNode> getStartMachines(){
-        List<MachineNode> startMachines = new ArrayList<>();
+    public MachineNode getStartMachine() throws Exception{
 
         for(MachineNode node: this.nodes.values()){
-            if(node.getPrev() == null){
-                startMachines.add(node);
-            }
+            if(node.isStartMachine())
+                return node;
         }
+        throw new Exception("Missing Start Node");
+    }
 
-        return startMachines;
+    public MachineNode getEndMachine() throws Exception{
+
+        for(MachineNode node: this.nodes.values()){
+            if(node.isEndMachine())
+                return node;
+        }
+        throw new Exception("Missing End Node");
     }
 
     public String toString(){ 
