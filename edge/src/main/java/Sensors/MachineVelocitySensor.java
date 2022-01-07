@@ -5,10 +5,14 @@ import org.json.JSONObject;
 public class MachineVelocitySensor extends Sensor {
     Type type;
     Double currentVelocity;
+    Double velocityMin;
+    Double velocityMax;
 
-    public MachineVelocitySensor(String name, String machineId, double averageVelocity, double velocityStandardDeviation, int updateInterval) {
+    public MachineVelocitySensor(String name, String machineId, double velMin, double velMax, double averageVelocity, double velocityStandardDeviation, double updateInterval) {
         super(name, machineId, averageVelocity, velocityStandardDeviation, updateInterval);
         this.type = Type.VELOCITY;
+        this.velocityMin = velMin;
+        this.velocityMax = velMax;
         this.currentVelocity = null; // meters/s
     }
 

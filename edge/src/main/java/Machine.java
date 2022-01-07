@@ -14,13 +14,26 @@ import java.util.ArrayList;
 public class Machine extends MQTTClient implements Runnable {
     Thread thread;
     String name;
+
+    Long status;
+    Long defectProbability;
+    String input;
+    String output;
+    Long timePerBatch;
+    String nextMachineID;
     String machineTopic;
     String productTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
 
-    Machine(String id) {
+    Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String nextMachine) {
         super(id);
         this.name = id;
+        this.status = machineStatus;
+        this.defectProbability = defectProb;
+        this.input = machineInput;
+        this.output = machineOutput;
+        this.timePerBatch = timeBatch;
+        this.nextMachineID = nextMachine;
         this.machineTopic = "machine/" + id;
         this.productTopic = "product/" + id;
 
@@ -31,9 +44,8 @@ public class Machine extends MQTTClient implements Runnable {
             System.err.println("Machine Configuration Not Found.");
             System.exit(-1);
         }
-
-        this.sensors = getSensors(); // only to get some sensors while there are no configuration files
     }
+
 
     public void start() {
         System.out.println("Machine " + this.name + " started working.");
@@ -77,14 +89,11 @@ public class Machine extends MQTTClient implements Runnable {
     }
 
     private ArrayList<Sensor> getSensors() {
-        // only to get some sensors while there are no configuration files
+        return this.sensors;
+    }
 
-        sensors = new ArrayList<>();
-        sensors.add(new PositionSensor("pos1", this.name, 1, 1, 1000));
-        sensors.add(new ProductionSpeedSensor("prodSpeed1", this.name, 1, 1, 3000));
-        sensors.add(new TemperatureSensor("temp1", this.name, 1, 1, 4000));
-        sensors.add(new VibrationSensor("vib1", this.name, 1, 1, 2000));
-        return sensors;
+    public void setSensors(ArrayList<Sensor> sensors){
+        this.sensors = sensors;
     }
 
     @Override

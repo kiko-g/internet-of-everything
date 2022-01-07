@@ -5,10 +5,14 @@ import org.json.JSONObject;
 public class MachineOrientationSensor extends Sensor {
     Type type;
     Double currentOrientation;
+    Double orientationMin;
+    Double orientationMax;
 
-    public MachineOrientationSensor(String name, String machineId, double averageOrientation, double orientationStandardDeviation, int updateInterval) {
+    public MachineOrientationSensor(String name, String machineId, double orientationMin, double orientationMax, double averageOrientation, double orientationStandardDeviation, double updateInterval) {
         super(name, machineId, averageOrientation, orientationStandardDeviation, updateInterval);
         this.type = Type.MACHINE_DIRECTION;
+        this.orientationMax = orientationMax;
+        this.orientationMin = orientationMin;
         this.currentOrientation = null; // degrees
     }
 

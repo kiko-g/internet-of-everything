@@ -4,10 +4,14 @@ import org.json.JSONObject;
 public class VibrationSensor extends Sensor {
     Type type;
     Double currentVibration;
+    Double minimumVibration;
+    Double maximumVibration;
 
-    public VibrationSensor(String name, String machineId, double averageVibration, double vibrationStandardDeviation, int updateInterval) {
+    public VibrationSensor(String name, String machineId, double minimumVibration, double maximumVibration, double averageVibration, double vibrationStandardDeviation, double updateInterval) {
         super(name, machineId, averageVibration, vibrationStandardDeviation, updateInterval);
         this.type = Type.VIBRATION;
+        this.minimumVibration = minimumVibration;
+        this.maximumVibration = maximumVibration;
         this.currentVibration = null; // Hertz
     }
 

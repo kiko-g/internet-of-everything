@@ -7,15 +7,13 @@ public class QRCodeSensor extends Sensor {
     Integer materialID;
     Action action;
     boolean defect;
-    int defectProbability;
 
-    public QRCodeSensor(String name, String machineId, Action action, int defectProbability, int updateInterval) {
+    public QRCodeSensor(String name, String machineId, String action, double updateInterval) {
         super(name, machineId, updateInterval);
         this.type = Type.QR_CODE;
         this.materialID = null;
-        this.action = action;
+        this.action = Action.valueOf(action);
         this.defect = false;
-        this.defectProbability = defectProbability;
     }
 
     public JSONObject readData() {
