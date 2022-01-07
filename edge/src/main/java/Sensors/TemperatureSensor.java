@@ -4,10 +4,14 @@ import org.json.JSONObject;
 public class TemperatureSensor extends Sensor {
     Type type;
     Double currentTemperature;
+    Double tempMin;
+    Double tempMax;
 
-    public TemperatureSensor(String name, String machineId, double averageTemperature, double temperatureStandardDeviation, int updateInterval) {
+    public TemperatureSensor(String name, String machineId, double tempMin, double tempMax, double averageTemperature, double temperatureStandardDeviation, double updateInterval) {
         super(name, machineId, averageTemperature, temperatureStandardDeviation, updateInterval);
         this.type = Type.TEMPERATURE;
+        this.tempMin = tempMin;
+        this.tempMax = tempMax;
         this.currentTemperature = null; //ºC
     }
 

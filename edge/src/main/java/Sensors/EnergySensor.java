@@ -5,10 +5,14 @@ import org.json.JSONObject;
 public class EnergySensor extends Sensor {
     Type type;
     Double currentEnergy;
+    Double energyMin;
+    Double energyMax;
 
-    public EnergySensor(String name, String machineId, float averageEnergy, float energyStandardDeviation, int updateInterval) {
+    public EnergySensor(String name, String machineId, double energyMin, double energyMax, float averageEnergy, float energyStandardDeviation, double updateInterval) {
         super(name, machineId, averageEnergy, energyStandardDeviation, updateInterval);
         this.type = Type.ENERGY;
+        this.energyMin = energyMin;
+        this.energyMax = energyMax;
         this.currentEnergy = null; // Watt
     }
 

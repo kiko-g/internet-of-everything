@@ -5,10 +5,14 @@ import org.json.JSONObject;
 public class ProductionSpeedSensor extends Sensor {
     Type type;
     Double currentSpeed;
+    Double prodSpeedMin;
+    Double prodSpeedMax;
 
-    public ProductionSpeedSensor(String name, String machineId, double averageSpeed, double speedStandardDeviation, int updateInterval) {
+    public ProductionSpeedSensor(String name, String machineId, double prodSpeedMin, double prodSpeedMax, double averageSpeed, double speedStandardDeviation, double updateInterval) {
         super(name, machineId, averageSpeed, speedStandardDeviation, updateInterval);
         this.type = Type.PRODUCTION_SPEED;
+        this.prodSpeedMin = prodSpeedMin;
+        this.prodSpeedMax = prodSpeedMax;
         this.currentSpeed = null; //antennas/min
     }
 

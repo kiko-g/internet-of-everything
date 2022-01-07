@@ -12,7 +12,7 @@ public abstract class Sensor extends Thread {
     String machineId;
     boolean isOn;
     boolean newData;
-    int interval; // update interval in milliseconds
+    double interval; // update interval in milliseconds
     static int ERROR_PROBABILITY = 10; // %
 
     // for generation of data
@@ -31,7 +31,7 @@ public abstract class Sensor extends Thread {
         QR_CODE
     }
 
-    Sensor(String id, String machineId, int updateInterval) {
+    Sensor(String id, String machineId, double updateInterval) {
         this.setName(id);
         this.id = id;
         this.machineId = machineId;
@@ -40,7 +40,7 @@ public abstract class Sensor extends Thread {
         this.interval = updateInterval;
     }
 
-    Sensor(String id, String machineId, double averageValue, double standardDeviation, int updateInterval) {
+    Sensor(String id, String machineId, double averageValue, double standardDeviation, double updateInterval) {
         this.setName(id);
         this.id = id;
         this.machineId = machineId;
