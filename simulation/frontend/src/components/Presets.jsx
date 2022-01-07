@@ -1,12 +1,11 @@
 import React from "react"
-import { useState } from "react"
 import { RadioGroup } from "@headlessui/react"
 import { PlusCircleIcon } from "@heroicons/react/solid"
 import { factories } from "../data"
 import PresetsModal from "./utilities/PresetsModal"
 
-export default function Presets() {
-  const [selected, setSelected] = useState(factories[0])
+export default function Presets({ factoryInitialState }) {
+  const [selected, setSelected] = factoryInitialState
 
   return (
     <div className="bg-slate-100 p-4 rounded-xl">
