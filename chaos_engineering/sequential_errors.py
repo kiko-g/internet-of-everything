@@ -3,8 +3,7 @@ This module calls another modules to inject sequential errors for a target machi
 """
 
 from random import randrange
-import os
-
+import subprocess
 
 def main():
     """ Launch inject sequential errors script"""
@@ -35,11 +34,11 @@ def main():
     rand = randrange(3)
     for _ in range(0, repetition):
         if rand == 0:
-            os.system("python3 display_overheating.py " + machine_id)
+            subprocess.call("python3 display_overheating.py " + machine_id, shell=True)
         elif rand == 1:
-            os.system("python3 display_over_pressure.py " + machine_id)
+            subprocess.call("python3 display_over_pressure.py " + machine_id, shell=True)
         else:
-            os.system("python3 display_overvibration.py " + machine_id)
+            subprocess.call("python3 display_overvibration.py " + machine_id, shell=True)
 
 
 if __name__ == '__main__':
