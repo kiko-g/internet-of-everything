@@ -30,7 +30,7 @@ export default function Representation() {
       {/* Graph schema */}
       <Tab label="Graph">
         <ForceGraph factory={displayFactory} phaseHook={[phase, setPhase]} />
-        <div className={`absolute top-8 left-8 min-w-1/4 z-50`}>
+        <div className={`absolute top-8 right-8 z-50`}>
           <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} />
         </div>
       </Tab>

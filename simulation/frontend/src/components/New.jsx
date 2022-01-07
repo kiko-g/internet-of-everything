@@ -3,8 +3,6 @@ import Graph from "react-graph-vis"
 import { colors } from "../utils"
 import Machine from "./Machine"
 
-let id = 0
-
 export default class ForceGraph extends Component {
   constructor(props) {
     super(props)
@@ -64,7 +62,7 @@ export default class ForceGraph extends Component {
           smooth: {
             enabled: true,
             type: "dynamic",
-            roundness: 20,
+            roundness: 2000,
           },
           arrows: {
             from: {
@@ -100,20 +98,6 @@ export default class ForceGraph extends Component {
         nodes: this.createNodes(),
         edges: this.createEdges(),
       },
-    }
-  }
-
-  componentDidMount() {
-    document.addEventListener("click", (e) => {
-      this.setState({
-        open: !this.state.open,
-      })
-    })
-  }
-
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return
     }
   }
 
@@ -156,6 +140,7 @@ export default class ForceGraph extends Component {
   }
 
   render() {
+    let id = 0
     return (
       <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
         {this.state.graph.nodes.length !== 0 ? (
@@ -176,7 +161,7 @@ export default class ForceGraph extends Component {
                 })
               }}
             />
-            <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
+            <div id="drawer" className={`hidden absolute top-4 right-4 min-w-1/4 opacity-80`}>
               <Machine data={this.factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
             </div>
           </>
