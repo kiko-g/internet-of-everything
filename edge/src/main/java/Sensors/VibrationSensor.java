@@ -20,6 +20,8 @@ public class VibrationSensor extends Sensor {
         if(Math.random() * 100 < ERROR_PROBABILITY)
             this.currentVibration = null;
         else this.currentVibration = this.generateRandomDataNormalDistribution();
+
+        this.setNewData(true);
     }
 
     public JSONObject readData() {

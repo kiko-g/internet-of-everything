@@ -38,6 +38,6 @@ public class QRCodeSensor extends Sensor {
 
     @Override
     public void generateData() {
-        System.out.println("Generate data " + this.getName());
+        System.err.println("Generate of data " + this.getName() + " not implemented.");
     }
 }
