@@ -16,17 +16,19 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     # pylint: disable = W, C
     # MQTT Callback, some arguments won't be used
+    mqtt_handler = userdata['handler']
     msg_str = str(msg.payload.decode("utf-8"))
+    mqtt_handler.logs.append(msg_str)
 
-    print_raw = userdata['print_raw']
-    machines = userdata['machines']
-    if print_raw:
+    if mqtt_handler.print_raw:
         print(f'topic {msg.topic}, message: {msg_str}')
+
     try:
         msg_dict = json.loads(msg_str)
     except ValueError as e:
         return
 
+    machines = mqtt_handler.machines
     machine_id = msg_dict['machineID']
     if machine_id not in machines:
         machines[machine_id] = {}
@@ -44,8 +46,10 @@ class MQTTHandler:
     def __init__(self, address, port, print_raw):
         self.address = address
         self.port = port
+        self.print_raw = print_raw
+        self.logs = []
         self.machines = {}
-        self.userdata = {'machines': self.machines, 'print_raw': print_raw}
+        self.userdata = {'handler': self}
         self.mqtt = mqtt.Client(userdata=self.userdata)
         self.mqtt.on_connect = on_connect
         self.mqtt.on_message = on_message
