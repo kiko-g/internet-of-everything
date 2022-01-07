@@ -3,9 +3,8 @@ import Batch from "./Batch.js"
 import JSONParser from "./JSONParser.js"
 
 export default class Simulation {
-  constructor(file, piecesQty) {
+  constructor(file) {
     this.file = file
-    this.piecesQty = piecesQty
     this.machines = {}
     this.completedBatches = []
   }
@@ -28,17 +27,17 @@ export default class Simulation {
       this.simulateSensorsBehaviour(simulationDuration)
     }
 
-    return this.createFactoryRepresentation();
+    let response = this.createFactoryRepresentation()
+
+    return JSON.parse(response)
   }
 
   simulateSensorsBehaviour(duration) {
     for (const machine of Object.values(this.machines)) {
-
       for (let i = 0; i < machine.getSensors().length; i++) {
         let sensor = machine.getSensors()[i]
-  
-        sensor.update(duration)
 
+        sensor.update(duration)
       }
 
       // Unoccupy machines
@@ -67,14 +66,13 @@ export default class Simulation {
       if (newBatch.getCurrentMachineID() === "" || newBatch.hasDefect) {
         this.completedBatches.push(newBatch)
         batchesToDelete.push(batchID)
-
       } else {
         this.batches[batchID] = newBatch
       }
     }
 
     if (batchesToDelete.length != 0) {
-      for(let i = 0; i < batchesToDelete.length; i++){
+      for (let i = 0; i < batchesToDelete.length; i++) {
         delete this.batches[batchesToDelete[i]]
       }
     }
@@ -90,10 +88,14 @@ export default class Simulation {
     }
   }
 
-  createFactoryRepresentation(){
-    let representation={nBatches: this.nBatches, startMachineID: this.startMachineID, totalFactoryRuntime: this.factoryWorkingTime}
+  createFactoryRepresentation() {
+    let representation = {
+      nBatches: this.nBatches,
+      startMachineID: this.startMachineID,
+      totalFactoryRuntime: this.factoryWorkingTime,
+    }
     let machines = []
-    for (const machine of Object.values(this.machines)){
+    for (const machine of Object.values(this.machines)) {
       machines.push(machine.getRepresentation())
     }
 
@@ -101,8 +103,8 @@ export default class Simulation {
     for (let i = 0; i < this.completedBatches; i++) {
       batches.push(this.completedBatches[i].getRepresentation())
     }
-    representation["machines"]=machines
-    representation["batches"]=batches
+    representation["machines"] = machines
+    representation["batches"] = batches
 
     return JSON.stringify(representation)
   }

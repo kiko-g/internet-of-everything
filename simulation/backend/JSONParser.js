@@ -5,11 +5,18 @@ export default class JSONParser {
   constructor() {}
 
   parse(jsonFile) {
-    let json = fs.readFileSync(jsonFile)
-    let parsedJson = JSON.parse(json);
+    //If from JSON file
+    /* let json = fs.readFileSync(jsonFile)
+    let parsedJson = JSON.parse(json); 
     let batches = parsedJson.batches;
     let startMachineID = parsedJson.startMachineID;
-    const machineDictionary = parsedJson.machines
+    const machineDictionary = parsedJson.machines */
+
+    //If from user input
+    let batches = jsonFile.batches
+    let startMachineID = jsonFile.startMachineID
+    const machineDictionary = jsonFile.machines
+
     let machines = {}
 
     for (let i = 0; i < Object.keys(machineDictionary).length; i++) {
@@ -20,17 +27,21 @@ export default class JSONParser {
       machine.setDefectProbability(machineInfo.defectProbability)
       machine.setInput(machineInfo.input)
       machine.setOutput(machineInfo.output)
-      machine.setTimePerBatch(machineInfo.timePerBatch);
+      machine.setTimePerBatch(machineInfo.timePerBatch)
       machine.setNextMachineID(machineInfo.nextMachineID)
 
       for (const sensorInfo of Object.values(machineInfo.sensors)) {
         machine.addSensor(
-          new Sensor(sensorInfo.id, sensorInfo.type, sensorInfo.updateInterval, sensorInfo.attributes)
+          new Sensor(
+            sensorInfo.id,
+            sensorInfo.type,
+            sensorInfo.updateInterval,
+            sensorInfo.attributes
+          )
         )
       }
-      machines[machine.id] = machine;
+      machines[machine.id] = machine
     }
-
 
     return [batches, startMachineID, machines]
   }
