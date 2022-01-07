@@ -24,10 +24,6 @@ app.post("/run", (req, res) => {
     res.status(400).send("Missing attributes on JSON.")
   } else {
     let simulation = new Simulation(userJson)
-
-    // If JSON input from file
-    //let simulation = new Simulation("factory.json")
-
     let endState = simulation.run()
 
     res.status(200).send(endState)

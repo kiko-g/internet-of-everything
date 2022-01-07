@@ -1,10 +1,21 @@
 import axios from "axios"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { PlayIcon } from "@heroicons/react/solid"
 import { factories } from "../data"
 import AboutModal from "./utilities/AboutModal"
+import InputBox from "./utilities/InputBox"
 
 export default function RunSection() {
+  const [alert, setAlert] = useState(false)
+  const [batches, setBatches] = useState(0)
+
+  useEffect(() => {
+    if (alert)
+      setTimeout(() => {
+        setAlert(false)
+      }, 5000)
+  }, [alert, setAlert])
+
   const instance = axios.create({
     timeout: 10000,
     baseURL: "http://localhost:8080",
@@ -13,12 +24,31 @@ export default function RunSection() {
     },
   })
 
+  const getStartMachineID = () => {
+    let result
+    factories[0].forEach((machine, index) => {
+      if (machine.prevMachineID === "null") {
+        result = machine.id
+      }
+    })
+    return result
+  }
+
   const requestStart = () => {
+    let startMachineID = getStartMachineID()
+    if (!Number.isInteger(parseInt(batches))) {
+      setAlert(true)
+      return
+    }
+
+    console.log(parseInt(batches))
+    console.log(startMachineID)
+
     instance
       .post("/run", {
         settings: {
-          batches: 1000,
-          startMachineID: "0",
+          batches: parseInt(batches),
+          startMachineID: startMachineID,
           machines: factories[0],
         },
       })
@@ -26,12 +56,9 @@ export default function RunSection() {
         console.log(response.data)
       })
       .catch(function (error) {
-        // handle error
         console.log(error)
       })
-      .then(function () {
-        // always executed
-      })
+      .then(function () {})
   }
 
   return (
@@ -44,15 +71,25 @@ export default function RunSection() {
         <AboutModal />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-1 gap-2">
-        <button
-          type="button"
-          onClick={requestStart}
-          className={`text-white bg-teal-500 hover:opacity-80 focus:shadow-lg font-medium rounded text-lg px-4 py-3 text-center duration-150`}
-        >
-          Run&nbsp;
-          <PlayIcon className="w-7 h-7 mb-0.5 inline-flex" />
-        </button>
+      <div className="grid grid-cols-12 gap-2 w-full">
+        <div className="col-span-3">
+          <InputBox classnames="flex-shrink" state={[batches, setBatches]} placeholder="#Batches" title="Amount of batches" />
+        </div>
+        <div className="col-span-9">
+          <button
+            type="button"
+            onClick={requestStart}
+            className={`w-full text-white bg-teal-500 hover:opacity-80 focus:shadow-lg font-medium rounded text-lg px-4 py-3 text-center duration-150`}
+          >
+            Run&nbsp;
+            <PlayIcon className="w-7 h-7 mb-0.5 inline-flex" />
+          </button>
+        </div>
+        {alert ? (
+          <div className="col-span-12">
+            <p className="text-xs text-red-400">Batches amount should be an integer value!</p>
+          </div>
+        ) : null}
       </div>
     </div>
   )

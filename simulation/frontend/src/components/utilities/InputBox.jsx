@@ -1,17 +1,21 @@
 import React from "react"
 
-export default function InputBox({ state, label = "", types = [], classnames = "", placeholder = "..." }) {
+export default function InputBox({ state, label = "", types = [], classnames = "", placeholder = "...", title }) {
   const [value, setValue] = state
   return (
     <div className={`h-full ${classnames}`}>
-      {label !== "" ? <label htmlFor="price" className="block text-lg font-bold text-slate-700"></label> : null}
+      {label !== "" ? (
+        <label htmlFor="price" className="text-sm font-medium text-slate-700">
+          {label}
+        </label>
+      ) : null}
       <div className="h-full relative rounded-xl shadow-sm">
         <input
           type="text"
           name="price"
           id="price"
           className="h-full bg-zinc-50 focus:bg-white focus:ring-slate-500 focus:border-slate-500 border-2 border-slate-400 block w-full sm:text-sm text-slate-700 rounded-xl"
-          title="Enter your search string here"
+          title={title || `Enter your search string here`}
           value={value}
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}

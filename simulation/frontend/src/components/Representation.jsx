@@ -115,7 +115,7 @@ export default function Representation() {
                   fontSize: "small",
                   lineHeight: 1,
                   fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553", //334155
+                  backgroundColor: "#3c4553",
                 }}
               />
             </div>
@@ -142,7 +142,7 @@ export default function Representation() {
                   fontSize: "small",
                   lineHeight: 1,
                   fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553", //334155
+                  backgroundColor: "#3c4553",
                 }}
               />
             </div>

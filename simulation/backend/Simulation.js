@@ -106,7 +106,6 @@ export default class Simulation {
     representation["machines"] = machines
     representation["batches"] = batches
 
-    console.log(representation)
     return JSON.stringify(representation)
   }
 }

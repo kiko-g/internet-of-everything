@@ -1,18 +1,10 @@
 import Machine from "./Machine.js"
 import Sensor from "./Sensor.js"
-import fs from "fs"
+
 export default class JSONParser {
   constructor() {}
 
   parse(jsonFile) {
-    //If from JSON file
-    /* let json = fs.readFileSync(jsonFile)
-    let parsedJson = JSON.parse(json); 
-    let batches = parsedJson.batches;
-    let startMachineID = parsedJson.startMachineID;
-    const machineDictionary = parsedJson.machines */
-
-    //If from user input
     let batches = jsonFile.batches
     let startMachineID = jsonFile.startMachineID
     const machineDictionary = jsonFile.machines

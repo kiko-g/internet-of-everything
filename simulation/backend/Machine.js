@@ -53,10 +53,6 @@ export default class Machine {
     return this.status;
   }
 
-  update() {
-    console.log("updating")
-  }
-
   treatBatch(batch){
     let rand = Math.floor(Math.random() * 101);
     this.totalWorkingTime += this.timePerBatch;
