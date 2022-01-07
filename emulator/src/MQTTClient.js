@@ -11,8 +11,6 @@ class MQTTClient {
         
         this.client.on('connect', function () {
             console.log("[MQTT] Connected.");
-            this.subscribe('machine/#');
-            this.publish('emulator/hello', 'Emulator server is online!');
         });
 
         this.client.on('reconnect', function () {
@@ -37,6 +35,10 @@ class MQTTClient {
             // console.log("    topic: " + topic);
             // console.log("    message: " + message.toString());
         });
+    }
+
+    on(action, callback) {
+        this.client.on(action, callback);
     }
 
     subscribe(topic, qos=0){

@@ -1,5 +1,5 @@
 {
-  "id": "machine1",            
+  "id": "m1",            
   "status": 0,                 
   "defectProbability": 2,      
   "input": "material1",
@@ -8,7 +8,7 @@
   "nextMachineID": "machine2",  
   "sensors": [                 
     { 
-      "id": "temperature1",        
+      "id": "temp1",        
       "type": "TEMPERATURE",       
       "updateInterval": 1000,      
       "attributes": {              
@@ -21,7 +21,7 @@
       }
     },  
     {
-      "id": "position1", 
+      "id": "pos1", 
       "type": "POSITION",
       "updateInterval": 2000,
       "attributes": {
@@ -40,7 +40,7 @@
       }
     },
     {
-      "id": "velocity1",
+      "id": "vel1",
       "type": "VELOCITY", 
       "updateInterval": 4000,
       "attributes": {
@@ -53,20 +53,20 @@
       }
     },
     {
-      "id": "vibration1",
+      "id": "vib1",
       "type": "VIBRATION",
       "updateInterval": 2500,
       "attributes": {
         "vibration": {
-          "min": 5,
-          "max": 2,
+          "min": 2,
+          "max": 5,
           "avg": 3.2, 
           "standardDeviation": 1
         }
       }
     },
     {
-      "id": "productionSpeed1",
+      "id": "prodSpeed1",
       "type": "PRODUCTION_SPEED",
       "updateInterval": 1000,
       "attributes": { 
@@ -105,7 +105,7 @@
       }
     },
     { 
-      "id": "temperature2",
+      "id": "temp2",
       "type": "TEMPERATURE",
       "updateInterval": 200,
       "attributes": {
