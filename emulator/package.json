@@ -4,6 +4,9 @@
         "jest": "^27.4.5",
         "mqtt": "^4.2.8"
     },
+    "optionalDependencies": {
+        "fsevents": "^2.0.7"
+    },
     "scripts": {
         "start": "node src/server.js",
         "test": "jest --detectOpenHandles"
