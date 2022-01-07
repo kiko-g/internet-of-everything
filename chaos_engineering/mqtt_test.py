@@ -3,29 +3,19 @@ This module launches a POST request with legitimate machine data on a loop to si
 when used by multiple computers
 """
 from time import sleep
-import json
 from mqtt_handler.mqtt_handler import MQTTHandler
 
 
-def main():
-    """ Launch mqtt test """
-    # 172.18.0.6 - mosquitto in docker
-    mqtt = MQTTHandler("localhost", 1883, True)
-    mqtt.start()  # mqtt starts the client in another thread
-    # m1 starts being updated by messages in the background
-    mqtt.subscribe("machine/m1")
-    sleep(10)  # wait for m1 to have all sensors updated
-
-    # make this a loop if needed
-
+def my_payload(mqtt, machine):
+    """ generate my payload """
     # Make copy of m1 so we can work with it without affecting the mqtt dict
     # on another thread
-    machine_1 = dict(mqtt.machines['m1'])
+    machine_1 = dict(mqtt.machines[machine])
     print(f'machine 1 values: {machine_1}')
     temp_sensor = machine_1['sensorID']['temp1']
     temp_value = temp_sensor['temperature']
 
-    my_payload = {
+    payload = {
         'readingTime': machine_1['readingTime'],
         'machineID': machine_1['machineID'],
         'values': {
@@ -33,14 +23,37 @@ def main():
         },
         'sensorID': 'temp2'
     }
-    # publish machine_1
-    mqtt.publish('machine/m1', json.dumps(my_payload))
+    return payload
 
-    # make this a loop if needed
 
-    sleep(2)  # Give time to read back message
+def main():
+    """ Launch mqtt test """
+    mqtt = MQTTHandler("localhost", 1883, True)
 
-    mqtt.stop()  # stop mqtt thread in the background
+    # mqtt starts the client in another thread
+    mqtt.start()
+
+    # m1 starts being updated by messages in the background
+    mqtt.subscribe("machine/m1")
+
+    # wait for m1 to have temp1 sensor updated
+    mqtt.wait_for('m1', 'temp1')
+
+    # publish a single message to machine_1
+    payload_lambda = lambda: my_payload(mqtt, 'm1')
+    mqtt.publish('machine/m1', payload_lambda)
+
+    # keep publishing a message to machine_1 until
+    #   10 messages have been published
+    #   With attemps every 2 seconds
+    #   with 25% chance of publishing on each attempt
+    mqtt.publish('machine/m1', payload_lambda, 10, 2, 25)
+
+    # Give time to read back messages
+    sleep(2)
+
+    # stop mqtt thread in the background
+    mqtt.stop()
 
 
 if __name__ == '__main__':

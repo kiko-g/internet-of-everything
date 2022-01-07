@@ -1,5 +1,6 @@
 """ mqtt integration """
-
+import time
+import random
 import json
 import paho.mqtt.client as mqtt
 
@@ -71,6 +72,29 @@ class MQTTHandler:
         """ Unsubscribes to a topic """
         self.mqtt.unsubscribe(topic)
 
-    def publish(self, topic, payload):
+    def publish(self, topic, payload, max_occurences=1, time_interval=0, percent_chance=100):
+        #pylint: disable=R0913
         """ Publishes 'payload' to 'topic' """
-        self.mqtt.publish(topic, payload)
+        last_time = time.time()
+        occurences = 0
+
+        while occurences != max_occurences:
+            curr_time = time.time()
+
+            if curr_time - last_time < time_interval:
+                continue
+
+            if random.randint(0, 100) < percent_chance:
+                occurences += 1
+
+                self.mqtt.publish(topic, json.dumps(payload()))
+
+                last_time = curr_time
+
+    def wait_for(self, machine, sensor_id):
+        """ Blocks until machine and sensor values are found"""
+        while machine not in self.machines:
+            pass
+
+        while sensor_id not in self.machines[machine]['sensorID']:
+            pass
