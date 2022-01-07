@@ -7,7 +7,7 @@ export default class Batch {
 
         this.currentMachineID=currentMachineID;
         this.hasDefect=false;
-        this.machineDefect = "";
+        this.machineDefect = "null";
         this.materialName=''
         
     }

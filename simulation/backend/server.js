@@ -14,11 +14,10 @@ app.use(function (req, res, next) {
 })
 app.use(urlencoded({ extended: true }))
 
-app.post("/startSimulation", (req, res) => {
-  // If JSON from user input
-  let userJson = req.body.userJson
+app.post("/run", (req, res) => {
+  let userJson = req.body.settings
   if (
-    userJson.batches == undefined ||
+    userJson.batches == undefined || 
     userJson.startMachineID == undefined ||
     userJson.machines == undefined
   ) {

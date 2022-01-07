@@ -6,15 +6,21 @@ import AboutModal from "./utilities/AboutModal"
 
 export default function RunSection() {
   const instance = axios.create({
-    timeout: 1000,
+    timeout: 10000,
     baseURL: "http://localhost:8080",
-    headers: { "Access-Control-Allow-Origin": "*" },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   })
 
   const requestStart = () => {
     instance
       .post("/run", {
-        settings: factories[0],
+        settings: {
+          batches: 1000,
+          startMachineID: "0",
+          machines: factories[0],
+        },
       })
       .then(function (response) {
         console.log(response.data)

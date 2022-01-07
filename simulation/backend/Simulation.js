@@ -63,7 +63,7 @@ export default class Simulation {
       }
 
       //end of production line
-      if (newBatch.getCurrentMachineID() === "" || newBatch.hasDefect) {
+      if (newBatch.getCurrentMachineID() === "null" || newBatch.hasDefect) {
         this.completedBatches.push(newBatch)
         batchesToDelete.push(batchID)
       } else {
@@ -106,6 +106,7 @@ export default class Simulation {
     representation["machines"] = machines
     representation["batches"] = batches
 
+    console.log(representation)
     return JSON.stringify(representation)
   }
 }
