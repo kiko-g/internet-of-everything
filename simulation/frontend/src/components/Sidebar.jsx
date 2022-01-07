@@ -2,12 +2,12 @@ import React from "react"
 import RunSection from "./RunSection"
 import Presets from "./Presets"
 
-export default function Sidebar() {
+export default function Sidebar({ factoryInitialState, factoryFinalState }) {
   return (
     <div>
       <div className="grid grid-cols-1 gap-4">
-        <RunSection />
-        <Presets />
+        <RunSection factoryInitialState={factoryInitialState} factoryFinalState={factoryFinalState} />
+        <Presets factoryInitialState={factoryInitialState} />
       </div>
     </div>
   )

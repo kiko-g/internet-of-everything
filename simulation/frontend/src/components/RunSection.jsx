@@ -1,13 +1,15 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { PlayIcon } from "@heroicons/react/solid"
-import { factories } from "../data"
 import AboutModal from "./utilities/AboutModal"
 import InputBox from "./utilities/InputBox"
+import { factories } from "../data"
 
-export default function RunSection() {
+export default function RunSection({ factoryInitialState, factoryFinalState }) {
   const [alert, setAlert] = useState(false)
-  const [batches, setBatches] = useState(0)
+  const [batches, setBatches] = useState(1000)
+  const [factoryInitial, setFactoryInitial] = factoryInitialState //used for presets
+  const [factoryFinal, setFactoryFinal] = factoryFinalState //used for result
 
   useEffect(() => {
     if (alert)
@@ -17,7 +19,7 @@ export default function RunSection() {
   }, [alert, setAlert])
 
   const instance = axios.create({
-    timeout: 10000,
+    timeout: process.env.TIMEOUT || 10000,
     baseURL: "http://localhost:8080",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -26,7 +28,7 @@ export default function RunSection() {
 
   const getStartMachineID = () => {
     let result
-    factories[0].forEach((machine, index) => {
+    factoryInitial.forEach((machine, index) => {
       if (machine.prevMachineID === "null") {
         result = machine.id
       }
@@ -49,11 +51,12 @@ export default function RunSection() {
         settings: {
           batches: parseInt(batches),
           startMachineID: startMachineID,
-          machines: factories[0],
+          machines: factoryInitial,
         },
       })
       .then(function (response) {
         console.log(response.data)
+        setFactoryFinal(factories[2])
       })
       .catch(function (error) {
         console.log(error)

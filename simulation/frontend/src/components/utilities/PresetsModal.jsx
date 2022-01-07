@@ -65,8 +65,14 @@ export default function PresetsModal() {
                   </button>
                 </div>
                 <div className="flex flex-col items-start mt-2 space-y-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-300">Information about presets usage 1.</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-300">Information about presets usage 2.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-300">
+                    This section allows the user to toggle between factorty representations, which allows for different simulation
+                    outcomes.
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-300">
+                    To add your preset click the <code className="text-sky-500 dark:text-sky-200">Add your preset</code> button
+                    and upload a JSON file with the same syntax as the ones already available.
+                  </p>
                   <button
                     type="button"
                     className="self-end px-4 py-2 text-sm font-medium 

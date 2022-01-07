@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
@@ -6,22 +6,20 @@ import InputBox from "./utilities/InputBox"
 import DetailedSwitch from "./utilities/switches/DetailedSwitch"
 import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
-import { factories } from "../data"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
 
-export default function Representation() {
-  const factoryInitial = factories[0]
-  const [factory, setFactory] = React.useState([])
-  const [displayFactory, setDisplayFactory] = React.useState(factoryInitial)
-  const [phase, setPhase] = React.useState(false) //false is initial, true is final
-  const [detailed, setDetailed] = React.useState(false)
-  const [searchValue, setSearchValue] = React.useState("")
+export default function Representation({ factoryInitialState, factoryFinalState }) {
+  const [factoryInitial, setFactoryInitial] = factoryInitialState //used for presets
+  const [factoryFinal, setFactoryFinal] = factoryFinalState //used for result
+  const [phase, setPhase] = useState(false) //false is initial, true is final
+  const [detailed, setDetailed] = useState(false)
+  const [searchValue, setSearchValue] = useState("")
 
-  useMemo(() => {
-    if (phase) setDisplayFactory(factory)
-    else setDisplayFactory(factoryInitial)
-  }, [factory, factoryInitial, phase])
+  const factory = useMemo(() => {
+    if (phase) return factoryFinal
+    else return factoryInitial
+  }, [factoryFinal, factoryInitial, phase])
 
   const Tab = (props) => <>{props.children}</>
 
@@ -29,7 +27,7 @@ export default function Representation() {
     <Tabs>
       {/* Graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={displayFactory} phaseHook={[phase, setPhase]} />
+        <ForceGraph factory={factory} phaseHook={[phase, setPhase]} />
         <div className={`absolute top-8 right-8 z-50`}>
           <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} />
         </div>
@@ -42,7 +40,7 @@ export default function Representation() {
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
           </div>
-          {displayFactory.map((machine, index) => (
+          {factory.map((machine, index) => (
             <Machine data={machine} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
           ))}
         </div>
@@ -69,7 +67,7 @@ export default function Representation() {
             </button>
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} compact={true} />
           </div>
-          {displayFactory
+          {factory
             .filter((machine, index) => {
               if (searchValue === "") return true
               else {
