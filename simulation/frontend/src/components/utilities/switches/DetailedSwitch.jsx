@@ -6,10 +6,10 @@ export default function DetailedSwitch(props) {
   const toggleDetailed = props.toggle
 
   return (
-    <Switch.Group>
+    <Switch.Group title={`Toggle details on machine (current: ${detailed})`}>
       <div className="flex items-center">
         <Switch.Label passive className="mr-2">
-          <span className="font-bold text-slate-500">Details</span>
+          <span className="capitalize font-medium text-slate-500">Details</span>
         </Switch.Label>
         <Switch
           checked={detailed}

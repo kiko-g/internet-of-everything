@@ -21,16 +21,21 @@ export default class Tabs extends React.Component {
           })}
           <TabButtons activeTab={this.state.activeTab} buttons={buttons} changeTab={this.changeTab} />
         </div>
-        <div
-          className="bg-slate-100 p-4 rounded-xl flex items-start justify-between space-x-8 bg-opacity-90 w-full"
-          style={{
-            overflowY: "auto",
-            overflowX: "hidden",
-            maxHeight: "74vh",
-          }}
+        <article
+          className="relative bg-cover rounded-xl flex items-start justify-between space-x-8 bg-opacity-90 w-full
+            bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')]"
         >
-          {content}
-        </div>
+          <div
+            className="p-4 w-full"
+            style={{
+              overflowY: "auto",
+              overflowX: "hidden",
+              maxHeight: "74vh",
+            }}
+          >
+            {content}
+          </div>
+        </article>
       </>
     )
   }

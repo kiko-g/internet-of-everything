@@ -2,14 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-.hero {
-  background-image: url(https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg) !important;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-} */
-
-.hero {
+.hero-light {
   background: linear-gradient(
     to top right,
     rgb(237, 237, 249),
@@ -23,13 +16,14 @@
   );
 }
 
-.hero-alt {
+.hero-dark {
   background: linear-gradient(
     -45deg,
     theme("colors.slate.500"),
+    theme("colors.slate.500"),
     theme("colors.slate.600"),
-    theme("colors.slate.700"),
     theme("colors.slate.600"),
+    theme("colors.slate.500"),
     theme("colors.slate.500")
   );
   background-size: 200% 200%;
@@ -46,3 +40,7 @@
     background-position: 0% 50%;
   }
 }
+
+/* bg-cover 
+bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')]
+dark:bg-[url('https://tailwindcss.com/_next/static/media/hero-dark@90.dba36cdf.jpg')] */
