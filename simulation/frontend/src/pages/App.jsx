@@ -5,6 +5,7 @@ import Representation from "../components/Representation"
 import { factories } from "../data"
 
 export default function App() {
+  const [presets, setPresets] = useState(factories)
   const [factoryInitial, setFactoryInitial] = useState(factories[0])
   const [factoryFinal, setFactoryFinal] = useState([])
 
@@ -17,6 +18,7 @@ export default function App() {
             <Sidebar
               factoryInitialState={[factoryInitial, setFactoryInitial]}
               factoryFinalState={[factoryFinal, setFactoryFinal]}
+              presetsState={[presets, setPresets]}
             />
           </div>
           <div className="col-span-12 xl:col-span-9 m-0">
