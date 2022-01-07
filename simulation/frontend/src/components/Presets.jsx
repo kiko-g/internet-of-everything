@@ -7,6 +7,17 @@ import PresetsModal from "./utilities/PresetsModal"
 export default function Presets({ factoryInitialState }) {
   const [selected, setSelected] = factoryInitialState
 
+  const getStartMachineID = () => {
+    let result
+    selected.forEach((machine, index) => {
+      if (machine.prevMachineID === "null") {
+        result = machine.id
+      }
+    })
+    return result
+  }
+  const startMachineID = getStartMachineID()
+
   return (
     <div className="bg-slate-100 p-4 rounded-xl">
       <div className="w-full mx-auto">
@@ -43,6 +54,8 @@ export default function Presets({ factoryInitialState }) {
                               <span>{`${factory.length} machines`}</span>
                               <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
                               <span>{`${sensorAmount} sensors in total`}</span>
+                              <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+                              <span>{`Start id: ${startMachineID}`}</span>
                             </RadioGroup.Description>
                           </div>
                         </div>
