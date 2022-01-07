@@ -8,10 +8,11 @@ import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
+import { jsonStyle } from "../utils"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
-  const [factoryInitial, setFactoryInitial] = factoryInitialState //used for presets
-  const [factoryFinal, setFactoryFinal] = factoryFinalState //used for result
+  const [factoryInitial] = factoryInitialState //used for presets
+  const [factoryFinal] = factoryFinalState //used for result
   const [phase, setPhase] = useState(false) //false is initial, true is final
   const [detailed, setDetailed] = useState(false)
   const [searchValue, setSearchValue] = useState("")
@@ -89,6 +90,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Initial State</div>
             <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Final State</div>
           </div>
+
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
@@ -103,23 +105,13 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 enableClipboard={false}
                 src={factoryInitial}
                 theme="threezerotwofour"
-                style={{
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                  padding: "1em",
-                  width: "100%",
-                  height: "60vh",
-                  borderRadius: "0.5rem",
-                  fontSize: "small",
-                  lineHeight: 1,
-                  fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553",
-                }}
+                style={jsonStyle}
               />
             </div>
+
             {/* Final JSON */}
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
-              <CopyClipboard json={factory} />
+              <CopyClipboard json={factoryFinal} />
               <ReactJson
                 indentWidth={4}
                 iconStyle="triangle"
@@ -128,20 +120,9 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
-                src={factory}
+                src={factoryFinal}
                 theme="threezerotwofour"
-                style={{
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                  padding: "1em",
-                  width: "100%",
-                  height: "60vh",
-                  borderRadius: "0.5rem",
-                  fontSize: "small",
-                  lineHeight: 1,
-                  fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553",
-                }}
+                style={jsonStyle}
               />
             </div>
           </div>

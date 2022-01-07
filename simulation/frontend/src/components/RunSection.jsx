@@ -3,13 +3,12 @@ import React, { useEffect, useState } from "react"
 import { PlayIcon } from "@heroicons/react/solid"
 import AboutModal from "./utilities/AboutModal"
 import InputBox from "./utilities/InputBox"
-import { factories } from "../data"
 
 export default function RunSection({ factoryInitialState, factoryFinalState }) {
   const [alert, setAlert] = useState(false)
   const [batches, setBatches] = useState(1000)
-  const [factoryInitial, setFactoryInitial] = factoryInitialState //used for presets
-  const [factoryFinal, setFactoryFinal] = factoryFinalState //used for result
+  const [factoryInitial] = factoryInitialState //used for presets
+  const [, setFactoryFinal] = factoryFinalState //used for result
 
   useEffect(() => {
     if (alert)
@@ -28,7 +27,7 @@ export default function RunSection({ factoryInitialState, factoryFinalState }) {
 
   const getStartMachineID = () => {
     let result
-    factoryInitial.forEach((machine, index) => {
+    factoryInitial.forEach((machine) => {
       if (machine.prevMachineID === "null") {
         result = machine.id
       }
@@ -38,25 +37,24 @@ export default function RunSection({ factoryInitialState, factoryFinalState }) {
 
   const requestStart = () => {
     let startMachineID = getStartMachineID()
-    if (!Number.isInteger(parseInt(batches))) {
+    let batchesPost = parseInt(batches)
+
+    if (!Number.isInteger(batchesPost)) {
       setAlert(true)
       return
     }
 
-    console.log(parseInt(batches))
-    console.log(startMachineID)
-
     instance
       .post("/run", {
         settings: {
-          batches: parseInt(batches),
+          batches: batchesPost,
           startMachineID: startMachineID,
           machines: factoryInitial,
         },
       })
       .then(function (response) {
         console.log(response.data)
-        setFactoryFinal(factories[2])
+        setFactoryFinal(response.data)
       })
       .catch(function (error) {
         console.log(error)
