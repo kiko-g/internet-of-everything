@@ -9,7 +9,7 @@ class MQTTClient {
 
         this.client = mqtt.connect('mqtt://localhost', MQTT_OPTIONS);
         
-        this.client.on('connect', function () {
+        this.client.on('connect', () => {
             console.log("[MQTT] Connected.");
             this.subscribe('edge/#');
             this.publish('emulator/hello', 'Emulator server is online!');
@@ -37,6 +37,10 @@ class MQTTClient {
             console.log("    topic: " + topic);
             console.log("    message: " + message.toString());
         });
+    }
+
+    on(action, callback) {
+        this.client.on(action, callback);
     }
 
     subscribe(topic, qos=0){
