@@ -4,8 +4,9 @@ This module POSTs a machine json with a fake pressure value
 
 import random
 import json
-import requests
 import sys
+import requests
+
 
 def main():
     """ Launch display over-pressure script """

@@ -4,8 +4,8 @@ This module POSTs a machine json with a fake temperature value
 
 import random
 import json
-import requests
 import sys
+import requests
 
 
 def main():

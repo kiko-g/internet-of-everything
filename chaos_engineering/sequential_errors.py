@@ -32,9 +32,8 @@ def main():
             except ValueError:
                 print("Please input integer only...")
                 continue
-
+    rand = randrange(3)
     for _ in range(0, repetition):
-        rand = randrange(3)
         if rand == 0:
             os.system("python3 display_overheating.py " + machine_id)
         elif rand == 1:
