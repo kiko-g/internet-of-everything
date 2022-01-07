@@ -8,10 +8,12 @@ import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
+import { jsonStyle } from "../utils"
+import AlternateMachine from "./AlternateMachine"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
-  const [factoryInitial, setFactoryInitial] = factoryInitialState //used for presets
-  const [factoryFinal, setFactoryFinal] = factoryFinalState //used for result
+  const [factoryInitial] = factoryInitialState //used for presets
+  const [factoryFinal] = factoryFinalState //used for result
   const [phase, setPhase] = useState(false) //false is initial, true is final
   const [detailed, setDetailed] = useState(false)
   const [searchValue, setSearchValue] = useState("")
@@ -36,13 +38,29 @@ export default function Representation({ factoryInitialState, factoryFinalState 
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="p-1 flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
+          <div className="px-1 flex items-center justify-end space-x-6 col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
           </div>
-          {factory.map((machine, index) => (
-            <Machine data={machine} key={`detailed-${index}`} classnames="col-span-1 min-w-full" isDetailed={detailed} />
-          ))}
+          {phase
+            ? factory.length === 0
+              ? null
+              : factory.machines.map((machine, index) => (
+                  <AlternateMachine
+                    data={machine}
+                    key={`detailed-final-${index}`}
+                    classnames="col-span-1 min-w-full"
+                    isDetailed={detailed}
+                  />
+                ))
+            : factory.map((machine, index) => (
+                <Machine
+                  data={machine}
+                  key={`detailed-initial-${index}`}
+                  classnames="col-span-1 min-w-full"
+                  isDetailed={detailed}
+                />
+              ))}
         </div>
       </Tab>
 
@@ -61,24 +79,46 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               type="button"
               title="Clear input"
               onClick={() => setSearchValue("")}
-              className="h-full bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 hover:opacity-75 p-3 rounded text-white font-semibold duration-200"
+              className="h-full bg-gradient-to-br from-rose-500 via-rose-600 to-rose-700 hover:opacity-75 p-3 rounded text-white font-semibold duration-200"
             >
               <TrashIcon className="h-6 w-6" />
             </button>
+            <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} compact={true} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} compact={true} />
           </div>
-          {factory
-            .filter((machine, index) => {
-              if (searchValue === "") return true
-              else {
-                let a = searchValue.toUpperCase()
-                let b = machine.id.toUpperCase()
-                return b.includes(a)
-              }
-            })
-            .map((machine, index) => {
-              return <Machine data={machine} key={`inspect-${index}`} classnames="col-span-1 min-w-full" isDetailed={true} />
-            })}
+          {phase
+            ? factory.length === 0
+              ? null
+              : factory.machines
+                  .filter((machine) => {
+                    if (searchValue === "") return true
+                    else return machine.id.toUpperCase().includes(searchValue.toUpperCase())
+                  })
+                  .map((machine, index) => {
+                    return (
+                      <AlternateMachine
+                        data={machine}
+                        key={`inspect-final-${index}`}
+                        classnames="col-span-1 min-w-full"
+                        isDetailed={detailed}
+                      />
+                    )
+                  })
+            : factory
+                .filter((machine) => {
+                  if (searchValue === "") return true
+                  else return machine.id.toUpperCase().includes(searchValue.toUpperCase())
+                })
+                .map((machine, index) => {
+                  return (
+                    <Machine
+                      data={machine}
+                      key={`inspect-initial-${index}`}
+                      classnames="col-span-1 min-w-full"
+                      isDetailed={detailed}
+                    />
+                  )
+                })}
         </div>
       </Tab>
 
@@ -89,6 +129,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Initial State</div>
             <div className="text-center text-white tracking-wider capitalize bg-slate-400 p-3 rounded-lg ">Final State</div>
           </div>
+
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
@@ -103,23 +144,13 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 enableClipboard={false}
                 src={factoryInitial}
                 theme="threezerotwofour"
-                style={{
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                  padding: "1em",
-                  width: "100%",
-                  height: "60vh",
-                  borderRadius: "0.5rem",
-                  fontSize: "small",
-                  lineHeight: 1,
-                  fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553",
-                }}
+                style={jsonStyle}
               />
             </div>
+
             {/* Final JSON */}
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
-              <CopyClipboard json={factory} />
+              <CopyClipboard json={factoryFinal} />
               <ReactJson
                 indentWidth={4}
                 iconStyle="triangle"
@@ -128,20 +159,9 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 displayObjectSize={false}
                 displayDataTypes={false}
                 enableClipboard={false}
-                src={factory}
+                src={factoryFinal}
                 theme="threezerotwofour"
-                style={{
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                  padding: "1em",
-                  width: "100%",
-                  height: "60vh",
-                  borderRadius: "0.5rem",
-                  fontSize: "small",
-                  lineHeight: 1,
-                  fontFamily: "JetBrains Mono, Consolas, sans-serif",
-                  backgroundColor: "#3c4553",
-                }}
+                style={jsonStyle}
               />
             </div>
           </div>

@@ -27,3 +27,16 @@ export const colors = [
   "#F472B6",
   "#FB7185",
 ]
+
+export const jsonStyle = {
+  overflowY: "auto",
+  overflowX: "hidden",
+  padding: "1em",
+  width: "100%",
+  height: "60vh",
+  borderRadius: "0.5rem",
+  fontSize: "small",
+  lineHeight: 1,
+  fontFamily: "JetBrains Mono, Consolas, sans-serif",
+  backgroundColor: "#3c4553",
+}

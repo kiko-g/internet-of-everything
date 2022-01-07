@@ -9,12 +9,12 @@ export default function PhaseSwitch(props) {
     <Switch.Group title={`Toggle factory state (current: ${phase ? `result` : `initial`})`}>
       <div className={`flex items-center ${compact ? `flex-col space-y-1` : ``}`}>
         {compact ? (
-          <Switch.Label passive className="font-medium text-xs text-slate-500">
+          <Switch.Label passive className="font-medium text-xxs text-slate-600">
             <span>{phase ? `Result` : `Initial`}</span>
           </Switch.Label>
         ) : (
-          <Switch.Label passive className="mr-2">
-            <span className={`font-medium ${props.alt ? `text-slate-800` : `text-slate-500`}`}>
+          <Switch.Label passive className="mr-1.5">
+            <span className={`tracking-tight font-medium ${props.alt ? `text-slate-800` : `text-slate-600`}`}>
               {phase ? `Result` : `Initial`}
             </span>
           </Switch.Label>
@@ -23,8 +23,9 @@ export default function PhaseSwitch(props) {
         <Switch
           checked={phase}
           onChange={() => setPhase(!phase)}
-          className={`${
-            phase ? "bg-blue-300" : "bg-slate-400"
+          className={`
+          ${
+            phase ? "bg-teal-500" : `${props.alt ? `bg-slate-600` : `bg-slate-300`}`
           } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
         >
           <span
