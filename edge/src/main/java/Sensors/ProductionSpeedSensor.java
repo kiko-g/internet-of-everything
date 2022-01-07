@@ -33,5 +33,7 @@ public class ProductionSpeedSensor extends Sensor {
         if(Math.random() * 100 < ERROR_PROBABILITY)
             this.currentSpeed = null;
         else this.currentSpeed = this.generateRandomDataNormalDistribution();
+
+        this.setNewData(true);
     }
 }

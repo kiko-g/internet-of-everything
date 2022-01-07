@@ -16,7 +16,7 @@ public class PositionSensor extends Sensor {
 
     @Override
     public void generateData() {
-        // do nothing, for now machines are static
+        System.err.println("Generate of data " + this.getName() + " not implemented.");
     }
 
     public JSONObject readData() {
