@@ -10,6 +10,7 @@ import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
 import { jsonStyle } from "../utils"
 import AlternateMachine from "./AlternateMachine"
+import Scrollbar from "react-scrollbars-custom"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -26,7 +27,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const Tab = (props) => <>{props.children}</>
 
   return (
-    <Tabs>
+    <Tabs activeIndex={2}>
       {/* Graph schema */}
       <Tab label="Graph">
         <ForceGraph factory={factory} phaseHook={[phase, setPhase]} />
@@ -132,37 +133,42 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
+            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryInitial} />
-              <ReactJson
-                indentWidth={4}
-                iconStyle="triangle"
-                name={false}
-                collapsed={true}
-                displayObjectSize={false}
-                displayDataTypes={false}
-                enableClipboard={false}
-                src={factoryInitial}
-                theme="threezerotwofour"
-                style={jsonStyle}
-              />
+              <Scrollbar style={{ height: "60vh" }}>
+                <ReactJson
+                  indentWidth={4}
+                  iconStyle="triangle"
+                  name={false}
+                  collapsed={1}
+                  displayObjectSize={false}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                  src={factoryInitial}
+                  theme="threezerotwofour"
+                  style={jsonStyle}
+                />
+              </Scrollbar>
             </div>
 
             {/* Final JSON */}
-            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
+            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryFinal} />
-              <ReactJson
-                indentWidth={4}
-                iconStyle="triangle"
-                name={false}
-                collapsed={true}
-                displayObjectSize={false}
-                displayDataTypes={false}
-                enableClipboard={false}
-                src={factoryFinal}
-                theme="threezerotwofour"
-                style={jsonStyle}
-              />
+              <Scrollbar style={{ height: "60vh" }}>
+                <ReactJson
+                  id="react-json-final"
+                  indentWidth={4}
+                  iconStyle="triangle"
+                  name={false}
+                  collapsed={1}
+                  displayObjectSize={false}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                  src={factoryFinal}
+                  theme="threezerotwofour"
+                  style={jsonStyle}
+                />
+              </Scrollbar>
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ export default function CopyClipboard({ json = {} }) {
     if (copied)
       setTimeout(() => {
         setCopied(!copied)
-      }, 5000)
+      }, 3000)
   }, [copied, setCopied])
 
   return (
