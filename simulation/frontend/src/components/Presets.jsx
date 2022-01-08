@@ -8,15 +8,7 @@ export default function Presets({ factoryInitialState, presetsState }) {
   const [presets, setPresets] = presetsState
   const [selected, setSelected] = factoryInitialState
 
-  useEffect(() => {
-    setInterval(() => {
-      let input = document.getElementById("presetUpload")
-      if (input === undefined || input.files.length === 0) return
-      setUploaded({ name: input.files[0].name, size: Number(parseFloat(input.files[0].size / 1000.0).toFixed(1)) + "KB" })
-      // console.log(input.files[0])
-      // setPresets(...presets, )
-    }, 2000)
-  }, [])
+  useEffect(() => {}, [presets])
 
   return (
     <div className="bg-slate-100 p-4 rounded-xl">
@@ -88,7 +80,28 @@ export default function Presets({ factoryInitialState, presetsState }) {
             Add preset&nbsp;
             <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
           </label>
-          <input type="file" accept=".json" id="presetUpload" name="presetUpload" className="sr-only" />
+          <input
+            type="file"
+            accept=".json"
+            id="presetUpload"
+            name="presetUpload"
+            className="sr-only"
+            onChange={(e) => {
+              const handleChangeFile = (file) => {
+                let fileData = new FileReader()
+                fileData.readAsText(file)
+                fileData.onloadend = (e) => setPresets([...presets, JSON.parse(e.target.result)])
+              }
+
+              let file = e.target.files[0]
+              handleChangeFile(file)
+
+              setUploaded({
+                name: e.target.files[0].name,
+                size: Number(parseFloat(e.target.files[0].size / 1000.0).toFixed(1)) + "KB",
+              })
+            }}
+          />
         </form>
       </div>
 
