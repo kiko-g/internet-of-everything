@@ -1,11 +1,14 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { RadioGroup } from "@headlessui/react"
-import { PlusCircleIcon } from "@heroicons/react/solid"
-import { factories } from "../data"
+import { PlusCircleIcon, DocumentReportIcon } from "@heroicons/react/solid"
 import PresetsModal from "./utilities/PresetsModal"
 
-export default function Presets({ factoryInitialState }) {
+export default function Presets({ factoryInitialState, presetsState }) {
+  const [uploaded, setUploaded] = useState({ name: "", size: "" })
+  const [presets, setPresets] = presetsState
   const [selected, setSelected] = factoryInitialState
+
+  useEffect(() => {}, [presets])
 
   return (
     <div className="bg-slate-100 p-4 rounded-xl">
@@ -13,7 +16,7 @@ export default function Presets({ factoryInitialState }) {
         <RadioGroup value={selected} onChange={setSelected}>
           <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
           <div className="space-y-2">
-            {factories.map((factory, index) => {
+            {presets.map((factory, index) => {
               let sensorAmount = 0
               let startMachineID = ""
               factory.forEach((machine) => {
@@ -66,15 +69,51 @@ export default function Presets({ factoryInitialState }) {
           </div>
         </RadioGroup>
       </div>
-      <div className="mt-2 flex items-center justify-between">
+
+      <div className="mt-3 flex items-center justify-between">
         <PresetsModal />
-        <button
-          type="button"
-          className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Add preset&nbsp;
-          <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
-        </button>
+        <form className="flex items-center space-x-6" title="Upload your JSON preset">
+          <label
+            htmlFor="presetUpload"
+            className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          >
+            Add preset&nbsp;
+            <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
+          </label>
+          <input
+            type="file"
+            accept=".json"
+            id="presetUpload"
+            name="presetUpload"
+            className="sr-only"
+            onChange={(e) => {
+              const handleChangeFile = (file) => {
+                let fileData = new FileReader()
+                fileData.readAsText(file)
+                fileData.onloadend = (e) => setPresets([...presets, JSON.parse(e.target.result)])
+              }
+
+              let file = e.target.files[0]
+              handleChangeFile(file)
+
+              setUploaded({
+                name: e.target.files[0].name,
+                size: Number(parseFloat(e.target.files[0].size / 1000.0).toFixed(1)) + "KB",
+              })
+            }}
+          />
+        </form>
+      </div>
+
+      <div className="mt-1 flex items-end justify-end">
+        <div className="flex text-xs text-slate-500">
+          {uploaded.name !== "" ? (
+            <>
+              {uploaded.name} ({uploaded.size})&nbsp;
+              <DocumentReportIcon className="h-4 w-4" />
+            </>
+          ) : null}
+        </div>
       </div>
     </div>
   )
