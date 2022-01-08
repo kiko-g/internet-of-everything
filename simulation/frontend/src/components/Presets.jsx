@@ -1,11 +1,22 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { RadioGroup } from "@headlessui/react"
-import { PlusCircleIcon } from "@heroicons/react/solid"
+import { PlusCircleIcon, DocumentReportIcon } from "@heroicons/react/solid"
 import PresetsModal from "./utilities/PresetsModal"
 
 export default function Presets({ factoryInitialState, presetsState }) {
+  const [uploaded, setUploaded] = useState({ name: "", size: "" })
   const [presets, setPresets] = presetsState
   const [selected, setSelected] = factoryInitialState
+
+  useEffect(() => {
+    setInterval(() => {
+      let input = document.getElementById("presetUpload")
+      if (input === undefined || input.files.length === 0) return
+      setUploaded({ name: input.files[0].name, size: Number(parseFloat(input.files[0].size / 1000.0).toFixed(1)) + "KB" })
+      // console.log(input.files[0])
+      // setPresets(...presets, )
+    }, 2000)
+  }, [])
 
   return (
     <div className="bg-slate-100 p-4 rounded-xl">
@@ -66,7 +77,8 @@ export default function Presets({ factoryInitialState, presetsState }) {
           </div>
         </RadioGroup>
       </div>
-      <div className="mt-2 flex items-center justify-between">
+
+      <div className="mt-3 flex items-center justify-between">
         <PresetsModal />
         <form className="flex items-center space-x-6" title="Upload your JSON preset">
           <label
@@ -78,6 +90,17 @@ export default function Presets({ factoryInitialState, presetsState }) {
           </label>
           <input type="file" accept=".json" id="presetUpload" name="presetUpload" className="sr-only" />
         </form>
+      </div>
+
+      <div className="mt-1 flex items-end justify-end">
+        <div className="flex text-xs text-slate-500">
+          {uploaded.name !== "" ? (
+            <>
+              {uploaded.name} ({uploaded.size})&nbsp;
+              <DocumentReportIcon className="h-4 w-4" />
+            </>
+          ) : null}
+        </div>
       </div>
     </div>
   )
