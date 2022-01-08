@@ -1,10 +1,10 @@
 import React from "react"
 import { RadioGroup } from "@headlessui/react"
 import { PlusCircleIcon } from "@heroicons/react/solid"
-import { factories } from "../data"
 import PresetsModal from "./utilities/PresetsModal"
 
-export default function Presets({ factoryInitialState }) {
+export default function Presets({ factoryInitialState, presetsState }) {
+  const [presets, setPresets] = presetsState
   const [selected, setSelected] = factoryInitialState
 
   return (
@@ -13,7 +13,7 @@ export default function Presets({ factoryInitialState }) {
         <RadioGroup value={selected} onChange={setSelected}>
           <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
           <div className="space-y-2">
-            {factories.map((factory, index) => {
+            {presets.map((factory, index) => {
               let sensorAmount = 0
               let startMachineID = ""
               factory.forEach((machine) => {
@@ -68,13 +68,16 @@ export default function Presets({ factoryInitialState }) {
       </div>
       <div className="mt-2 flex items-center justify-between">
         <PresetsModal />
-        <button
-          type="button"
-          className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Add preset&nbsp;
-          <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
-        </button>
+        <form className="flex items-center space-x-6" title="Upload your JSON preset">
+          <label
+            htmlFor="presetUpload"
+            className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          >
+            Add preset&nbsp;
+            <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
+          </label>
+          <input type="file" accept=".json" id="presetUpload" name="presetUpload" className="sr-only" />
+        </form>
       </div>
     </div>
   )
