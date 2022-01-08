@@ -1,0 +1,50 @@
+[
+  {
+    "startMachineID": 1
+  },
+  {
+    "machineID": 1,
+    "readingTime": "datetime(mmhhYYYYMMDD)",
+    "properties": {
+      "name": "cutting",
+      "status": 0,
+      "temperature": 90,
+      "piecesProduced": 10,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
+      "rotate": 920
+    },
+    "links": [2]
+  },
+  {
+    "machineID": 2,
+    "readingTime": "datetime(mmhhYYYYMMDD)",
+    "properties": {
+      "name": "different",
+      "status": 0,
+      "temperature": 90,
+      "piecesProduced": 10,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
+      "rotate": 920
+    },
+    "links": [3]
+  },
+  {
+    "machineID": 3,
+    "readingTime": "datetime(mmhhYYYYMMDD)",
+    "properties": {
+      "name": "ola",
+      "status": 0,
+      "temperature": 90,
+      "piecesProduced": 10,
+      "volt": 2905,
+      "vibration": 143,
+      "pressure": 103,
+      "rotate": 920
+    },
+    "links": []
+  }
+]
