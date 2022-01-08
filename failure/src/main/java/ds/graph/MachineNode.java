@@ -1,27 +1,32 @@
 package ds.graph;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.json.JSONObject;
+import ds.graph.sensor.Sensor;
+
 public class MachineNode {  
+    
+    private String id;                         
+    private MachineNode next;   // Children machine. [machine sends output to this] 
+    private MachineNode prev;   // Parent machines. [machine receives input from this] 
+    private ConcurrentHashMap<String, Sensor> sensorProperties; // Machine sensors
+    private String input;            // Type of material to be received by the machine. 
+    private String output;           // Type of material to be produced by the machine.
+    private float defectProbability; // Defect probability in percentage
 
-    private String id;                          
-    private List<MachineNode> prev;             // Parent machines.   [machine receives input from these]
-    private List<MachineNode> next;             // Children machines. [machine output to these]
-    ConcurrentHashMap<String, Float> defaultValues;      // The maximum values allowed by the machine. 
-    // Necessary materials to make the machine produce the output. The key is the product id and the value is the amount.
-    ConcurrentHashMap<String, Integer> inputs;            // Produces subproduct. 
-    String output;    
-    ConcurrentHashMap<String, Integer> currentInput; 
-    Integer productCounter;                              // How many subproducts were produced.
+    Integer inCounter; 
+    Integer outCounter;  // How many subproducts were produced.
+    Integer defectiveProducts;
 
-    public MachineNode(String id){
-        this.id = id;
-        this.next = new ArrayList<>();
-        this.prev = new ArrayList<>();  
-        this.defaultValues = new ConcurrentHashMap<>();
-        this.inputs = new ConcurrentHashMap<>();
-        this.currentInput = new ConcurrentHashMap<>();
-        this.productCounter = 0;
+    public MachineNode(String id, String input, String output, float defectProbability){
+        this.id = id; 
+        this.sensorProperties = new ConcurrentHashMap<>();
+        this.input = input;
+        this.output = output;
+        this.inCounter = 0; 
+        this.outCounter = 0; 
+        this.defectiveProducts = 0;
+        this.defectProbability = defectProbability;
     }
 
     public String getId(){
@@ -32,108 +37,101 @@ public class MachineNode {
         return this.output;
     } 
 
-    public ConcurrentHashMap<String,Integer> getInputs(){
-        return this.inputs;
+    public Integer getOutCount(){
+        return this.outCounter;
     } 
 
-    public ConcurrentHashMap<String, Float> getDefaults(){
-        return this.defaultValues;
-    } 
-
-    public Integer getProductCount(){
-        return this.productCounter;
-    } 
-
-    public List<MachineNode> getNext(){
+    public MachineNode getNext(){
         return this.next;
     } 
 
-    public void addPrevMachine(MachineNode machineNode){
-        this.prev.add(machineNode);
+    public MachineNode getPrev(){
+        return this.prev;
     } 
 
-    public void addNextMachine(MachineNode machineNode){
-        this.next.add(machineNode);
+    public float getDefectProbability(){
+        return this.defectProbability;
     } 
 
-    public void addDefault(String name, Float value){
-        defaultValues.put(name, value); 
+    public Integer getDefectiveCount(){
+        return this.defectiveProducts;
+    } 
+
+    public float getDefectRate(){
+        if(this.outCounter == 0)
+            return 0;
+        
+        return (float)this.defectiveProducts/this.outCounter;
+    } 
+
+    public ConcurrentHashMap<String, Sensor> getSensors(){
+        return this.sensorProperties;
+    } 
+
+    public Sensor getSensor(String sensorID){
+        return this.sensorProperties.get(sensorID);
+    } 
+
+    public void addSensor(JSONObject sensorJson){
+        String id = sensorJson.getString("id");
+        this.sensorProperties.put(id, new Sensor(id,sensorJson.getJSONObject("attributes")));
     }
 
-    public void addInput(String id, Integer amount) {
-        this.inputs.put(id, amount);
-        this.currentInput.put(id, 0);
+    public void setNext(MachineNode nextMachine){
+        this.next = nextMachine;
+    }
+
+    public void setPrev(MachineNode prevMachine){
+        this.prev = prevMachine;
     }
 
     public void addOutput(String id){
         this.output = id; 
     } 
-
-    public void addCurrentInput(String prod){
-        Integer currAmountProd = this.currentInput.getOrDefault(prod, 0); 
-        this.currentInput.put(prod, currAmountProd + 1);  
+    
+    public void updateInCounter(){ 
+        this.inCounter++;
     }
 
-    public void updateCounter(){ 
-        this.productCounter++;
+    public void updateOutCounter(){ 
+        this.outCounter++;
     }
 
-    public void cleanProducedInput(){
-        for (String key: this.currentInput.keySet()){
-            Integer expectedAmount = this.inputs.get(key); 
-            Integer currAmount = this.currentInput.get(key); 
-
-            Integer remainingInput = currAmount - expectedAmount;
-            this.currentInput.put(key, remainingInput);
-        }
-    }
-
-    public Integer getCurrentInput(String prod){
-        return this.currentInput.get(prod);
-    }
-
-    /**
-     * Case the product can be produced.
-     * @return 
-     */
-    public boolean canProduce(){ 
-        for (String key: this.inputs.keySet()){ 
-            Integer expectedValue = this.inputs.get(key); 
-            Integer currentValue = this.currentInput.get(key); 
-            if (currentValue < expectedValue){
-                return false; 
-            }
-        }    
-        return true; 
+    public void addDefectiveProduct(){ 
+        this.defectiveProducts++;
     }
 
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();  
         s.append("[ID]: ").append(this.id).append("\n"); 
- 
-        s.append("[PREV]: ");
-        prev.forEach(prevNode-> {
-            s.append(prevNode.getId()).append(" ");
-        });  
-        s.append("\n"); 
 
-        s.append("[NEXT]: ");
-        next.forEach(prevNode-> {
-            s.append(prevNode.getId()).append(" ");
-        });
-        s.append("\n");
-        s.append("[DFLT]:\n"); 
-        defaultValues.keySet().forEach(propertyName -> {
-            s.append("- ").append(propertyName).append(" ").append(defaultValues.get(propertyName)).append("\n"); 
-        });
-        s.append("[INPUT]:\n");
-        inputs.keySet().forEach(prodId -> {
-            s.append("- ").append(prodId).append(" : ").append(inputs.get(prodId)).append("\n");
-        });
+        if(!isStartMachine()){
+            s.append("[PREV]: ");
+            s.append(this.prev.getId()).append(" ");
+            s.append("\n");
+        }
+
+        if(!isEndMachine()){
+            s.append("[NEXT]: ");
+            s.append(this.next.getId()).append(" ");
+            s.append("\n");
+        }
+
+        this.sensorProperties.forEach((key, value) -> System.out.println(value));
+
+        s.append("[INPUT]:").append(this.input).append("\n");
+
         s.append("[OUTPUT]:").append(this.output).append("\n"); 
 
         return s.toString();
     }
 
+    public boolean isEndMachine(){
+        return this.next == null;
+    }
+
+    public boolean isStartMachine(){
+        return this.prev == null;
+    }
 }
