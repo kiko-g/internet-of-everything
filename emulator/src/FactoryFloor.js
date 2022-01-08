@@ -13,7 +13,7 @@ class FactoryFloor {
     isValidMachineAddition(machine) {
         const machine_id = machine.getID();
         const is_valid_id = !(machine_id in this.machines_map);
-        const is_valid_position = machine.getPosition().isInside(new Position2D(0,0), new Position2D(this.width, this.height));
+        const is_valid_position = machine.getPosition.isInside(new Position2D(0,0), new Position2D(this.width, this.height));
 
         return is_valid_id && is_valid_position;
     }
@@ -46,6 +46,10 @@ class FactoryFloor {
 
     getMachine(machine_id) {
         return this.machines_map[machine_id];
+    }
+
+    get getMachines(){
+        return this.machines_map;
     }
 }
 
