@@ -6,6 +6,7 @@ on:
       - V1-Emulator
       - main
       - dev
+      - bind/V1-V3
   pull_request:
     branches: 
       - main
@@ -22,7 +23,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: "Run Docker"
-      working-directory: ./emulator
       run: docker-compose up -d
      
   gradle_build:
@@ -31,8 +31,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: "Run Docker"
+      run: docker-compose up -d
     - name: "Build and Test Edge"
-      working-directory: ./emulator/edge
+      working-directory: ./edge
       run: gradle test
   
   npm-build:
@@ -45,11 +47,13 @@ jobs:
       with:
         node-version: '14'
         cache: 'npm'
-        cache-dependency-path: emulator/server/package-lock.json
+        cache-dependency-path: emulator/package-lock.json
+    - name: "Run Docker"
+      run: docker-compose up -d
     - name: "npm install"
-      working-directory: ./emulator/server
+      working-directory: ./emulator
       run: npm install
 #     - name: "npm test"
-#       working-directory: ./emulator/server
+#       working-directory: ./emulator
 #       run: npm test
    

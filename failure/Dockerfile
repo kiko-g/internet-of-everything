@@ -1,9 +1,9 @@
 FROM  alpine:3.15
-LABEL vertical="edge"
+LABEL vertical="failure"
 
 # Set directories
-RUN mkdir -p /edge/
-WORKDIR /edge/
+RUN mkdir -p /failure/
+WORKDIR /failure/
 COPY src/ src/
 COPY data/ data/
 COPY build.gradle build.gradle

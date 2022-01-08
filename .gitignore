@@ -1,2 +1,10 @@
 .idea/*
+**/.DS_Store
+
+.gradle/*
+bin/*
+
+mosquitto/data/mosquitto.db
+mosquitto/log/mosquitto.log
+
 .vscode/*
