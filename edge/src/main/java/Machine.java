@@ -25,7 +25,7 @@ public class Machine extends MQTTClient implements Runnable {
     String productTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
 
-    Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String nextMachine) {
+    Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String nextMachine, byte[] config) {
         super(id);
         this.name = id;
         this.status = machineStatus;
@@ -36,14 +36,7 @@ public class Machine extends MQTTClient implements Runnable {
         this.nextMachineID = nextMachine;
         this.machineTopic = "machine/" + id;
         this.productTopic = "product/" + id;
-
-        try {
-            byte[] config = this.getConfigContent();
-            this.publishMessage("startup", config);
-        } catch (IOException e) {
-            System.err.println("Machine Configuration Not Found.");
-            System.exit(-1);
-        }
+        this.publishMessage("startup", config);
     }
 
 
@@ -81,12 +74,12 @@ public class Machine extends MQTTClient implements Runnable {
         }
     }
 
-    private byte[] getConfigContent() throws IOException{
-        String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
-        File file = new File(file_name);     
-        byte[] bytes = Files.readAllBytes(file.toPath());
-        return bytes;
-    }
+    // private byte[] getConfigContent() throws IOException{
+    //     String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
+    //     File file = new File(file_name);     
+    //     byte[] bytes = Files.readAllBytes(file.toPath());
+    //     return bytes;
+    // }
 
     private ArrayList<Sensor> getSensors() {
         return this.sensors;

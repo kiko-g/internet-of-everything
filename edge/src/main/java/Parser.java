@@ -96,10 +96,12 @@ public class Parser {
 
         ArrayList<Sensor> sensors = new ArrayList<Sensor>();
 
+        byte[] config = machineInfo.toString().getBytes();
+
         //Iterate over employee array
         sensorList.forEach( sensor -> parseSensorObject( (JSONObject) sensor, machineID, sensors));
 
-        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, nextMachineID);
+        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, nextMachineID, config);
         machines.add(newMachine);
 
         newMachine.setSensors(sensors);
