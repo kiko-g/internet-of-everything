@@ -36,3 +36,10 @@ services:
       - ./src/:/failure/edge/src/
     container_name: "failure-service"
     
+  # Chaos Engineering
+  chaos-engineering:
+    build: ./chaos_engineering/
+    command: sh -c "python3 mqtt_test.py"
+    volumes:
+      - ./chaos_engineering:/chaos_engineering/
+    container_name: "chaos_engineering"
