@@ -89,6 +89,8 @@ public class Parser {
         //Get machine timePerBatch
         Long machineTimePerBatch = (Long) machineInfo.get("timePerBatch");
 
+        String prevMachineID = (String) machineInfo.get("prevMachineID");
+
         //Get machine output
         String nextMachineID = (String) machineInfo.get("nextMachineID");
 
@@ -100,8 +102,8 @@ public class Parser {
 
         //Iterate over employee array
         sensorList.forEach( sensor -> parseSensorObject( (JSONObject) sensor, machineID, sensors));
-
-        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, nextMachineID, config);
+    
+        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, prevMachineID, nextMachineID, config);
         machines.add(newMachine);
 
         newMachine.setSensors(sensors);

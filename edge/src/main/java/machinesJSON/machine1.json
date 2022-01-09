@@ -5,6 +5,7 @@
   "input": "material1",
   "output": "material2",
   "timePerBatch": 1000,
+  "prevMachineID": null,
   "nextMachineID": "machine2",
   "sensors": [
     {

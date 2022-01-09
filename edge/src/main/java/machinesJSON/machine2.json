@@ -2,10 +2,11 @@
   "id": "machine2",
   "status": 0,
   "defectProbability": 1,
-  "input": "material3",
-  "output": "material4",
+  "input": "material1",
+  "output": "material2",
   "timePerBatch": 2000,
-  "nextMachineID": "machine3",
+  "prevMachineID": "machine1",
+  "nextMachineID": null,
   "sensors": [
     {
       "id": "temperature3",
