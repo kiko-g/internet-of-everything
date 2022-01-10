@@ -2,14 +2,9 @@ import React from "react"
 import { Disclosure, Transition } from "@headlessui/react"
 import { ChevronUpIcon } from "@heroicons/react/solid"
 
-export default function Collapsed(props) {
-  const headline = props.headline || "Headline Text"
-  const classNames = props.classNames || ""
-  const color = props.color || "purple"
-  const open = props.open || false
-
+export default function Collapsed({ children, open = false, color = "blue", classnames = "", headline = "Headline text" }) {
   return (
-    <Disclosure defaultOpen={open} as="div" className={`duration-200 ${classNames}`}>
+    <Disclosure defaultOpen={open} as="div" className={`duration-200 ${classnames}`}>
       {({ open }) => (
         <>
           <Disclosure.Button
@@ -33,7 +28,7 @@ export default function Collapsed(props) {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-bluegray-700">{props.children}</Disclosure.Panel>
+            <Disclosure.Panel className="px-2 pt-2 pb-3 text-sm text-slate-700">{children}</Disclosure.Panel>
           </Transition>
         </>
       )}

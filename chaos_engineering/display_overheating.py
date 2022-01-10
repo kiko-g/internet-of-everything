@@ -4,13 +4,17 @@ This module POSTs a machine json with a fake temperature value
 
 import random
 import json
+import sys
 import requests
 
 
 def main():
     """ Launch display overheating script """
     browser_type = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
-    request = requests.get("http://localhost:8000/machine2",
+
+    args = sys.argv[1:]
+
+    request = requests.get("http://localhost:8000/machine" + args[0],
                            headers={
                                "User-Agent":
                                browser_type

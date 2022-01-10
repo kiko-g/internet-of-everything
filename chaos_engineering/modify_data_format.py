@@ -18,11 +18,11 @@ def main():
 
     machine_json = machine_request.json()
 
-    reading_time = machine_json['reading-time']
-    machine_properties = machine_json['properties']
+    reading_time = machine_json['readingTime']
+    machine_values = machine_json['values']
 
-    machine_json['reading-time'] = {'time':reading_time, 'properties':machine_properties}
-    del machine_json['properties']
+    machine_json['readingTime'] = {'readingTime':reading_time, 'values':machine_values}
+    del machine_json['values']
 
     final_json = json.dumps(machine_json)
 
