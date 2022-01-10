@@ -1,8 +1,8 @@
 # Internet of Everything
 
-## Vertical 1
+## Vertical 1 - Emulator
 
-TODO: adicionar descrição
+The goal of this vertical is to emulate a factory, combining the information obtained from the machines in the factory floor and displaying it in real time in a organized dashboard.
 
 ## Vertical 2
 
@@ -20,11 +20,26 @@ TODO: adicionar descrição
 
 ## Edge
 
-TODO: adicionar descrição
+Make sure you have [gradle](https://gradle.org/install/) installed.
+
+Change directory to edge folder: `cd edge`
+
+Compile: `gradle build`
+Test: `gradle test`
+Run: `gradle run`
+
+## Mosquitto (MQTT Broker)
+
+Compile and run: `docker-compose up -d`
 
 ## Emulator
 
-TODO: adicionar descrição
+Make sure you have [NodeJS](https://nodejs.org/en/) installed.
+
+Change directory to emulator folder: `cd emulator`
+
+Install packages: `npm install`
+Run server: `npm start`
 
 ## Simulator
 
