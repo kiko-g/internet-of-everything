@@ -85,16 +85,17 @@ export default function AboutModal() {
                       className="self-end px-4 py-2 text-sm font-medium duration-150 border
                       border-rose-800/80 text-rose-800 hover:bg-rose-800 hover:text-white
                       dark:border-rose-400 dark:text-rose-400 dark:hover:border-rose-500 dark:hover:bg-rose-500 dark:hover:text-white
-                       rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                       rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-500"
                       onClick={closeModal}
                     >
                       Contact dev team
                     </a>
                     <button
                       type="button"
-                      className="self-end px-4 py-2 text-sm font-medium duration-150
-                     text-blue-900 bg-blue-200 dark:text-slate-100 bg-opacity-25 dark:bg-opacity-50 dark:hover:bg-opacity-75 hover:bg-opacity-75
-                       border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      className="self-end px-4 py-2 text-sm font-medium duration-150 border
+                       border-blue-700/80 bg-blue-700 text-white hover:bg-blue-600 hover:border-blue-600
+                       dark:border-blue-500 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-400 dark:hover:border-blue-400
+                       rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
                       Got it, thanks!

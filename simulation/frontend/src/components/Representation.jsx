@@ -80,7 +80,8 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               type="button"
               title="Clear input"
               onClick={() => setSearchValue("")}
-              className="h-full bg-gradient-to-br from-rose-500 via-rose-600 to-rose-700 hover:opacity-75 p-3 rounded text-white font-semibold duration-200"
+              className="h-full p-3 rounded font-semibold duration-200 ring-1
+               ring-rose-700/80 text-rose-700/80 hover:bg-rose-700/80 hover:text-white"
             >
               <TrashIcon className="h-6 w-6" />
             </button>
