@@ -26,11 +26,16 @@ TODO: adicionar descrição
 
 ## Edge
 
-TODO: adicionar descrição
+- added generated data by some sensors
+- that data is sent by MQTT to the topics defined in wiki (`machine/id` and `product/id`)
+- defined structure of config file for each machine
+- during boot of each machine that config file is sent via MQTT to the topic `startup`
+- the config file is parsed in order to create in runtime the necessary java objects to run the machines and the sensors
 
 ## Emulator
 
-TODO: adicionar descrição
+- parse the config file of each machine and create the necessary objects
+- parse the messages received by the machine's sensors
 
 ## Simulator
 
@@ -48,11 +53,16 @@ TODO: adicionar descrição
 
 ## Edge
 
-TODO: adicionar descrição
+- make the Edge a MQTT Client
+
+## Mosquitto
+
+- create a MQTT Broker using mosquitto
 
 ## Emulator
 
-TODO: adicionar descrição
+- make the emulator a MQTT Client
+- store information relative to the factory topology
 
 ## Simulator
 
@@ -70,11 +80,11 @@ TODO: adicionar descrição
 
 ## Edge
 
-TODO: adicionar descrição
+- technology setup
 
 ## Emulator
 
-TODO: adicionar descrição
+- technology setup
 
 ## Simulator
 
