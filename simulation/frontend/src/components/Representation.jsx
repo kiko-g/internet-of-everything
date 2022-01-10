@@ -135,7 +135,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryInitial} />
-              <Scrollbar style={{ height: "60vh" }}>
+              <Scrollbar style={{ minHeight: "56vh" }}>
                 <ReactJson
                   indentWidth={4}
                   iconStyle="triangle"
@@ -154,7 +154,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             {/* Final JSON */}
             <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryFinal} />
-              <Scrollbar style={{ height: "60vh" }}>
+              <Scrollbar style={{ minHeight: "56vh" }}>
                 <ReactJson
                   id="react-json-final"
                   indentWidth={4}

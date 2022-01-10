@@ -32,7 +32,6 @@ export const jsonStyle = {
   overflowX: "hidden",
   padding: "1em",
   width: "100%",
-  minHeight: "60vh",
   fontSize: "small",
   lineHeight: 1,
   fontFamily: "JetBrains Mono, Consolas, sans-serif",

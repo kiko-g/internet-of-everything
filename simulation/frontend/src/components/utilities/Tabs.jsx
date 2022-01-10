@@ -4,7 +4,6 @@ import Scrollbar from "react-scrollbars-custom"
 export default class Tabs extends React.Component {
   constructor(props) {
     super(props)
-    this.wrapper = React.createRef()
     this.state = {
       activeTab: this.props.children[this.props.activeIndex || 0].props.label,
     }
@@ -14,18 +13,6 @@ export default class Tabs extends React.Component {
     this.setState({
       activeTab: tab,
     })
-  }
-
-  componentDidMount() {
-    this.special = this.state.activeTab === "JSON"
-  }
-
-  componentDidUpdate() {
-    this.special = this.state.activeTab === "JSON"
-  }
-
-  componentWillUnmount() {
-    this.special = false
   }
 
   render() {
@@ -46,13 +33,9 @@ export default class Tabs extends React.Component {
             bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')]"
         >
           <div className="w-full p-2">
-            {this.special ? (
-              <Scrollbar style={{ minHeight: "calc(65vh + 1rem)", maxHeight: "74vh" }}>
-                <div className="p-2 h-full">{content}</div>
-              </Scrollbar>
-            ) : (
+            <Scrollbar style={{ minHeight: "calc(65vh + 1.1rem)", maxHeight: "74vh" }}>
               <div className="p-2 h-full">{content}</div>
-            )}
+            </Scrollbar>
           </div>
         </article>
       </>
