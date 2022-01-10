@@ -20,7 +20,7 @@ export default function PresetsModal() {
         onClick={openModal}
         className="ml-1 font-medium font-sans text-sm tracking-normal w-full text-slate-600 rounded-b-xl opacity-75 hover:opacity-100 duration-200"
       >
-        Need help?
+        What is this?
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -53,8 +53,8 @@ export default function PresetsModal() {
             >
               <div className="inline-block w-full max-w-xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-slate-50 dark:bg-slate-700 shadow-xl rounded-2xl">
                 <div className="flex items-center justify-between">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-slate-800 dark:text-white">
-                    About
+                  <Dialog.Title as="h2" className="text-xl font-semibold leading-6 text-slate-800 dark:text-white">
+                    Help
                   </Dialog.Title>
                   <button
                     type="button"
@@ -65,23 +65,49 @@ export default function PresetsModal() {
                   </button>
                 </div>
                 <div className="flex flex-col items-start mt-2 space-y-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-300">
-                    This section allows the user to toggle between factorty representations, which allows for different simulation
-                    outcomes.
+                  <p className="text-gray-700 dark:text-gray-300">
+                    This section allows the user to <span className="font-semibold">toggle between factorty representations</span>
+                    . The purpose of this section is to allow users to create different simulation outcomes for different factory
+                    layouts.
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-300">
-                    To add your preset click the <code className="text-sky-500 dark:text-sky-200">Add your preset</code> button
-                    and upload a JSON file with the same syntax as the ones already available.
+                  <p className="text-gray-700 dark:text-gray-300">
+                    This section also allows the user to upload their own factory layout using the{" "}
+                    <code className="px-2 font-bold text-blue-500 dark:text-amber-300">Add preset</code> button. This button will
+                    prompt the user to select a JSON file and will add that factory layout to the list of available presets.
                   </p>
-                  <button
-                    type="button"
-                    className="self-end px-4 py-2 text-sm font-medium 
-                    text-blue-900 bg-blue-200 dark:text-slate-100 bg-opacity-25 dark:bg-opacity-50 dark:hover:bg-opacity-75 hover:bg-opacity-75
-                    border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
-                  >
-                    Got it, thanks!
-                  </button>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Make sure the JSON file you choose to upload is{" "}
+                    <span className="font-semibold">compliant with the expected JSON format</span>. The format is available in the
+                    JSON tab button and we recommend copying the json text to the clipboard using the{" "}
+                    <code className="px-2 font-bold text-blue-500 dark:text-amber-300">Copy</code> button.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    The storage of these files is not persistent which means you should not delete your local file, since if you
+                    refresh your tab or close your browser the file won't be available as a preset
+                  </p>
+                  <div className="flex items-center justify-between w-full">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://github.com/softeng-feup/ds-meic1"
+                      className="self-end px-4 py-2 text-sm font-medium duration-150 border
+                      border-rose-800/80 text-rose-800 hover:bg-rose-800 hover:text-white
+                      dark:border-rose-400 dark:text-rose-400 dark:hover:border-rose-500 dark:hover:bg-rose-500 dark:hover:text-white
+                       rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                      onClick={closeModal}
+                    >
+                      Contact dev team
+                    </a>
+                    <button
+                      type="button"
+                      className="self-end px-4 py-2 text-sm font-medium duration-150
+                     text-blue-900 bg-blue-200 dark:text-slate-100 bg-opacity-25 dark:bg-opacity-50 dark:hover:bg-opacity-75 hover:bg-opacity-75
+                       border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      onClick={closeModal}
+                    >
+                      Got it, thanks!
+                    </button>
+                  </div>
                 </div>
               </div>
             </Transition.Child>
