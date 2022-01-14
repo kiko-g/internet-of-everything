@@ -17,7 +17,7 @@ on:
 
 jobs:
   docker_build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "Vertical 1: Test docker-compose"
     
     steps:
@@ -26,7 +26,7 @@ jobs:
       run: docker-compose up -d
      
   gradle_build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "Vertical 1: Build and Test Edge"
     
     steps:
@@ -38,7 +38,7 @@ jobs:
       run: gradle test
   
   npm-build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "Vertical 1: Build and Test Server"
     
     steps:
