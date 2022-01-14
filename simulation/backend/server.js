@@ -17,7 +17,7 @@ app.use(urlencoded({ extended: true }))
 app.post("/run", (req, res) => {
   let userJson = req.body.settings
   if (
-    userJson.batches == undefined || 
+    userJson.batches == undefined ||
     userJson.startMachineID == undefined ||
     userJson.machines == undefined
   ) {

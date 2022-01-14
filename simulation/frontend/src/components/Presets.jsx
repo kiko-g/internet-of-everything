@@ -47,9 +47,9 @@ export default function Presets({ factoryInitialState, presetsState }) {
                               as="span"
                               className={`inline text-xs ${checked ? "text-sky-100" : "text-gray-500"}`}
                             >
-                              <span>{`${factory.length} machines`}</span>
+                              <span>{`${factory.length} machine${factory.length === 1 ? ` ` : `s`}`}</span>
                               <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
-                              <span>{`${sensorAmount} sensors in total`}</span>
+                              <span>{`${sensorAmount} sensors`}</span>
                               <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
                               <span>{`Start id: ${startMachineID}`}</span>
                             </RadioGroup.Description>

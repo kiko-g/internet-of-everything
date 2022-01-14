@@ -10,6 +10,7 @@ import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
 import { jsonStyle } from "../utils"
 import AlternateMachine from "./AlternateMachine"
+import Scrollbar from "react-scrollbars-custom"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -26,7 +27,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const Tab = (props) => <>{props.children}</>
 
   return (
-    <Tabs>
+    <Tabs activeIndex={2}>
       {/* Graph schema */}
       <Tab label="Graph">
         <ForceGraph factory={factory} phaseHook={[phase, setPhase]} />
@@ -79,7 +80,8 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               type="button"
               title="Clear input"
               onClick={() => setSearchValue("")}
-              className="h-full bg-gradient-to-br from-rose-500 via-rose-600 to-rose-700 hover:opacity-75 p-3 rounded text-white font-semibold duration-200"
+              className="h-full p-3 rounded font-semibold duration-200 ring-1
+               ring-rose-700/80 text-rose-700/80 hover:bg-rose-700/80 hover:text-white"
             >
               <TrashIcon className="h-6 w-6" />
             </button>
@@ -132,37 +134,42 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
           {/* Initial JSON */}
           <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
+            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryInitial} />
-              <ReactJson
-                indentWidth={4}
-                iconStyle="triangle"
-                name={false}
-                collapsed={true}
-                displayObjectSize={false}
-                displayDataTypes={false}
-                enableClipboard={false}
-                src={factoryInitial}
-                theme="threezerotwofour"
-                style={jsonStyle}
-              />
+              <Scrollbar style={{ minHeight: "56vh" }}>
+                <ReactJson
+                  indentWidth={4}
+                  iconStyle="triangle"
+                  name={false}
+                  collapsed={1}
+                  displayObjectSize={false}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                  src={factoryInitial}
+                  theme="threezerotwofour"
+                  style={jsonStyle}
+                />
+              </Scrollbar>
             </div>
 
             {/* Final JSON */}
-            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl">
+            <div className="relative w-full overflow-y-auto overflow-x-hidden rounded-xl bg-[#3c4553] pr-2">
               <CopyClipboard json={factoryFinal} />
-              <ReactJson
-                indentWidth={4}
-                iconStyle="triangle"
-                name={false}
-                collapsed={true}
-                displayObjectSize={false}
-                displayDataTypes={false}
-                enableClipboard={false}
-                src={factoryFinal}
-                theme="threezerotwofour"
-                style={jsonStyle}
-              />
+              <Scrollbar style={{ minHeight: "56vh" }}>
+                <ReactJson
+                  id="react-json-final"
+                  indentWidth={4}
+                  iconStyle="triangle"
+                  name={false}
+                  collapsed={1}
+                  displayObjectSize={false}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                  src={factoryFinal}
+                  theme="threezerotwofour"
+                  style={jsonStyle}
+                />
+              </Scrollbar>
             </div>
           </div>
         </div>

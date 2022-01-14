@@ -1029,251 +1029,13 @@ export const factories = [
   ],
   [
     {
-      id: "0",
-      status: 0,
-      defectProbability: 52,
-      input: "material1",
-      output: "material2",
-      timePerBatch: 1000,
-      prevMachineID: "null",
-      nextMachineID: "null",
-      sensors: [
-        {
-          id: "temperature1",
-          type: "TEMPERATURE",
-          updateInterval: 1000,
-          attributes: {
-            temperature: {
-              min: 70,
-              max: 120,
-              avg: 90,
-              standardDeviation: 2,
-            },
-          },
-        },
-        {
-          id: "position1",
-          type: "POSITION",
-          updateInterval: 2000,
-          attributes: {
-            x: {
-              min: 0,
-              max: 20,
-              avg: 10,
-              standardDeviation: 7,
-            },
-            y: {
-              min: 0,
-              max: 20,
-              avg: 10,
-              standardDeviation: 7,
-            },
-          },
-        },
-        {
-          id: "velocity1",
-          type: "VELOCITY",
-          updateInterval: 4000,
-          attributes: {
-            velocity: {
-              min: 50,
-              max: 120,
-              avg: 100,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "vibration1",
-          type: "VIBRATION",
-          updateInterval: 2500,
-          attributes: {
-            vibration: {
-              min: 5,
-              max: 2,
-              avg: 3.2,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "productionSpeed1",
-          type: "PRODUCTION_SPEED",
-          updateInterval: 1000,
-          attributes: {
-            productionSpeed: {
-              max: 60,
-              min: 0,
-              avg: 23.5,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "energy1",
-          type: "ENERGY",
-          updateInterval: 1000,
-          attributes: {
-            energy: {
-              max: 60,
-              min: 20,
-              avg: 40,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "orientation1",
-          type: "ORIENTATION",
-          updateInterval: 100,
-          attributes: {
-            orientation: {
-              max: 360,
-              min: 0,
-              avg: 40.5,
-              standardDeviation: 9,
-            },
-          },
-        },
-        {
-          id: "temperature2",
-          type: "TEMPERATURE",
-          updateInterval: 200,
-          attributes: {
-            temperature: {
-              min: 60,
-              max: 110,
-              avg: 95,
-              standardDeviation: 2,
-            },
-          },
-        },
-      ],
-    },
-  ],
-  [
-    {
-      id: "machine1",
-      status: 0,
-      defectProbability: 0.74,
-      input: "material1",
-      output: "material2",
-      timePerBatch: 1000,
-      prevMachineID: "null",
-      nextMachineID: "machine5",
-      sensors: [
-        {
-          id: "temperature1",
-          type: "TEMPERATURE",
-          attributes: {
-            temperature: {
-              min: 70,
-              max: 120,
-              avg: 90,
-              standardDeviation: 2,
-            },
-          },
-        },
-        {
-          id: "position1",
-          type: "POSITION",
-          attributes: {
-            x: {
-              min: 0,
-              max: 20,
-              avg: 10,
-              standardDeviation: 7,
-            },
-            y: {
-              min: 0,
-              max: 20,
-              avg: 10,
-              standardDeviation: 7,
-            },
-          },
-        },
-        {
-          id: "velocity1",
-          type: "VELOCITY",
-          attributes: {
-            velocity: {
-              min: 50,
-              max: 120,
-              avg: 100,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "vibration1",
-          type: "VIBRATION",
-          attributes: {
-            vibration: {
-              min: 5,
-              max: 2,
-              avg: 3.2,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "speed1",
-          type: "SPEED",
-          attributes: {
-            productionSpeed: {
-              max: 60,
-              min: 0,
-              avg: 23.5,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "energy1",
-          type: "ENERGY",
-          attributes: {
-            energy: {
-              max: 60,
-              min: 20,
-              avg: 40,
-              standardDeviation: 1,
-            },
-          },
-        },
-        {
-          id: "orientation1",
-          type: "ORIENTATION",
-          attributes: {
-            orientation: {
-              max: 360,
-              min: 0,
-              avg: 40.5,
-              standardDeviation: 9,
-            },
-          },
-        },
-        {
-          id: "temperature2",
-          type: "TEMPERATURE",
-          attributes: {
-            temperature: {
-              min: 60,
-              max: 110,
-              avg: 95,
-              standardDeviation: 2,
-            },
-          },
-        },
-      ],
-    },
-    {
       id: "machine5",
       status: 0,
       defectProbability: 2.48,
-      input: "material2",
+      input: "material5",
       output: "material6",
       timePerBatch: 1000,
-      prevMachineID: "machine1",
+      prevMachineID: "null",
       nextMachineID: "machine6",
       sensors: [
         {
@@ -1825,6 +1587,130 @@ export const factories = [
         {
           id: "temperature2",
           type: "TEMPERATURE",
+          attributes: {
+            temperature: {
+              min: 60,
+              max: 110,
+              avg: 95,
+              standardDeviation: 2,
+            },
+          },
+        },
+      ],
+    },
+  ],
+  [
+    {
+      id: "0",
+      status: 0,
+      defectProbability: 52,
+      input: "material1",
+      output: "material2",
+      timePerBatch: 1000,
+      prevMachineID: "null",
+      nextMachineID: "null",
+      sensors: [
+        {
+          id: "temperature1",
+          type: "TEMPERATURE",
+          updateInterval: 1000,
+          attributes: {
+            temperature: {
+              min: 70,
+              max: 120,
+              avg: 90,
+              standardDeviation: 2,
+            },
+          },
+        },
+        {
+          id: "position1",
+          type: "POSITION",
+          updateInterval: 2000,
+          attributes: {
+            x: {
+              min: 0,
+              max: 20,
+              avg: 10,
+              standardDeviation: 7,
+            },
+            y: {
+              min: 0,
+              max: 20,
+              avg: 10,
+              standardDeviation: 7,
+            },
+          },
+        },
+        {
+          id: "velocity1",
+          type: "VELOCITY",
+          updateInterval: 4000,
+          attributes: {
+            velocity: {
+              min: 50,
+              max: 120,
+              avg: 100,
+              standardDeviation: 1,
+            },
+          },
+        },
+        {
+          id: "vibration1",
+          type: "VIBRATION",
+          updateInterval: 2500,
+          attributes: {
+            vibration: {
+              min: 5,
+              max: 2,
+              avg: 3.2,
+              standardDeviation: 1,
+            },
+          },
+        },
+        {
+          id: "productionSpeed1",
+          type: "PRODUCTION_SPEED",
+          updateInterval: 1000,
+          attributes: {
+            productionSpeed: {
+              max: 60,
+              min: 0,
+              avg: 23.5,
+              standardDeviation: 1,
+            },
+          },
+        },
+        {
+          id: "energy1",
+          type: "ENERGY",
+          updateInterval: 1000,
+          attributes: {
+            energy: {
+              max: 60,
+              min: 20,
+              avg: 40,
+              standardDeviation: 1,
+            },
+          },
+        },
+        {
+          id: "orientation1",
+          type: "ORIENTATION",
+          updateInterval: 100,
+          attributes: {
+            orientation: {
+              max: 360,
+              min: 0,
+              avg: 40.5,
+              standardDeviation: 9,
+            },
+          },
+        },
+        {
+          id: "temperature2",
+          type: "TEMPERATURE",
+          updateInterval: 200,
           attributes: {
             temperature: {
               min: 60,
