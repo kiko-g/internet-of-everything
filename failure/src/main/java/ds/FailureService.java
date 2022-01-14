@@ -8,6 +8,9 @@ public class FailureService {
     ProductListener productListener;
     Graph machinesGraph;
 
+    /**
+     * Starts the failure service by activating the machine listener and product listener. 
+     */
     public FailureService(){
         this.machinesGraph = new Graph();
         this.machineListener = new MachineListener(this.machinesGraph);

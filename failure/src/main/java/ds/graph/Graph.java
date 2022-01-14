@@ -3,23 +3,23 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import java.nio.file.Files;
 import java.io.IOException; 
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView; 
+
 
 public class Graph { 
     ConcurrentHashMap<String, MachineNode> nodes; 
 
     public Graph(){
-        this("./data/graph.json");
+        this("./data/graph/");
     }
 
-    public Graph(String filename){  
+    public Graph(String folderPath){  
         nodes = new ConcurrentHashMap<>(); 
         try{
-            JSONObject json = this.readJsonGraph(filename);  
+            List<JSONObject> json = this.readJsonGraph(folderPath);  
             this.addEmptyNodes(json);
             this.addProperties(json);
         } catch(Exception e){
@@ -27,14 +27,26 @@ public class Graph {
         }
     } 
     /**
-     * Reads the graph json file to build it in code.
+     * Reads all the files in the graph folder. 
      * @param filename Name of the file. 
-     * @return File content as JSONObject
+     * @return Get's all the machine JSON objects. 
      * @throws IOException 
      */
-    public JSONObject readJsonGraph(String filename) throws IOException{ 
-        byte[] encoded = Files.readAllBytes(Paths.get(filename));
-        return new JSONObject(new String (encoded));
+    public List<JSONObject> readJsonGraph(String folderPath) throws IOException {  
+        List<JSONObject> jsonFiles = new ArrayList<>(); 
+        File folder = new File(folderPath);
+        File[] listOfFiles = folder.listFiles();  
+        Arrays.stream(listOfFiles).forEach((file) -> {
+            if (file.isFile()) {
+                try { 
+                    byte[] encoded = Files.readAllBytes(file.toPath()); 
+                    jsonFiles.add(new JSONObject(new String(encoded))); 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return jsonFiles; 
     }
 
 
@@ -43,58 +55,38 @@ public class Graph {
      * Just after adding all the nodes to the HashMap, it's possible to add the next and previous nodes. 
      * @param json The json that contains the graph structure. 
      */
-    public void addEmptyNodes(JSONObject json){
-        json.keySet().forEach(id -> {
-            this.nodes.put(id, new MachineNode(id)); 
-        });
+    public void addEmptyNodes(List<JSONObject> machinesJson){
+        for(JSONObject machineJson : machinesJson){
+            String input = machineJson.getString("input"); 
+            String output = machineJson.getString("output"); 
+            String id  = machineJson.getString("id");
+            float defectProbability  = machineJson.getFloat("defectProbability");
+            this.nodes.put(id, new MachineNode(id, input, output, defectProbability)); 
+        }
     }
 
     /**
      * Adds the property for each node in the graph. 
      * @param json The json object describing the graph.
      */
-    public void addProperties(JSONObject json) {
-        json.keySet().forEach(id -> {
-            MachineNode machineNode = nodes.get(id); 
-            JSONObject machineJson = json.getJSONObject(id); 
-            this.addPrevNodes(machineNode, machineJson.getJSONArray("prev"));       
-            this.addNextNodes(machineNode, machineJson.getJSONArray("next")); 
-            this.addDefaultValues(machineNode, machineJson.getJSONObject("default")); 
-            this.addInputs(machineNode, machineJson.getJSONObject("input"));
-            this.addOutput(machineNode, machineJson.getString("output"));
-        });
-    }
+    public void addProperties(List<JSONObject> machinesJson) {
+        for(JSONObject machineJson : machinesJson){
+            String id = machineJson.getString("id");
+            MachineNode machineNode = nodes.get(id);  
 
-    public void addPrevNodes(MachineNode machineNode, JSONArray prevNodes){  
-        prevNodes.forEach(id -> {
-            MachineNode prevNode = nodes.get(id); 
-            if (prevNode != null) 
-                machineNode.addPrevMachine(prevNode);
-        });
-    }  
 
-    public void addNextNodes(MachineNode machineNode, JSONArray nextNodes){  
-        nextNodes.forEach(id -> {
-            MachineNode nextNode = nodes.get(id); 
-            if (nextNode != null) 
-                machineNode.addNextMachine(nextNode);
-        });
-    } 
+            if(machineJson.has("nextMachineID")){
+                String nextId = machineJson.getString("nextMachineID");
+                MachineNode next = this.nodes.get(nextId);
+                machineNode.setNext(next);
+                next.setPrev(machineNode);
+            }
 
-    public void addDefaultValues(MachineNode machineNode, JSONObject defaultValues){
-        defaultValues.keySet().forEach(propertyName -> {
-            machineNode.addDefault(propertyName, defaultValues.getFloat(propertyName));
-        });
-    }
-
-    public void addInputs(MachineNode machineNode, JSONObject inputs){
-        inputs.keySet().forEach(inputId -> {
-            machineNode.addInput(inputId, inputs.getInt(inputId));
-        });
-    } 
-
-    public void addOutput(MachineNode machineNode, String prodId){
-        machineNode.addOutput(prodId);
+            JSONArray sensors = machineJson.getJSONArray("sensors");
+            for(Object sensorJson: sensors) { 
+                machineNode.addSensor((JSONObject)sensorJson);
+            }
+        }
     }
 
     public MachineNode getMachineNode(String machineId){
@@ -105,16 +97,22 @@ public class Graph {
         return this.nodes.keySet(); 
     }
 
-    public List<MachineNode> getStartMachines(){
-        List<MachineNode> startMachines = new ArrayList<>();
+    public MachineNode getStartMachine() throws Exception{
 
         for(MachineNode node: this.nodes.values()){
-            if(node.getInputs().isEmpty()){
-                startMachines.add(node);
-            }
+            if(node.isStartMachine())
+                return node;
         }
+        throw new Exception("Missing Start Node");
+    }
 
-        return startMachines;
+    public MachineNode getEndMachine() throws Exception{
+
+        for(MachineNode node: this.nodes.values()){
+            if(node.isEndMachine())
+                return node;
+        }
+        throw new Exception("Missing End Node");
     }
 
     public String toString(){ 

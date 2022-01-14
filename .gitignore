@@ -1,8 +1,11 @@
-.idea/*
+**/.idea/**
 **/.DS_Store
 
 .gradle/*
 bin/*
 
+*.db
 mosquitto/data/mosquitto.db
 mosquitto/log/mosquitto.log
+
+.vscode/*
