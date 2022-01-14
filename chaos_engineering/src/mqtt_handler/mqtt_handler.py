@@ -3,6 +3,8 @@ import time
 import random
 import json
 import paho.mqtt.client as mqtt
+import os
+from dotenv import load_dotenv
 
 
 def on_connect(client, userdata, flags, rc):
@@ -44,8 +46,9 @@ def on_message(client, userdata, msg):
 class MQTTHandler:
     """ Handles mosquitto functions """
 
-    def __init__(self, address, port, print_raw):
-        self.address = address
+    def __init__(self, port, print_raw):
+        load_dotenv()
+        self.address = os.getenv('mosquitto_address')
         self.port = port
         self.print_raw = print_raw
         self.logs = []
@@ -54,7 +57,7 @@ class MQTTHandler:
         self.mqtt = mqtt.Client(userdata=self.userdata)
         self.mqtt.on_connect = on_connect
         self.mqtt.on_message = on_message
-        self.mqtt.connect(address, 1883)
+        self.mqtt.connect(self.address, 1883)
 
     def start(self):
         """ Starts mosquitto loop in a different thread """
