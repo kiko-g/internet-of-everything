@@ -51,7 +51,7 @@ public class Listener implements MqttCallbackExtended {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
+        //System.out.println(messageParsed);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class MachineState  {
         return this.sensorsState.get(sensorId);
     }
 
-    public void updateSensorState(String sensorId, String propertyName, float value){
+    public void updateSensorState(String sensorId, String propertyName, double value){
 
     }
 

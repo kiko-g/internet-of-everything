@@ -22,14 +22,14 @@ public final class Utils {
         return dateTime;
     }
 
-    public static float getRandomFloat(float min, float max){
-        return round(min + rnd.nextFloat() * (max - min));
+    public static double getRandomDouble(double min, double max){
+        return round(min + rnd.nextDouble() * (max - min));
     } 
 
-    public static float round(float value) {
-        BigDecimal bd = new BigDecimal(Float.toString(value));
+    public static double round(double value) {
+        BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(4, RoundingMode.HALF_UP);
-        return bd.floatValue();
+        return bd.doubleValue();
     }
 
     public static String formatDouble(double value) {

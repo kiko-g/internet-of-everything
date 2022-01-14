@@ -26,10 +26,18 @@ services:
     build: ./failure/
     command: sh -c "gradle runFailureService"
     volumes:
-      - ./src/:/failure/edge/src/
+      - ./failure/src/:/failure/src/
     container_name: "failure-service"
-    
-  # Chaos Engineering
+
+  # TODO: delete this when QRCode messages are ready
+  products:
+    build: ./failure/
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./failure/src/:/failure/src/
+    container_name: "product-sensors"
+
+  #git Chaos Engineering
   chaos-engineering:
     build: ./chaos_engineering/
     command: sh -c "python3 src/mqtt_test.py"

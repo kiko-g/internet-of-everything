@@ -1,16 +1,29 @@
 {
-    "id": "machine2",
+    "id": "machine5",
     "status": 0,
     "defectProbability": 10,
-    "input": "material2",
-    "output": "material3",
-    "timePerBatch": 1000,
-    "nextMachineID": "machine3",
+    "input": "material5",
+    "output": "material6",
+    "timePerBatch": 2000,
+    "nextMachineID": "null",
     "sensors": [
-      {
-        "id": "position2", 
-        "type": "POSITION",
+      { 
+        "id": "temperature5",
+        "type": "TEMPERATURE",
         "updateInterval": 1000,
+        "attributes": {
+          "temperature":{
+            "min": 70,
+            "max": 120,
+            "avg": 90, 
+            "standardDeviation": 2
+          } 
+        }
+      },  
+      {
+        "id": "position5", 
+        "type": "POSITION",
+        "updateInterval": 4000,
         "attributes": {
           "x": {
             "min": 0,
@@ -27,41 +40,28 @@
         }
       },
       {
-        "id": "velocity2",
+        "id": "velocity5",
         "type": "VELOCITY", 
-        "updateInterval": 2000,
+        "updateInterval": 4000,
         "attributes": {
-          "velocity":{
-            "min": 50, 
+          "velocity": {
+            "min": 40, 
             "max": 120,
-            "avg": 100,
-            "standardDeviation": 1
+            "avg": 80,
+            "standardDeviation":8
           }
         }
       },
       {
-        "id": "vibration2",
+        "id": "vibration5",
         "type": "VIBRATION",
         "updateInterval": 4000,
         "attributes": {
-          "vibration":{
+          "vibration": {
             "min": 5,
             "max": 2,
             "avg": 3.2, 
             "standardDeviation": 1
-          }
-        }
-      },
-      {
-        "id": "energy2",
-        "type": "ENERGY",
-        "updateInterval": 1000,
-        "attributes": {
-          "energy":{
-            "max": 60, 
-            "min": 20, 
-            "avg": 40,
-            "standardDeviation": 9
           }
         }
       }
