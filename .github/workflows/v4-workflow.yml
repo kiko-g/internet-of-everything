@@ -16,17 +16,17 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.9, 3.10.1]
+    #strategy:
+    #  max-parallel: 4
+    #  matrix:
+    #    python-version: [3.9, 3.10.1]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+    #- name: Set up Python ${{ matrix.python-version }}
+    #  uses: actions/setup-python@v2
+    #  with:
+    #    python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       working-directory: ./chaos_engineering
       run: |
