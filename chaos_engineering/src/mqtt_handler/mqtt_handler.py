@@ -2,8 +2,9 @@
 import time
 import random
 import json
-import paho.mqtt.client as mqtt
 import os
+import paho.mqtt.client as mqtt
+
 from dotenv import load_dotenv
 
 
