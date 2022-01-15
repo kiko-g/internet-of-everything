@@ -1,16 +1,21 @@
 {
-    "id": "m5",
+    "id": "machine5",
     "status": 0,
     "defectProbability": 10,
+    "input": "material5",
+    "output": "material6",
+    "timePerBatch": 2000,
+    "nextMachineID": "null",
     "sensors": [
       { 
         "id": "temperature5",
         "type": "TEMPERATURE",
+        "updateInterval": 1000,
         "attributes": {
           "temperature":{
-            "avg": 90, 
             "min": 70,
             "max": 120,
+            "avg": 90, 
             "standardDeviation": 2
           } 
         }
@@ -18,17 +23,18 @@
       {
         "id": "position5", 
         "type": "POSITION",
+        "updateInterval": 4000,
         "attributes": {
           "x": {
-            "avg": 10, 
             "min": 0,
             "max": 20,
+            "avg": 10, 
             "standardDeviation":7
           },
           "y": {
-            "avg": 10, 
             "min": 0,
             "max": 20,
+            "avg": 10, 
             "standardDeviation":7
           }
         }
@@ -36,11 +42,12 @@
       {
         "id": "velocity5",
         "type": "VELOCITY", 
+        "updateInterval": 4000,
         "attributes": {
           "velocity": {
-            "avg": 80,
             "min": 40, 
             "max": 120,
+            "avg": 80,
             "standardDeviation":8
           }
         }
@@ -48,28 +55,15 @@
       {
         "id": "vibration5",
         "type": "VIBRATION",
+        "updateInterval": 4000,
         "attributes": {
           "vibration": {
-            "avg": 3.2, 
             "min": 5,
             "max": 2,
+            "avg": 3.2, 
             "standardDeviation": 1
           }
         }
-      },
-      {
-        "id": "productionSpeed5",
-        "type": "PRODUCTION_SPEED",
-        "attributes": {
-          "productionSpeed":{
-            "avg": 23.5,
-            "max": 30, 
-            "min": 0, 
-            "standardDeviation": 9
-          }
-        }
       }
-    ],
-    "input": "material5",
-    "output": "material6"
+    ]
 } 

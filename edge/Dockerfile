@@ -1,17 +1,16 @@
 FROM  alpine:3.15
-LABEL vertical="failure"
+LABEL vertical="edge"
 
 # Set directories
-RUN mkdir -p /failure/
-WORKDIR /failure/
+RUN mkdir -p /edge/
+WORKDIR /edge/
 COPY src/ src/
-COPY data/ data/
+COPY lib/ lib/
+COPY .env.docker .env
 COPY build.gradle build.gradle
 COPY settings.gradle settings.gradle
-COPY .env.docker .env
 
 RUN apk add gradle --no-cache
 RUN apk --no-cache add mosquitto-clients
 
-# To be deleted later
 RUN gradle build

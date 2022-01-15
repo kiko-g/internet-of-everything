@@ -74,8 +74,7 @@ public class Graph {
             String id = machineJson.getString("id");
             MachineNode machineNode = nodes.get(id);  
 
-
-            if(machineJson.has("nextMachineID")){
+            if(!machineJson.getString("nextMachineID").equals("null")){
                 String nextId = machineJson.getString("nextMachineID");
                 MachineNode next = this.nodes.get(nextId);
                 machineNode.setNext(next);
