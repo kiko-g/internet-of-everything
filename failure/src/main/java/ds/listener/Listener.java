@@ -10,6 +10,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 import ds.graph.Graph;
+import io.github.cdimascio.dotenv.Dotenv;
+
 
 public class Listener implements MqttCallbackExtended {
     private final String brokerURI;
@@ -18,7 +20,8 @@ public class Listener implements MqttCallbackExtended {
     protected Graph machinesGraph;
 
     public Listener(String topic, Graph graph) {
-        this.brokerURI = "tcp://mosquitto:1883";
+        Dotenv dotenv = Dotenv.load();
+        this.brokerURI = "tcp://" + dotenv.get("mosquitto_address") + ":1883";
         this.subscriberId = UUID.randomUUID().toString();
         this.topic = topic;
         this.machinesGraph = graph;
@@ -48,7 +51,7 @@ public class Listener implements MqttCallbackExtended {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
+        //System.out.println(messageParsed);
     }
 
     @Override

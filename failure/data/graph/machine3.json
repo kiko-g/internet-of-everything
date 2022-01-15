@@ -1,16 +1,20 @@
 {
-    "id": "m3",
+    "id": "machine3",
     "status": 0,
     "defectProbability": 20,
+    "input": "material3",
+    "output": "material4",
+    "nextMachineID": "machine4",
     "sensors": [
       { 
         "id": "temperature4",
         "type": "TEMPERATURE",
+        "updateInterval": 1000,
         "attributes": { 
           "temperature": {
-            "avg": 90, 
             "min": 70,
             "max": 120,
+            "avg": 90, 
             "standardDeviation": 2
           }
         }
@@ -18,41 +22,28 @@
       {
         "id": "vibration3",
         "type": "VIBRATION",
+        "updateInterval": 2000,
         "attributes": { 
           "vibration": {
-            "avg": 3.2, 
             "min": 5,
             "max": 2,
+            "avg": 3.2, 
             "standardDeviation": 1
-          }
-        }
-      },
-      {
-        "id": "productionSpeed3",
-        "type": "PRODUCTION_SPEED",
-        "attributes": {
-          "productionSpeed":{
-            "avg": 23.5,
-            "max": 60, 
-            "min": 0, 
-            "standardDeviation": 9
           }
         }
       },
       {
         "id": "energy3",
         "type": "ENERGY",
+        "updateInterval": 2000,
         "attributes": { 
           "energy": {
-            "avg": 40,
             "max": 60, 
             "min": 20,  
+            "avg": 40,
             "standardDeviation": 9
           }
         }
       }
-    ],
-    "input": "material3",
-    "output": "material4",
-    "nextMachineID": "m4"
+    ]
 } 

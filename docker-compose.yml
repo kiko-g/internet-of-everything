@@ -11,35 +11,36 @@ services:
       - ./mosquitto/log:/mosquitto/log 
     container_name: "mosquitto"
 
+  edge:
+    build: ./edge/
+    command: sh -c "gradle run"
+    volumes:
+      - ./edge/src:/edge/src
+    container_name: "edge"
+
   # Emulator Server
   # TODO
 
   # Failure Analysis
-  machines:
-    build: ./failure/
-    command: sh -c "gradle runMachineSensors"
-    volumes:
-      - ./src/:/failure/edge/src/
-    container_name: "machine-sensors"
-
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
-    volumes:
-      - ./src/:/failure/edge/src/
-    container_name: "product-sensors"
-
   failure-service:
     build: ./failure/
     command: sh -c "gradle runFailureService"
     volumes:
-      - ./src/:/failure/edge/src/
+      - ./failure/src/:/failure/src/
     container_name: "failure-service"
-    
-  # Chaos Engineering
+
+  # TODO: delete this when QRCode messages are ready
+  products:
+    build: ./failure/
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./failure/src/:/failure/src/
+    container_name: "product-sensors"
+
+  #git Chaos Engineering
   chaos-engineering:
     build: ./chaos_engineering/
-    command: sh -c "python3 mqtt_test.py"
+    command: sh -c "python3 src/mqtt_test.py"
     volumes:
-      - ./chaos_engineering:/chaos_engineering/
+      - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"

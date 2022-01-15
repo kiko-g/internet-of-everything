@@ -17,7 +17,7 @@ public class MachineListener extends Listener {
     private FailurePublisher failurePublisher; 
 
     public MachineListener(Graph graph) {
-        super("machine", graph);
+        super("machine/#", graph);
         this.state = new State(graph); 
         // TODO: perhaps in the future implement send to the machine topic.
         this.failurePublisher = new FailurePublisher("failure");
@@ -27,7 +27,6 @@ public class MachineListener extends Listener {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-
         try {
             this.updateState(messageParsed);
         } catch(Exception e){
@@ -46,7 +45,7 @@ public class MachineListener extends Listener {
         JSONObject measureValues  = messageParsed.getJSONObject("values"); 
 
         measureValues.keySet().forEach((key) -> {
-            float measureValue = measureValues.getFloat(key);
+            double measureValue = measureValues.getDouble(key);
             boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
 
             if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
@@ -60,15 +59,15 @@ public class MachineListener extends Listener {
         Failure failure = new Failure(sensorState, machineID, readingTime); 
         MeasureState measureState = sensorState.getMeasureState(measureType);
         
-        Queue<Float> measures = measureState.getLastMeasures();    
-        Iterator<Float> iterator = measures.iterator();
+        Queue<Double> measures = measureState.getLastMeasures();    
+        Iterator<Double> iterator = measures.iterator();
 
-        Float prevVal = iterator.next();
+        Double prevVal = iterator.next();
         int numIncrease = 0;
         int numDecrease = 0;
 
         while (iterator.hasNext()) {
-            Float currentVal = iterator.next();
+            Double currentVal = iterator.next();
 
             if (currentVal >= prevVal) {
                 numIncrease += 1;
@@ -85,14 +84,14 @@ public class MachineListener extends Listener {
         System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
             "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
 
-        float proximityMax = measureState.getMaxProximity();
+        double proximityMax = measureState.getMaxProximity();
         this.sendFailureFuture(failure, proximityMax, numIncrease, FailureType.ABOVE_EXPECTED, "increasing");
 
-        float proximityMin = measureState.getMinProximity();
+        double proximityMin = measureState.getMinProximity();
         this.sendFailureFuture(failure, proximityMin, numDecrease, FailureType.UNDER_EXPECTED, "decreasing");
     }
 
-    private void sendFailureFuture(Failure failure, float proximity, int numConsecutive, FailureType type, String log) {
+    private void sendFailureFuture(Failure failure, double proximity, int numConsecutive, FailureType type, String log) {
         if (proximity < 10.0) {
             if (numConsecutive > FUTURE_BEHAVIOR) {          
                 failure.setFailureType(type);
@@ -119,7 +118,7 @@ public class MachineListener extends Listener {
     public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
         String readingTime = messageParsed.get("readingTime").toString();
-        float measureValue = messageParsed.getJSONObject("values").getFloat(measureType);
+        double measureValue = messageParsed.getJSONObject("values").getDouble(measureType);
         Failure failure = new Failure(sensorState, machineID, readingTime); 
         Values expectedValues = sensorState.getMeasureState(measureType).getExpectedValues();
 

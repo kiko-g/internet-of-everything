@@ -1,16 +1,21 @@
 {
-    "id": "m1",
+    "id": "machine1",
     "status": 0,
     "defectProbability": 2,
+    "input": "material1",
+    "output": "material2",
+    "timePerBatch": 1000,
+    "nextMachineID": "machine2",
     "sensors": [
       { 
         "id": "temperature1",
         "type": "TEMPERATURE",
+        "updateInterval": 1000,
         "attributes": {
           "temperature":{
-            "avg": 90, 
             "min": 70,
             "max": 120,
+            "avg": 90, 
             "standardDeviation": 2
           }
         }
@@ -18,17 +23,18 @@
       {
         "id": "position1", 
         "type": "POSITION",
+        "updateInterval": 2000,
         "attributes": {
           "x": {
-            "avg": 10, 
             "min": 0,
             "max": 20,
+            "avg": 10, 
             "standardDeviation":7
           },
           "y": {
-            "avg": 10, 
             "min": 0,
             "max": 20,
+            "avg": 10, 
             "standardDeviation":7
           }
         }
@@ -36,11 +42,12 @@
       {
         "id": "velocity1",
         "type": "VELOCITY", 
+        "updateInterval": 4000,
         "attributes": {
           "velocity":{
-            "avg": 100,
             "min": 50, 
             "max": 120,
+            "avg": 100,
             "standardDeviation": 1
           }
         }
@@ -48,23 +55,12 @@
       {
         "id": "vibration1",
         "type": "VIBRATION",
+        "updateInterval": 4000,
         "attributes": {
           "vibration":{
-            "avg": 3.2, 
             "min": 5,
             "max": 2,
-            "standardDeviation": 1
-          }
-        }
-      },
-      {
-        "id": "productionSpeed1",
-        "type": "PRODUCTION_SPEED",
-        "attributes": { 
-          "productionSpeed": {
-            "avg": 23.5, 
-            "max": 60,  
-            "min": 0,  
+            "avg": 3.2, 
             "standardDeviation": 1
           }
         }
@@ -72,11 +68,12 @@
       {
         "id": "energy1",
         "type": "ENERGY",
+        "updateInterval": 1000,
         "attributes": { 
           "energy": {
+            "min": 20, 
             "avg": 40, 
-            "max": 60,  
-            "min": 20,  
+            "max": 60,   
             "standardDeviation": 1
           }
         }
@@ -84,11 +81,12 @@
       {
         "id": "orientation1",
         "type": "ORIENTATION",
+        "updateInterval": 100,
         "attributes": { 
           "orientation": {
-            "avg": 40.5,
             "max": 360, 
             "min": 0, 
+            "avg": 40.5,
             "standardDeviation": 9
           }
         }
@@ -96,17 +94,15 @@
       { 
         "id": "temperature2",
         "type": "TEMPERATURE",
+        "updateInterval": 4000,
         "attributes": {
           "temperature":{
-            "avg": 95, 
             "min": 60,
             "max": 110,
+            "avg": 95, 
             "standardDeviation": 2 
           }
         }
       }
-    ],
-    "input": "material1",
-    "output": "material2",
-    "nextMachineID": "m2"
+    ]
 } 
