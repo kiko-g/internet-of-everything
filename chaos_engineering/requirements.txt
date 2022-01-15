@@ -2,3 +2,4 @@ pylint==2.4.4
 Flask==2.0.2
 requests==2.22.0
 paho-mqtt==1.6.1
+python-dotenv==0.19.2

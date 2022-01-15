@@ -16,8 +16,8 @@ public class Sensor {
     public void init(JSONObject propertiesJson) {
         for (String propertyName: JSONObject.getNames(propertiesJson)){
             JSONObject valuesJson = propertiesJson.getJSONObject(propertyName);
-            float min = valuesJson.getFloat("min");
-            float max = valuesJson.getFloat("max");
+            double min = valuesJson.getDouble("min");
+            double max = valuesJson.getDouble("max");
             this.values.put(propertyName, new Values(min, max));
         }
     }

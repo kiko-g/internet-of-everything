@@ -34,6 +34,6 @@ public class MachineVelocitySensor extends Sensor {
 
     @Override
     public void generateData() {
-        System.err.println("Generate of data " + this.getName() + " not implemented.");
+        //System.err.println("Generate of data " + this.getName() + " not implemented.");
     }
 }
