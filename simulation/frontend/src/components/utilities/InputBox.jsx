@@ -14,7 +14,7 @@ export default function InputBox({ state, label = "", types = [], classnames = "
           type="text"
           name="price"
           id="price"
-          className="h-full bg-zinc-50 focus:bg-white focus:ring-slate-500 focus:border-slate-500 border-2 border-white block w-full sm:text-sm text-slate-700 rounded"
+          className="placeholder:italic h-full bg-zinc-50 focus:bg-white focus:ring-slate-500 focus:border-slate-500 border-2 border-white block w-full sm:text-sm text-slate-700 rounded"
           title={title || `Enter your search string here`}
           value={value}
           placeholder={placeholder}

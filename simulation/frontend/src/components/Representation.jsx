@@ -11,6 +11,13 @@ import { TrashIcon } from "@heroicons/react/outline"
 import { jsonStyle } from "../utils"
 import AlternateMachine from "./AlternateMachine"
 import Scrollbar from "react-scrollbars-custom"
+import Select from "./Select"
+
+const options = [
+  { name: "Machines", color: "bg-blue-400" },
+  { name: "Sensors", color: "bg-teal-400" },
+  { name: "Extra", color: "bg-violet-400" },
+]
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -18,6 +25,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [phase, setPhase] = useState(false) //false is initial, true is final
   const [detailed, setDetailed] = useState(false)
   const [searchValue, setSearchValue] = useState("")
+  const [displayType, setDisplayType] = useState(options[0])
 
   const factory = useMemo(() => {
     if (phase) return factoryFinal
@@ -27,21 +35,27 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const Tab = (props) => <>{props.children}</>
 
   return (
-    <Tabs activeIndex={2}>
+    <Tabs activeIndex={1}>
       {/* Graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={factory} phaseHook={[phase, setPhase]} />
-        <div className={`absolute top-8 right-8 z-50`}>
-          <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} />
+        <ForceGraph factory={factoryInitial} phaseHook={[phase, setPhase]} />
+        <div className={`absolute bottom-8 right-6 z-50`}>
+          {/* <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} /> */}
+          <span className="p-2 rounded bg-indigo-400/50 text-white">Displaying initial state</span>
         </div>
       </Tab>
 
       {/* Detailed list view */}
       <Tab label="Detailed">
         <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="px-1 flex items-center justify-end space-x-6 col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
-            <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
-            <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
+          <div className="px-1 flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
+            <div className="flex self-start">
+              <Select selectedHook={[displayType, setDisplayType]} options={options} />
+            </div>
+            <div className="flex items-center justify-end space-x-6">
+              <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
+              <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
+            </div>
           </div>
           {phase
             ? factory.length === 0

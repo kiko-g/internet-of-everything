@@ -1,0 +1,18 @@
+- **0:00 - 0:14**
+  - A nossa plataforma tem login e register e vamos demonstrá-la com 3 utilizadores já existentes, o bruno, charlie e eder.
+- **0:15 - 0:22**
+  - A barra lateral contém os utilizadores seguidos, a seguir e sugeridos para seguir. Os sugeridos são todas as entidades na rede que ainda não estão a ser seguidos e são fetched logo após a autenticação.
+- **0:23 - 0:31**
+  - No ecrã podemos ver agora o **bruno**, a fazer um post e a seguir também o **charlie.**
+- **0:32 - 0:45**
+  - De seguida o **charlie** vai fazer um post seu, pedir para atualizar os seus seguidores e seguir o bruno.
+- **0:46 -1:05**
+  - Agora o charlie vai fazer mais um post que deve ser visivel para o bruno. Como se pode ver a timeline faz fetch periodicamente e o post do bruno passa a ser visivel para o charlie. O mesmo acontece para o bruno a seguir, que tem acesso ao novo post do charlie assim que a timeline faz update.
+- **1:06 - 1:14**
+  - A barra lateral permite mostrar vistas mais detalhadas com todos os utilizadores debaixo de cada categoria.
+- **1:14-1:37**
+  - Agora o eder vai fazer um post e seguir o bruno. O bruno vai atualizar os seus seguidores e ver o eder como tal e após a timeline atualizar o eder passa a ver o post do bruno.
+- **1:38-1:52**
+  - Nesta parte o charlie vai fazer logout e o eder vai pedir para seguir o charlie, que já nao está logged in. Por lapso no video seguimos o também o afonso, operação que é depois anulada e não tem qualquer impacto. Assim que o update ocorre os 2 posts do charlie sao acrescentados à timeline do eder, apesar do charlie nao estar online.
+- **1:53-2:50**
+  - Nesta parte final vamos demonstrar a storage efémera da timeline. Começamos por fazer 2 logins, com afonso e bruno e cada um vai fazer 3 posts. Os dois utilizadores vão também seguir-se um ao outro. Como se pode observar na timeline do bruno, apesar de ele nunca parar de seguir o afonso, a sua timeline vai ser limpa após um período arbitrário de tempo e reposta pelo update da timeline, visto que o bruno ainda segue o afonso.
