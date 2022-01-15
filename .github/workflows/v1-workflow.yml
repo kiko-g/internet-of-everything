@@ -17,7 +17,7 @@ on:
 
 jobs:
   docker_build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "Vertical 1: Test docker-compose"
     
     steps:
@@ -26,7 +26,7 @@ jobs:
       run: docker-compose up -d
      
   gradle_build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "Vertical 1: Build and Test Edge"
     
     steps:
@@ -36,24 +36,24 @@ jobs:
     - name: "Build and Test Edge"
       working-directory: ./edge
       run: gradle test
-  
-  npm-build:
-    runs-on: ubuntu-latest
-    name: "Vertical 1: Build and Test Server"
+
+  #npm-build:
+    #runs-on: self-hosted
+    #name: "Vertical 1: Build and Test Server"
     
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-        cache: 'npm'
-        cache-dependency-path: emulator/package-lock.json
-    - name: "Run Docker"
-      run: docker-compose up -d
-    - name: "npm install"
-      working-directory: ./emulator
-      run: npm install
-    - name: "npm test"
-      working-directory: ./emulator
-      run: npm test
+    #steps:
+    #- uses: actions/checkout@v2
+    #- uses: actions/setup-node@v2
+    #  with:
+    #    node-version: '14'
+    #    cache: 'npm'
+    #    cache-dependency-path: emulator/package-lock.json
+    #- name: "Run Docker"
+    #  run: docker-compose up -d
+    #- name: "npm install"
+    #  working-directory: ./emulator
+    #  run: npm install
+    #- name: "npm test"
+    #  working-directory: ./emulator
+    #  run: npm test
    
