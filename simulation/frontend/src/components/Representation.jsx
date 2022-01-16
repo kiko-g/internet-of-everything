@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import Machine from "./Machine"
 import ReactJson from "react-json-view"
 import Tabs from "./utilities/Tabs"
@@ -8,16 +8,11 @@ import CopyClipboard from "./utilities/CopyClipboard"
 import ForceGraph from "./ForceGraph"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import { TrashIcon } from "@heroicons/react/outline"
-import { jsonStyle } from "../utils"
+import { jsonStyle, options } from "../utils"
 import AlternateMachine from "./AlternateMachine"
 import Scrollbar from "react-scrollbars-custom"
 import Select from "./Select"
-
-const options = [
-  { name: "Machines", color: "bg-blue-400" },
-  { name: "Sensors", color: "bg-teal-400" },
-  { name: "Extra", color: "bg-violet-400" },
-]
+import Sensor from "./Sensor"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -26,6 +21,8 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [detailed, setDetailed] = useState(false)
   const [searchValue, setSearchValue] = useState("")
   const [displayType, setDisplayType] = useState(options[0])
+
+  useEffect(() => {}, [displayType])
 
   const factory = useMemo(() => {
     if (phase) return factoryFinal
@@ -47,35 +44,50 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
       {/* Detailed list view */}
       <Tab label="Detailed">
-        <div className="grid w-full grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          <div className="px-1 flex items-center justify-between col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-4 min-w-full">
+        <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          <div className="px-1 flex flex-col space-y-4 md:space-y-0 md:flex-row items-center justify-between col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
             <div className="flex self-start">
               <Select selectedHook={[displayType, setDisplayType]} options={options} />
             </div>
-            <div className="flex items-center justify-end space-x-6">
+            <div className="flex items-center justify-start md:justify-end space-x-6 w-full">
               <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} />
               <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
             </div>
           </div>
-          {phase
-            ? factory.length === 0
-              ? null
-              : factory.machines.map((machine, index) => (
-                  <AlternateMachine
+          {displayType.name === "Machines"
+            ? phase
+              ? factory.length === 0
+                ? null
+                : factory.machines.map((machine, machineIdx) => (
+                    <AlternateMachine
+                      data={machine}
+                      key={`detailed-final-${machineIdx}`}
+                      classnames="col-span-1 min-w-full"
+                      isDetailed={detailed}
+                    />
+                  ))
+              : factory.map((machine, machineIdx) => (
+                  <Machine
                     data={machine}
-                    key={`detailed-final-${index}`}
+                    key={`detailed-initial-${machineIdx}`}
                     classnames="col-span-1 min-w-full"
                     isDetailed={detailed}
                   />
                 ))
-            : factory.map((machine, index) => (
-                <Machine
-                  data={machine}
-                  key={`detailed-initial-${index}`}
-                  classnames="col-span-1 min-w-full"
-                  isDetailed={detailed}
-                />
-              ))}
+            : null}
+          {displayType.name === "Sensors"
+            ? factory.map((machine, machineIdx) =>
+                machine.sensors.map((sensor, sensorIdx) => (
+                  <Sensor
+                    data={sensor}
+                    parent={machine.id}
+                    key={`sensor-${machineIdx}-${sensorIdx}`}
+                    classnames="col-span-1 min-w-full"
+                    isDetailed={detailed}
+                  />
+                ))
+              )
+            : null}
         </div>
       </Tab>
 
@@ -83,6 +95,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
       <Tab label="Inspect">
         <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="flex items-center justify-between space-x-2 col-span-1 lg:col-span-2 min-w-full">
+            <Select selectedHook={[displayType, setDisplayType]} options={options} />
             <InputBox
               label=""
               classnames="flex-1"
@@ -94,10 +107,11 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               type="button"
               title="Clear input"
               onClick={() => setSearchValue("")}
-              className="h-full p-3 rounded font-semibold duration-200 ring-1
-               ring-rose-700/80 text-rose-700/80 hover:bg-rose-700/80 hover:text-white"
+              className="flex items-center h-12 p-3 rounded text-sm font-semibold duration-200
+               bg-rose-500 hover:bg-rose-500/80 text-white"
             >
-              <TrashIcon className="h-6 w-6" />
+              <span>Clear&nbsp;</span>
+              <TrashIcon className="h-4 w-4" />
             </button>
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} compact={true} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} compact={true} />
