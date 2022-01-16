@@ -76,17 +76,19 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 ))
             : null}
           {displayType.name === "Sensors"
-            ? factory.map((machine, machineIdx) =>
-                machine.sensors.map((sensor, sensorIdx) => (
-                  <Sensor
-                    data={sensor}
-                    parent={machine.id}
-                    key={`sensor-${machineIdx}-${sensorIdx}`}
-                    classnames="col-span-1 min-w-full"
-                    isDetailed={detailed}
-                  />
-                ))
-              )
+            ? phase
+              ? null
+              : factory.map((machine, machineIdx) =>
+                  machine.sensors.map((sensor, sensorIdx) => (
+                    <Sensor
+                      data={sensor}
+                      parent={machine.id}
+                      key={`sensor-${machineIdx}-${sensorIdx}`}
+                      classnames="col-span-1 min-w-full"
+                      isDetailed={detailed}
+                    />
+                  ))
+                )
             : null}
         </div>
       </Tab>
@@ -99,7 +101,10 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             <InputBox
               label=""
               classnames="flex-1"
-              types={["Machine ID"]}
+              types={[
+                displayType.name === "Sensors" ? "Sensor ID" : "",
+                displayType.name === "Machines" ? "Machine ID" : "",
+              ].filter((item) => item !== "")}
               placeholder={`What are you searching for?`}
               state={[searchValue, setSearchValue]}
             />
@@ -116,39 +121,61 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             <DetailedSwitch hook={[detailed, setDetailed]} toggle={() => setDetailed(!detailed)} compact={true} />
             <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} compact={true} />
           </div>
-          {phase
-            ? factory.length === 0
-              ? null
-              : factory.machines
+          {displayType.name === "Machines"
+            ? phase
+              ? factory.length === 0
+                ? null
+                : factory.machines
+                    .filter((machine) => {
+                      if (searchValue === "") return true
+                      else return machine.id.toUpperCase().includes(searchValue.toUpperCase())
+                    })
+                    .map((machine, index) => {
+                      return (
+                        <AlternateMachine
+                          data={machine}
+                          key={`inspect-final-${index}`}
+                          classnames="col-span-1 min-w-full"
+                          isDetailed={detailed}
+                        />
+                      )
+                    })
+              : factory
                   .filter((machine) => {
                     if (searchValue === "") return true
                     else return machine.id.toUpperCase().includes(searchValue.toUpperCase())
                   })
                   .map((machine, index) => {
                     return (
-                      <AlternateMachine
+                      <Machine
                         data={machine}
-                        key={`inspect-final-${index}`}
+                        key={`inspect-initial-${index}`}
                         classnames="col-span-1 min-w-full"
                         isDetailed={detailed}
                       />
                     )
                   })
-            : factory
-                .filter((machine) => {
-                  if (searchValue === "") return true
-                  else return machine.id.toUpperCase().includes(searchValue.toUpperCase())
-                })
-                .map((machine, index) => {
-                  return (
-                    <Machine
-                      data={machine}
-                      key={`inspect-initial-${index}`}
-                      classnames="col-span-1 min-w-full"
-                      isDetailed={detailed}
-                    />
-                  )
-                })}
+            : null}
+          {displayType.name === "Sensors"
+            ? phase
+              ? null
+              : factory.map((machine, machineIdx) =>
+                  machine.sensors
+                    .filter((sensor, sensorIdx) => {
+                      if (searchValue === "") return true
+                      else return sensor.id.toUpperCase().includes(searchValue.toUpperCase())
+                    })
+                    .map((sensor, sensorIdx) => (
+                      <Sensor
+                        data={sensor}
+                        parent={machine.id}
+                        key={`sensor-${machineIdx}-${sensorIdx}`}
+                        classnames="col-span-1 min-w-full"
+                        isDetailed={detailed}
+                      />
+                    ))
+                )
+            : null}
         </div>
       </Tab>
 

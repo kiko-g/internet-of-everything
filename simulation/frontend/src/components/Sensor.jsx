@@ -1,21 +1,84 @@
 import React from "react"
+import "./css/sensor.css"
+import { findColor } from "../utils"
 
 export default function Sensor({ data, parent, classnames, isDetailed }) {
   const id = data.id
   const type = data.type
   const attributes = data.attributes
+  const color = findColor(type)
 
-  return (
-    <div className="flex items-center justify-between rounded-2xl shadow">
-      <div className="bg-emerald-500 rounded-l-2xl h-24 w-24"></div>
-      <div className="p-2 flex-1">
-        <div className="w-min px-1 text-xs lowercase rounded-md bg-emerald-200 text-emerald-800">{type}</div>
-        <div className="text-gray-800 capitalize">{id}</div>
-        <div className="text-gray-400 font-normal">
-          Associated with <span className="text-gray-500 font-medium">{parent}</span>
+  return isDetailed ? (
+    <div className="bg-white flex flex-col justify-between rounded-xl shadow text-sm">
+      <div className="flex items-center justify-between border-b-2">
+        <div className={`card-${color} rounded-tl-xl h-full w-2`}></div>
+        <div className="p-3 flex-1 flex flex-col items-start space-y-2 justify-between h-full">
+          <div className={`w-min px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+          <div>
+            <div className="text-gray-500 capitalize">{id}</div>
+            <div className="text-gray-400 font-normal">
+              Associated with <span className="text-gray-600 font-medium">{parent}</span>
+            </div>
+          </div>
         </div>
       </div>
-      {Object.keys(attributes).map((attribute, attributeIdx) => console.log(attribute))}
+      <div className="rounded-b-xl h-full">
+        {Object.keys(attributes).map((attribute, attributeIdx) =>
+          Object.keys(attributes).length === 1 ? (
+            <div className="flex h-full">
+              <div className="rounded-bl-xl bg-slate-400 w-2 flex items-center"></div>
+              <div
+                title="Minimum, Maximum, Average and Standard Deviation"
+                className="flex items-center text-gray-700 space-x-1 p-2 font-normal text-xs"
+              >
+                <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
+                <span>
+                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
+                </span>
+              </div>
+            </div>
+          ) : attributeIdx !== Object.keys(attributes).length - 1 ? (
+            <div className="flex">
+              <div className="bg-slate-400 w-2"></div>
+              <div
+                title="Minimum, Maximum, Average and Standard Deviation"
+                className="flex items-center text-gray-700 space-x-1 p-2 font-normal text-xs"
+              >
+                <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
+                <span>
+                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex">
+              <div className="bg-slate-400 w-2 rounded-bl-xl"></div>
+              <div
+                title="Minimum, Maximum, Average and Standard Deviation"
+                className="flex items-center text-gray-700 space-x-1 p-2 font-normal text-xs"
+              >
+                <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
+                <span>
+                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
+                </span>
+              </div>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  ) : (
+    <div className="bg-white flex items-center justify-between rounded-xl shadow text-sm">
+      <div className={`card-${color} rounded-l-xl h-full w-2`}></div>
+      <div className="p-3 flex-1 flex flex-col items-start space-y-2 justify-between h-full">
+        <div className={`w-min px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+        <div>
+          <div className="text-gray-500 capitalize">{id}</div>
+          <div className="text-gray-400 font-normal">
+            Associated with <span className="text-gray-600 font-medium">{parent}</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

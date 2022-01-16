@@ -79,7 +79,7 @@ export default function Machine({ data, classnames, isDetailed }) {
                 .map((k, i) => (
                   <li className="flex justify-between my-1" key={`sensor-${data.id}-${index}-${k}`}>
                     <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-semibold px-2 py-0.5 rounded">
-                      {`type`}
+                      {`sensor`}
                     </span>
                     <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                       {`${sensors[key][k]}`}
