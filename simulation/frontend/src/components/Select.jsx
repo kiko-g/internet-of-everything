@@ -8,7 +8,7 @@ export default function Select({ selectedHook, options }) {
     <div className="h-12 z-20 w-64 shadow rounded">
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative h-full">
-          <Listbox.Button className="relative w-full h-full  py-2 pl-3 pr-10 text-left bg-gray-50 rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-gray-500 sm:text-sm">
+          <Listbox.Button className="relative w-full h-full  py-2 pl-3 pr-10 text-left bg-white rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-gray-500 sm:text-sm">
             <span className="flex items-center justify-start space-x-2 truncate">
               <span className={`h-4 w-4 ${selected.color} rounded-full`} />
               <span className="font-normal tracking-wide">{selected.name}</span>
@@ -25,7 +25,7 @@ export default function Select({ selectedHook, options }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-gray-50 rounded max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {options.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}

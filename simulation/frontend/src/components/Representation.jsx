@@ -112,7 +112,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               type="button"
               title="Clear input"
               onClick={() => setSearchValue("")}
-              className="flex items-center h-12 p-3 rounded text-sm font-semibold duration-200
+              className="flex items-center h-12 p-3 rounded text-sm duration-200
                bg-rose-500 hover:bg-rose-500/80 text-white"
             >
               <span>Clear&nbsp;</span>

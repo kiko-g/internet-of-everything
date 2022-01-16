@@ -1,6 +1,6 @@
 import React from "react"
-import "./css/sensor.css"
 import { findColor } from "../utils"
+import "./css/sensor.css"
 
 export default function Sensor({ data, parent, classnames, isDetailed }) {
   const id = data.id

@@ -31,7 +31,7 @@ export default function Presets({ factoryInitialState, presetsState }) {
                   className={({ active, checked }) =>
                     `${active ? "ring-2 ring-offset-2 ring-offset-sky-300 ring-white ring-opacity-60" : ""}
                 ${
-                  checked ? "bg-sky-900 bg-opacity-75 text-white" : "bg-white"
+                  checked ? "bg-sky-900/75 text-white" : "bg-white"
                 } relative rounded-xl shadow-md px-3 py-2 cursor-pointer flex focus:outline-none`
                   }
                 >
@@ -75,7 +75,9 @@ export default function Presets({ factoryInitialState, presetsState }) {
         <form className="flex items-center space-x-6" title="Upload your JSON preset">
           <label
             htmlFor="presetUpload"
-            className="px-3 py-2 text-sm font-medium text-white bg-slate-700 rounded-xl bg-opacity-30 hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            className="px-3 py-2 text-sm font-medium rounded-xl
+            text-white bg-slate-700/30 hover:bg-slate-700/40
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           >
             Add preset&nbsp;
             <PlusCircleIcon className="w-4 h-4 mb-0.5 inline-flex" />
