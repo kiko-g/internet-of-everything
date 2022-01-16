@@ -1,96 +1,37 @@
 package ds.listener;
-import ds.state.MachineState;
-import ds.state.State; 
+import ds.graph.Graph;
+import ds.graph.sensor.*;
+import ds.state.*; 
+import ds.state.sensor.*;
+import ds.failures.*;
 
-import java.util.UUID;
-
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import java.util.*;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
-public class MachineListener implements MqttCallbackExtended {
-    private final String brokerURI;
-    private final String subscriberId;
-    private final String[] topics;
+public class MachineListener extends Listener {
+    private State state; // Stores the current state of all machines.
+    public static final Integer INFO_SIZE = 5; // Number of previous states to save 
+    public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
 
-    private State state = new State();  // Stores the current state of all machines.
-    // The state will store the last INFO_SIZE data for each attribute, e.g, will be stored the last INFO_SIZE
-    // temperatures for each machine.
-    public static final Integer INFO_SIZE = 3;
+    private FailurePublisher failurePublisher; 
 
-
-    public MachineListener(String[] topics) {
-        this.brokerURI = "tcp://mosquitto:1883";
-        this.subscriberId = UUID.randomUUID().toString();
-        this.topics = topics;
-
-    }
-
-    public void init() {
-        try {
-            System.out.println("Connecting to MQTT Broker at " + this.brokerURI);
-
-            // Connect to Broker
-            MqttClient subscriber = new MqttClient(this.brokerURI, subscriberId);
-            subscriber.setCallback(this);
-            subscriber.connect();
-            System.out.println("Connected with success to MQTT Broker at " + this.brokerURI);
-
-            //Subscribe to all machine sensors
-            for (String topic: topics) {
-                System.out.println("Subscribed to " + topic);
-                subscriber.subscribe(topic);
-            }
-
-        } catch (MqttException e) {
-            e.printStackTrace();
-            System.out.println("Failed connecting to MQTT Broker");
-            System.exit(1);
-        }
-
-    }
-
-    public static void main(String[] args) {
-
-        if(args.length == 0){
-            System.err.println("Usage: java MachineListener [sensors...]");
-            System.out.println("e.g. java MachineListener temperature");
-        }
-
-        MachineListener machineListener = new MachineListener(args);
-        machineListener.init();
-        
+    public MachineListener(Graph graph) {
+        super("machine/#", graph);
+        this.state = new State(graph); 
+        // TODO: perhaps in the future implement send to the machine topic.
+        this.failurePublisher = new FailurePublisher("failure");
+        this.failurePublisher.init();
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
-        String machineID = messageParsed.getString("machineID");
-        System.out.println(machineID);
-
         try {
-            if (!this.state.findMachine(machineID)) {
-                this.addMachineToState(messageParsed);
-            } else {
-                this.updateState(messageParsed);
-            }
-        }catch(Exception e){
+            this.updateState(messageParsed);
+        } catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-     /**
-     * Creates a new machine state with the current ID and adds to the system state.
-     * @param messageParsed JSONObject with the message content.
-     */
-    public void addMachineToState(JSONObject messageParsed){
-        MachineState machineState = new MachineState(messageParsed);
-        this.state.addMachine(machineState.getId(), machineState);
-        System.out.println("MachineID :: " + machineState.getId()+ "::" + machineState.getTempState().getMeanTemp());
     }
 
     /**
@@ -98,21 +39,103 @@ public class MachineListener implements MqttCallbackExtended {
      * @param messageParsed JSONObject with the message content.
      */
     public void updateState(JSONObject messageParsed){
-        String machineID = messageParsed.get("machineID").toString();
-        MachineState machineState = this.state.getMachineState(machineID);
+        String machineID = messageParsed.get("machineID").toString(); 
+        String sensorID = messageParsed.get("sensorID").toString();
+        SensorState sensorState = this.state.getMachineState(machineID).getSensorState(sensorID);
+        JSONObject measureValues  = messageParsed.getJSONObject("values"); 
 
-        machineState.addTemperature(messageParsed.getJSONObject("properties").getFloat("temperature"));
-        // Replaces the old state to the new one.
-        this.state.addMachine(machineID, machineState);
-        System.out.println("MachineID :: " + machineID + "::" + machineState.getTempState().getMeanTemp());
+        measureValues.keySet().forEach((key) -> {
+            double measureValue = measureValues.getDouble(key);
+            boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
+
+            if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
+            else analyseFutureBehavior(messageParsed, sensorState, key);
+        });
     }
 
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {}
+    private void analyseFutureBehavior(JSONObject messageParsed, SensorState sensorState, String measureType){  
+        String machineID = messageParsed.get("machineID").toString(); 
+        String readingTime = messageParsed.get("readingTime").toString();
+        Failure failure = new Failure(sensorState, machineID, readingTime); 
+        MeasureState measureState = sensorState.getMeasureState(measureType);
+        
+        Queue<Double> measures = measureState.getLastMeasures();    
+        Iterator<Double> iterator = measures.iterator();
 
-    @Override
-    public void connectComplete(boolean reconnect, String serverURI) {}
+        Double prevVal = iterator.next();
+        int numIncrease = 0;
+        int numDecrease = 0;
 
-    @Override
-    public void connectionLost(Throwable cause) {}
+        while (iterator.hasNext()) {
+            Double currentVal = iterator.next();
+
+            if (currentVal >= prevVal) {
+                numIncrease += 1;
+                numDecrease = 0;
+            } 
+            else {
+                numDecrease += 1;
+                numIncrease = 0;
+            } 
+
+            prevVal = currentVal;
+        }
+
+        System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
+            "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
+
+        double proximityMax = measureState.getMaxProximity();
+        this.sendFailureFuture(failure, proximityMax, numIncrease, FailureType.ABOVE_EXPECTED, "increasing");
+
+        double proximityMin = measureState.getMinProximity();
+        this.sendFailureFuture(failure, proximityMin, numDecrease, FailureType.UNDER_EXPECTED, "decreasing");
+    }
+
+    private void sendFailureFuture(Failure failure, double proximity, int numConsecutive, FailureType type, String log) {
+        if (proximity < 10.0) {
+            if (numConsecutive > FUTURE_BEHAVIOR) {          
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.MEDIUM);
+                failure.setDescription("Values " + log + " too fast and near the max limit");
+            } else {
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.LOW);
+                failure.setDescription("Values near the max limit");
+            }
+        } else if (numConsecutive > FUTURE_BEHAVIOR) {
+                failure.setFailureType(type);
+                failure.setFailureSeverity(FailureSeverity.LOW);
+                failure.setDescription("Values " + log + " too fast");
+        } else {
+            return;
+        }
+
+        System.out.println(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage());
+    }
+
+
+    public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
+        String machineID = messageParsed.get("machineID").toString(); 
+        String readingTime = messageParsed.get("readingTime").toString();
+        double measureValue = messageParsed.getJSONObject("values").getDouble(measureType);
+        Failure failure = new Failure(sensorState, machineID, readingTime); 
+        Values expectedValues = sensorState.getMeasureState(measureType).getExpectedValues();
+
+        //TODO: change severity according to what the clients considers high priority.
+        if (measureValue > expectedValues.getMax()) {
+            failure.setFailureType(FailureType.ABOVE_EXPECTED);
+            failure.setFailureSeverity(FailureSeverity.HIGH);
+            failure.setDescription("Detected value: " + measureValue);
+        }
+        else if (measureValue < expectedValues.getMin()) {
+            failure.setFailureType(FailureType.UNDER_EXPECTED);
+            failure.setFailureSeverity(FailureSeverity.HIGH);
+            failure.setDescription("Detected value: " + measureValue);
+        }
+
+        System.out.println(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage());
+    }
+
 }

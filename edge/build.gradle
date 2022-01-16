@@ -1,0 +1,21 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    flatDir { dirs 'lib' }
+}
+
+dependencies {
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation (name:'org.eclipse.paho.mqttv5.client-1.2.5', ext:'jar')
+    implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation "org.mockito:mockito-core:3.+"
+    implementation 'org.json:json:20171018'
+}
+
+application {
+    mainClassName = 'Parser'
+}

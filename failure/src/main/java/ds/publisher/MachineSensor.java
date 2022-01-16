@@ -1,68 +1,81 @@
 package ds.publisher;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
-public class MachineSensor extends Sensor {
+import ds.Utils;
+import ds.graph.Graph;
+import ds.graph.MachineNode;
+import ds.graph.sensor.Sensor;
+import ds.graph.sensor.Values;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class MachineSensor extends SensorSimulator {
+    private Graph machinesGraph;
+    private List<String> machineIds;
     private Random rnd = new Random();
+    private ScheduledThreadPoolExecutor executor;
 
     public MachineSensor() throws MqttException {
-        super("temperature");
+        super("machine");
+        this.machinesGraph = new Graph();
+        this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
+        this.executor = new ScheduledThreadPoolExecutor(10);
+    }
+
+    public void init(){
+        super.init();
+
+        //Start Publishing with fixed delay
+        Thread messageGenerator = new Thread(() -> this.sendMessage());
+        executor.scheduleWithFixedDelay(messageGenerator, 0, 1500, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * This method simulates reading the temperature from a Machine
+     * This method simulates reading of the properties of a Machine
      */
-    @Override
-    protected MqttMessage readSensor() {
-        String message = getMessage();  
-
-        System.out.println(message);
-
-        byte[] payload = message.getBytes();        
-        MqttMessage msg = new MqttMessage(payload); 
-        return msg;
-    }
-
-    private String getMessage(){
-        int machineID = this.rnd.nextInt(4 - 1) + 1;
-        double temperature =  round(80 + this.rnd.nextDouble() * 20.0);
-        String readTime = getDateTime(); 
+    protected void sendMessage(){
+        int machineIdx = this.rnd.nextInt(this.machineIds.size());
+        MachineNode machine = this.machinesGraph.getMachineNode(this.machineIds.get(machineIdx));
+        String readTime = Utils.getDateTime(); 
         
-        JSONObject propertiesObject = new JSONObject();
+        List<String> sensorIds = new ArrayList<String>(machine.getSensors().keySet());
+        int sensorIdx = this.rnd.nextInt(sensorIds.size());
+        Sensor sensor = machine.getSensor(sensorIds.get(sensorIdx));
+        
+        //Generate random values for each sensor
+        JSONObject valuesJson = new JSONObject(); 
+        double errorProbability = 0.3; 
+        ConcurrentHashMap<String, Values> values = sensor.getValues();  
+        values.forEach((key, value) -> {
+            boolean hasError = Utils.getRandomDouble(0, 1) >  ( 1 - errorProbability) ? true: false; 
+            double min = value.getMin();  
+            double max = value.getMax();  
+            double currentValue = 0; 
 
-        propertiesObject.put("temperature", temperature);
-        propertiesObject.put("piecesProduced", 0);
-        propertiesObject.put("volt",16);
-        propertiesObject.put("vibration", 35.1788);
-        propertiesObject.put("pressure",109.2486);
-        propertiesObject.put("rotate", 402.7474);
+            if (hasError){
+                double randomDeviation = Utils.getRandomDouble(1, 20);
+                if (this.rnd.nextInt(1) == 0) 
+                    currentValue = min - randomDeviation;  
+                else 
+                    currentValue = max + randomDeviation; 
+            }  else {
+                currentValue = Utils.getRandomDouble(min, max);
+            }
+            valuesJson.put(key, currentValue);
+        });
 
         JSONObject messageObject = new JSONObject();
-        messageObject.put("machineID", String.valueOf(machineID));
-        messageObject.put("reading-time", readTime);
-        messageObject.put("properties", propertiesObject);
+        messageObject.put("machineID", machine.getId());
+        messageObject.put("sensorID", sensor.getId());
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", valuesJson);
         
-        return messageObject.toString(); 
-    }
-
-    private String getDateTime(){
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        String formattedDate = myDateObj.format(myFormatObj);
-        return formattedDate;
-    }
-
-    private double round(double value) {
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(4, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        this.publish(messageObject.toString());
     }
 
     public static void main(String[] args) {
@@ -72,7 +85,6 @@ public class MachineSensor extends Sensor {
         }
 
         try {
-
             MachineSensor machineSensor = new MachineSensor();
             machineSensor.init();
 

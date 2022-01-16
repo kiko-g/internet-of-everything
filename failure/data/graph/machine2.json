@@ -1,0 +1,69 @@
+{
+    "id": "machine2",
+    "status": 0,
+    "defectProbability": 10,
+    "input": "material2",
+    "output": "material3",
+    "timePerBatch": 1000,
+    "nextMachineID": "machine3",
+    "sensors": [
+      {
+        "id": "position2", 
+        "type": "POSITION",
+        "updateInterval": 1000,
+        "attributes": {
+          "x": {
+            "min": 0,
+            "max": 20,
+            "avg": 10, 
+            "standardDeviation":7
+          },
+          "y": {
+            "min": 0,
+            "max": 20,
+            "avg": 10, 
+            "standardDeviation":7
+          }
+        }
+      },
+      {
+        "id": "velocity2",
+        "type": "VELOCITY", 
+        "updateInterval": 2000,
+        "attributes": {
+          "velocity":{
+            "min": 50, 
+            "max": 120,
+            "avg": 100,
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "vibration2",
+        "type": "VIBRATION",
+        "updateInterval": 4000,
+        "attributes": {
+          "vibration":{
+            "min": 5,
+            "max": 2,
+            "avg": 3.2, 
+            "standardDeviation": 1
+          }
+        }
+      },
+      {
+        "id": "energy2",
+        "type": "ENERGY",
+        "updateInterval": 1000,
+        "attributes": {
+          "energy":{
+            "max": 60, 
+            "min": 20, 
+            "avg": 40,
+            "standardDeviation": 9
+          }
+        }
+      }
+    ]
+} 
