@@ -10,6 +10,10 @@
   @apply bg-slate-100 text-slate-800;
 }
 
+.pill-fail {
+  @apply bg-slate-400 text-white;
+}
+
 .card-indigo {
   @apply bg-indigo-400/70;
 }

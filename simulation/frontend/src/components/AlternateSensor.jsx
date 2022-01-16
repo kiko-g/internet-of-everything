@@ -2,9 +2,10 @@ import React from "react"
 import { findColor } from "../utils"
 import "./css/sensor.css"
 
-export default function Sensor({ data, parent, classnames, isDetailed }) {
+export default function AlternateSensor({ data, parent, classnames, isDetailed }) {
   const id = data.id
   const type = data.type
+  const fails = data.failureTimes
   const attributes = data.attributes
   const color = findColor(type)
 
@@ -13,7 +14,10 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
       <div className="flex items-center justify-between border-b-2">
         <div className={`card-${color} rounded-tl-xl h-full w-2`}></div>
         <div className="p-3 flex-1 flex flex-col items-start space-y-2 justify-between h-full">
-          <div className={`w-min px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+          <div className="flex items-center justify-between w-full">
+            <div className={`px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+            <div className={`px-1.5 py-0.5 text-xs lowercase rounded-xl pill-fail font-normal`}>Fails: {fails}</div>
+          </div>
           <div>
             <div className="text-gray-500 capitalize">{id}</div>
             <div className="text-gray-400 font-normal">
@@ -32,9 +36,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>
-                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
-                </span>
+                <span>{attributes[attribute]}</span>
               </div>
             </div>
           ) : attributeIdx !== Object.keys(attributes).length - 1 ? (
@@ -45,9 +47,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>
-                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
-                </span>
+                <span>{attributes[attribute]}</span>
               </div>
             </div>
           ) : (
@@ -58,9 +58,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>
-                  {`min ${attributes[attribute].min}, max ${attributes[attribute].max}, avg ${attributes[attribute].avg}`}
-                </span>
+                <span>{attributes[attribute]}</span>
               </div>
             </div>
           )
@@ -71,7 +69,10 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
     <div className="bg-white flex items-center justify-between rounded-xl shadow text-sm">
       <div className={`card-${color} rounded-l-xl h-full w-2`}></div>
       <div className="p-3 flex-1 flex flex-col items-start space-y-2 justify-between h-full">
-        <div className={`w-min px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+        <div className="flex items-center justify-between w-full">
+          <div className={`px-1.5 py-0.5 text-xs lowercase rounded-xl pill-${color}`}>{type}</div>
+          <div className={`px-1.5 py-0.5 text-xs lowercase rounded-xl pill-fail font-normal`}>Fails: {fails}</div>
+        </div>
         <div>
           <div className="text-gray-500 capitalize">{id}</div>
           <div className="text-gray-400 font-normal">

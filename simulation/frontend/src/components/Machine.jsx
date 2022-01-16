@@ -47,7 +47,7 @@ export default function Machine({ data, classnames, isDetailed }) {
                 <span>none</span>
               </span>
             ) : (
-              <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+              <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                 <span>{links[link]}</span>
               </span>
             )}
@@ -62,7 +62,7 @@ export default function Machine({ data, classnames, isDetailed }) {
             <span className="uppercase bg-blue-400/75 text-sky-50 dark:bg-blue-400/75 dark:text-sky-50 text-xs font-medium px-2 py-0.5 rounded">
               {key.slice(0, 9)}
             </span>
-            <span className="lowercase bg-gray-100 text-gray-700 dark:bg-gray-100 dark:text-gray-700 text-right text-xs font-medium px-2 py-0.5 rounded">
+            <span className="lowercase bg-gray-100 text-gray-700 dark:bg-gray-100 dark:text-gray-700 text-right text-xs font-normal px-2 py-0.5 rounded">
               {info[key]}
             </span>
           </li>
@@ -71,19 +71,29 @@ export default function Machine({ data, classnames, isDetailed }) {
 
       {/* Sensors */}
       {isDetailed ? (
-        <ul>
+        <ul className="space-y-[-3px]">
           {Object.keys(sensors).map((key, index) => (
             <ul key={`sensor-${data.id}-${index}`}>
               {Object.keys(sensors[key])
                 .filter((k, i) => k === "type")
                 .map((k, i) => (
-                  <li className="flex justify-between my-1" key={`sensor-${data.id}-${index}-${k}`}>
-                    <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
-                      {`sensor`}
-                    </span>
-                    <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-                      {`${sensors[key][k]}`}
-                    </span>
+                  <li className="flex justify-between" key={`sensor-type-${data.id}-${index}-${k}`}>
+                    <div className="space-x-1">
+                      <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
+                        {`sensor`}
+                      </span>
+                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-1 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                        {`${sensors[key][k]}`}
+                      </span>
+                    </div>
+                    <div className="space-x-1">
+                      <span className="lowercase bg-violet-600/50 text-white dark:bg-violet-400 dark:text-white text-xs font-medium px-1 py-0.5 rounded">
+                        {`id`}
+                      </span>
+                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                        {`${sensors[key]["id"][0]}${sensors[key]["id"][sensors[key]["id"].length - 1]}`}
+                      </span>
+                    </div>
                   </li>
                 ))}
             </ul>

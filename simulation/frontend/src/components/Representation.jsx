@@ -13,6 +13,7 @@ import AlternateMachine from "./AlternateMachine"
 import Scrollbar from "react-scrollbars-custom"
 import Select from "./Select"
 import Sensor from "./Sensor"
+import AlternateSensor from "./AlternateSensor"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -77,7 +78,17 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             : null}
           {displayType.name === "Sensors"
             ? phase
-              ? null
+              ? factory.machines.map((machine, machineIdx) =>
+                  machine.sensors.map((sensor, sensorIdx) => (
+                    <AlternateSensor
+                      data={sensor}
+                      parent={machine.id}
+                      key={`sensor-${machineIdx}-${sensorIdx}`}
+                      classnames="col-span-1 min-w-full"
+                      isDetailed={detailed}
+                    />
+                  ))
+                )
               : factory.map((machine, machineIdx) =>
                   machine.sensors.map((sensor, sensorIdx) => (
                     <Sensor
@@ -158,10 +169,25 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             : null}
           {displayType.name === "Sensors"
             ? phase
-              ? null
+              ? factory.machines.map((machine, machineIdx) =>
+                  machine.sensors
+                    .filter((sensor) => {
+                      if (searchValue === "") return true
+                      else return sensor.id.toUpperCase().includes(searchValue.toUpperCase())
+                    })
+                    .map((sensor, sensorIdx) => (
+                      <AlternateSensor
+                        data={sensor}
+                        parent={machine.id}
+                        key={`sensor-${machineIdx}-${sensorIdx}`}
+                        classnames="col-span-1 min-w-full"
+                        isDetailed={detailed}
+                      />
+                    ))
+                )
               : factory.map((machine, machineIdx) =>
                   machine.sensors
-                    .filter((sensor, sensorIdx) => {
+                    .filter((sensor) => {
                       if (searchValue === "") return true
                       else return sensor.id.toUpperCase().includes(searchValue.toUpperCase())
                     })

@@ -6,7 +6,7 @@ export default function AlternateMachine({ data, classnames, isDetailed }) {
   const status = data.status
   const info = {
     sensors: data.sensors.length,
-    totalWorkingTime: data.totalWorkingTime + " ms",
+    workTime: data.totalWorkingTime + " ms",
   }
   const links = {
     prev: "tbd",
@@ -21,7 +21,7 @@ export default function AlternateMachine({ data, classnames, isDetailed }) {
     >
       {/* Headline */}
       <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
-        <h5 className="mt-0 uppercase tracking-wide text-lg font-mono">{data.id}</h5>
+        <h5 className="uppercase tracking-wide text-lg font-mono">{data.id}</h5>
         <span className="flex items-start text-sm">
           {resolveStatus(status)}
           {status ? (
@@ -44,7 +44,7 @@ export default function AlternateMachine({ data, classnames, isDetailed }) {
                 <span>none</span>
               </span>
             ) : (
-              <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+              <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                 <span>{links[link]}</span>
               </span>
             )}
@@ -57,9 +57,9 @@ export default function AlternateMachine({ data, classnames, isDetailed }) {
         {Object.keys(info).map((key, index) => (
           <li className="flex justify-between mt-1" key={`info-machine-${data.id}-${key}`}>
             <span className="uppercase bg-blue-400/75 text-sky-50 dark:bg-blue-400/75 dark:text-sky-50 text-xs font-medium px-2 py-0.5 rounded">
-              {key.slice(0, 7)}
+              {key.slice(0, 9)}
             </span>
-            <span className="lowercase bg-gray-100 text-gray-700 dark:bg-gray-100 dark:text-gray-700 text-right text-xs font-medium px-2 py-0.5 rounded">
+            <span className="lowercase bg-gray-100 text-gray-700 dark:bg-gray-100 dark:text-gray-700 text-right text-xs font-normal px-2 py-0.5 rounded">
               {info[key]}
             </span>
           </li>
@@ -68,30 +68,30 @@ export default function AlternateMachine({ data, classnames, isDetailed }) {
 
       {/* Sensors */}
       {isDetailed ? (
-        <ul>
+        <ul className="space-y-[-3px]">
           {Object.keys(sensors).map((key, index) => (
             <ul key={`sensor-${data.id}-${index}`}>
               {Object.keys(sensors[key])
                 .filter((k, i) => k === "type")
                 .map((k, i) => (
-                  <>
-                    <li className="flex justify-between my-1" key={`sensor-type-${data.id}-${index}-${k}`}>
+                  <li className="flex justify-between" key={`sensor-type-${data.id}-${index}-${k}`}>
+                    <div className="space-x-1">
                       <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
-                        {`type`}
+                        {`sensor`}
                       </span>
-                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
                         {`${sensors[key][k]}`}
                       </span>
-                    </li>
-                    <li className="flex justify-between my-1" key={`sensor-fail-${data.id}-${index}-${k}`}>
-                      <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
-                        {`failcount`}
+                    </div>
+                    <div className="space-x-1">
+                      <span className="lowercase bg-rose-500/75 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
+                        {`fails`}
                       </span>
-                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-                        {`${sensors[key]["failcount"]}`}
+                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
+                        {sensors[key]["failcount"] || 0}
                       </span>
-                    </li>
-                  </>
+                    </div>
+                  </li>
                 ))}
             </ul>
           ))}
