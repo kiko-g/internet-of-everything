@@ -13,7 +13,7 @@ public class Graph {
     ConcurrentHashMap<String, MachineNode> nodes; 
 
     public Graph(){
-        this("./data/graph/");
+        this("../data/");
     }
 
     public Graph(String folderPath){  

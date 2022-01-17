@@ -45,11 +45,17 @@ public class MachineListener extends Listener {
         JSONObject measureValues  = messageParsed.getJSONObject("values"); 
 
         measureValues.keySet().forEach((key) -> {
-            double measureValue = measureValues.getDouble(key);
-            boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
+            try {
+                double measureValue = measureValues.getDouble(key);
+                boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
 
-            if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
-            else analyseFutureBehavior(messageParsed, sensorState, key);
+                if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
+                else analyseFutureBehavior(messageParsed, sensorState, key);   
+            }
+            catch (Exception e) {
+                // e.printStackTrace();
+                System.out.println("Error Reading sensor " + sensorID + " from machine " + machineID);
+            }
         });
     }
 
