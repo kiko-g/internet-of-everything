@@ -37,6 +37,7 @@ public class Machine extends MQTTClient implements Runnable {
         this.machineTopic = "machine/" + id;
         this.productTopic = "product/" + id;
         this.publishMessage("startup", config);
+        this.subscribeTopic("failure/" + id);
     }
 
 
@@ -114,7 +115,7 @@ public class Machine extends MQTTClient implements Runnable {
         // System.out.println("--");
         // System.out.println("messageArrived()");
         // System.out.println("topic: " + s);
-        // System.out.println("message: " + mqttMessage.toString());
+        System.out.println("message: " + mqttMessage.toString());
         // System.out.println("--");
 
         //TODO: handle message
