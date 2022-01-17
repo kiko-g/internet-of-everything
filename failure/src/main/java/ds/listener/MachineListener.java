@@ -63,6 +63,7 @@ public class MachineListener extends Listener {
         String machineID = messageParsed.get("machineID").toString(); 
         String readingTime = messageParsed.get("readingTime").toString();
         Failure failure = new Failure(sensorState, machineID, readingTime); 
+
         MeasureState measureState = sensorState.getMeasureState(measureType);
         
         Queue<Double> measures = measureState.getLastMeasures();    
@@ -87,39 +88,55 @@ public class MachineListener extends Listener {
             prevVal = currentVal;
         }
 
-        System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
-            "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
-
-        double proximityMax = measureState.getMaxProximity();
-        this.sendFailureFuture(failure, proximityMax, numIncrease, FailureType.ABOVE_EXPECTED, "increasing");
-
-        double proximityMin = measureState.getMinProximity();
-        this.sendFailureFuture(failure, proximityMin, numDecrease, FailureType.UNDER_EXPECTED, "decreasing");
+        // System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
+        //     "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
+        
+        this.sendFailureFuture(measureState, failure, numIncrease, numDecrease);
     }
 
-    private void sendFailureFuture(Failure failure, double proximity, int numConsecutive, FailureType type, String log) {
-        if (proximity < 10.0) {
-            if (numConsecutive > FUTURE_BEHAVIOR) {          
+    private void sendFailureFuture(MeasureState measureState, Failure failure, int numIncrease, int numDecrease){
+        double upperLimit = measureState.getExpectedValues().max;
+        double downLimit = measureState.getExpectedValues().min;
+        double interval = (upperLimit - downLimit) / 8; 
+        
+        FailureType type;
+        String log;
+        int numConsecutive;
+        double proximity;
+
+        double proximityMax = measureState.getMaxProximity();
+        double proximityMin = measureState.getMinProximity();
+        
+        if (proximityMax < proximityMin) {
+            proximity = proximityMax;
+            numConsecutive = numIncrease;
+            type = FailureType.ABOVE_EXPECTED;
+            log = "increasing";
+        } else {
+            proximity = proximityMin;
+            numConsecutive = numDecrease;
+            type = FailureType.UNDER_EXPECTED;
+            log = "decreasing";
+        } 
+
+        // Sensor value near the limit
+        if (proximity < interval) {
+            if (numConsecutive >= FUTURE_BEHAVIOR) {          
                 failure.setFailureType(type);
                 failure.setFailureSeverity(FailureSeverity.MEDIUM);
-                failure.setDescription("Values " + log + " too fast and near the max limit");
+                failure.setDescription("Values " + log + " too fast and near the limit");
             } else {
                 failure.setFailureType(type);
                 failure.setFailureSeverity(FailureSeverity.LOW);
-                failure.setDescription("Values near the max limit");
+                failure.setDescription("Values near the limit");
             }
-        } else if (numConsecutive > FUTURE_BEHAVIOR) {
-                failure.setFailureType(type);
-                failure.setFailureSeverity(FailureSeverity.LOW);
-                failure.setDescription("Values " + log + " too fast");
         } else {
             return;
         }
 
         System.out.println(failure.getMessage());
-        this.failurePublisher.publish(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage(), failure.getMachineID());
     }
-
 
     public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
@@ -141,7 +158,7 @@ public class MachineListener extends Listener {
         }
 
         System.out.println(failure.getMessage());
-        this.failurePublisher.publish(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage(), machineID);
     }
 
 }
