@@ -6,10 +6,12 @@ import org.json.JSONObject;
  * Class resposible for building the failure message.
  */
 public class Failure {
-    JSONObject message; 
+    private JSONObject message; 
+    private String machineID;
 
     public Failure(SensorState sensorState, String machineID, String readingTime){
         this.message = new JSONObject(); 
+        this.machineID = machineID;
         message.put("machineID", machineID); 
         message.put("sensorID", sensorState.getId());
         message.put("readingTime", readingTime);
@@ -17,6 +19,10 @@ public class Failure {
 
     public String getMessage(){
         return this.message.toString();
+    }
+
+    public String getMachineID(){
+        return this.machineID;
     }
 
     public void setFailureType(FailureType failureType){

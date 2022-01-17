@@ -58,8 +58,8 @@
         "updateInterval": 4000,
         "attributes": {
           "vibration":{
-            "min": 5,
-            "max": 2,
+            "min": 2,
+            "max": 5,
             "avg": 3.2, 
             "standardDeviation": 1
           }
