@@ -37,3 +37,29 @@ export const jsonStyle = {
   fontFamily: "JetBrains Mono, Consolas, sans-serif",
   backgroundColor: "#3c4553",
 }
+
+export const options = [
+  { name: "Machines", color: "bg-blue-400" },
+  { name: "Sensors", color: "bg-teal-400" },
+]
+
+const labels = [
+  { type: "energy", color: "orange" },
+  { type: "position", color: "teal" },
+  { type: "velocity", color: "indigo" },
+  { type: "temperature", color: "red" },
+  { type: "vibration", color: "purple" },
+  { type: "orientation", color: "lime" },
+  { type: "speed ", color: "sky" },
+]
+
+export const findColor = (type) => {
+
+  for (let i = 0; i < labels.length; i++) {
+    let condition = type.toLowerCase().trim() === labels[i].type.toLowerCase().trim()
+    console.log(condition, `|${type.toLowerCase().trim()}|`, `|${labels[i].type.toLowerCase().trim()}|`)
+    if (condition) return labels[i].color
+  }
+
+  return "slate"
+}

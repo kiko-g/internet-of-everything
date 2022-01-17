@@ -27,7 +27,7 @@ export default function AboutModal() {
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
+        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center bg-black/50">
             <Transition.Child
               as={Fragment}
@@ -56,7 +56,7 @@ export default function AboutModal() {
             >
               <div className="inline-block w-full max-w-xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-slate-50 dark:bg-slate-700 shadow-xl rounded-2xl">
                 <div className="flex items-center justify-between">
-                  <Dialog.Title as="h2" className="text-xl font-semibold leading-6 text-slate-800 dark:text-white">
+                  <Dialog.Title as="h2" className="text-xl font-medium leading-6 text-slate-800 dark:text-white">
                     About
                   </Dialog.Title>
                   <button
