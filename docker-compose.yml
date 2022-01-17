@@ -32,6 +32,8 @@ services:
   failure-service:
     build: ./failure/
     command: sh -c "gradle runFailureService"
+    ports: 
+      - 9000:9000
     volumes:
       - ./src/:/failure/edge/src/
     container_name: "failure-service"
