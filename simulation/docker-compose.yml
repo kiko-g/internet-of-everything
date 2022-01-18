@@ -6,8 +6,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
     volumes:
-      - frontend:/usr/simulation/frontend
+      - ./frontend:/usr/simulation/frontend
   backend:
     build:
       context: ./backend
@@ -15,8 +18,4 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - backend:/usr/simulation/backend
-
-volumes:
-  backend: {}
-  frontend: {}
+      - ./backend:/usr/simulation/backend

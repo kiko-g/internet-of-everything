@@ -2,11 +2,9 @@ FROM node:16
 
 WORKDIR /usr/simulation/frontend
 
-COPY package*.json ./
+COPY . .
 
 RUN npm install
-
-COPY . .
 
 EXPOSE 3000
 
