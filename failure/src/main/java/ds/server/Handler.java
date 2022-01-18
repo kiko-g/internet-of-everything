@@ -1,31 +1,29 @@
 package ds.server;
-import com.sun.net.httpserver.HttpHandler;  
+
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import ds.FailureService;
-import ds.failures.Failure;
 
-import java.io.OutputStream;
 import java.io.IOException;
-import java.lang.StringBuilder; 
+import java.io.OutputStream;
 
-public class Handler implements HttpHandler {
+interface Handler extends HttpHandler {
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException { 
-        String requestParamValue = null; 
-        if ("GET".equals(httpExchange.getRequestMethod())){ 
-            handleResponse(httpExchange); 
+    default void handle(HttpExchange httpExchange) throws IOException {
+        if ("GET".equals(httpExchange.getRequestMethod())) {
+            String jsonResponse = this.getResponse();
+            this.sendResponse(httpExchange, jsonResponse);
         }
     }
 
-    public void handleResponse(HttpExchange httpExchange) throws IOException{
+    default void sendResponse(HttpExchange httpExchange, String jsonResponse) throws IOException {
         OutputStream outputStream = httpExchange.getResponseBody();
-        StringBuilder jsonResponse = new StringBuilder();
-        
-        jsonResponse.append(FailureService.serverState.getSensorFailure());
         httpExchange.sendResponseHeaders((200), jsonResponse.length());
-        outputStream.write(jsonResponse.toString().getBytes()); 
+        outputStream.write(jsonResponse.getBytes());
         outputStream.flush();
-        outputStream.close(); 
+        outputStream.close();
     }
-}
 
+    String getResponse();
+
+}

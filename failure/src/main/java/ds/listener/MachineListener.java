@@ -11,11 +11,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 public class MachineListener extends Listener {
-    private State state; // Stores the current state of all machines.
+    private final State state; // Stores the current state of all machines.
     public static final Integer INFO_SIZE = 5; // Number of previous states to save 
     public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
 
-    private FailurePublisher failurePublisher;
+    private final FailurePublisher failurePublisher;
 
     public MachineListener(Graph graph) {
         super("machine", graph);

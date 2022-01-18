@@ -5,19 +5,35 @@ package ds.server;
  */
 public class ServerState {
     String sensorFailure;
+    String sensorFutureFailure;
     String product;
-    public ServerState(){
+
+    public ServerState() {
         this.sensorFailure = null;
     }
-    public void setSensorFailure(String sensor){
-        this.sensorFailure = sensor;
+
+    public void setSensorFailure(String sensorFailure) {
+        this.sensorFailure = sensorFailure;
     }
 
-    public String getSensorFailure(){
+    public void setSensorFutureFailure(String sensorFutureFailure) {
+        this.sensorFutureFailure = sensorFutureFailure;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getSensorFailure() {
         return this.sensorFailure;
     }
 
-    public void setProduct(String product){
-        this.product = product;
+    public String getSensorFutureFailure() {
+        return this.sensorFutureFailure;
     }
+
+    public String getProduct(){
+        return this.product;
+    }
+
 }
