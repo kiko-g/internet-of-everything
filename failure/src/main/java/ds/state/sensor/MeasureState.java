@@ -13,9 +13,9 @@ import java.util.*;
  * statistics.
  */
 public class MeasureState {
-    private Queue<Float> lastMeasures;          // The last n values.
-    private float sumMeasures;                  // The total sum of the values in the queue.
-    private float mostRecentMeasure; 
+    private Queue<Double> lastMeasures;          // The last n values.
+    private double sumMeasures;                  // The total sum of the values in the queue.
+    private double mostRecentMeasure; 
 
     private Integer nMeasures;                  // The number of measures received until now.
     private Integer nUnallowedMeasures;         // The number of measures not allowed until now (i.e measure not within the min and max bounds).
@@ -34,11 +34,11 @@ public class MeasureState {
      * Get's the mean value of the machine considering the last n.
      * @return The value mean.
      */
-    public Float getMeanMeasure() {
+    public Double getMeanMeasure() {
         return sumMeasures/ lastMeasures.size();
     }
 
-    public Float getMostRecentMeasures() {
+    public Double getMostRecentMeasures() {
         return this.mostRecentMeasure;
     }
 
@@ -46,19 +46,19 @@ public class MeasureState {
         return this.expectedValues;
     }
 
-    public Queue<Float> getLastMeasures() {
+    public Queue<Double> getLastMeasures() {
         return lastMeasures;
     }
 
-    public Float getMaxProximity() {
+    public Double getMaxProximity() {
         return this.expectedValues.max - this.mostRecentMeasure;
     }
 
-    public Float getMinProximity() {
+    public Double getMinProximity() {
         return this.mostRecentMeasure - this.expectedValues.min;
     }
 
-    private void updateUnallowedMeasures(float measure){
+    private void updateUnallowedMeasures(double measure){
         this.nUnallowedMeasures += this.isMeasureAcceptable(measure) ? 1: 0; 
     }
 
@@ -70,14 +70,14 @@ public class MeasureState {
      * 
      * @param newMeasure The new measure to be added to the queue.
      */
-    public boolean add(float newMeasure) {
+    public boolean add(double newMeasure) {
         int numMeasures = this.lastMeasures.size();
         this.nMeasures++;
         if (numMeasures < MachineListener.INFO_SIZE) {
             this.lastMeasures.add(newMeasure);
             this.sumMeasures += newMeasure;
         } else {
-            Float removedMeasure = this.lastMeasures.remove(); // Remove the first element in the queue.
+            Double removedMeasure = this.lastMeasures.remove(); // Remove the first element in the queue.
             this.lastMeasures.add(newMeasure);
             this.sumMeasures = this.sumMeasures - removedMeasure + newMeasure;
         }
@@ -90,7 +90,7 @@ public class MeasureState {
      * An acceptable measure is a measure that is between its possible min and max values. 
      * @return true if the measure is acceptable, false otherwise. 
      */
-    private boolean isMeasureAcceptable(float measureValue){
+    private boolean isMeasureAcceptable(double measureValue){
         return measureValue >= this.expectedValues.getMin() && measureValue <= this.expectedValues.max;
     }
 

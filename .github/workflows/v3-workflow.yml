@@ -1,0 +1,26 @@
+name: v3-docker-workflow
+ 
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - V3-Fault-Analysis
+  pull_request:
+    branches: 
+      - main
+      - dev
+      - V3-Fault-Analysis
+
+  workflow_dispatch:
+
+jobs:
+  docker_build:
+    runs-on: self-hosted
+    name: "Vertical 3: Test docker-compose"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Run Docker"
+      working-directory: ./failure
+      run: docker-compose up -d

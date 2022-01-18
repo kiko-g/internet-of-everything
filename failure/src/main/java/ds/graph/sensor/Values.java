@@ -1,17 +1,17 @@
 package ds.graph.sensor; 
 public class Values {
-    public float min; 
-    public float max;  
+    public double min; 
+    public double max;  
 
-    public Values(float min, float max) {
+    public Values(double min, double max) {
         this.min = min;
         this.max = max; 
     }
-    public float getMax(){
+    public double getMax(){
         return this.max; 
     }
 
-    public float getMin(){
+    public double getMin(){
         return this.min;
     } 
 

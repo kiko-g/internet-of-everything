@@ -2,13 +2,14 @@ import org.eclipse.paho.mqttv5.client.*;
 import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
+import io.github.cdimascio.dotenv.Dotenv;
 
 // example: https://partners-intl.aliyun.com/help/doc-detail/146631.htm
 
 public abstract class MQTTClient implements MqttCallback {
-    // ------ Client Configuration ------ //
-    private final int qos = 2; // exactly once delivery
-    private final String broker = "tcp://localhost:1883";
+
+    private final int qos = 0; // at most once delivery
+    private final String broker;
     private String clientId;
     private MqttClient client;
     private final String willTopic = "will";
@@ -16,6 +17,8 @@ public abstract class MQTTClient implements MqttCallback {
 
 
     MQTTClient(String clientId) {
+        Dotenv dotenv = Dotenv.load();
+        this.broker = "tcp://" + dotenv.get("mosquitto_address") + ":1883";
         try {
             this.clientId = clientId;
             MemoryPersistence persistence = new MemoryPersistence();
@@ -35,7 +38,9 @@ public abstract class MQTTClient implements MqttCallback {
         } catch (MqttException e) {
             System.err.println("[MQTT] Exception Occurred whilst connecting the client " + clientId + ": ");
             e.printStackTrace();
-            //System.exit(0);
+            System.err.println();
+            System.err.println("A possibility is that mosquitto is not running...");
+            System.exit(0);
         }
     }
 
