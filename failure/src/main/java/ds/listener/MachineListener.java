@@ -1,4 +1,5 @@
 package ds.listener;
+import ds.FailureService;
 import ds.graph.Graph;
 import ds.graph.sensor.*;
 import ds.state.*; 
@@ -14,7 +15,7 @@ public class MachineListener extends Listener {
     public static final Integer INFO_SIZE = 5; // Number of previous states to save 
     public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
 
-    private FailurePublisher failurePublisher; 
+    private FailurePublisher failurePublisher;
 
     public MachineListener(Graph graph) {
         super("machine", graph);
@@ -136,6 +137,7 @@ public class MachineListener extends Listener {
         }
 
         System.out.println(failure.getMessage());
+        FailureService.serverState.setSensorFailure(failure.getMessage());
         this.failurePublisher.publish(failure.getMessage());
     }
 

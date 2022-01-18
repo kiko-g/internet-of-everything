@@ -3,21 +3,24 @@ import ds.graph.Graph;
 import ds.listener.MachineListener;
 import ds.listener.ProductListener;
 import ds.server.Server;
+import ds.server.ServerState;
 
 public class FailureService {
     MachineListener machineListener;
     ProductListener productListener;
     Graph machinesGraph;
-    Server server; 
+    Server server;
+    public static ServerState serverState;
 
     /**
      * Starts the failure service by activating the machine listener and product listener. 
      */
     public FailureService() {
         try {
+            serverState = new ServerState();
             this.machinesGraph = new Graph();
             this.machineListener = new MachineListener(this.machinesGraph);
-            this.productListener = new ProductListener(this.machinesGraph); 
+            this.productListener = new ProductListener(this.machinesGraph);
             this.server = new Server();  
         } catch (Exception e){
             System.err.println("Not possible to initialize server");
