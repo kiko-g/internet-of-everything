@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MeasureStateTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-18T11:38:35" hostname="LAPTOP-EILQL0GL" time="0.098">
+  <properties/>
+  <testcase name="testAddMaxValue()" classname="MeasureStateTest" time="0.091"/>
+  <testcase name="testAddAboveMaxValue()" classname="MeasureStateTest" time="0.002"/>
+  <testcase name="testAddValueInsideRange()" classname="MeasureStateTest" time="0.002"/>
+  <testcase name="testAddValueAfterLimit()" classname="MeasureStateTest" time="0.0"/>
+  <testcase name="testAddMinValue()" classname="MeasureStateTest" time="0.0"/>
+  <testcase name="testAddUnderMinValue()" classname="MeasureStateTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
