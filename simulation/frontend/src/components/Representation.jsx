@@ -77,13 +77,15 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 ))
             : null}
           {displayType.name === "Sensors"
-            ? phase
+            ? factory.length === 0
+              ? null
+              : phase
               ? factory.machines.map((machine, machineIdx) =>
                   machine.sensors.map((sensor, sensorIdx) => (
                     <AlternateSensor
                       data={sensor}
                       parent={machine.id}
-                      key={`sensor-${machineIdx}-${sensorIdx}`}
+                      key={`sensor-final-${machineIdx}-${sensorIdx}`}
                       classnames="col-span-1 min-w-full"
                       isDetailed={detailed}
                     />
@@ -94,7 +96,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     <Sensor
                       data={sensor}
                       parent={machine.id}
-                      key={`sensor-${machineIdx}-${sensorIdx}`}
+                      key={`sensor-initial-${machineIdx}-${sensorIdx}`}
                       classnames="col-span-1 min-w-full"
                       isDetailed={detailed}
                     />
@@ -168,7 +170,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                   })
             : null}
           {displayType.name === "Sensors"
-            ? phase
+            ? phase && factory.length !== 0
               ? factory.machines.map((machine, machineIdx) =>
                   machine.sensors
                     .filter((sensor) => {

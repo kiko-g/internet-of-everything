@@ -25,7 +25,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
       <div className="rounded-b-xl h-full">
         {Object.keys(attributes).map((attribute, attributeIdx) =>
           Object.keys(attributes).length === 1 ? (
-            <div className="flex h-full">
+            <div key={`sensor-initial-${id}-attribute-${attribute}`} className="flex h-full">
               <div className="rounded-bl-xl bg-slate-400 w-2 flex items-center"></div>
               <div
                 title="Minimum, Maximum, Average and Standard Deviation"
@@ -38,7 +38,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
               </div>
             </div>
           ) : attributeIdx !== Object.keys(attributes).length - 1 ? (
-            <div className="flex">
+            <div key={`sensor-initial-${id}-attribute-${attribute}`} className="flex">
               <div className="bg-slate-400 w-2"></div>
               <div
                 title="Minimum, Maximum, Average and Standard Deviation"
@@ -51,7 +51,7 @@ export default function Sensor({ data, parent, classnames, isDetailed }) {
               </div>
             </div>
           ) : (
-            <div className="flex">
+            <div key={`sensor-initial-${id}-attribute-${attribute}`} className="flex">
               <div className="bg-slate-400 w-2 rounded-bl-xl"></div>
               <div
                 title="Minimum, Maximum, Average and Standard Deviation"

@@ -57,7 +57,6 @@ export const findColor = (type) => {
 
   for (let i = 0; i < labels.length; i++) {
     let condition = type.toLowerCase().trim() === labels[i].type.toLowerCase().trim()
-    console.log(condition, `|${type.toLowerCase().trim()}|`, `|${labels[i].type.toLowerCase().trim()}|`)
     if (condition) return labels[i].color
   }
 
