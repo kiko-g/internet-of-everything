@@ -4,12 +4,14 @@ package ds.server;
  * This class is responsible for storing the current messages that the server must store.
  */
 public class ServerState {
-    String sensorFailure;
-    String sensorFutureFailure;
-    String product;
+    private String sensorFailure;
+    private String sensorFutureFailure;
+    private String production;
 
     public ServerState() {
         this.sensorFailure = null;
+        this.sensorFutureFailure = null;
+        this.production = null;
     }
 
     public void setSensorFailure(String sensorFailure) {
@@ -20,8 +22,8 @@ public class ServerState {
         this.sensorFutureFailure = sensorFutureFailure;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public void setProduction(String production) {
+        this.production= production;
     }
 
     public String getSensorFailure() {
@@ -32,8 +34,8 @@ public class ServerState {
         return this.sensorFutureFailure;
     }
 
-    public String getProduct(){
-        return this.product;
+    public String getProduction(){
+        return this.production;
     }
 
 }

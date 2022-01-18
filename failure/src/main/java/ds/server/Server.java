@@ -10,7 +10,7 @@ public class Server {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.server.createContext("/failure", (Handler)() -> FailureService.serverState.getSensorFailure());
         this.server.createContext("/future-failure", (Handler)() -> FailureService.serverState.getSensorFutureFailure());
-        this.server.createContext("/product", (Handler)() -> FailureService.serverState.getProduct());
+        this.server.createContext("/production", (Handler)() -> FailureService.serverState.getProduction());
         this.server.setExecutor(null);
     } 
 

@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import ds.FailureService;
+import ds.failures.Failure;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ds.Utils;
@@ -29,17 +32,18 @@ public class ProductListener extends Listener {
         }
     }
 
-    public void init(){
+    public void init() {
         super.init();
 
         // Show the production state every 5 seconds
         this.executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleWithFixedDelay(new Thread(() -> this.showState()), 0, 5000, TimeUnit.MILLISECONDS);
+        executor.scheduleWithFixedDelay(new Thread(() -> FailureService.serverState.setProduction(this.buildMessage())),
+                0, 5000, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-       
+
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
         //System.out.println(messageParsed);
 
@@ -52,19 +56,18 @@ public class ProductListener extends Listener {
         MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
         // Process output messages - new sub-product was produced by a machine
-        if(action.equals("OUT")){
+        if (action.equals("OUT")) {
             machine.updateOutCounter();
-
             this.productionState.saveProductionTime(machine, readTime);
 
             // Identify defective product
-            if(defect){
+            if (defect) {
                 machine.addDefectiveProduct();
                 System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
             }
         }
         // Process input messages - new subproduct was received by a machine
-        else if(action.equals("IN")){
+        else if (action.equals("IN")) {
             machine.updateInCounter();
             this.productionState.saveInputTime(machineID, readTime);
         }
@@ -73,7 +76,7 @@ public class ProductListener extends Listener {
     /**
      * Output details regarding the production (e.g. number of defective products, production rate, ...)
      */
-    public void showState(){
+    public void showState() {
         String leftAlignFormat1 = "| %-15s |%n";
         String leftAlignFormat2 = "| %-7s | %-7d | %-11f | %-8d | %-20s | %-15s |%n";
         StringBuilder sb = new StringBuilder();
@@ -83,26 +86,43 @@ public class ProductListener extends Listener {
         sb.append(String.format("+-----------------+%n"));
 
         sb.append(String.format(leftAlignFormat1,
-            Utils.formatDouble(this.productionState.getTotalProductionRate()) + " / 10s"));   
+                Utils.formatDouble(this.productionState.getTotalProductionRate()) + " / 10s"));
         sb.append(String.format("+-----------------+%n"));
 
         sb.append(String.format("%n+---------+---------+-------------+----------+----------------------+-----------------+%n"));
         sb.append(String.format("| Machine | Defects | Defect Rate | Products | Mean Production Time | Production Rate |%n"));
         sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
 
-        for(String machineID : this.machinesGraph.getMachines()){
+        for (String machineID : this.machinesGraph.getMachines()) {
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
             sb.append(String.format(leftAlignFormat2,
-                machineID, 
-                machine.getDefectiveCount(), 
-                machine.getDefectRate(), 
-                machine.getOutCount(), 
-                Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
-                Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));    
+                    machineID,
+                    machine.getDefectiveCount(),
+                    machine.getDefectRate(),
+                    machine.getOutCount(),
+                    Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
+                    Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));
         }
 
         sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
         System.out.println(sb.toString());
     }
+
+    public String buildMessage() {
+        JSONArray message = new JSONArray();
+        for (String machineID : this.machinesGraph.getMachines()) {
+            JSONObject machineInfo = new JSONObject();
+            MachineNode machine = this.machinesGraph.getMachineNode(machineID);
+            machineInfo.put("machineID", machineID);
+            machineInfo.put("nDefects", machine.getDefectiveCount());
+            machineInfo.put("defectRate", machine.getDefectRate());
+            machineInfo.put("nProducts", machine.getOutCount());
+            machineInfo.put("meanProductionTime", this.productionState.getProductionTime(machine));
+            machineInfo.put("productionRate", this.productionState.getProductionRate(machine));
+            message.put(machineInfo);
+        }
+        return message.toString(2);
+    }
+
 }

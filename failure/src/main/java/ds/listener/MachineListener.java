@@ -113,9 +113,9 @@ public class MachineListener extends Listener {
         }
 
         System.out.println(failure.getMessage());
-        this.failurePublisher.publish(failure.getMessage());
+        FailureService.serverState.setSensorFutureFailure(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage());    // TODO: perhaps remove this.
     }
-
 
     public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
@@ -138,7 +138,7 @@ public class MachineListener extends Listener {
 
         System.out.println(failure.getMessage());
         FailureService.serverState.setSensorFailure(failure.getMessage());
-        this.failurePublisher.publish(failure.getMessage());
+        this.failurePublisher.publish(failure.getMessage());    // TODO: perhaps remove this.
     }
 
 }
