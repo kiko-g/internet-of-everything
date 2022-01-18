@@ -11,6 +11,6 @@ COPY settings.gradle settings.gradle
 
 RUN apk add gradle --no-cache
 RUN apk --no-cache add mosquitto-clients
-EXPOSE 9000
+EXPOSE $PORT
 # To be deleted later
 RUN gradle build
