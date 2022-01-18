@@ -9,7 +9,3 @@ mosquitto/data/mosquitto.db
 mosquitto/log/mosquitto.log
 
 .vscode/*
-
-failure/.gradle/*
-failure/.idea/*
-failure/.vscode/*

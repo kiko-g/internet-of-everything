@@ -1,2 +1,0 @@
-MeasureStateTest.java
- MeasureStateTest
