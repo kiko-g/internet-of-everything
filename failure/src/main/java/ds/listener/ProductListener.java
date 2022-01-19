@@ -28,7 +28,6 @@ public class ProductListener extends Listener {
     private ProductionState productionState;
     private MongoCollection<Document> collection;
 
-
     public ProductListener(Graph graph, MongoCollection<Document> collection) {
         super("product", graph);
 
@@ -54,63 +53,69 @@ public class ProductListener extends Listener {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
+        try {
+            JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
+            System.out.println(messageParsed);
 
-        JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        System.out.println(messageParsed);
+            // Get message values
+            String machineID = messageParsed.getString("machineID");
+            String action = messageParsed.getJSONObject("values").getString("action");
+            boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
+            String readTimeStr = messageParsed.getString("readingTime");
+            String productID = messageParsed.getJSONObject("values").getString("productID");
+            LocalDateTime readTime = Utils.parseDateTime(readTimeStr);
 
-        // Get message values
-        String machineID = messageParsed.getString("machineID");
-        String action = messageParsed.getJSONObject("values").getString("action");
-        boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
-        String readTimeStr = messageParsed.getString("readingTime");
-        LocalDateTime readTime = Utils.parseDateTime(readTimeStr);
+            MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
-        MachineNode machine = this.machinesGraph.getMachineNode(machineID);
+            // Process output messages - new sub-product was produced by a machine
+            if (action.equals("OUT")) {
+                System.out.println("OUT ====================================");
+                machine.updateOutCounter();
+                this.productionState.saveProductionTime(machine, readTime);
 
-        // Process output messages - new sub-product was produced by a machine
-        if (action.equals("OUT")) {
-            machine.updateOutCounter();
-            this.productionState.saveProductionTime(machine, readTime);
-
-            // Identify defective product
-            if (defect) {
-                machine.addDefectiveProduct();
-                System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
+                // Identify defective product
+                if (defect) {
+                    machine.addDefectiveProduct();
+                    System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
+                }
             }
-        }
-        // Process input messages - new subproduct was received by a machine
-        else if (action.equals("IN")) {
-            machine.updateInCounter();
-            this.productionState.saveInputTime(machineID, readTime);
-        }
-        else {
-            return;
+            // Process input messages - new subproduct was received by a machine
+            else if (action.equals("IN")) {
+                machine.updateInCounter();
+                this.productionState.saveInputTime(machineID, readTime);
+            } else {
+                return;
+            }
+
+            this.insertIntoDatabase(machineID, action, defect, readTimeStr, productID);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        this.insertIntoDatabase(machineID, action, defect, readTimeStr);
     }
-    
-    /**
-     * Function resposible for adding product location to the database. 
-     */
-    void insertIntoDatabase(String machineID, String action, boolean defect, String readTime){
-        System.out.println("INSERT INTO DATABASE");
-        try{
-            this.collection.insertOne(new Document()
-                            .append("machineID", machineID)
-                            .append("action", action)
-                            .append("defect", defect)
-                            .append("readTime", readTime)
-                            .append("productID", "shit")
-                            .append("date", new Date()));
 
-        }catch(Exception e){
+    /**
+     * Function resposible for adding product location to the database.
+     */
+    void insertIntoDatabase(String machineID, String action, boolean defect, String readTime, String productID) {
+        System.out.println("INSERT INTO DATABASE");
+        try {
+            this.collection.insertOne(new Document()
+                    .append("machineID", machineID)
+                    .append("action", action)
+                    .append("defect", defect)
+                    .append("readTime", readTime)
+                    .append("productID", productID)
+                    .append("date", new Date()));
+
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     /**
-     * Output details regarding the production (e.g. number of defective products, production rate, ...)
+     * Output details regarding the production (e.g. number of defective products,
+     * production rate, ...)
      */
     public void showState() {
         String leftAlignFormat1 = "| %-15s |%n";
@@ -125,9 +130,12 @@ public class ProductListener extends Listener {
                 Utils.formatDouble(this.productionState.getTotalProductionRate()) + " / 10s"));
         sb.append(String.format("+-----------------+%n"));
 
-        sb.append(String.format("%n+---------+---------+-------------+----------+----------------------+-----------------+%n"));
-        sb.append(String.format("| Machine | Defects | Defect Rate | Products | Mean Production Time | Production Rate |%n"));
-        sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
+        sb.append(String
+                .format("%n+---------+---------+-------------+----------+----------------------+-----------------+%n"));
+        sb.append(String
+                .format("| Machine | Defects | Defect Rate | Products | Mean Production Time | Production Rate |%n"));
+        sb.append(String
+                .format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
 
         for (String machineID : this.machinesGraph.getMachines()) {
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
@@ -141,7 +149,8 @@ public class ProductListener extends Listener {
                     Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));
         }
 
-        sb.append(String.format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
+        sb.append(String
+                .format("+---------+---------+-------------+----------+----------------------+-----------------+%n"));
         System.out.println(sb.toString());
     }
 

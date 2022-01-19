@@ -23,15 +23,74 @@ public class ProductSensor extends SensorSimulator {
     public void init(){
         super.init();
         this.machinesGraph = new Graph();
+        testTracking();
         
-        MachineNode machine;
+        //MachineNode machine;
+        // try {
+        //     machine = this.machinesGraph.getStartMachine();
+        //     int time = this.rnd.nextInt(2000 - 1000) + 1000;
+        //     executor.scheduleWithFixedDelay(new Thread(() -> this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+    }
+
+    private void testTracking(){
         try {
-            machine = this.machinesGraph.getStartMachine();
-            int time = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
+            Thread.sleep(2000);
+            publishTrackingMessage("m1", "in", "IN", "0");
+            Thread.sleep(2000);
+            publishTrackingMessage("m1", "out", "OUT", "0");
+            Thread.sleep(1000);
+            publishTrackingMessage("m2", "in", "IN", "0");
+            publishTrackingMessage("m1", "in", "IN", "1");
+            Thread.sleep(2000);
+            publishTrackingMessage("m2", "out", "OUT", "0");
+            publishTrackingMessage("m1", "out", "OUT", "1");
+            Thread.sleep(2000);
+            publishTrackingMessage("m3", "in", "IN",  "0");
+            Thread.sleep(1000);
+            publishTrackingMessage("m2", "in", "IN", "1");
+            publishTrackingMessage("m3", "out", "OUT", "0");
+            Thread.sleep(2000);
+            publishTrackingMessage("m2", "out", "OUT", "1");
+            publishTrackingMessage("m4", "in", "IN", "0"); 
+            Thread.sleep(2000);
+            publishTrackingMessage("m3", "in", "IN", "1");
+            publishTrackingMessage("m4", "out", "OUT", "0"); 
+            Thread.sleep(1000);
+            publishTrackingMessage("m3", "out", "OUT", "1");
+            publishTrackingMessage("m5", "in", "IN", "0"); 
+            Thread.sleep(2000);
+            publishTrackingMessage("m5", "out", "OUT", "0"); 
+            publishTrackingMessage("m4", "in", "IN", "1");
+            Thread.sleep(1000);
+            publishTrackingMessage("m4", "out", "OUT", "1");
+            Thread.sleep(1000);
+            publishTrackingMessage("m5", "in", "IN", "1");
+            Thread.sleep(1000);
+            publishTrackingMessage("m5", "out", "OUT", "1");
+        }catch(Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void publishTrackingMessage(String machineID, String sensorID, String action, String materialID){
+        String readTime = Utils.getDateTime(); 
+        JSONObject messageObject = new JSONObject();
+        messageObject.put("machineID", machineID);
+        messageObject.put("sensorID", sensorID);
+
+        JSONObject values = new JSONObject();
+        values.put("productID", materialID);
+        values.put("action", action);
+        values.put("defect", false);
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
+
+        this.publish(messageObject.toString());
     }
 
     private void simulateOutput(MachineNode startMachine){

@@ -47,16 +47,22 @@ public class FailureService {
             this.initDatabase();
             this.machineListener = new MachineListener(this.machinesGraph);
             this.productListener = new ProductListener(this.machinesGraph, this.collection);
-            this.server = new Server();  
+            this.server = new Server(this.collection);  
         } catch (Exception e){
             System.err.println("Not possible to initialize server");
             e.printStackTrace();
         }
     }
 
-
+    /**
+     * Initializes the database and the collection. 
+     * @throws Exception
+     */
     public void initDatabase() throws Exception{
-        this.mongoClient = new MongoClient(new MongoClientURI("mongodb://root:root@mongo:27017"));
+        String username = System.getenv("DB_USERNAME"); 
+        String password = System.getenv("DB_PASSWORD");
+        String port = System.getenv("DB_PORT");
+        this.mongoClient = new MongoClient(new MongoClientURI("mongodb://" + username +":" + password + "@mongo:" + port));
         
         this.database = mongoClient.getDatabase("manufacturing"); 
 
@@ -73,8 +79,7 @@ public class FailureService {
         this.database.createCollection("production_state", 
             new CreateCollectionOptions().validationOptions(validationOptions));
         this.collection = this.database.getCollection("production_state"); 
-        // TODO: change seconds to minutes
-        this.collection.createIndex(Indexes.ascending("date"), new IndexOptions().expireAfter(10L, TimeUnit.SECONDS)); 
+        this.collection.createIndex(Indexes.ascending("date"), new IndexOptions().expireAfter(1L, TimeUnit.HOURS)); 
     }
 
 

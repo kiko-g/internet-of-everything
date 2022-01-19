@@ -20,7 +20,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation 'org.json:json:20171018' 
-    implementation group: 'com.sun.net.httpserver', name: 'http', version: '20070405' 
+    implementation group: 'com.sun.net.httpserver', name:'http', version: '20070405' 
     implementation 'org.mongodb:mongo-java-driver:3.12.10'
     implementation 'org.mongodb:bson:4.4.1'
 }

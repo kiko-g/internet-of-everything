@@ -10,7 +10,7 @@ interface Handler extends HttpHandler {
     @Override
     default void handle(HttpExchange httpExchange) throws IOException {
         if ("GET".equals(httpExchange.getRequestMethod())) {
-            String jsonResponse = this.getResponse();
+            String jsonResponse = this.getResponse(httpExchange);
             this.sendResponse(httpExchange, jsonResponse);
         }
     }
@@ -23,6 +23,6 @@ interface Handler extends HttpHandler {
         outputStream.close();
     }
 
-    String getResponse();
+    String getResponse(HttpExchange httpExchange);
 
 }
