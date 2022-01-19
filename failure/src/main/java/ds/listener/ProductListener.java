@@ -69,7 +69,6 @@ public class ProductListener extends Listener {
 
             // Process output messages - new sub-product was produced by a machine
             if (action.equals("OUT")) {
-                System.out.println("OUT ====================================");
                 machine.updateOutCounter();
                 this.productionState.saveProductionTime(machine, readTime);
 
@@ -98,7 +97,7 @@ public class ProductListener extends Listener {
      * Function resposible for adding product location to the database.
      */
     void insertIntoDatabase(String machineID, String action, boolean defect, String readTime, String productID) {
-        System.out.println("INSERT INTO DATABASE");
+        
         try {
             this.collection.insertOne(new Document()
                     .append("machineID", machineID)
