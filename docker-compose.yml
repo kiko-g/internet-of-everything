@@ -26,7 +26,7 @@ services:
     image: mongo:5.0.5
     restart: always  
     env_file:
-      - ./failure/.env
+      - .env
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
@@ -35,6 +35,8 @@ services:
 
   mongo-express:
       image: mongo-express
+      env_file:
+        - .env
       restart: always
       ports:
         - 8081:8081
@@ -48,7 +50,7 @@ services:
     build: ./failure/
     command: sh -c "gradle runFailureService"
     env_file:
-     - ./failure/.env
+     - .env
     ports: 
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
