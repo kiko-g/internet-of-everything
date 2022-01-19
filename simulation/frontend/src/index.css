@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-.homepage {
-  /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E"); */
+.hero-light {
+  background: linear-gradient(
+    to top right,
+    rgb(237, 237, 249),
+    rgb(245, 235, 244),
+    rgb(218, 235, 251),
+    rgb(232, 235, 252),
+    rgb(237, 237, 249),
+    rgb(245, 235, 244),
+    rgb(218, 235, 251),
+    rgb(232, 235, 252)
+  );
+}
+
+.hero-dark {
+  background: linear-gradient(
+    -45deg,
+    theme("colors.slate.500"),
+    theme("colors.slate.500"),
+    theme("colors.slate.600"),
+    theme("colors.slate.600"),
+    theme("colors.slate.500"),
+    theme("colors.slate.500")
+  );
+  background-size: 200% 200%;
+}
+
+@keyframes breathe {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

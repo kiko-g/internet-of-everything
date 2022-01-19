@@ -103,14 +103,14 @@ public class ProductSensor extends SensorSimulator {
 
         // Simulate defective product
         boolean higherDefectProbability = (rnd.nextInt(20) == 0);
-        float defectProbability = 0;
-        if (higherDefectProbability) {
-            float randomDeviation = Utils.getRandomFloat(10, 50);
-            defectProbability = (startMachine.getDefectProbability() + randomDeviation) / 100;
+        double defectProbability = 0;
+        if(higherDefectProbability){
+            double randomDeviation = Utils.getRandomDouble(10, 50);
+            defectProbability = (startMachine.getDefectProbability() + randomDeviation)/100;
         } else {
             defectProbability = startMachine.getDefectProbability() / 100;
         }
-        boolean hasDefect = Utils.getRandomFloat(0, 1) > (1 - defectProbability) ? true : false;
+        boolean hasDefect = Utils.getRandomDouble(0, 1) >  ( 1 - defectProbability) ? true: false; 
 
         // Send output message
         String message = this.getOutputMessage(startMachine, hasDefect);

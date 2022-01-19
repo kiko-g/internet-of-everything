@@ -1,19 +1,19 @@
-import * as React from "react"
+import React from "react"
 import { Disclosure } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
 import PropTypes from "prop-types"
-import DarkModeSwitch from "./utilities/DarkModeSwitch"
+import DarkModeSwitch from "./utilities/switches/DarkModeSwitch"
 
 export default function Header({ siteTitle }) {
   return (
-    <Disclosure as="nav" className="bg-bluegray-500 dark:bg-bluegray-700 text-white space-x-4">
+    <Disclosure as="nav" className="bg-slate-500 dark:bg-slate-700 text-white space-x-4">
       {({ open }) => {
         return (
           <>
             <div className="mx-auto">
               <div className="relative flex items-center justify-between h-16 sm:h-12 md:h-12 lg:h-12 xl:h-12">
                 <div className="absolute inset-y-0 right-4 flex items-start md:hidden">
-                  <Disclosure.Button className="transition duration-200 ease inline-flex items-center justify-center p-1 ml-3 mt-3 rounded-xl text-gray-400 hover:text-white hover:bg-bluegray-400 focus:outline-none focus:ring focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="transition duration-200 ease inline-flex items-center justify-center p-1 ml-3 mt-3 rounded-xl text-gray-400 hover:text-white hover:bg-slate-400 focus:outline-none focus:ring focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6 transition duration-200 ease" aria-hidden="true" />

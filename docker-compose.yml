@@ -11,8 +11,17 @@ services:
       - ./mosquitto/log:/mosquitto/log 
     container_name: "mosquitto"
 
+  edge:
+    build: ./edge/
+    command: sh -c "gradle run"
+    volumes:
+      - ./edge/src:/edge/src
+      - ./data/:/data/
+    container_name: "edge"
+
   # Emulator Server
   # TODO
+  
   mongo: 
     image: mongo:5.0.5
     restart: always  
@@ -35,20 +44,6 @@ services:
         ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
 
   # Failure Analysis
-  machines:
-    build: ./failure/
-    command: sh -c "gradle runMachineSensors"
-    volumes:
-      - ./src/:/failure/edge/src/
-    container_name: "machine-sensors"
-
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
-    volumes:
-      - ./src/:/failure/edge/src/
-    container_name: "product-sensors"
-
   failure-service:
     build: ./failure/
     command: sh -c "gradle runFailureService"
@@ -57,8 +52,25 @@ services:
     ports: 
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
-      - ./src/:/failure/edge/src/
+      - ./failure/src/:/failure/src/
+      - ./data/:/data/
     container_name: "failure-service"
     depends_on:
       - mongo
+
+  # TODO: delete this when QRCode messages are ready
+  products:
+    build: ./failure/
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./failure/src/:/failure/src/
+      - ./data/:/data/
+    container_name: "product-sensors"
     
+  #git Chaos Engineering
+  # chaos-engineering:
+  #   build: ./chaos_engineering/
+  #   command: sh -c "python3 src/mqtt_test.py"
+  #   volumes:
+  #     - ./chaos_engineering/src:/chaos_engineering/src
+  #   container_name: "chaos_engineering"
