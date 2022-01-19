@@ -2,6 +2,7 @@ package ds.listener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -68,7 +69,6 @@ public class ProductListener extends Listener {
 
         // Process output messages - new sub-product was produced by a machine
         if (action.equals("OUT")) {
-            System.out.println("====================== INSIDE OUT ========================");
             machine.updateOutCounter();
             this.productionState.saveProductionTime(machine, readTime);
 
@@ -80,7 +80,6 @@ public class ProductListener extends Listener {
         }
         // Process input messages - new subproduct was received by a machine
         else if (action.equals("IN")) {
-            System.out.println("====================== INSIDE IN ========================");
             machine.updateInCounter();
             this.productionState.saveInputTime(machineID, readTime);
         }
@@ -102,7 +101,8 @@ public class ProductListener extends Listener {
                             .append("action", action)
                             .append("defect", defect)
                             .append("readTime", readTime)
-                            .append("productID", "shit"));
+                            .append("productID", "shit")
+                            .append("date", new Date()));
 
         }catch(Exception e){
             System.out.println(e);

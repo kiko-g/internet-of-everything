@@ -2,6 +2,7 @@ package ds;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 
 import com.mongodb.DB;
 import com.mongodb.client.MongoCollection;
@@ -12,6 +13,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.ValidationOptions;
 
 import org.bson.BsonType;
@@ -59,17 +62,19 @@ public class FailureService {
 
         Bson machineID = Filters.type("machineID", BsonType.STRING);
         Bson defect = Filters.type("defect", BsonType.BOOLEAN);
+        Bson date = Filters.type("date", BsonType.DATE_TIME);
         Bson action = Filters.type("action", BsonType.STRING);
         Bson readTime = Filters.type("readTime", BsonType.STRING);
         Bson productID= Filters.type("productID", BsonType.STRING);
-        Bson validator = Filters.and(machineID, defect, action,readTime,productID);
+        Bson validator = Filters.and(machineID, defect, action,readTime,productID, date);
 
         ValidationOptions validationOptions = new ValidationOptions().validator(validator);
-
         this.database.getCollection("production_state").drop();
         this.database.createCollection("production_state", 
             new CreateCollectionOptions().validationOptions(validationOptions));
-        this.collection = this.database.getCollection("production_state");
+        this.collection = this.database.getCollection("production_state"); 
+        // TODO: change seconds to minutes
+        this.collection.createIndex(Indexes.ascending("date"), new IndexOptions().expireAfter(10L, TimeUnit.SECONDS)); 
     }
 
 
