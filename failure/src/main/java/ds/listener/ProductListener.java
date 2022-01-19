@@ -6,8 +6,14 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
+
 import ds.FailureService;
-import ds.failures.Failure;
+
+import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,14 +25,18 @@ import ds.graph.MachineNode;
 public class ProductListener extends Listener {
     private ScheduledThreadPoolExecutor executor;
     private ProductionState productionState;
+    private MongoCollection<Document> collection;
 
-    public ProductListener(Graph graph) {
+
+    public ProductListener(Graph graph, MongoCollection<Document> collection) {
         super("product", graph);
+
         try {
             String startMachineID = this.machinesGraph.getStartMachine().getId();
             MachineNode endMachine = this.machinesGraph.getEndMachine();
             List<String> machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
             this.productionState = new ProductionState(machineIds, startMachineID, endMachine);
+            this.collection = collection;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,18 +55,20 @@ public class ProductListener extends Listener {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
 
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        //System.out.println(messageParsed);
+        System.out.println(messageParsed);
 
         // Get message values
         String machineID = messageParsed.getString("machineID");
         String action = messageParsed.getJSONObject("values").getString("action");
         boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
-        LocalDateTime readTime = Utils.parseDateTime(messageParsed.getString("readingTime"));
+        String readTimeStr = messageParsed.getString("readingTime");
+        LocalDateTime readTime = Utils.parseDateTime(readTimeStr);
 
         MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
         // Process output messages - new sub-product was produced by a machine
         if (action.equals("OUT")) {
+            System.out.println("====================== INSIDE OUT ========================");
             machine.updateOutCounter();
             this.productionState.saveProductionTime(machine, readTime);
 
@@ -68,8 +80,32 @@ public class ProductListener extends Listener {
         }
         // Process input messages - new subproduct was received by a machine
         else if (action.equals("IN")) {
+            System.out.println("====================== INSIDE IN ========================");
             machine.updateInCounter();
             this.productionState.saveInputTime(machineID, readTime);
+        }
+        else {
+            return;
+        }
+
+        this.insertIntoDatabase(machineID, action, defect, readTimeStr);
+    }
+    
+    /**
+     * Function resposible for adding product location to the database. 
+     */
+    void insertIntoDatabase(String machineID, String action, boolean defect, String readTime){
+        System.out.println("INSERT INTO DATABASE");
+        try{
+            this.collection.insertOne(new Document()
+                            .append("machineID", machineID)
+                            .append("action", action)
+                            .append("defect", defect)
+                            .append("readTime", readTime)
+                            .append("productID", "shit"));
+
+        }catch(Exception e){
+            System.out.println(e);
         }
     }
 
