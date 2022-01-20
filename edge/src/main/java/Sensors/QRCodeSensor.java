@@ -1,7 +1,7 @@
 package Sensors;
 import org.json.JSONObject;
 public class QRCodeSensor extends Sensor {
-    enum Action {IN, OUT}
+    public enum Action {IN, OUT}
 
     Type type;
     Integer materialID;
@@ -14,6 +14,16 @@ public class QRCodeSensor extends Sensor {
         this.materialID = null;
         this.action = Action.valueOf(action);
         this.defect = false;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setMaterial(int id, boolean defect){
+        this.setNewData(true);
+        this.materialID = id;
+        this.defect = defect;
     }
 
     public JSONObject readData() {
@@ -37,7 +47,5 @@ public class QRCodeSensor extends Sensor {
     }
 
     @Override
-    public void generateData() {
-        System.err.println("Generate of data " + this.getName() + " not implemented.");
-    }
+    public void generateData() {}
 }

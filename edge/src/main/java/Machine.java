@@ -5,13 +5,13 @@ import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 import org.json.JSONObject;
-import java.io.IOException;
-import java.io.File;
-import java.nio.file.Files;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Machine extends MQTTClient implements Runnable {
+    public static final double FAILURE_RATE = 0.05;
+
     Thread thread;
     String name;
 
@@ -25,8 +25,8 @@ public class Machine extends MQTTClient implements Runnable {
     String machineTopic;
     String productTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
-    Set<String> idSet = new HashSet<>();
-    Queue<String> items = new LinkedList<>();
+    Set<Integer> idSet = new HashSet<>();
+    Queue<Material> items = new LinkedList<>();
 
     Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String prevMachineID, String nextMachine, byte[] config) {
         super(id);
@@ -65,34 +65,53 @@ public class Machine extends MQTTClient implements Runnable {
         }
     }
 
-    private String randomID(){
-        int idSize = 5;
-        String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder id = new StringBuilder();
-        for(int i = 0; i < idSize; i++) {
-            int index = (int) (Math.random() * possibleChars.length());
-            id.append(possibleChars.charAt(index));
+    private ArrayList<QRCodeSensor> getQRSensors(QRCodeSensor.Action action){
+        ArrayList<QRCodeSensor> sensors = new ArrayList<>();
+        for(Sensor sensor: this.sensors){
+            if(sensor.getClass() == QRCodeSensor.class) {
+                if(((QRCodeSensor) sensor).getAction() == action) {
+                    sensors.add((QRCodeSensor) sensor);
+                }
+            }
         }
-        return id.toString();
+        return sensors;
+    }
+
+
+    private void setQRMaterial(Material material, QRCodeSensor.Action action){
+        for(QRCodeSensor sensor : getQRSensors(action)){
+            sensor.setMaterial(material.materialID,material.defect);
+        }
     }
 
     private void receiveNewMaterial(){
         if(prevMachineID == null){
-            String id;
+            int id;
             do{
-                id = randomID();
+                id = (int)(Math.random()*1000);
             }while (idSet.contains(id));
             idSet.add(id);
-            items.add(id);
-            System.out.println(this.name+"::::Product "+id+" entered production line");
+            Material material = new Material(id, false);
+            items.add(material);
+            //System.out.println(this.name+"::::Product "+id+" entered production line");
+            setQRMaterial(material, QRCodeSensor.Action.IN);
         }
     }
 
     private void dispatchMaterial(){
-        String item = items.poll();
-        System.out.println(this.name+"::::Product "+item+" dispatched");
-        if (nextMachineID != null && item != null){
-             this.publishMessage(this.nextMachineID, item.getBytes());
+        Material item = items.poll();
+        if(item != null){
+            if(Math.random() < FAILURE_RATE)
+                item.defect = true;
+
+            setQRMaterial(item, QRCodeSensor.Action.OUT);
+            if(nextMachineID != null)
+            {
+                this.publishMessage(this.nextMachineID, item.toString().getBytes());
+                //System.out.println(this.name+"::::Product "+item.materialID+" dispatched to "+nextMachineID);
+            }
+            //else
+                //System.out.println(this.name+"::::Product "+item.materialID+" dispatched");
         }
     }
 
@@ -104,6 +123,7 @@ public class Machine extends MQTTClient implements Runnable {
 
             if((curr_time - last_time) > this.timePerBatch){
                 last_time = curr_time;
+
                 receiveNewMaterial();
                 dispatchMaterial();
             }
@@ -111,10 +131,7 @@ public class Machine extends MQTTClient implements Runnable {
             for (Sensor sensor: this.sensors) {
                 if(sensor.hasNewData()) {
                     JSONObject data = sensor.readData();
-                    if(sensor.getClass() == QRCodeSensor.class)
-                        this.publishMessage(this.productTopic, data.toString().getBytes());
-                    else
-                        this.publishMessage(this.machineTopic, data.toString().getBytes());
+                    this.publishMessage(this.productTopic, data.toString().getBytes());
                 }
             }
         }
@@ -164,8 +181,13 @@ public class Machine extends MQTTClient implements Runnable {
         System.out.println("--");
 
         if(s.equals(this.name)){
-            System.out.println(this.name+"::::Received "+mqttMessage+" from "+this.prevMachineID);
-            this.items.add(mqttMessage.toString());
+            Material material = new Material(mqttMessage.toString());
+            //System.out.println(this.name+"::::>>Received "+material.materialID+" from "+this.prevMachineID+"   "+this.productTopic);
+            if(!material.defect)
+                this.items.add(material);
+            else
+                System.out.println("Item received with defect, id:"+material.materialID);
+            setQRMaterial(material, QRCodeSensor.Action.IN);
         }
 
         //TODO: handle message

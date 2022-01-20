@@ -52,6 +52,22 @@
           "standardDeviation": 1
         }
       }
+    },
+    {
+      "id": "qrcode1",
+      "type": "QR_CODE",
+      "updateInterval": 2000,
+      "attributes": {
+        "action": "IN"
+      }
+    },
+    {
+      "id": "qrcode2",
+      "type": "QR_CODE",
+      "updateInterval": 2000,
+      "attributes": {
+        "action": "OUT"
+      }
     }
   ]
 }
