@@ -40,10 +40,9 @@ services:
       - ./data/:/data/
     container_name: "product-sensors"
 
-  #git Chaos Engineering
-  # chaos-engineering:
-  #   build: ./chaos_engineering/
-  #   command: sh -c "python3 src/mqtt_test.py"
-  #   volumes:
-  #     - ./chaos_engineering/src:/chaos_engineering/src
-  #   container_name: "chaos_engineering"
+  chaos-engineering:
+    build: ./chaos_engineering/
+    command: sh -c "python3 src/mqtt_test.py"
+    volumes:
+      - ./chaos_engineering/src:/chaos_engineering/src
+    container_name: "chaos_engineering"
