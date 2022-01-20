@@ -1,4 +1,5 @@
 package ds.listener;
+import ds.FailureService;
 import ds.graph.Graph;
 import ds.graph.sensor.*;
 import ds.state.*; 
@@ -10,11 +11,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 public class MachineListener extends Listener {
-    private State state; // Stores the current state of all machines.
-    public static final Integer INFO_SIZE = 5; // Number of previous states to save 
-    public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
+    private final State state; // Stores the current state of all machines.
+    public static final Integer INFO_SIZE = Integer.parseInt(System.getenv("INFO_SIZE")); // Number of previous states to save 
+    public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(System.getenv("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
 
-    private FailurePublisher failurePublisher; 
+    private final FailurePublisher failurePublisher;
 
     public MachineListener(Graph graph) {
         super("machine/#", graph);
@@ -134,7 +135,7 @@ public class MachineListener extends Listener {
             return;
         }
 
-        System.out.println(failure.getMessage());
+        FailureService.serverState.setSensorFutureFailure(failure.getMessage());
         this.failurePublisher.publish(failure.getMessage(), failure.getMachineID());
     }
 
@@ -145,7 +146,6 @@ public class MachineListener extends Listener {
         Failure failure = new Failure(sensorState, machineID, readingTime); 
         Values expectedValues = sensorState.getMeasureState(measureType).getExpectedValues();
 
-        //TODO: change severity according to what the clients considers high priority.
         if (measureValue > expectedValues.getMax()) {
             failure.setFailureType(FailureType.ABOVE_EXPECTED);
             failure.setFailureSeverity(FailureSeverity.HIGH);
@@ -157,7 +157,7 @@ public class MachineListener extends Listener {
             failure.setDescription("Detected value: " + measureValue);
         }
 
-        System.out.println(failure.getMessage());
+        FailureService.serverState.setSensorFailure(failure.getMessage());
         this.failurePublisher.publish(failure.getMessage(), machineID);
     }
 
