@@ -42,10 +42,14 @@ public class ProductionState {
 
         if(this.inputTimes.containsKey(machineID)){
             LocalDateTime inputDt = this.inputTimes.get(machineID).poll();
+
+            if(inputDt == null){
+                System.out.println("Received output message without receiving input message.");
+                return;
+            }
             long productionTime = ChronoUnit.MILLIS.between(inputDt, outputDt);
 
             // Add new production time to the machine
-            if(inputDt == null) return;
             this.productionTimes.compute(machineID, (key, val) -> val + productionTime); 
 
         }
