@@ -18,13 +18,6 @@ services:
       - ./edge/src:/edge/src
       - ./data/:/data/
     container_name: "edge"
-
-  # Emulator Server
-  emulator:
-    build: ./emulator/
-    ports:
-      - "9999:9999"
-    container_name: "emulator"
   
   mongo: 
     image: mongo:5.0.5
@@ -73,10 +66,26 @@ services:
       - ./data/:/data/
     container_name: "product-sensors"
     
-  #git Chaos Engineering
+  # Chaos Engineering
   chaos-engineering:
     build: ./chaos_engineering/
     command: sh -c "python3 src/mqtt_test.py"
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
+
+  simulation-frontend:
+    build: ./simulation/frontend
+    ports:
+      - "3000:3000"
+  
+  simulation-backend:
+    build: ./simulation/backend
+    ports:
+      - "8080:8080"
+
+  emulator:
+    build: ./emulator/
+    ports:
+      - "9999:9999"
+    container_name: "emulator"
