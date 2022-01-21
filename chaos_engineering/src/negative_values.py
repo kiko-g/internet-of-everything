@@ -1,67 +1,50 @@
 """
-{
-    Unique identifyer of each machine
-    "machineID": int,
-    //Time of the reading
-    "reading-time": datetime(mmhhYYYYMMDD),
-    //The information from the machine, ie. not the headings
-    "properties": {
-        //The temperature read from a thermometer
-        "temperature": float (Celsius),
-        //Pieces produced since last reading
-        "piecesProduced": int,
-        //Voltage consumed in reading moment
-        "volt": float (Volts),
-        //Average vibration since last reading
-        "vibration": float (mm/s),
-        //Pressure in moment of reading
-        "pressure": float (psi),
-        //Rotation in moment of reading
-        "rotate" : float (Hz)
-    }
-}
+negative_values
 """
-
-import json
+import sys
 import random
 import datetime
-import requests
-
+from mqtt_handler import MQTTHandler
 
 def generate_machine_id(number_machines):
     """generate random machine_id"""
     return random.randint(-number_machines, number_machines)
 
-
 def generate_temperature():
     """generate random temperature"""
     return random.randint(-300, 1000)
-
 
 def generate_pieces_produced():
     """generate random number of pieces produced"""
     return random.randint(-300, 1000)
 
+def generate_sensor_id():
+    """generate random sensor id"""
+    return random.randint(-100,100)
 
-def generate_volt():
-    """generate random voltage"""
-    return random.randint(-1000, 1000)
+def generate_position_x():
+    """generate random coordinates for x"""
+    return random.randint(-1000,1000)
 
+def generate_position_y():
+    """generate random coordinates for y"""
+    return random.randint(-1000,1000)
+
+def generate_velocity():
+    """generate random velocity"""
+    return random.randrange(-100,100)
+
+def generate_orientation():
+    """generate orientation"""
+    return random.randint(-360,360)
 
 def generate_vibration():
     """generate random vibration"""
-    return random.randint(-1000, 1000)
+    return random.randrange(-500,500)
 
-
-def generate_pressure():
-    """generate random pressure"""
-    return random.randint(-10000, 10000)
-
-
-def generate_rotate():
-    """generate random rotation"""
-    return random.randint(-1000, 1000)
-
+def generate_energy():
+    """generate random energy"""
+    return random.randrange(-1000,1000)
 
 def generate_reading_time():
     """generate random reading time"""
@@ -83,26 +66,34 @@ def negative_values():
 
     data = {
         "machineID": generate_machine_id(number_machines),
-        "reading-time": generate_reading_time(),
-        "properties": {
+        "sensorID": generate_sensor_id(),
+        "values": {
+            "x": generate_position_x(),
+            "y": generate_position_y(),
+            "velocity": generate_velocity(),
+            "orientation": generate_orientation(),
             "temperature": generate_temperature(),
-            "piecesProduced": generate_pieces_produced(),
-            "volt": generate_volt(),
             "vibration": generate_vibration(),
-            "pressure": generate_pressure(),
-            "rotate": generate_rotate()
-
-        }
+            "productionSpeed": generate_pieces_produced(),
+            "energy": generate_energy()
+        },
+        "reading-time": generate_reading_time()
     }
-    return json.dumps(data)
+    return data
 
 
 def main():
     """main"""
     post_data = negative_values()
 
-    # print(json.dumps(data))
-    requests.post('http://localhost:8000/central', post_data)
+    machine_1 = f'm{sys.argv[1]}'
+    mqtt = MQTTHandler("localhost", 1883, True)
+    mqtt.start()
+    mqtt.subscribe(f"machine/{machine_1}")
+
+    mqtt.publish(f"machine/{machine_1}", post_data, 10, 1, 50)
+
+    mqtt.stop()  # stop mqtt thread in the background
 
 
 if __name__ == '__main__':
