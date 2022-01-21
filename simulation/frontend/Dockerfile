@@ -1,11 +1,19 @@
-FROM node:16
+# pull official base image
+FROM node:13.12.0-alpine
 
-WORKDIR /var/www/frontend
+# set working directory
+WORKDIR /app
 
-COPY . .
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-RUN npm install
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
 
-EXPOSE 3000
+# add app
+COPY . ./
 
-CMD [ "npm", "start" ]
+# start app
+CMD ["npm", "start"]
