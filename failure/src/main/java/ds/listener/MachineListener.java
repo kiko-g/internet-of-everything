@@ -20,7 +20,6 @@ public class MachineListener extends Listener {
     public MachineListener(Graph graph) {
         super("machine/#", graph);
         this.state = new State(graph); 
-        // TODO: perhaps in the future implement send to the machine topic.
         this.failurePublisher = new FailurePublisher("failure");
         this.failurePublisher.init();
     }

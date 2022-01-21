@@ -22,7 +22,6 @@ public class Listener implements MqttCallbackExtended {
     public Listener(String topic, Graph graph) {
         Dotenv dotenv = Dotenv.load();
         this.brokerURI = "tcp://" + dotenv.get("mosquitto_address") + ":1883";
-        System.out.println(this.brokerURI);
         this.subscriberId = UUID.randomUUID().toString();
         this.topic = topic;
         this.machinesGraph = graph;
@@ -52,7 +51,7 @@ public class Listener implements MqttCallbackExtended {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
-        //System.out.println(messageParsed);
+        System.out.println(messageParsed);
     }
 
     @Override
