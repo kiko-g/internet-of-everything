@@ -42,7 +42,7 @@ public class ProductSensor extends SensorSimulator {
         int productID = 1;
         try {
             while (true) {
-                Thread.sleep(10000);
+                Thread.sleep(4000);
                 publishTrackingMessage("machine1", "in", "IN", productID);
                 Thread.sleep(1000);
                 publishTrackingMessage("machine1", "out", "OUT", productID);

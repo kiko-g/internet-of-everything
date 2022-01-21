@@ -29,10 +29,9 @@ public class ProductListener extends Listener {
         super("product", graph);
 
         try {
-            String startMachineID = this.machinesGraph.getStartMachine().getId();
             MachineNode endMachine = this.machinesGraph.getEndMachine();
             List<String> machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
-            this.productionState = new ProductionState(machineIds, startMachineID, endMachine);
+            this.productionState = new ProductionState(machineIds, endMachine);
             this.collection = collection;
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +141,7 @@ public class ProductListener extends Listener {
                     machine.getDefectiveCount(),
                     machine.getDefectRate(),
                     machine.getOutCount(),
-                    Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
+                    Utils.formatDouble(this.productionState.getProductionTime(machineID)) + " ms",
                     Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));
         }
 
@@ -160,10 +159,13 @@ public class ProductListener extends Listener {
             machineInfo.put("nDefects", machine.getDefectiveCount());
             machineInfo.put("defectRate", machine.getDefectRate());
             machineInfo.put("nProducts", machine.getOutCount());
-            machineInfo.put("meanProductionTime", this.productionState.getProductionTime(machine));
+            machineInfo.put("meanProductionTime", this.productionState.getProductionTime(machineID));
             machineInfo.put("productionRate", this.productionState.getProductionRate(machine));
             message.put(machineInfo);
         }
+        JSONObject globalInfo = new JSONObject();
+        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
+        message.put(globalInfo);
         return message.toString(2);
     }
 
