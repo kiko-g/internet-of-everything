@@ -1,21 +1,15 @@
-version: "3.9"
+version: "3"
+
 services:
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-    volumes:
-      - ./frontend:/usr/simulation/frontend
+      - "3000:3000"
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
-    volumes:
-      - ./backend:/usr/simulation/backend
+      - "8080:8080"

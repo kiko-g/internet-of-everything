@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /usr/simulation/frontend
+WORKDIR /var/www/frontend
 
 COPY . .
 
