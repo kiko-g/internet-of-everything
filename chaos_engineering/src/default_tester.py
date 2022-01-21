@@ -5,6 +5,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 
 
 def main():
+    print('Initiating default tester')
     mqtt = MQTTHandler(1883, False)
     machine_id = 'machine1'
     # mqtt starts the client in another thread

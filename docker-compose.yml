@@ -42,7 +42,7 @@ services:
 
   chaos-engineering:
     build: ./chaos_engineering/
-    command: sh -c "python3 src/default_tester.py"
+    command: sh -c "python3 -u src/default_tester.py"
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
