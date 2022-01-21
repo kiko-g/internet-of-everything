@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 
 import ds.FailureService;
@@ -22,6 +18,7 @@ import org.json.JSONObject;
 import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
+import ds.listener.product.ProductionState;
 
 public class ProductListener extends Listener {
     private ScheduledThreadPoolExecutor executor;
@@ -67,10 +64,10 @@ public class ProductListener extends Listener {
 
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
-            // Process output messages - new sub-product was produced by a machine
+            // Process output messages
             if (action.equals("OUT")) {
                 machine.updateOutCounter();
-                this.productionState.saveProductionTime(machine, readTime);
+                this.productionState.saveProductionTime(machine, productID, readTime);
 
                 // Identify defective product
                 if (defect) {
@@ -78,14 +75,15 @@ public class ProductListener extends Listener {
                     System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
                 }
             }
-            // Process input messages - new subproduct was received by a machine
+            // Process input messages
             else if (action.equals("IN")) {
                 machine.updateInCounter();
-                this.productionState.saveInputTime(machineID, readTime);
+                this.productionState.saveInputTime(machineID, productID, readTime);
             } else {
                 return;
             }
 
+            // Add product state to the database
             this.insertIntoDatabase(machineID, action, defect, readTimeStr, productID);
         } catch (Exception e) {
             e.printStackTrace();
