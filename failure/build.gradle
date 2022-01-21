@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'eclipse-wtp'
+    id 'war'
+}
+
+archivesBaseName = 'MqttSample'
+
+group 'org.example'
+version = '0.0.0.1'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.eclipse.org/content/repositories/paho-releases/' }
+}
+
+dependencies {
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'org.json:json:20171018'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task(runFailureService, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.FailureService'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runMachineSensors, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.publisher.MachineSensor'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runProductSensors, dependsOn: 'classes', type: JavaExec) {
+    main = 'ds.publisher.ProductSensor'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(graphTest, dependsOn: 'classes', type: JavaExec){
+    main = 'ds.graph.Test'
+    classpath = sourceSets.main.runtimeClasspath
+}
