@@ -11,21 +11,20 @@ export const resolveStatus = (status) => {
 
 export const colors = [
   "#F87171",
-  "#FB923C",
   "#FBBF24",
+  "#2DD4BF",
+  "#60A5FA",
+  "#A78BFA",
+  "#E11D48",
+  "#34D399",
+  "#38BDF8",
+  "#0EA5E9",
+  "#818CF8",
+  "#C084FC",
   "#A3E635",
   "#4ADE80",
-  "#34D399",
-  "#2DD4BF",
-  "#22D3EE",
-  "#38BDF8",
-  "#60A5FA",
-  "#818CF8",
-  "#A78BFA",
-  "#C084FC",
-  "#E879F9",
-  "#F472B6",
   "#FB7185",
+  "#FB923C",
 ]
 
 export const jsonStyle = {
@@ -33,10 +32,33 @@ export const jsonStyle = {
   overflowX: "hidden",
   padding: "1em",
   width: "100%",
-  height: "60vh",
-  borderRadius: "0.5rem",
   fontSize: "small",
   lineHeight: 1,
   fontFamily: "JetBrains Mono, Consolas, sans-serif",
   backgroundColor: "#3c4553",
+}
+
+export const options = [
+  { name: "Machines", color: "bg-blue-400" },
+  { name: "Sensors", color: "bg-teal-400" },
+]
+
+const labels = [
+  { type: "energy", color: "orange" },
+  { type: "position", color: "teal" },
+  { type: "velocity", color: "indigo" },
+  { type: "temperature", color: "red" },
+  { type: "vibration", color: "purple" },
+  { type: "orientation", color: "lime" },
+  { type: "speed ", color: "sky" },
+]
+
+export const findColor = (type) => {
+
+  for (let i = 0; i < labels.length; i++) {
+    let condition = type.toLowerCase().trim() === labels[i].type.toLowerCase().trim()
+    if (condition) return labels[i].color
+  }
+
+  return "slate"
 }

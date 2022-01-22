@@ -7,8 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "style:check": "npm run prettier --check .",
-    "style:write": "npm run prettier --write ."
+    "start": "node server.js",
+    "style:check": "npx prettier --check .",
+    "style:write": "npx prettier --write ."
   },
   "author": "",
   "license": "ISC",

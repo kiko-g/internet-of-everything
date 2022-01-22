@@ -25,8 +25,8 @@
     "eject": "react-scripts eject",
     "lint": "npx eslint .",
     "style:all": "npm run style:write && npm run lint",
-    "style:check": "npx prettier --check .",
-    "style:write": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "checkformat": "npx prettier --check ."
   },
   "eslintConfig": {
     "extends": [
