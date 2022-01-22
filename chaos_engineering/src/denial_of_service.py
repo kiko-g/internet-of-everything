@@ -6,6 +6,9 @@ network entirely
 
 import socket
 import threading
+import os
+
+from dotenv import load_dotenv
 
 
 def attack(target, fake_ip, port):
@@ -22,7 +25,8 @@ def attack(target, fake_ip, port):
 
 def main():
     """ Entry function """
-    target = 'localhost'
+    load_dotenv()
+    target = os.getenv('mosquitto_address')
     fake_ip = '182.21.20.32'
     port = 1883
     threads = []
