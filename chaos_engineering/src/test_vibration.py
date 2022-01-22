@@ -18,8 +18,8 @@ def main():
                            headers={
                                "User-Agent":
                                user_agent2
-                           }
-                           )
+    }
+    )
     machine_json = request.json()
     machine_properties = machine_json['properties']
     over_vibe = random.uniform(10, 100)
@@ -34,4 +34,3 @@ def main():
 
 if __name__ == '__main__':
     main()
- 

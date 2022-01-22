@@ -1,21 +1,10 @@
 """ Module docstring """
 import time
-import json
 import random
-from overheating import test as overheating_test
+from utils import get_config
+from test_temperature import test_over as overheating_test
+from test_temperature import test_under as underheating_test
 from mqtt_handler.mqtt_handler import MQTTHandler
-
-
-def get_config():
-    """ Get Json Configuration """
-    config_location = 'src/static/config.json'
-    try:
-        with open(config_location) as file_input:
-            config = json.loads(file_input.read())
-    except FileNotFoundError:
-        print(f'Failed to read config at {config_location}, aborting')
-        return None
-    return config
 
 
 def main():
@@ -25,9 +14,6 @@ def main():
     config = get_config()
     if config is None:
         return -1
-
-    machines = config['machines']
-    machines_last_idx = len(machines) - 1
 
     try:
         mqtt = MQTTHandler(1883, False)
@@ -40,16 +26,28 @@ def main():
     # Wait for connection
     time.sleep(2)
     # Make all channel subscriptions
-    for machine_id in machines:
+    for machine_id in config['machines']:
         mqtt.subscribe(f"machine/{machine_id}")
         mqtt.subscribe(f"failure/{machine_id}")
+
+    temperature_args = {"delay": config['delay_after_payload']}
+
+    tests = [
+        (overheating_test, temperature_args),
+        (underheating_test, temperature_args)
+    ]
 
     # Execute random tests on a loop
     for i in range(config['max_test_occurences']):
         mqtt.erase_logs()
-        machine_id = machines[random.randint(0, machines_last_idx)]
-        overheating_test(mqtt, machine_id, config['delay_after_payload'], i)
+        machine_id = random.choice(config['machines'])
+        test = random.choice(tests)
+
+        test[0](mqtt=mqtt, machine_id=machine_id,
+                test_number=i, **test[1])
+
         time.sleep(config['test_delay_seconds'])
+        print()
 
     # stop mqtt thread in the background
     mqtt.stop()
