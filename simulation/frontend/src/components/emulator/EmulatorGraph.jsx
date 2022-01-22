@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import Graph from "react-graph-vis"
-import { colors } from "../utils"
-import Machine from "./Machine"
+import { colors } from "../../utils"
+import Machine from "../Machine"
 
 let id = 0
 

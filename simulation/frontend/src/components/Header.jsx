@@ -1,7 +1,6 @@
 import React from "react"
 import { Disclosure } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
-import PropTypes from "prop-types"
 import DarkModeSwitch from "./utilities/switches/DarkModeSwitch"
 import { Link } from "react-router-dom"
 

@@ -1,6 +1,6 @@
 import React from "react"
 import Header from "../components/Header"
-import EmulatorRepresentation from "../components/EmulatorRepresentation"
+import EmulatorRepresentation from "../components/emulator/EmulatorRepresentation"
 
 export default function Emulator() {
   return (

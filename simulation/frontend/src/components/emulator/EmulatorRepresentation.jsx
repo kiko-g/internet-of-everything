@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react"
-import Machine from "./Machine"
-import Tabs from "./utilities/Tabs"
-import InputBox from "./utilities/InputBox"
-import DetailedSwitch from "./utilities/switches/DetailedSwitch"
+import Machine from "../Machine"
+import Tabs from "../utilities/Tabs"
+import InputBox from "../utilities/InputBox"
+import DetailedSwitch from "../utilities/switches/DetailedSwitch"
 import EmulatorGraph from "./EmulatorGraph"
 import { TrashIcon } from "@heroicons/react/outline"
-import { options } from "../utils"
-import Select from "./Select"
-import Sensor from "./Sensor"
-import { factories } from "../data"
+import { options } from "../../utils"
+import Select from "../Select"
+import Sensor from "../Sensor"
+import { factories } from "../../data"
 
 export default function EmulatorRepresentation() {
   const factory = factories[0] // json array in data/index.js
