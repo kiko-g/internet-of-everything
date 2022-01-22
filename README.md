@@ -1,55 +1,27 @@
 # Internet of Everything
 
-## Vertical 1 - Emulator
+# Setup Instructions
+To run our project you need to have `Docker` installed.
 
-The goal of this vertical is to emulate a factory, combining the information obtained from the machines in the factory floor and displaying it in real time in a organized dashboard.
+After that, run the following command on terminal, under the root:
+```bash
+docker-compose up -d
+```
 
-## Vertical 2
-
-TODO: adicionar descrição
-
-## Vertical 3
-
-TODO: adicionar descrição
-
-## Vertical 4
-
-TODO: adicionar descrição
-
-# Instructions
-
-## Edge
-
-Make sure you have [gradle](https://gradle.org/install/) installed.
-
-Change directory to edge folder: `cd edge`
-
-Compile: `gradle build`
-Test: `gradle test`
-Run: `gradle run`
-
-## Mosquitto (MQTT Broker)
-
-Compile and run: `docker-compose up -d`
-
+# Modules
 ## Emulator
-
-Make sure you have [NodeJS](https://nodejs.org/en/) installed.
-
-Change directory to emulator folder: `cd emulator`
-
-Install packages: `npm install`
-Run server: `npm start`
+The goal of this vertical is to emulate a factory, combining the information obtained from the machines in the factory floor and displaying it in real time in a organized dashboard.
 
 ## Simulator
 
 TODO: adicionar descrição
 
-## Chaos Engineering
-
-TODO: adicionar descrição
-
 ## Fault Analysis
+It's necessary to analyse every machine output, to guarantee that no error occured or is going to occur in a near future.
 
-TODO: adicionar descrição
+## Chaos Engineering
+Sending
+
+# Architeture Overview
+TODO
 
