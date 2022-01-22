@@ -1,5 +1,6 @@
 package ds.server;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -16,11 +17,20 @@ interface Handler extends HttpHandler {
     }
 
     default void sendResponse(HttpExchange httpExchange, String jsonResponse) throws IOException {
+        sendHeader(httpExchange, jsonResponse);
         OutputStream outputStream = httpExchange.getResponseBody();
-        httpExchange.sendResponseHeaders((200), jsonResponse.length());
+        httpExchange.sendResponseHeaders((200), jsonResponse.getBytes().length);
         outputStream.write(jsonResponse.getBytes());
         outputStream.flush();
         outputStream.close();
+    }
+
+    default void sendHeader(HttpExchange httpExchange, String jsonResponse) throws IOException {
+        // TODO: change the port to env
+        Headers header = httpExchange.getResponseHeaders();
+        header.add("Content-Type", "application/json"); 
+        header.add("Access-Control-Allow-Origin", "http://localhost:" + System.getenv("FRONTEND_PORT")); 
+        header.add("Access-Control-Allow-Headers", "*"); 
     }
 
     String getResponse(HttpExchange httpExchange);

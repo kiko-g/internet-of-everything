@@ -19,6 +19,15 @@ services:
       - ./edge/src:/edge/src
       - ./data/:/data/
     container_name: "edge"
+
+
+  # # Emulator Server
+  # emulator:
+  #   build: ./emulator/
+  #   ports:
+  #     - "9999:9999"
+  #   container_name: "emulator"
+
   
   # Database to track product messages
   mongo: 
