@@ -1,35 +1,102 @@
 """
-This module POSTs a machine json with a fake vibration value
+This module runs tests on vibration sensors
 """
-
+import time
 import random
-import json
-import sys
-import requests
+from print_color import print_color, TerminalColor
+from mqtt_handler.mqtt_handler import MQTTHandler
+from utils import get_payload_with_term, test_result
+
+
+def test_over(mqtt, machine_id, test_number, **kwargs):
+    """ Test vibration too high """
+
+    base_payload = test(mqtt, machine_id, test_number,
+                        kwargs["delay"], random.randint(100, 200))
+    if base_payload is None:
+        return -1
+
+    expected_values = {
+        "severity": "HIGH",
+        "readingTime": base_payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "ABOVE_EXPECTED",
+        "value": base_payload["values"]["vibration"],
+        "sensorID": base_payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
+
+
+def test_under(mqtt, machine_id, test_number, **kwargs):
+    """ Test vibration too low """
+    base_payload = test(mqtt, machine_id, test_number,
+                        kwargs["delay"], -random.randint(50, 100))
+    if base_payload is None:
+        return -1
+
+    expected_values = {
+        "severity": "HIGH",
+        "readingTime": base_payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "UNDER_EXPECTED",
+        "value": base_payload["values"]["vibration"],
+        "sensorID": base_payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
+
+
+def test(mqtt, machine_id, test_number, delay, value):
+    """ Test machine sensor overheating"""
+    test_msg = f'Test #{test_number}: starting vibration test on {machine_id}'
+    print_color(test_msg, TerminalColor.OKBLUE)
+
+    machine_topic = f"machine/{machine_id}"
+
+    base_payload = get_payload_with_term(
+        mqtt, machine_topic, "vibration", test_number, 4)
+
+    if base_payload is None:
+        return None
+
+    # edge case
+    if base_payload['values']['vibration'] == 'null':
+        base_payload['values']['vibration'] = 0
+
+    base_payload['values']['vibration'] += value
+
+    payload_msg = f'Test #{test_number}: publishing payload {base_payload} to {machine_topic}'
+    print_color(payload_msg, TerminalColor.OKCYAN)
+
+    mqtt.publish(machine_topic, base_payload)
+
+    time.sleep(delay)
+    return base_payload
 
 
 def main():
-    """ Launch display over-vibration script """
-    user_agent2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
+    """ Launch mqtt test """
+    mqtt = MQTTHandler(1883, False)
+    machine_id = 'machine1'
+    # mqtt starts the client in another thread
+    mqtt.start()
 
-    args = sys.argv[1:]
+    # machine1 starts being updated by messages in the background
+    mqtt.subscribe(f"machine/{machine_id}")
+    mqtt.subscribe(f"failure/{machine_id}")
+    # publish a single message to machine_1
 
-    request = requests.get("http://localhost:8000/machine" + args[0],
-                           headers={
-                               "User-Agent":
-                               user_agent2
-    }
-    )
-    machine_json = request.json()
-    machine_properties = machine_json['properties']
-    over_vibe = random.uniform(10, 100)
-    machine_vibration = machine_properties['vibration']
-    print(machine_vibration)
-    machine_properties['vibration'] = over_vibe
-    print(machine_properties['vibration'])
+    test_over(mqtt, machine_id, 0, delay=2)
 
-    last_json = json.dumps(machine_json)
-    requests.post('http://localhost:8000/fault', last_json)
+    test_under(mqtt, machine_id, 0, delay=2)
+
+    # stop mqtt thread in the background
+    mqtt.stop()
 
 
 if __name__ == '__main__':
