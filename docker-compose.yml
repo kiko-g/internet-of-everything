@@ -1,6 +1,6 @@
 version: "3"
 services:
-  # Edge Broker
+  # Mosquitto Communication
   mosquitto:
     image: eclipse-mosquitto:1.6
     ports:
@@ -11,6 +11,7 @@ services:
       - ./mosquitto/log:/mosquitto/log 
     container_name: "mosquitto"
 
+  # Edge Layer
   edge:
     build: ./edge/
     command: sh -c "gradle run"
@@ -19,13 +20,16 @@ services:
       - ./data/:/data/
     container_name: "edge"
 
+
   # # Emulator Server
   # emulator:
   #   build: ./emulator/
   #   ports:
   #     - "9999:9999"
   #   container_name: "emulator"
+
   
+  # Database to track product messages
   mongo: 
     image: mongo:5.0.5
     restart: always  
@@ -49,6 +53,15 @@ services:
         ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
         ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
 
+  # TODO: delete this when QRCode messages are ready
+  products:
+    build: ./failure/
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./failure/src/:/failure/src/
+      - ./data/:/data/
+    container_name: "product-sensors"
+
   # Failure Analysis
   failure-service:
     build: ./failure/
@@ -63,20 +76,35 @@ services:
     container_name: "failure-service"
     depends_on:
       - mongo
-
-  # TODO: delete this when QRCode messages are ready
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
-    volumes:
-      - ./failure/src/:/failure/src/
-      - ./data/:/data/
-    container_name: "product-sensors"
     
-  #git Chaos Engineering
+  # Chaos Engineering, intercepting messages
   chaos-engineering:
     build: ./chaos_engineering/
     command: sh -c "python3 src/mqtt_test.py"
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
+  
+  # Simulation Backend
+  simulation-backend:
+    build: ./simulation/backend
+    ports:
+      - "8080:8080"
+
+  # Emulator Backend
+  emulator-backend:
+    build: ./emulator/
+    ports:
+      - "9999:9999"
+    container_name: "emulator-backend"
+
+  # Frontend interface
+  frontend:
+    build: ./simulation/frontend
+    ports:
+      - "3000:3000"
+    volumes:
+        - './simulation/frontend:/app'
+        - '/app/node_modules'
+    environment:
+      - CHOKIDAR_USEPOLLING=true

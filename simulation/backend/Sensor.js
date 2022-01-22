@@ -29,7 +29,6 @@ export default class Sensor {
   }
 
   update(duration) {
-
     this.timeAfterLastUpdate += duration
     if (this.timeAfterLastUpdate < this.updateInterval) {
       return
