@@ -68,7 +68,20 @@ Functional GUI that allows for upload of a factory configuration and running sim
 
 ## Chaos Engineering
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- As a chaos engineer, I want to target a specific machine to receive sequential errors. 
+- As a chaos engineer, i want to test the error handling mechanisms to see if they can correctly identify the errors injected.
+- As a chaos engineer, i want to be able to easily select the script to execute from a command.
+
+### Increment 
+
+Beginning integration with other verticals to tests.
+Simple CLI to select types of errors to simulate.
+
+
+
+### Increment
 
 ## Fault Analysis
 ### Closed PBIs
@@ -121,7 +134,21 @@ Parse the fatory JSON and create a simulation representation based on it.
 
 ## Chaos Engineering
 
-TODO: adicionar descrição
+### Closed PBIs
+- As a chaos engineer, I want to modify the data format to check if the system can handle it.
+- As a chaos engineer, I want to cause a machine to display over-vibration to see if the system can detect it and react to it properly.
+- As a chaos engineer, I want to create new fake machine data readings to see if the system can detect them.
+- As a chaos engineer, I want to cause a machine to display over-pressure to see if the system can detect it and react to it properly.
+- As a chaos engineer, I want to cause a machine to display overheating to see if the system can detect it and react to it properly.
+- As a chaos engineer, i want to have a simple endpoint server to view my error injections.
+- As a chaos engineer, i want to overload the system with messages, to simulate a Ddos attack.
+- As a chaos engineer, I want cause a machine to display negative values where it doesn't make sense (ex.: vibration) to see if the system can react to it properly.
+
+### Increment
+Setup of github workflow run.
+Creation of scripts simulating various errors in json used in the communication.
+Improvements in the mock server and endpoints structure.
+
 
 ## Fault Analysis
 ### Closed PBIs
@@ -129,6 +156,7 @@ TODO: adicionar descrição
 - As a User I want to know the the location(production phase) of each product, so that I can give tracking information to the end user.
 - As a User, I want to be able to know the machine graph and visualise it, so that I can locate the products. 
 - As a User I want to know when a product enters/leaves a machine, so that the product can be tracked.
+
 
 ### Increment
 Add github workflow run
@@ -164,7 +192,16 @@ Create a base structure of the factory and a base simulation.
 
 ## Chaos Engineering
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- As a chaos engineer, I want to send incoherent data to check if the system is capable of handling it.
+- As a chaos engineer, I want to delete a machine's data reading to see how the systems reacts.
+
+### Increment
+
+Technology setup.
+Setup of mock server and endpoints representing the factory.
+
 
 ## Fault Analysis
 ### Closed PBIs
