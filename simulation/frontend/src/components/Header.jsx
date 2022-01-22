@@ -65,6 +65,3 @@ export default function Header({ siteTitle = "IOE", location }) {
   )
 }
 
-Header.propTypes = {
-  siteTitle: PropTypes.string.isRequired,
-}
