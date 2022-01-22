@@ -1,27 +1,27 @@
 """
-This module creates, sends and tests a fake data reading in a machine topic
+This module creates, sends and tests a negative value data reading in a machine topic
 """
 import time
 import random
-from print_color import print_color, TerminalColor
 from mqtt_handler.mqtt_handler import MQTTHandler
+from print_color import print_color, TerminalColor
 
 
 def test(mqtt, machine_id, test_number, **kwargs):
-    """ Test machine sensor overheating"""
-    test_msg = f'Test #{test_number}: starting fake reading test on {machine_id}'
+    """ Test machine sensor with negative values"""
+    test_msg = f'Test #{test_number}: starting negative value reading test on {machine_id}'
     print_color(test_msg, TerminalColor.OKBLUE)
 
     machine_topic = f"machine/{machine_id}"
     #failure_topic = f"failure/{machine_id}"
 
     payload = {
-        "machineID": random.randint(0, 1000),
-        "readingTime": random.randint(0, 100000000000),
+        "machineID": random.randint(-100, 0),
+        "readingTime": random.randint(-100, 0),
         "values": {
-            "vibration": random.randint(0, 1000),
+            "temperature": random.randint(-100, 0),
         },
-        "sensorID": f"vibration{random.randint(0, 50)}"
+        "sensorID": f'temperature{random.randint(-100, 0)}'
     }
 
     payload_msg = f'Test #{test_number}: publishing payload {payload} to {machine_topic}'
@@ -37,7 +37,7 @@ def test(mqtt, machine_id, test_number, **kwargs):
 
 
 def main():
-    """ Launch over and under temperature test """
+    """ Launch negative values test """
     mqtt = MQTTHandler(1883, False)
     machine_id = 'machine1'
     # mqtt starts the client in another thread
