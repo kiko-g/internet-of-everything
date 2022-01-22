@@ -38,7 +38,7 @@ def test(mqtt, machine_id, delay, test_number):
     if base_payload['values']['temperature'] == 'null':
         base_payload['values']['temperature'] = 0
 
-    base_payload['values']['temperature'] += random.uniform(100, 200)
+    base_payload['values']['temperature'] = random.randint(100, 200)
 
     payload_msg = f'Test #{test_number}: publishing payload {base_payload} to {machine_topic}'
     print_color(payload_msg, TerminalColor.OKCYAN)
