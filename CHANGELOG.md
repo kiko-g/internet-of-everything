@@ -39,7 +39,32 @@ TODO: adicionar descrição
 
 ## Simulator
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- As a simulator, I have to receive the user's input.
+- As a simulator, I have to be able to process the user's input to generate a simulation.
+- As a simulator, I want to be able to send the machine's information to the front-end. 
+- As a Machine, I want to be able to send batches to other machines. 
+- As a Machine, I want to be able to receive batches from other machines.
+- As a Simulator, I want to be able to manage the inputs and outputs of the machines.
+- As a Machine, I want to be able to represent my state in JSON.
+- Adjust factory representation in simulation UI 
+- Readjust JSON Parser for new input
+- Create sensor abstraction for the machines
+- As a machine, I want to be able to generate my state based on a normal distribution after each batch.
+- Readjust machine structure 
+- Generate a final JSON representation of the factory
+- As a user, I want to toggle between the initial and final representation of the machines 
+- Create Batch class
+- Simulate sensors behaviour
+- As a Batch, I want to represent my state in JSON
+- As a Batch, I want to know in which machine an error occurred when I need to be discarded 
+- Presets radio allow user to change the initial factory configuration 
+- Upload a JSON file and it gets registered as a preset
+
+### Increment
+Complete functioning of the factory simulation, generating sensors values and batches processing.
+Functional GUI that allows for upload of a factory configuration and running simulation for any nunber of given batches. 
 
 ## Chaos Engineering
 
@@ -80,9 +105,19 @@ TODO: adicionar descrição
 - make the emulator a MQTT Client
 - store information relative to the factory topology
 
+
 ## Simulator
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- As a user, I want to be able to change variables in a UI
+- As a user, I want to see the actual state of each machine before the simulation.
+- As a Simulator, I want to be able to read the representation of the factory floor from a JSON file.
+- As a user, I want to be able to see the layout of the factory floor. 
+
+### Increment
+
+Parse the fatory JSON and create a simulation representation based on it.
 
 ## Chaos Engineering
 
@@ -116,7 +151,16 @@ Compute number of products in each phase
 
 ## Simulator
 
-TODO: adicionar descrição
+### Closed PBIs
+- As a simulator, I want to be able to instantiate machines
+- As a user, I want to be able to see representations of the machines.
+- As a user, I want to have a button to be able to start a simulation. 
+- As a simulator, I want to be able to create a representation of the factory floor
+- As a simulator, I want to loop through the machines and update them.
+
+### Increment
+Technology setup.
+Create a base structure of the factory and a base simulation.
 
 ## Chaos Engineering
 
