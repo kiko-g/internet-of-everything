@@ -3,7 +3,7 @@ import Machine from "./Machine"
 import Tabs from "./utilities/Tabs"
 import InputBox from "./utilities/InputBox"
 import DetailedSwitch from "./utilities/switches/DetailedSwitch"
-import ForceGraph from "./ForceGraph"
+import EmulatorGraph from "./EmulatorGraph"
 import { TrashIcon } from "@heroicons/react/outline"
 import { options } from "../utils"
 import Select from "./Select"
@@ -11,7 +11,7 @@ import Sensor from "./Sensor"
 import { factories } from "../data"
 
 export default function EmulatorRepresentation() {
-  const factory = factories[0]
+  const factory = factories[0] // json array in data/index.js
   const [detailed, setDetailed] = useState(false)
   const [searchValue, setSearchValue] = useState("")
   const [displayType, setDisplayType] = useState(options[0])
@@ -24,7 +24,7 @@ export default function EmulatorRepresentation() {
     <Tabs activeIndex={1}>
       {/* Graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={factory} />
+        <EmulatorGraph factory={factory} />
         <div className={`absolute bottom-8 right-6 z-50`}>
           {/* <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} /> */}
           <span className="p-2 rounded bg-indigo-400/50 text-white">Displaying initial state</span>
