@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { PlayIcon } from "@heroicons/react/solid"
 import AboutModal from "./utilities/AboutModal"
 import InputBox from "./utilities/InputBox"
+import { Link } from "react-router-dom"
 
 export default function RunSection({ factoryInitialState, factoryFinalState }) {
   const [alert, setAlert] = useState(false)
@@ -67,7 +68,15 @@ export default function RunSection({ factoryInitialState, factoryFinalState }) {
       <div className="flex justify-between items-start">
         <div>
           <h5 className="text-slate-700 font-bold text-2xl">Run Section</h5>
-          <p className="font-normal text-gray-500 text-sm">Start your simulation by hitting the big green button</p>
+          <p className="font-normal text-gray-500 text-base">
+            Start your simulation by hitting the big green button. You can also try our{" "}
+            <Link to={`/emulator`}>
+              <span className="text-teal-500 font-bold hover:underline hover:decoration-2 hover:decoration-teal-500 duration-150">
+                emulator
+              </span>
+            </Link>
+            !
+          </p>
         </div>
         <AboutModal />
       </div>

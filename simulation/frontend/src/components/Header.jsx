@@ -3,10 +3,11 @@ import { Disclosure } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
 import PropTypes from "prop-types"
 import DarkModeSwitch from "./utilities/switches/DarkModeSwitch"
+import { Link } from "react-router-dom"
 
-export default function Header({ siteTitle }) {
+export default function Header({ siteTitle = "IOE", location }) {
   return (
-    <Disclosure as="nav" className="bg-slate-500 dark:bg-slate-700 text-white space-x-4">
+    <Disclosure as="nav" className="bg-slate-700 dark:bg-slate-700 text-white space-x-4">
       {({ open }) => {
         return (
           <>
@@ -23,18 +24,20 @@ export default function Header({ siteTitle }) {
                   </Disclosure.Button>
                 </div>
 
-                <div className="flex-1 flex items-center justify-between md:items-stretch md:justify-between md:mx-2">
+                <div className="flex-1 flex items-center justify-between md:items-stretch md:justify-between md:mx-2 duration-150">
                   <div className="text-md font-medium h-auto py-1 ml-4 md:mx-2">
-                    <span>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href="/"
-                        className="hover:text-blue-300 transition duration-200 sm:text-xs xl:text-lg"
-                      >
-                        {siteTitle}
-                      </a>
-                    </span>
+                    <div className="flex items-center space-x-2">
+                      <Link to="/" className="flex items-center space-x-2 hover:opacity-90">
+                        <h2
+                          className="text-blue-400 text-lg tracking-wider uppercase 
+                        hover:underline hover:decoration-2 hover:decoration-blue-500 "
+                        >
+                          {siteTitle}
+                        </h2>
+                      </Link>
+                      <span aria-hidden="true">&middot;</span>
+                      <span className="font-light text-sm">{location}</span>
+                    </div>
                   </div>
                   <div className="hidden md:block md:ml-6">
                     <div className="flex space-x-2 mr-2">
