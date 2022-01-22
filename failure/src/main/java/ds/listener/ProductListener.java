@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 
 import ds.FailureService;
@@ -22,6 +18,7 @@ import org.json.JSONObject;
 import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
+import ds.listener.product.ProductionState;
 
 public class ProductListener extends Listener {
     private ScheduledThreadPoolExecutor executor;
@@ -32,10 +29,9 @@ public class ProductListener extends Listener {
         super("product", graph);
 
         try {
-            String startMachineID = this.machinesGraph.getStartMachine().getId();
             MachineNode endMachine = this.machinesGraph.getEndMachine();
             List<String> machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
-            this.productionState = new ProductionState(machineIds, startMachineID, endMachine);
+            this.productionState = new ProductionState(machineIds, endMachine);
             this.collection = collection;
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,10 +63,10 @@ public class ProductListener extends Listener {
 
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
 
-            // Process output messages - new sub-product was produced by a machine
+            // Process output messages
             if (action.equals("OUT")) {
                 machine.updateOutCounter();
-                this.productionState.saveProductionTime(machine, readTime);
+                this.productionState.saveProductionTime(machine, productID, readTime);
 
                 // Identify defective product
                 if (defect) {
@@ -78,14 +74,15 @@ public class ProductListener extends Listener {
                     System.out.println("MachineID :: " + machine.getId() + ":: Defective Product");
                 }
             }
-            // Process input messages - new subproduct was received by a machine
+            // Process input messages
             else if (action.equals("IN")) {
                 machine.updateInCounter();
-                this.productionState.saveInputTime(machineID, readTime);
+                this.productionState.saveInputTime(machineID, productID, readTime);
             } else {
                 return;
             }
 
+            // Add product state to the database
             this.insertIntoDatabase(machineID, action, defect, readTimeStr, productID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +141,7 @@ public class ProductListener extends Listener {
                     machine.getDefectiveCount(),
                     machine.getDefectRate(),
                     machine.getOutCount(),
-                    Utils.formatDouble(this.productionState.getProductionTime(machine)) + " ms",
+                    Utils.formatDouble(this.productionState.getProductionTime(machineID)) + " ms",
                     Utils.formatDouble(this.productionState.getProductionRate(machine)) + " / s"));
         }
 
@@ -162,10 +159,13 @@ public class ProductListener extends Listener {
             machineInfo.put("nDefects", machine.getDefectiveCount());
             machineInfo.put("defectRate", machine.getDefectRate());
             machineInfo.put("nProducts", machine.getOutCount());
-            machineInfo.put("meanProductionTime", this.productionState.getProductionTime(machine));
+            machineInfo.put("meanProductionTime", this.productionState.getProductionTime(machineID));
             machineInfo.put("productionRate", this.productionState.getProductionRate(machine));
             message.put(machineInfo);
         }
+        JSONObject globalInfo = new JSONObject();
+        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
+        message.put(globalInfo);
         return message.toString(2);
     }
 

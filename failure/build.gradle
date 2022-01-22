@@ -26,6 +26,10 @@ dependencies {
     implementation 'org.mongodb:bson:4.4.1'
 }
 
+configurations {
+    all*.exclude group: 'com.sun.net.httpserver'
+}
+
 test {
     useJUnitPlatform()
 }
@@ -45,7 +49,3 @@ task(runProductSensors, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task(graphTest, dependsOn: 'classes', type: JavaExec){
-    main = 'ds.graph.Test'
-    classpath = sourceSets.main.runtimeClasspath
-}

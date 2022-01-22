@@ -39,10 +39,10 @@ public class ProductSensor extends SensorSimulator {
     }
 
     private void testTracking() {
-        int productID = 0;
+        int productID = 1;
         try {
             while (true) {
-                Thread.sleep(1000);
+                Thread.sleep(4000);
                 publishTrackingMessage("machine1", "in", "IN", productID);
                 Thread.sleep(1000);
                 publishTrackingMessage("machine1", "out", "OUT", productID);
@@ -75,7 +75,7 @@ public class ProductSensor extends SensorSimulator {
                 publishTrackingMessage("machine5", "in", "IN", productID+1);
                 Thread.sleep(1000);
                 publishTrackingMessage("machine5", "out", "OUT", productID+1);
-                productID++;
+                productID+=2;
             }
         } catch (Exception e) {
             e.printStackTrace();
