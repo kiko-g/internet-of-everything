@@ -19,12 +19,12 @@ services:
       - ./data/:/data/
     container_name: "edge"
 
-  # Emulator Server
-  emulator:
-    build: ./emulator/
-    ports:
-      - "9999:9999"
-    container_name: "emulator"
+  # # Emulator Server
+  # emulator:
+  #   build: ./emulator/
+  #   ports:
+  #     - "9999:9999"
+  #   container_name: "emulator"
   
   mongo: 
     image: mongo:5.0.5

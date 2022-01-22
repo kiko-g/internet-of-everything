@@ -21,7 +21,7 @@ public class Server {
     HttpServer server;
     MongoCollection<Document> collection;
 
-    public Server(MongoCollection<Document> collection) throws Exception {
+    public Server(MongoCollection<Document> collection) throws Exception { 
         Integer serverPort = Integer.parseInt(System.getenv("SERVER_PORT"));
         this.collection = collection;
         this.server = HttpServer.create(new InetSocketAddress(serverPort), 0);
