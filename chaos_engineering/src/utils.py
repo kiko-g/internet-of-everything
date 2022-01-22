@@ -1,3 +1,4 @@
+""" Module for general helper functions """
 import time
 import json
 from print_color import print_color, TerminalColor
@@ -10,13 +11,13 @@ def generate_expected_result(result):
         f'"readingTime":"{result["readingTime"]}",'\
         f'"machineID":"{result["machineID"]}",'\
         f'"failureType":"{result["failureType"]}",'\
-        f'"description":"Detected value: {result["value"]}",'\
+        f'"description":"Detected value: {float(result["value"])}",'\
         f'"sensorID":"{result["sensorID"]}"'\
         '}'
 
 
 def test_result(mqtt, expected_values, failure_topic, test_number):
-
+    """ Prints the result of the tests, returns 0 on success, 1 on failure """
     expected_result = generate_expected_result(expected_values)
 
     if expected_result in mqtt.logs[failure_topic]:
@@ -30,6 +31,7 @@ def test_result(mqtt, expected_values, failure_topic, test_number):
 
 
 def get_payload_with_term(mqtt, machine_topic, term, test_number, max_attempts):
+    """ Does <max_attempts> at getting a specific log from mqtt """
     base_payload = None
     attempts = 0
     while base_payload is None:
@@ -50,6 +52,13 @@ def get_payload_with_term(mqtt, machine_topic, term, test_number, max_attempts):
         attempts += 1
 
     return base_payload
+
+
+def publish_payload(mqtt, payload, test_number, machine_topic):
+    """ Prints and publishes a payload to a machine topic """
+    payload_msg = f'Test #{test_number}: publishing payload {payload} to {machine_topic}'
+    print_color(payload_msg, TerminalColor.OKCYAN)
+    mqtt.publish(machine_topic, payload)
 
 
 def get_config():

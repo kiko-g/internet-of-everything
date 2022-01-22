@@ -5,7 +5,7 @@ import time
 import random
 from print_color import print_color, TerminalColor
 from mqtt_handler.mqtt_handler import MQTTHandler
-from utils import get_payload_with_term, test_result
+from utils import get_payload_with_term, test_result, publish_payload
 
 
 def test_over(mqtt, machine_id, test_number, **kwargs):
@@ -70,17 +70,14 @@ def test(mqtt, machine_id, test_number, delay, value):
 
     base_payload['values']['vibration'] += value
 
-    payload_msg = f'Test #{test_number}: publishing payload {base_payload} to {machine_topic}'
-    print_color(payload_msg, TerminalColor.OKCYAN)
-
-    mqtt.publish(machine_topic, base_payload)
+    publish_payload(mqtt, base_payload, test_number, machine_topic)
 
     time.sleep(delay)
     return base_payload
 
 
 def main():
-    """ Launch mqtt test """
+    """ Launch over and under vibration test """
     mqtt = MQTTHandler(1883, False)
     machine_id = 'machine1'
     # mqtt starts the client in another thread
@@ -91,9 +88,8 @@ def main():
     mqtt.subscribe(f"failure/{machine_id}")
     # publish a single message to machine_1
 
-    test_over(mqtt, machine_id, 0, delay=2)
-
     test_under(mqtt, machine_id, 0, delay=2)
+    test_over(mqtt, machine_id, 0, delay=2)
 
     # stop mqtt thread in the background
     mqtt.stop()

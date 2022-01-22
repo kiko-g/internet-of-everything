@@ -1,32 +1,99 @@
 """
-This module POSTs a machine json with a fake pressure value
+This module runs tests on energy sensors
 """
-
+import time
 import random
-import json
-import sys
-import requests
+from print_color import print_color, TerminalColor
+from mqtt_handler.mqtt_handler import MQTTHandler
+from utils import get_payload_with_term, test_result, publish_payload
+
+
+def test_over(mqtt, machine_id, test_number, **kwargs):
+    """ Test energy too high """
+
+    base_payload = test(mqtt, machine_id, test_number,
+                        kwargs["delay"], random.randint(40, 80))
+    if base_payload is None:
+        return -1
+
+    expected_values = {
+        "severity": "HIGH",
+        "readingTime": base_payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "ABOVE_EXPECTED",
+        "value": base_payload["values"]["energy"],
+        "sensorID": base_payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
+
+
+def test_under(mqtt, machine_id, test_number, **kwargs):
+    """ Test energy too low """
+    base_payload = test(mqtt, machine_id, test_number,
+                        kwargs["delay"], -random.randint(50, 100))
+    if base_payload is None:
+        return -1
+
+    expected_values = {
+        "severity": "HIGH",
+        "readingTime": base_payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "UNDER_EXPECTED",
+        "value": base_payload["values"]["energy"],
+        "sensorID": base_payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
+
+
+def test(mqtt, machine_id, test_number, delay, value):
+    """ Test machine sensor overheating"""
+    test_msg = f'Test #{test_number}: starting energy test on {machine_id}'
+    print_color(test_msg, TerminalColor.OKBLUE)
+
+    machine_topic = f"machine/{machine_id}"
+
+    base_payload = get_payload_with_term(
+        mqtt, machine_topic, "energy", test_number, 4)
+
+    if base_payload is None:
+        return None
+
+    # edge case
+    if base_payload['values']['energy'] == 'null':
+        base_payload['values']['energy'] = 0
+
+    base_payload['values']['energy'] += value
+
+    publish_payload(mqtt, base_payload, test_number, machine_topic)
+
+    time.sleep(delay)
+    return base_payload
 
 
 def main():
-    """ Launch display over-pressure script """
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
+    """ Launch over and under energy test """
+    mqtt = MQTTHandler(1883, False)
+    machine_id = 'machine1'
+    # mqtt starts the client in another thread
+    mqtt.start()
 
-    args = sys.argv[1:]
+    # machine1 starts being updated by messages in the background
+    mqtt.subscribe(f"machine/{machine_id}")
+    mqtt.subscribe(f"failure/{machine_id}")
+    # publish a single message to machine_1
+    test_under(mqtt, machine_id, 0, delay=2)
+    test_over(mqtt, machine_id, 0, delay=2)
+    test_under(mqtt, machine_id, 0, delay=2)
 
-    machine2_request = requests.get("http://localhost:8000/machine" + args[0],
-                                    headers={
-                                        "User-Agent":
-                                        user_agent
-                                    })
+    # stop mqtt thread in the background
+    mqtt.stop()
 
-    machine_json = machine2_request.json()
-    machine_properties = machine_json['properties']
-    pressure = random.uniform(0, 100000)
-    machine_properties['pressure'] = pressure
 
-    last_json = json.dumps(machine_json)
-    requests.post('http://localhost:8000/fault', last_json)
-
-    if __name__ == '__main__':
-        main()
+if __name__ == '__main__':
+    main()

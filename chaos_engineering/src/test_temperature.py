@@ -81,7 +81,7 @@ def test(mqtt, machine_id, test_number, delay, value):
 
 
 def main():
-    """ Launch mqtt test """
+    """ Launch over and under temperature test """
     mqtt = MQTTHandler(1883, False)
     machine_id = 'machine1'
     # mqtt starts the client in another thread
