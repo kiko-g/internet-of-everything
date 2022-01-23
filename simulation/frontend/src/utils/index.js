@@ -62,3 +62,87 @@ export const findColor = (type) => {
 
   return "slate"
 }
+
+export const productionMockArray = [
+  { productionRate: 1.2469087055009456 },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+]

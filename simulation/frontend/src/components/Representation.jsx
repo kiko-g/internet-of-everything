@@ -5,7 +5,7 @@ import Tabs from "./utilities/Tabs"
 import ForceGraph from "./ForceGraph"
 import ReactJson from "react-json-view"
 import InputBox from "./utilities/InputBox"
-import { jsonStyle, options } from "../utils"
+import { productionMockArray, jsonStyle, options } from "../utils"
 import Scrollbar from "react-scrollbars-custom"
 import AlternateSensor from "./AlternateSensor"
 import AlternateMachine from "./AlternateMachine"
@@ -14,26 +14,6 @@ import CopyClipboard from "./utilities/CopyClipboard"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import DetailedSwitch from "./utilities/switches/DetailedSwitch"
 import React, { useEffect, useMemo, useState } from "react"
-
-const productionMockArray = [
-  { productionRate: 1.2469087055009456 },
-  {
-    machineID: "machine1",
-    nDefects: 0,
-    defectRate: 0.0,
-    nProducts: 5,
-    meanProductionTime: 1616.6,
-    productionRate: 0.5825,
-  },
-  {
-    machineID: "machine2",
-    nDefects: 1,
-    defectRate: 1.0,
-    nProducts: 1,
-    meanProductionTime: 1476.6,
-    productionRate: 0.0,
-  },
-]
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -237,7 +217,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
               <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} />
             </div>
           </div>
-          {production.slice(1, production.length).map((machine, machineIdx) => (
+          {/* {production.slice(1, production.length).map((machine, machineIdx) => (
             <ul className="border-2 rounded" key={`production-machine-${machineIdx}`}>
               {Object.keys(machine).map((prop, propIdx) => (
                 <li key={`production-machine-${machineIdx}-${prop}`} className="flex items-center space-x-2">
@@ -246,7 +226,69 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                 </li>
               ))}
             </ul>
-          ))}
+          ))} */}
+          <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 sm:rounded-lg col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+            <table className="w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50 w-full">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Machine
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    # Defects
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Defect Rate
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    # Products
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Mean Production Time
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Production Rate
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {production.slice(1, production.length).map((machine, machineIdx) => (
+                  <tr key={`production-machine-${machineIdx}`} className="text-center">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
+                      <div className="flex items-center">
+                        <span className="h-8 w-8 rounded-full bg-rose-400" />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
+                          <div className="text-sm text-gray-500">Some description</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{machine.nDefects}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{machine.defectRate}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{machine.nProducts}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {parseFloat(machine.productionRate) * 100 < 50 ? (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-rose-100 text-rose-800">
+                          {`${(parseFloat(machine.productionRate) * 100).toFixed(2)} %`}
+                        </span>
+                      ) : (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          {`${(parseFloat(machine.productionRate) * 100).toFixed(2)} %`}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{machine.productionRate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Tab>
 
