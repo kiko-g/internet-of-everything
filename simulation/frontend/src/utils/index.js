@@ -44,6 +44,11 @@ export const options = [
   { name: "Sensors", color: "bg-teal-400" },
 ]
 
+export const productionOptions = [
+  { name: "Production", color: "bg-blue-400" },
+  { name: "State", color: "bg-teal-400" },
+]
+
 const labels = [
   { type: "energy", color: "orange" },
   { type: "position", color: "teal" },
