@@ -90,12 +90,14 @@ export default class Simulation {
 
   calculateStats(){
     let failedBatches = 0;
-    for(let i = 0; i < this.completedBatches; i++){
+    for(let i = 0; i < this.completedBatches.length; i++){
       if(this.completedBatches[i].hasDefect){
         failedBatches++;
       }
     }
-    let batchPercentage = (failedBatches / this.nBatches ) * 100
+    console.log(failedBatches)
+    console.log(failedBatches / this.nBatches)
+    return (failedBatches / this.nBatches )
 
   }
 
@@ -104,6 +106,7 @@ export default class Simulation {
       nBatches: this.nBatches,
       startMachineID: this.startMachineID,
       totalFactoryRuntime: this.factoryWorkingTime,
+      percentageDefect: this.calculateStats(),
     }
     let machines = []
     for (const machine of Object.values(this.machines)) {

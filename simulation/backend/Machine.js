@@ -41,10 +41,6 @@ export default class Machine {
     this.isOccupied = false
   }
 
-  incrementDefect(){
-    this.produceDefect++;
-  }
-
   getTimePerBatch() {
     return this.timePerBatch
   }
@@ -58,13 +54,13 @@ export default class Machine {
   }
 
   treatBatch(batch) {
-    let rand = Math.floor(Math.random() * 101)
+    let rand = Math.random() * 100
     this.totalWorkingTime += this.timePerBatch
 
     if (rand < this.defectProbability) {
       batch.setHasDefect(true)
       batch.setMachineDefect(this.id)
-      this.incrementDefect();
+      this.producedDefect++
     }
 
     batch.setMaterialName(this.output)
