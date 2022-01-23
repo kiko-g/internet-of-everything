@@ -88,6 +88,17 @@ export default class Simulation {
     }
   }
 
+  calculateStats(){
+    let failedBatches = 0;
+    for(let i = 0; i < this.completedBatches; i++){
+      if(this.completedBatches[i].hasDefect){
+        failedBatches++;
+      }
+    }
+    let batchPercentage = (failedBatches / this.nBatches ) * 100
+
+  }
+
   createFactoryRepresentation() {
     let representation = {
       nBatches: this.nBatches,
@@ -100,9 +111,10 @@ export default class Simulation {
     }
 
     let batches = []
-    for (let i = 0; i < this.completedBatches; i++) {
+    for (let i = 0; i < this.completedBatches.length; i++) {
       batches.push(this.completedBatches[i].getRepresentation())
     }
+
     representation["machines"] = machines
     representation["batches"] = batches
 
