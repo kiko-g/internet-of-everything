@@ -68,6 +68,7 @@ export const findColor = (type) => {
   return "slate"
 }
 
+// should be replaced later
 export const productionMockArray = [
   { productionRate: 1.2469087055009456 },
   {
@@ -149,5 +150,45 @@ export const productionMockArray = [
     nProducts: 1,
     meanProductionTime: 1476.6,
     productionRate: 0.0,
+  },
+]
+
+// should be replaced later
+export const productionStateMockArray = [
+  {
+    date: { $date: 1642809222629 },
+    defect: false,
+    machineID: "machine1",
+    productID: "3",
+    action: "IN",
+    readTime: "21-01-2022 23:53:42.573",
+    _id: { $oid: "61eb4786c766e425edb72241" },
+  },
+  {
+    date: { $date: 1642809223663 },
+    defect: false,
+    machineID: "machine1",
+    productID: "3",
+    action: "OUT",
+    readTime: "21-01-2022 23:53:43.603",
+    _id: { $oid: "61eb4787c766e425edb72242" },
+  },
+  {
+    date: { $date: 1642809224865 },
+    defect: false,
+    machineID: "machine2",
+    productID: "3",
+    action: "IN",
+    readTime: "21-01-2022 23:53:44.637",
+    _id: { $oid: "61eb4788c766e425edb72243" },
+  },
+  {
+    date: { $date: 1642809226117 },
+    defect: false,
+    machineID: "machine2",
+    productID: "3",
+    action: "OUT",
+    readTime: "21-01-2022 23:53:45.865",
+    _id: { $oid: "61eb478ac766e425edb72245" },
   },
 ]

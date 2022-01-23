@@ -13,7 +13,7 @@ import { TrashIcon } from "@heroicons/react/outline"
 import CopyClipboard from "./utilities/CopyClipboard"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import DetailedSwitch from "./utilities/switches/DetailedSwitch"
-import { productionMockArray, jsonStyle, options, productionOptions } from "../utils"
+import { jsonStyle, productionMockArray, productionStateMockArray, options, productionOptions } from "../utils"
 import React, { useEffect, useMemo, useState } from "react"
 import SelectProduction from "./SelectProduction"
 
@@ -25,6 +25,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [searchValue, setSearchValue] = useState("")
   const [displayType, setDisplayType] = useState(options[0])
   const [production, setProduction] = useState(productionMockArray)
+  const [productionState, setProductionState] = useState(productionStateMockArray)
   const [productionSelect, setProductionSelect] = useState(productionOptions[0])
 
   useEffect(() => {}, [displayType])
@@ -312,8 +313,78 @@ export default function Representation({ factoryInitialState, factoryFinalState 
           ) : null}
 
           {productionSelect.name === "State" ? (
-            <div>
-              <h1>Production State</h1>
+            <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+              <div className="flex items-center justify-between w-full">
+                <h1 className="border-2 flex-1">Input box here</h1>
+                <button className="border-2">Button?</button>
+              </div>
+              <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded">
+                <table className="w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 dark:bg-slate-600 w-full">
+                    <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
+                      <th scope="col" className="px-6 py-3 font-medium text-left">
+                        Machine
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Product
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Defect
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Action
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Readtime
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {productionState.map((machine, machineIdx) => (
+                      <tr key={`production-machine-${machineIdx}`} className="text-center">
+                        <td className="px-6 py-3 whitespace-nowrap text-left">
+                          <div className="flex items-center">
+                            <span className="h-8 w-8 rounded-full bg-sky-600/75" />
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
+                              <div className="text-sm font-normal text-gray-500">Some description</div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-600">{machine.productID}</td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {machine.defect === false ? (
+                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
+                              No
+                            </span>
+                          ) : (
+                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
+                              Yes
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {machine.action === "IN" ? (
+                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
+                              {machine.action}
+                            </span>
+                          ) : (
+                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
+                              {machine.action}
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">{machine.readTime}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : null}
         </div>
