@@ -10,14 +10,14 @@ public final class Utils {
     
     public static String getDateTime(){
         LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS");
 
         String formattedDate = myDateObj.format(myFormatObj);
         return formattedDate;
     }
 
     public static LocalDateTime parseDateTime(String str){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS");
         LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
         return dateTime;
     }

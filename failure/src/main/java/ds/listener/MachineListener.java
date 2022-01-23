@@ -74,7 +74,6 @@ public class MachineListener extends Listener {
             String readingTime = messageParsed.getString("readingTime");
             Utils.parseDateTime(readingTime);  
         } catch(Exception e){
-            e.printStackTrace();
             this.sendParseFailure(machineID, sensorID, "Invalid readingTime", FailureType.FORMAT);
             return;
         }

@@ -96,7 +96,7 @@ public abstract class Sensor extends Thread {
     public JSONObject createBaseJSON() {
         JSONObject obj = new JSONObject();
         //prepare reading time
-        String readingTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS"));
+        String readingTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS"));
         obj.put("machineID", this.machineId);
         obj.put("sensorID", this.id);
         obj.put("readingTime", readingTime);
