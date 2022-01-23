@@ -6,6 +6,7 @@ export default class Machine {
     this.sensors = []
     this.isOccupied = false
     this.totalWorkingTime = 0
+    this.producedDefect = 0;
   }
 
   setStatus(status) {
@@ -53,12 +54,13 @@ export default class Machine {
   }
 
   treatBatch(batch) {
-    let rand = Math.floor(Math.random() * 101)
+    let rand = Math.random() * 100
     this.totalWorkingTime += this.timePerBatch
 
     if (rand < this.defectProbability) {
       batch.setHasDefect(true)
       batch.setMachineDefect(this.id)
+      this.producedDefect++
     }
 
     batch.setMaterialName(this.output)
@@ -93,6 +95,7 @@ export default class Machine {
       id: this.id,
       status: this.status,
       totalWorkingTime: this.totalWorkingTime,
+      defectNumber: this.producedDefect,
       sensors: sensorsDict,
     }
     return representation

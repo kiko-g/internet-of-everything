@@ -88,11 +88,25 @@ export default class Simulation {
     }
   }
 
+  calculateStats(){
+    let failedBatches = 0;
+    for(let i = 0; i < this.completedBatches.length; i++){
+      if(this.completedBatches[i].hasDefect){
+        failedBatches++;
+      }
+    }
+    console.log(failedBatches)
+    console.log(failedBatches / this.nBatches)
+    return (failedBatches / this.nBatches )
+
+  }
+
   createFactoryRepresentation() {
     let representation = {
       nBatches: this.nBatches,
       startMachineID: this.startMachineID,
       totalFactoryRuntime: this.factoryWorkingTime,
+      percentageDefect: this.calculateStats(),
     }
     let machines = []
     for (const machine of Object.values(this.machines)) {
@@ -100,9 +114,10 @@ export default class Simulation {
     }
 
     let batches = []
-    for (let i = 0; i < this.completedBatches; i++) {
+    for (let i = 0; i < this.completedBatches.length; i++) {
       batches.push(this.completedBatches[i].getRepresentation())
     }
+
     representation["machines"] = machines
     representation["batches"] = batches
 
