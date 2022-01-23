@@ -16,6 +16,7 @@ services:
     command: sh -c "gradle run"
     volumes:
       - ./edge/src:/edge/src
+      - ./data/:/data/
     container_name: "edge"
 
   # Emulator Server
@@ -27,6 +28,7 @@ services:
     command: sh -c "gradle runFailureService"
     volumes:
       - ./failure/src/:/failure/src/
+      - ./data/:/data/
     container_name: "failure-service"
 
   # TODO: delete this when QRCode messages are ready
@@ -35,12 +37,12 @@ services:
     command: sh -c "gradle runProductSensors"
     volumes:
       - ./failure/src/:/failure/src/
+      - ./data/:/data/
     container_name: "product-sensors"
 
-  #git Chaos Engineering
   chaos-engineering:
     build: ./chaos_engineering/
-    command: sh -c "python3 src/mqtt_test.py"
+    command: sh -c "python3 -u src/default_tester.py"
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"

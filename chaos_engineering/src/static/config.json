@@ -1,0 +1,12 @@
+{
+    "machines": [
+        "machine1",
+        "machine2",
+        "machine3",
+        "machine4",
+        "machine5"
+    ],
+    "test_delay_seconds": 3,
+    "delay_after_payload": 2,
+    "max_test_occurences": 500
+}
