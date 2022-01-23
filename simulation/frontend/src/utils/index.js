@@ -45,8 +45,8 @@ export const options = [
 ]
 
 export const productionOptions = [
-  { name: "Production", color: "bg-blue-400" },
-  { name: "State", color: "bg-teal-400" },
+  { name: "Production", color: "bg-purple-400" },
+  { name: "State", color: "bg-orange-400" },
 ]
 
 const labels = [

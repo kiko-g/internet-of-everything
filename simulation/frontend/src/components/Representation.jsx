@@ -36,6 +36,21 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
   const Tab = (props) => <>{props.children}</>
 
+  /**
+   * @brief installs periodic production fetch when component is mounted
+   * TODO: uncomment lines below and deal with request to container
+   */
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     fetch("/production")
+  //       .then((response) => {
+  //         // parse response
+  //         // setProduction(parsedProductionArray)
+  //       })
+  //       .catch((error) => console.error(error))
+  //   }, 5000) // maybe these 5000 ms could be an env var
+  // }, [])
+
   return (
     <Tabs activeIndex={1}>
       {/* Graph schema */}
@@ -214,74 +229,93 @@ export default function Representation({ factoryInitialState, factoryFinalState 
       <Tab label="Production">
         <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <div className="px-1 flex flex-col space-y-4 md:space-y-0 md:flex-row items-center justify-between col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
-            <div className="flex items-center justify-start space-x-4 w-full">
+            <div className="flex items-center justify-between space-x-4 w-full">
               <SelectProduction selectedHook={[productionSelect, setProductionSelect]} options={productionOptions} />
-              <Stat
-                color="teal"
-                statName="Production Rate"
-                statValue={parseFloat(production[0].productionRate).toFixed(3)}
-                statUnit="per 10 seconds"
-              />
+              {productionSelect.name === "Production" ? (
+                <Stat
+                  color="purple"
+                  statName="Production Rate"
+                  statValue={parseFloat(production[0].productionRate).toFixed(3)}
+                  statUnit="per 10 seconds"
+                />
+              ) : null}
             </div>
           </div>
 
-          <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
-            <table className="w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50 dark:bg-slate-600 w-full">
-                <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
-                  <th scope="col" className="px-6 py-3 font-medium text-left">
-                    Machine
-                  </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    # Defects
-                  </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    Defect Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(Hz)</span>
-                  </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    # Products
-                  </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    Mean Production Time <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(ms)</span>
-                  </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    Production Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(Hz)</span>
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="bg-white divide-y divide-gray-200">
-                {production.slice(1, production.length).map((machine, machineIdx) => (
-                  <tr key={`production-machine-${machineIdx}`} className="text-center">
-                    <td className="px-6 py-4 whitespace-nowrap text-left">
-                      <div className="flex items-center">
-                        <span className="h-8 w-8 rounded-full bg-sky-600/75" />
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
-                          <div className="text-sm text-gray-500">Some description</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{machine.nDefects}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{machine.defectRate}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{machine.nProducts}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-sky-100 text-sky-800">
-                        {parseFloat(machine.productionRate).toFixed(2)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{machine.productionRate}</td>
+          {productionSelect.name === "Production" ? (
+            <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+              <table className="w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 dark:bg-slate-600 w-full">
+                  <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
+                    <th scope="col" className="px-6 py-3 font-medium text-left">
+                      Machine
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      # Defects
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      # Products
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      Defect Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(%)</span>
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      Mean Production Time <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(ms)</span>
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      Production Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(Hz)</span>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {production.slice(1, production.length).map((machine, machineIdx) => (
+                    <tr key={`production-machine-${machineIdx}`} className="text-center">
+                      <td className="px-6 py-3 whitespace-nowrap text-left">
+                        <div className="flex items-center">
+                          <span className="h-8 w-8 rounded-full bg-sky-600/75" />
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
+                            <div className="text-sm font-normal text-gray-500">Some description</div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {machine.nDefects === 0 ? (
+                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
+                            {machine.nDefects}
+                          </span>
+                        ) : (
+                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
+                            {machine.nDefects}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">{machine.nProducts}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                        {parseFloat(machine.defectRate).toFixed(2)}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                        {parseFloat(machine.meanProductionTime).toFixed(1)}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                        {parseFloat(machine.productionRate).toFixed(3)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+
+          {productionSelect.name === "State" ? (
+            <div>
+              <h1>Production State</h1>
+            </div>
+          ) : null}
         </div>
       </Tab>
 
