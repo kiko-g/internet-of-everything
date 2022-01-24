@@ -18,8 +18,7 @@ import SelectProduction from "./SelectProduction"
 import {
   jsonStyle,
   productionMockArray,
-  productionStateMockArray,
-  sensorFailureMockArray,
+  sensorFailureMockArray, 
   options,
   productionOptions,
 } from "../utils"
@@ -36,6 +35,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [productionState, setProductionState] = useState(null)
   const [searchProductValue, setSearchProductValue] = useState("")
   const [productionSelect, setProductionSelect] = useState(productionOptions[0])
+  const requestPath = "http://localhost:9000";   // TODO: change to env path. 
 
   useEffect(() => {}, [displayType])
 
@@ -48,34 +48,37 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
   const requestFindProduct = () => {
     if (searchProductValue === "") return
-    let found = productionStateMockArray.find((element) => element.productID === searchProductValue) // replace this logic with request
-    if (found) setProductionState(found)
+    console.log(searchProductValue);
+    fetch(requestPath + "/product-state?productID=" + searchProductValue) 
+      .then(response => response.json())
+      .then(data => {
+        let found = data.find((element) => element.productID === searchProductValue) 
+        if (found) setProductionState(found);
+      })
+      .catch((error) => console.error(error));  
   }
 
   /**
    * @brief installs 2 periodic production fetches when component is mounted
    * TODO: uncomment lines below and deal with request to container
    */
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     fetch("/production")
-  //       .then((response) => {
-  //         // parse response
-  //         // setProduction(parsedProductionArray)
-  //       })
-  //       .catch((error) => console.error(error))
-  //   }, 5000) // maybe these 5000 ms could be an env var
-  //
-  //   setInterval(() => {
-  //     fetch("/failure")
-  //       .then((response) => {
-  //         // parse response
-  //         // setSensorFailure(parsedSensorFailureArray)
-  //       })
-  //       .catch((error) => console.error(error))
-  //   }, 10000) // maybe these 10000 ms could be an env var
-  // }, [])
+  useEffect(() => {
+    fetch(requestPath + "/production") 
+      .then(response => response.json()
+      ).then(data => {setProduction(data)})
+      .catch((error) => console.error(error)) 
 
+    fetch(requestPath + "/failure") 
+      .then(response => response.json()
+      ).then(data => {
+        if (!Array.isArray(data)){ 
+          data = [data]
+        } 
+        setSensorFailure(data); 
+      })
+      .catch((error) => console.error(error)) 
+  });
+     
   return (
     <Tabs activeIndex={1}>
       {/* Graph schema */}

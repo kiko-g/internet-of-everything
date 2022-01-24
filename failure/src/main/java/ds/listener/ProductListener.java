@@ -151,7 +151,10 @@ public class ProductListener extends Listener {
     }
 
     public String buildMessage() {
-        JSONArray message = new JSONArray();
+        JSONArray message = new JSONArray(); 
+        JSONObject globalInfo = new JSONObject();
+        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
+        message.put(globalInfo);
         for (String machineID : this.machinesGraph.getMachines()) {
             JSONObject machineInfo = new JSONObject();
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
@@ -163,9 +166,7 @@ public class ProductListener extends Listener {
             machineInfo.put("productionRate", this.productionState.getProductionRate(machine));
             message.put(machineInfo);
         }
-        JSONObject globalInfo = new JSONObject();
-        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
-        message.put(globalInfo);
+
         return message.toString(2);
     }
 

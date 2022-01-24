@@ -29,7 +29,7 @@ interface Handler extends HttpHandler {
         // TODO: change the port to env
         Headers header = httpExchange.getResponseHeaders();
         header.add("Content-Type", "application/json"); 
-        header.add("Access-Control-Allow-Origin", "http://localhost:" + System.getenv("FRONTEND_PORT")); 
+        header.add("Access-Control-Allow-Origin", "*"); 
         header.add("Access-Control-Allow-Headers", "*"); 
     }
 
