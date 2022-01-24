@@ -1,9 +1,11 @@
-ds/listener/Listener.java
- ds.listener.Listener
+ds/failures/FailureSeverity.java
+ ds.failures.FailureSeverity
 ds/failures/FailureType.java
  ds.failures.FailureType
 ds/publisher/SensorSimulator.java
  ds.publisher.SensorSimulator
+ds/listener/Listener.java
+ ds.listener.Listener
 ds/state/State.java
  ds.state.State
 ds/FailureService.java
@@ -32,8 +34,6 @@ ds/listener/ProductListener.java
  ds.listener.ProductListener
 ds/failures/Failure.java
  ds.failures.Failure
-ds/failures/FailureSeverity.java
- ds.failures.FailureSeverity
 ds/graph/sensor/Values.java
  ds.graph.sensor.Values
 ds/state/MachineState.java

@@ -44,13 +44,13 @@ class MeasureStateTest {
         int previousLastMeasures = measureState.getLastMeasures().size();
 
         boolean result = measureState.add(5f);
-        float mostRecentMeasure = measureState.getMostRecentMeasures();
-        Queue<Float> lastMeasures = measureState.getLastMeasures();
-        float meanMeasure = measureState.getMeanMeasure();
+        double mostRecentMeasure = measureState.getMostRecentMeasures();
+        int lastMeasures = measureState.getLastMeasures().size();
+        double meanMeasure = measureState.getMeanMeasure();
 
         assertTrue(result, "Couldn't add measure inside min to max values range");
         assertEquals(5f, mostRecentMeasure, "mostRecentMeasure is not updated with added measure");
-        assertEquals(previousLastMeasures +1, lastMeasures.size(), "lastMeasures was not enqueued with added measure");
+        assertEquals(previousLastMeasures +1, lastMeasures, "lastMeasures was not enqueued with added measure");
         assertEquals(5f, meanMeasure, "sumMeasure was not updated correctly");
     }
 
@@ -66,9 +66,9 @@ class MeasureStateTest {
 
         boolean result = measureState.add(6f);
         int lastMeasures = measureState.getLastMeasures().size();
-        float frontMeasure = measureState.getLastMeasures().peek();
-        float mostRecentMeasure = measureState.getMostRecentMeasures();
-        float meanMeasure = measureState.getMeanMeasure();
+        double frontMeasure = measureState.getLastMeasures().peek();
+        double mostRecentMeasure = measureState.getMostRecentMeasures();
+        double meanMeasure = measureState.getMeanMeasure();
 
         assertEquals(previousLastMeasures, lastMeasures, "lastMeasures did not maintain the size limit");
         assertEquals(2f, frontMeasure, "lastMeasures was not dequeued correctly");
