@@ -25,7 +25,8 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [searchValue, setSearchValue] = useState("")
   const [displayType, setDisplayType] = useState(options[0])
   const [production, setProduction] = useState(productionMockArray)
-  const [productionState, setProductionState] = useState(productionStateMockArray)
+  const [productionState, setProductionState] = useState(null)
+  const [searchProductValue, setSearchProductValue] = useState("")
   const [productionSelect, setProductionSelect] = useState(productionOptions[0])
 
   useEffect(() => {}, [displayType])
@@ -36,6 +37,12 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   }, [factoryFinal, factoryInitial, phase])
 
   const Tab = (props) => <>{props.children}</>
+
+  const requestFindProduct = () => {
+    if (searchProductValue === "") return
+    let found = productionStateMockArray.find((element) => element.productID === searchProductValue) // replace this logic with request
+    if (found) setProductionState(found)
+  }
 
   /**
    * @brief installs periodic production fetch when component is mounted
@@ -240,71 +247,94 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                   statUnit="per 10 seconds"
                 />
               ) : null}
+              {productionSelect.name === "State" ? (
+                <>
+                  <InputBox
+                    label=""
+                    classnames="flex-1 h-16"
+                    placeholder={`Type your product ID`}
+                    state={[searchProductValue, setSearchProductValue]}
+                  />
+                  <button
+                    type="button"
+                    title="Clear input"
+                    onClick={requestFindProduct}
+                    className="flex items-center h-16 p-3 rounded text-sm duration-200
+                  bg-teal-400/80 hover:bg-teal-300 text-white"
+                  >
+                    <span>Find product</span>
+                  </button>
+                </>
+              ) : null}
             </div>
           </div>
 
           {productionSelect.name === "Production" ? (
-            <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+            <div className="shadow overflow-hidden border-b border-gray-200 bg-sky-800/80 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
               <table className="w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50 dark:bg-slate-600 w-full">
-                  <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
+                <thead className="w-full">
+                  <tr className="text-center text-xs text-white uppercase tracking-wide">
                     <th scope="col" className="px-6 py-3 font-medium text-left">
                       Machine
                     </th>
                     <th scope="col" className="px-6 py-3 font-medium">
+                      Defect Rate <span className="normal-case dark:text-gray-100">(%)</span>
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      Mean Production Time <span className="normal-case dark:text-gray-100">(ms)</span>
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
+                      Production Rate <span className="normal-case dark:text-gray-100">(Hz)</span>
+                    </th>
+                    <th scope="col" className="px-6 py-3 font-medium">
                       # Defects
-                    </th>
-                    <th scope="col" className="px-6 py-3 font-medium">
-                      # Products
-                    </th>
-                    <th scope="col" className="px-6 py-3 font-medium">
-                      Defect Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(%)</span>
-                    </th>
-                    <th scope="col" className="px-6 py-3 font-medium">
-                      Mean Production Time <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(ms)</span>
-                    </th>
-                    <th scope="col" className="px-6 py-3 font-medium">
-                      Production Rate <span className="normal-case font-bold text-slate-700 dark:text-gray-100">(Hz)</span>
                     </th>
                   </tr>
                 </thead>
 
                 <tbody className="bg-white divide-y divide-gray-200">
                   {production.slice(1, production.length).map((machine, machineIdx) => (
-                    <tr key={`production-machine-${machineIdx}`} className="text-center">
-                      <td className="px-6 py-3 whitespace-nowrap text-left">
+                    <tr
+                      key={`production-machine-${machineIdx}`}
+                      className="text-center odd:bg-white even:bg-slate-50 dark:even:bg-slate-50 dark:odd:bg-white"
+                    >
+                      <td className="px-6 py-2 whitespace-nowrap text-left">
                         <div className="flex items-center">
                           <span className="h-8 w-8 rounded-full bg-sky-600/75" />
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
-                            <div className="text-sm font-normal text-gray-500">Some description</div>
+                            <div className="text-sm font-normal text-gray-500">
+                              <span className="font-medium text-sky-600/75">{machine.nProducts} products</span>
+                            </div>
                           </div>
                         </div>
                       </td>
 
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {machine.nDefects === 0 ? (
-                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
-                            {machine.nDefects}
-                          </span>
-                        ) : (
-                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
-                            {machine.nDefects}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">{machine.nProducts}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {parseFloat(machine.defectRate).toFixed(2)}
                       </td>
 
-                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {parseFloat(machine.meanProductionTime).toFixed(1)}
                       </td>
 
-                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {parseFloat(machine.productionRate).toFixed(3)}
                       </td>
+
+                      {machine.nDefects !== 0 ? (
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100/50 text-rose-600">
+                            {machine.nDefects}
+                          </span>
+                        </td>
+                      ) : (
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-100/50 text-teal-600">
+                            {machine.nDefects}
+                          </span>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -314,10 +344,6 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
           {productionSelect.name === "State" ? (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
-              <div className="flex items-center justify-between w-full">
-                <h1 className="border-2 flex-1">Input box here</h1>
-                <button className="border-2">Button?</button>
-              </div>
               <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded">
                 <table className="w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50 dark:bg-slate-600 w-full">
@@ -340,49 +366,52 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     </tr>
                   </thead>
 
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {productionState.map((machine, machineIdx) => (
-                      <tr key={`production-machine-${machineIdx}`} className="text-center">
-                        <td className="px-6 py-3 whitespace-nowrap text-left">
+                  {productionState !== null ? (
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {console.log(productionState)}
+                      <tr className="text-center">
+                        <td className="px-6 py-2 whitespace-nowrap text-left">
                           <div className="flex items-center">
                             <span className="h-8 w-8 rounded-full bg-sky-600/75" />
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
-                              <div className="text-sm font-normal text-gray-500">Some description</div>
+                              <div className="text-sm font-medium text-gray-900">{productionState.machineID}</div>
+                              <div className="text-sm font-normal text-gray-500">
+                                <span className="font-medium text-xs text-sky-600/75">{productionState._id.$oid}</span>
+                              </div>
                             </div>
                           </div>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-600">{machine.productID}</td>
+                        <td className="whitespace-nowrap text-gray-600">{productionState.productID}</td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {machine.defect === false ? (
-                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
-                              No
+                        <td className="whitespace-nowrap text-sm">
+                          {productionState.defect === false ? (
+                            <span className="px-2 inline-flex leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
+                              None
                             </span>
                           ) : (
-                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
+                            <span className="px-2 inline-flex leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
                               Yes
                             </span>
                           )}
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {machine.action === "IN" ? (
-                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-200/50 text-teal-700">
-                              {machine.action}
+                        <td className="whitespace-nowrap text-sm">
+                          {productionState.action === "IN" ? (
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-sky-200/50 text-sky-700">
+                              {productionState.action.toLowerCase()}
                             </span>
                           ) : (
-                            <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
-                              {machine.action}
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-purple-200/50 text-purple-700">
+                              {productionState.action.toLowerCase()}
                             </span>
                           )}
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-base text-gray-600">{machine.readTime}</td>
+                        <td className="whitespace-nowrap text-sm text-gray-600">{productionState.readTime}</td>
                       </tr>
-                    ))}
-                  </tbody>
+                    </tbody>
+                  ) : null}
                 </table>
               </div>
             </div>
