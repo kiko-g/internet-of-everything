@@ -101,12 +101,13 @@ public class FailureService {
         Bson date = Filters.type("dateFailure", BsonType.DATE_TIME);
         Bson machineID = Filters.type("machineID", BsonType.STRING);
         Bson sensorID = Filters.type("sensorID",  BsonType.STRING);
+        Bson action = Filters.type("action", BsonType.STRING);
         Bson failureType = Filters.type("failureType", BsonType.STRING);
         Bson failureSeverity = Filters.type("failureSeverity", BsonType.STRING);
         Bson description = Filters.type("description", BsonType.STRING);
         Bson readTime = Filters.type("readingTime", BsonType.STRING);
         
-        Bson validator = Filters.and(machineID, sensorID, failureType,failureSeverity,description,readTime, date);
+        Bson validator = Filters.and(machineID, sensorID, action, failureType,failureSeverity,description,readTime, date);
         return new ValidationOptions().validator(validator);
     }
 

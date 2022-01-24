@@ -178,14 +178,34 @@ public class MachineListener extends Listener {
             log = "decreasing";
         } 
 
+        String sensorName = failure.getSensorID();
         // Sensor value near the limit
         if (proximity < interval) {
+            
             if (numConsecutive >= FUTURE_BEHAVIOR) {          
                 failure.setFailureType(type);
+
+                if(sensorName.contains("temperature")) {
+                    failure.setFailureAction(FailureAction.INCREASE_FANS);
+                } else if(sensorName.contains("vibration")) {
+                    failure.setFailureAction(FailureAction.DECREASE_GEAR_SPEED);
+                } else {
+                    failure.setFailureAction(FailureAction.WARNING);
+                }
+
                 failure.setFailureSeverity(FailureSeverity.MEDIUM);
                 failure.setDescription("Values " + log + " too fast and near the limit");
             } else {
                 failure.setFailureType(type);
+
+                if(sensorName.contains("temperature")) {
+                    failure.setFailureAction(FailureAction.DECREASE_FANS);
+                } else if(sensorName.contains("vibration")) {
+                    failure.setFailureAction(FailureAction.INCREASE_GEAR_SPEED);
+                } else {
+                    failure.setFailureAction(FailureAction.WARNING);
+                }
+
                 failure.setFailureSeverity(FailureSeverity.LOW);
                 failure.setDescription("Values near the limit");
             }
@@ -198,7 +218,6 @@ public class MachineListener extends Listener {
         this.failurePublisher.publish(failure.getMessage(), failure.getMachineID());
     }
 
-    // TODO: Add action 
      /**
      * Send a failure relative to the value of a sensor
      */ 
@@ -211,11 +230,13 @@ public class MachineListener extends Listener {
 
         if (measureValue > expectedValues.getMax()) {
             failure.setFailureType(FailureType.ABOVE_EXPECTED);
+            failure.setFailureAction(FailureAction.POWEROFF);
             failure.setFailureSeverity(FailureSeverity.HIGH);
             failure.setDescription("Detected value: " + measureValue);
         }
         else if (measureValue < expectedValues.getMin()) {
             failure.setFailureType(FailureType.UNDER_EXPECTED);
+            failure.setFailureAction(FailureAction.POWEROFF);
             failure.setFailureSeverity(FailureSeverity.HIGH);
             failure.setDescription("Detected value: " + measureValue);
         }
@@ -225,7 +246,6 @@ public class MachineListener extends Listener {
         this.failurePublisher.publish(failure.getMessage(), machineID);
     }
 
-    // TODO: Add action
      /**
      * Send a failure that is not related to any particular machine
      */  
@@ -233,6 +253,7 @@ public class MachineListener extends Listener {
         JSONObject failureMessage = new JSONObject(); 
         failureMessage.put("machineID", "null");
         failureMessage.put("sensorID", "null");
+        failureMessage.put("action", FailureAction.WARNING);
         failureMessage.put("failureSeverity",  FailureSeverity.LOW);
         failureMessage.put("failureType",  failureType);
         failureMessage.put("description", description);
@@ -241,7 +262,6 @@ public class MachineListener extends Listener {
         this.failurePublisher.publishUnknowFailure(failureMessage.toString());
     }
 
-    // TODO: Add action
     /**
      * Send a failure of a specific machine, that occured due to a format or unknow error in the message
      */ 
@@ -249,6 +269,7 @@ public class MachineListener extends Listener {
         JSONObject failureMessage = new JSONObject(); 
         failureMessage.put("machineID", machineID);
         failureMessage.put("sensorID", sensorID);
+        failureMessage.put("action", FailureAction.WARNING);
         failureMessage.put("failureSeverity",  FailureSeverity.LOW);
         failureMessage.put("failureType",  failureType);
         failureMessage.put("description", description);
@@ -267,6 +288,7 @@ public class MachineListener extends Listener {
             this.collection.insertOne(new Document()
                     .append("machineID", message.getString("machineID"))
                     .append("sensorID", message.getString("sensorID"))
+                    .append("action", ((FailureAction) message.get("action")).name())
                     .append("failureType", ((FailureType) message.get("failureType")).name())
                     .append("failureSeverity", ((FailureSeverity) message.get("failureSeverity")).name())
                     .append("description", message.getString("description"))

@@ -78,12 +78,12 @@ services:
       - failure-service
     
   # Chaos Engineering, intercepting messages
-  # chaos-engineering:
-  #   build: ./chaos_engineering/
-  #   command: sh -c "python3 src/mqtt_test.py"
-  #   volumes:
-  #     - ./chaos_engineering/src:/chaos_engineering/src
-  #   container_name: "chaos_engineering"
+  chaos-engineering:
+    build: ./chaos_engineering/
+    command: sh -c "python3 src/mqtt_test.py"
+    volumes:
+      - ./chaos_engineering/src:/chaos_engineering/src
+    container_name: "chaos_engineering"
 
   # Simulation Backend
   # simulation-backend:
@@ -99,12 +99,12 @@ services:
     container_name: "emulator-backend"
 
   # Frontend interface
-  # frontend:
-  #   build: ./simulation/frontend
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - "./simulation/frontend:/app"
-  #     - "/app/node_modules"
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
+  frontend:
+    build: ./simulation/frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./simulation/frontend:/app"
+      - "/app/node_modules"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
