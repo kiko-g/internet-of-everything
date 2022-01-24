@@ -1,0 +1,25 @@
+{
+  "type": "module",
+  "name": "node-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "style:check": "npm run prettier --check .",
+    "style:write": "npm run prettier --write ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.15",
+    "package.json": "^2.0.1",
+    "random-normal": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "2.5.1"
+  }
+}

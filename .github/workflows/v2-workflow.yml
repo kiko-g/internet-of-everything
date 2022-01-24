@@ -1,0 +1,26 @@
+name: v2-docker-workflow
+ 
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - V2-Simulation
+  pull_request:
+    branches: 
+      - main
+      - dev
+      - V2-Simulation
+
+  workflow_dispatch:
+
+jobs:
+  docker_build:
+    runs-on: self-hosted
+    name: "Vertical 2: Test docker-compose"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Run Docker"
+      working-directory: ./simulation
+      run: docker-compose up -d
