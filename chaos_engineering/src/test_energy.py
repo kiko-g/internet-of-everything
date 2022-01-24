@@ -50,6 +50,26 @@ def test_under(mqtt, machine_id, test_number, **kwargs):
 
     return test_result(mqtt, expected_values, failure_topic, test_number)
 
+def test_null(mqtt, machine_id, test_number, **kwargs):
+    """ Test energy to have no voltage """
+    base_payload = test(mqtt, machine_id, test_number,
+                        kwargs["delay"], 0)
+    if base_payload is None:
+        return -1
+
+    expected_values = {
+        "severity": "HIGH",
+        "readingTime": base_payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "UNDER_EXPECTED",
+        "value": base_payload["values"]["energy"],
+        "sensorID": base_payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
+
 
 def test(mqtt, machine_id, test_number, delay, value):
     """ Test machine sensor overheating"""
@@ -90,6 +110,7 @@ def main():
     test_under(mqtt, machine_id, 0, delay=2)
     test_over(mqtt, machine_id, 0, delay=2)
     test_under(mqtt, machine_id, 0, delay=2)
+    test_null(mqtt, machine_id, 0, delay=2)
 
     # stop mqtt thread in the background
     mqtt.stop()

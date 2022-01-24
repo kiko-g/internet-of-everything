@@ -4,7 +4,9 @@ import random
 from utils import get_config
 from test_temperature import test_over as overheating_test, test_under as underheating_test
 from test_vibration import test_under as undervibration_test, test_over as overvibration_test
-from test_energy import test_under as underenergy_test, test_over as overenergy_test
+from test_energy import test_under as underenergy_test
+from test_energy import test_over as overenergy_test
+from test_energy import test_null as nullenergy_test
 from test_fake_reading import test as fake_data_test
 from test_null_values import test as null_data_test
 from test_negative_values import test as negative_data_test
@@ -43,6 +45,7 @@ def main():
         (overvibration_test, delay_only_args),
         (overenergy_test, delay_only_args),
         (underenergy_test, delay_only_args),
+        (nullenergy_test, delay_only_args),
         (fake_data_test, delay_only_args),
         (null_data_test, delay_only_args),
         (negative_data_test, delay_only_args)
