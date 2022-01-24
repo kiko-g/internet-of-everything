@@ -104,7 +104,7 @@ public class ProductListener extends Listener {
                     .append("machineID", machineID)
                     .append("action", action)
                     .append("defect", defect)
-                    .append("readTime", readTime)
+                    .append("readingTime", readTime)
                     .append("productID", productID)
                     .append("dateProduct", new Date()));
 

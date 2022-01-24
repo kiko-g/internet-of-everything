@@ -56,11 +56,11 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   }
 
   const requestFindFailure = () => {
-    fetch(requestPath + "/failure?machineID" + searchFailureValue)
+    fetch(requestPath + "/failure?machineID=" + searchFailureValue)
       .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) setSensorFailure(data)
-        else setSensorFailure([data])
+      .then((data) => { 
+        if (data.length === 0) setSensorFailure({ found: false, data:[] });
+        else setSensorFailure({ found: true, data: data});
       })
       .catch((error) => console.error(error))
   }
@@ -455,9 +455,9 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                           </td>
 
                           <td className="whitespace-nowrap text-sm text-gray-600">
-                            <span>{product.readTime.split(" ")[1].slice(0, 8)}</span>
+                            <span>{product.readingTime.split(" ")[1].slice(0, 8)}</span>
                             <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
-                            <span>{product.readTime.split(" ")[0]}</span>
+                            <span>{product.readingTime.split(" ")[0]}</span>
                           </td>
                         </tr>
                       ))
@@ -501,7 +501,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     </tr>
                   </thead>
 
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-200"> 
                     {sensorFailure.found ? (
                       sensorFailure.data.map((sensor, sensorIdx) => (
                         <tr

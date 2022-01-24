@@ -270,7 +270,7 @@ public class MachineListener extends Listener {
                     .append("failureType", ((FailureType) message.get("failureType")).name())
                     .append("failureSeverity", ((FailureSeverity) message.get("failureSeverity")).name())
                     .append("description", message.getString("description"))
-                    .append("readTime", message.getString("readingTime"))
+                    .append("readingTime", message.getString("readingTime"))
                     .append("dateFailure", new Date()));
 
         } catch (Exception e) {
