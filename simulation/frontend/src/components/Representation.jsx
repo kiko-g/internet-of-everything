@@ -13,9 +13,16 @@ import { TrashIcon } from "@heroicons/react/outline"
 import CopyClipboard from "./utilities/CopyClipboard"
 import PhaseSwitch from "./utilities/switches/PhaseSwitch"
 import DetailedSwitch from "./utilities/switches/DetailedSwitch"
-import { jsonStyle, productionMockArray, productionStateMockArray, options, productionOptions } from "../utils"
 import React, { useEffect, useMemo, useState } from "react"
 import SelectProduction from "./SelectProduction"
+import {
+  jsonStyle,
+  productionMockArray,
+  productionStateMockArray,
+  sensorFailureMockArray,
+  options,
+  productionOptions,
+} from "../utils"
 
 export default function Representation({ factoryInitialState, factoryFinalState }) {
   const [factoryInitial] = factoryInitialState //used for presets
@@ -25,6 +32,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const [searchValue, setSearchValue] = useState("")
   const [displayType, setDisplayType] = useState(options[0])
   const [production, setProduction] = useState(productionMockArray)
+  const [sensorFailure, setSensorFailure] = useState(sensorFailureMockArray)
   const [productionState, setProductionState] = useState(null)
   const [searchProductValue, setSearchProductValue] = useState("")
   const [productionSelect, setProductionSelect] = useState(productionOptions[0])
@@ -45,7 +53,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   }
 
   /**
-   * @brief installs periodic production fetch when component is mounted
+   * @brief installs 2 periodic production fetches when component is mounted
    * TODO: uncomment lines below and deal with request to container
    */
   // useEffect(() => {
@@ -57,6 +65,15 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   //       })
   //       .catch((error) => console.error(error))
   //   }, 5000) // maybe these 5000 ms could be an env var
+  //
+  //   setInterval(() => {
+  //     fetch("/failure")
+  //       .then((response) => {
+  //         // parse response
+  //         // setSensorFailure(parsedSensorFailureArray)
+  //       })
+  //       .catch((error) => console.error(error))
+  //   }, 10000) // maybe these 10000 ms could be an env var
   // }, [])
 
   return (
@@ -244,10 +261,10 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                   color="purple"
                   statName="Production Rate"
                   statValue={parseFloat(production[0].productionRate).toFixed(3)}
-                  statUnit="per 10 seconds"
+                  statUnit="products per 10 seconds"
                 />
               ) : null}
-              {productionSelect.name === "State" ? (
+              {productionSelect.name === "State Tracking" ? (
                 <>
                   <InputBox
                     label=""
@@ -342,7 +359,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
             </div>
           ) : null}
 
-          {productionSelect.name === "State" ? (
+          {productionSelect.name === "State Tracking" ? (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
               <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded">
                 <table className="w-full divide-y divide-gray-200">
@@ -368,7 +385,6 @@ export default function Representation({ factoryInitialState, factoryFinalState 
 
                   {productionState !== null ? (
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {console.log(productionState)}
                       <tr className="text-center">
                         <td className="px-6 py-2 whitespace-nowrap text-left">
                           <div className="flex items-center">
@@ -391,7 +407,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                             </span>
                           ) : (
                             <span className="px-2 inline-flex leading-5 font-semibold rounded-full bg-rose-200/50 text-rose-700">
-                              Yes
+                              Found
                             </span>
                           )}
                         </td>
@@ -408,10 +424,105 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                           )}
                         </td>
 
-                        <td className="whitespace-nowrap text-sm text-gray-600">{productionState.readTime}</td>
+                        <td className="whitespace-nowrap text-sm text-gray-600">
+                          <span>{productionState.readTime.split(" ")[1].slice(0, 8)}</span>
+                          <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+                          <span>{productionState.readTime.split(" ")[0]}</span>
+                        </td>
                       </tr>
                     </tbody>
                   ) : null}
+                </table>
+              </div>
+            </div>
+          ) : null}
+
+          {productionSelect.name === "Sensor Failure" ? (
+            <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+              <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded">
+                <table className="w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 dark:bg-slate-600 w-full">
+                    <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
+                      <th scope="col" className="px-6 py-3 font-medium text-left">
+                        Sensor
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Action
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Failure
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Severity
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Readtime
+                      </th>
+                      <th scope="col" className="px-6 py-3 font-medium">
+                        Description
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {sensorFailure.map((sensor, sensorIdx) => (
+                      <tr
+                        key={`production-machine-${sensorIdx}`}
+                        className="text-center odd:bg-white even:bg-slate-50 dark:even:bg-slate-50 dark:odd:bg-white"
+                      >
+                        <td className="px-6 py-2 whitespace-nowrap text-left">
+                          <div className="flex items-center">
+                            <span className="h-8 w-8 rounded-full bg-teal-400" />
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900 capitalize">{sensor.sensorID}</div>
+                              <div className="text-xs font-normal text-gray-500">
+                                Associated with <span className="font-medium text-sky-600/75">{sensor.machineID}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-sky-200/50 text-sky-700">
+                            {sensor.action}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-sky-200/80 text-sky-700">
+                            {sensor.failureType}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {sensor.failureSeverity === "LOW" ? (
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-lime-200/80 text-lime-700">
+                              {sensor.failureSeverity}
+                            </span>
+                          ) : null}
+                          {sensor.failureSeverity === "MEDIUM" ? (
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-amber-200/80 text-amber-700">
+                              {sensor.failureSeverity}
+                            </span>
+                          ) : null}
+                          {sensor.failureSeverity === "HIGH" ? (
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-rose-200/80 text-rose-700">
+                              {sensor.failureSeverity}
+                            </span>
+                          ) : null}
+                          {sensor.failureSeverity === "CRITICAL" ? (
+                            <span className="capitalize px-2 inline-flex leading-5 font-semibold rounded-full bg-rose-700/80 text-white">
+                              {sensor.failureSeverity}
+                            </span>
+                          ) : null}
+                        </td>
+                        <td className="whitespace-nowrap text-sm text-gray-600">
+                          <span>{sensor.readingTime.split(" ")[1].slice(0, 8)}</span>
+                          <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+                          <span>{sensor.readingTime.split(" ")[0]}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600">{sensor.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>

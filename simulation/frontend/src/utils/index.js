@@ -45,8 +45,9 @@ export const options = [
 ]
 
 export const productionOptions = [
-  { name: "Production", color: "bg-purple-400" },
-  { name: "State", color: "bg-orange-400" },
+  { name: "Production", color: "bg-rose-400" },
+  { name: "State Tracking", color: "bg-cyan-400" },
+  { name: "Sensor Failure", color: "bg-amber-400" },
 ]
 
 const labels = [
@@ -190,5 +191,26 @@ export const productionStateMockArray = [
     action: "OUT",
     readTime: "21-01-2022 23:53:45.865",
     _id: { $oid: "61eb478ac766e425edb72245" },
+  },
+]
+
+export const sensorFailureMockArray = [
+  {
+    machineID: "machine1",
+    sensorID: "productionSpeed1",
+    action: "POWEROFF",
+    failureSeverity: "HIGH",
+    failureType: "UNDER_EXPECTED",
+    description: "Detected value: -11.3498",
+    readingTime: "01-01-2022 19:41:34",
+  },
+  {
+    machineID: "machine2",
+    sensorID: "productionSpeed2",
+    action: "DECREASE_FANS",
+    failureSeverity: "LOW",
+    failureType: "UNDER_EXPECTED",
+    description: "Detected value: -11.3498",
+    readingTime: "01-01-2022 19:41:44",
   },
 ]
