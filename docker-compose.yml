@@ -87,7 +87,7 @@ services:
 
   # Simulation Backend
   # simulation-backend:
-  #   build: ./simulation/backend
+  #   build: ./simulation
   #   ports:
   #     - "8080:8080"
 
@@ -100,11 +100,12 @@ services:
 
   # Frontend interface
   frontend:
-    build: ./simulation/frontend
+    build: ./frontend
     ports:
       - "3000:3000"
     volumes:
-      - "./simulation/frontend:/app"
-      - "/app/node_modules"
+        - './frontend:/app'
+        - '/app/node_modules'
     environment:
       - CHOKIDAR_USEPOLLING=true
+
