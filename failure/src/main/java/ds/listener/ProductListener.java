@@ -8,8 +8,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import com.mongodb.client.MongoCollection;
 
-import ds.FailureService;
-
 import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
@@ -19,11 +17,17 @@ import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 import ds.listener.product.ProductionState;
+import ds.listener.product.ProductionTable;
 
+/**
+ * Listens to the messages relative to the product, calculating statistics relative 
+ * to the production and allows the tracking of a product
+ */
 public class ProductListener extends Listener {
     private ScheduledThreadPoolExecutor executor;
     private ProductionState productionState;
     private MongoCollection<Document> collection;
+    public static ProductionTable productionTable;
 
     public ProductListener(Graph graph, MongoCollection<Document> collection) {
         super("product", graph);
@@ -33,6 +37,7 @@ public class ProductListener extends Listener {
             List<String> machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
             this.productionState = new ProductionState(machineIds, endMachine);
             this.collection = collection;
+            ProductListener.productionTable = new ProductionTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,7 +48,7 @@ public class ProductListener extends Listener {
 
         // Show the production state every 5 seconds
         this.executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleWithFixedDelay(new Thread(() -> FailureService.serverState.setProduction(this.buildMessage())),
+        executor.scheduleWithFixedDelay(new Thread(() -> ProductListener.productionTable.setProduction(this.buildMessage())),
                 0, 5000, TimeUnit.MILLISECONDS);
     }
 
@@ -94,7 +99,6 @@ public class ProductListener extends Listener {
      * Function resposible for adding product location to the database.
      */
     void insertIntoDatabase(String machineID, String action, boolean defect, String readTime, String productID) {
-        
         try {
             this.collection.insertOne(new Document()
                     .append("machineID", machineID)
@@ -102,7 +106,7 @@ public class ProductListener extends Listener {
                     .append("defect", defect)
                     .append("readTime", readTime)
                     .append("productID", productID)
-                    .append("date", new Date()));
+                    .append("dateProduct", new Date()));
 
         } catch (Exception e) {
             System.out.println(e);
@@ -150,8 +154,15 @@ public class ProductListener extends Listener {
         System.out.println(sb.toString());
     }
 
+    /**
+     * Build a json object with the state of the production
+     */
     public String buildMessage() {
         JSONArray message = new JSONArray();
+        JSONObject globalInfo = new JSONObject();
+        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
+        message.put(globalInfo);
+        
         for (String machineID : this.machinesGraph.getMachines()) {
             JSONObject machineInfo = new JSONObject();
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
@@ -163,9 +174,6 @@ public class ProductListener extends Listener {
             machineInfo.put("productionRate", this.productionState.getProductionRate(machine));
             message.put(machineInfo);
         }
-        JSONObject globalInfo = new JSONObject();
-        globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
-        message.put(globalInfo);
         return message.toString(2);
     }
 

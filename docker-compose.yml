@@ -53,15 +53,6 @@ services:
         ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
         ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
 
-  # TODO: delete this when QRCode messages are ready
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
-    volumes:
-      - ./failure/src/:/failure/src/
-      - ./data/:/data/
-    container_name: "product-sensors"
-
   # Failure Analysis
   failure-service:
     build: ./failure/
@@ -76,6 +67,17 @@ services:
     container_name: "failure-service"
     depends_on:
       - mongo
+
+  # TODO: delete this when QRCode messages are ready
+  products:
+    build: ./failure/
+    command: sh -c "gradle runProductSensors"
+    volumes:
+      - ./failure/src/:/failure/src/
+      - ./data/:/data/
+    container_name: "product-sensors"
+    depends_on:
+      - failure-service
     
   # Chaos Engineering, intercepting messages
   chaos-engineering:
