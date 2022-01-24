@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MeasureStateTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-18T11:55:50" hostname="LAPTOP-EILQL0GL" time="0.087">
+<testsuite name="MeasureStateTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-24T12:10:53" hostname="LAPTOP-EILQL0GL" time="0.087">
   <properties/>
-  <testcase name="testAddMaxValue()" classname="MeasureStateTest" time="0.077"/>
+  <testcase name="testAddMaxValue()" classname="MeasureStateTest" time="0.073"/>
   <testcase name="testAddAboveMaxValue()" classname="MeasureStateTest" time="0.002"/>
-  <testcase name="testAddValueInsideRange()" classname="MeasureStateTest" time="0.002"/>
-  <testcase name="testAddValueAfterLimit()" classname="MeasureStateTest" time="0.0"/>
-  <testcase name="testAddMinValue()" classname="MeasureStateTest" time="0.0"/>
+  <testcase name="testAddValueInsideRange()" classname="MeasureStateTest" time="0.004"/>
+  <testcase name="testAddValueAfterLimit()" classname="MeasureStateTest" time="0.001"/>
+  <testcase name="testAddMinValue()" classname="MeasureStateTest" time="0.001"/>
   <testcase name="testAddUnderMinValue()" classname="MeasureStateTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

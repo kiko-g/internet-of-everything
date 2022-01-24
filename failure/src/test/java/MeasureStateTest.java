@@ -1,9 +1,8 @@
+import ds.graph.MachineNode;
 import ds.graph.sensor.Values;
 import ds.state.sensor.MeasureState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
