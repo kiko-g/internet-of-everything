@@ -158,11 +158,10 @@ public class ProductListener extends Listener {
      * Build a json object with the state of the production
      */
     public String buildMessage() {
-        JSONArray message = new JSONArray();
+        JSONArray message = new JSONArray(); 
         JSONObject globalInfo = new JSONObject();
         globalInfo.put("productionRate", this.productionState.getTotalProductionRate());
         message.put(globalInfo);
-        
         for (String machineID : this.machinesGraph.getMachines()) {
             JSONObject machineInfo = new JSONObject();
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);

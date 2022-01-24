@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
 import Representation from "../components/Representation"
@@ -8,6 +8,10 @@ export default function App() {
   const [presets, setPresets] = useState(factories)
   const [factoryInitial, setFactoryInitial] = useState(factories[0])
   const [factoryFinal, setFactoryFinal] = useState([])
+
+  useEffect(() => {
+    document.title = "IOE | Simulation"
+  }, [])
 
   return (
     <div className="homepage min-h-screen bg-slate-200 dark:bg-slate-500 font-sans font-medium">

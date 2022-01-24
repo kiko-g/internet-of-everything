@@ -274,7 +274,6 @@ public class MachineListener extends Listener {
                     .append("dateFailure", new Date()));
 
         } catch (Exception e) {
-            System.out.println("INSERT ERROR");
             System.out.println(e);
         }
     }
