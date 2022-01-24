@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Header from "../components/Header"
 import EmulatorRepresentation from "../components/emulator/EmulatorRepresentation"
 
 export default function Emulator() {
+  useEffect(() => {
+    document.title = "IOE | Emulator"
+  }, [])
+
   return (
     <div className="homepage min-h-screen bg-slate-200 dark:bg-slate-500 font-sans font-medium">
       <Header location="Emulator" />

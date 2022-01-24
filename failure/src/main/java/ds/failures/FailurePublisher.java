@@ -58,6 +58,20 @@ public class FailurePublisher {
             System.err.println("Error publishing to " + machineTopic + " - " + e);
         }
     }
+
+    public void publishUnknowFailure(String rawMsg){
+        try {
+            final MqttTopic topicObj = this.publisher.getTopic(this.topic);
+
+            MqttMessage msg = getMqttMessage(rawMsg);
+            msg.setQos(2);
+            topicObj.publish(msg);
+            System.out.println(msg.toString());
+
+        } catch (MqttException e) {
+            System.err.println("Error publishing to " + this.topic + " - " + e);
+        }
+    }
     
     private MqttMessage getMqttMessage(String message){
         byte[] payload = message.getBytes();        

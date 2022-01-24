@@ -39,6 +39,7 @@ module.exports = {
         system: defaultTheme.fontFamily.sans,
         flow: "Flow",
       },
+      backgroundImage: { "hero": "url('/src/components/img/hero.jpg')" },
     },
   },
   plugins: [require("@tailwindcss/forms")],

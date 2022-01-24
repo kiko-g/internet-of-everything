@@ -11,6 +11,11 @@ services:
       - ./mosquitto/log:/mosquitto/log 
     container_name: "mosquitto"
 
+  # Emulator Backend
+  emulator-backend:
+    build: ./emulator/
+    container_name: "emulator-backend"
+
   # Edge Layer
   edge:
     build: ./edge/
@@ -19,14 +24,6 @@ services:
       - ./edge/src:/edge/src
       - ./data/:/data/
     container_name: "edge"
-
-
-  # # Emulator Server
-  # emulator:
-  #   build: ./emulator/
-  #   ports:
-  #     - "9999:9999"
-  #   container_name: "emulator"
 
   
   # Database to track product messages
@@ -91,13 +88,6 @@ services:
     ports:
       - "8080:8080"
 
-  # Emulator Backend
-  emulator-backend:
-    build: ./emulator/
-    ports:
-      - "9999:9999"
-    container_name: "emulator-backend"
-
   # Frontend interface
   frontend:
     build: ./simulation/frontend
@@ -108,3 +98,4 @@ services:
         - '/app/node_modules'
     environment:
       - CHOKIDAR_USEPOLLING=true
+    container_name: "frontend"
