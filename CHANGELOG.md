@@ -4,23 +4,61 @@
 
 ## Edge
 
-TODO: adicionar descrição
+### Closed PBIs
+
+### Increment
 
 ## Emulator
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- Track Products around the Factory
+
+
+### Increment
 
 ## Simulator
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- Retrieve information from sensor failure server
+- Create a unified page to accommodate other verticals work
+- Fault Analysis Representation
+
+- As a user, I want to see the representation of the sensors in each machine
+- As a user, I want to be able to see the final outcome of a simulation
+- As a user, I want to be able upload my own JSON representation of the factory
+
+
+### Increment
 
 ## Chaos Engineering
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- Refactor: display overvibration needs to work with mqtt
+
+### Increment
 
 ## Fault Analysis
 
-TODO: adicionar descrição
+### Closed PBIs
+
+- As a User, I want to handle malformed errors in JSON in order to have a secure way of detecting failures
+- As a Developer, I want to build a database to allow an efficient access to the state of a product, so that vertical 2 can display it in the front-end
+- As a User, I want to know the current state of a product, so that I can track it during production
+- As a Developer, I want to build an API to access product state and possible failures, so that the frontend can display the information
+
+
+
+### Increment
+
+- Concluded the integration with other verticals by sending messages as http request to the server
+
+## Global Product Increment
+
+- Intregration between emulator and fault analysis allowing data to be correctly sent fro the backend to the frontend and displayed accordingly
+
 
 # Sprint 3
 
