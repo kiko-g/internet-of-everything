@@ -58,9 +58,9 @@ export default function Representation({ factoryInitialState, factoryFinalState 
   const requestFindFailure = () => {
     fetch(requestPath + "/failure?machineID=" + searchFailureValue)
       .then((response) => response.json())
-      .then((data) => { 
-        if (data.length === 0) setSensorFailure({ found: false, data:[] });
-        else setSensorFailure({ found: true, data: data});
+      .then((data) => {
+        if (data.length === 0) setSensorFailure({ found: false, data: [] })
+        else setSensorFailure({ found: true, data: data })
       })
       .catch((error) => console.error(error))
   }
@@ -501,7 +501,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     </tr>
                   </thead>
 
-                  <tbody className="bg-white divide-y divide-gray-200"> 
+                  <tbody className="bg-white divide-y divide-gray-200">
                     {sensorFailure.found ? (
                       sensorFailure.data.map((sensor, sensorIdx) => (
                         <tr
@@ -561,8 +561,8 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                         </tr>
                       ))
                     ) : (
-                      <tr key={`no-product`} className="text-center">
-                        <td colSpan={5} className="p-4 bg-rose-100/50 text-rose-800">
+                      <tr key={`no-failure`} className="text-center">
+                        <td colSpan={6} className="p-4 bg-rose-100/50 text-rose-800">
                           No products matching your input!
                         </td>
                       </tr>
