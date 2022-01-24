@@ -52,19 +52,19 @@ public class MachineSensor extends SensorSimulator {
         double errorProbability = 0.3; 
         ConcurrentHashMap<String, Values> values = sensor.getValues();  
         values.forEach((key, value) -> {
-            boolean hasError = Utils.getRandomFloat(0, 1) >  ( 1 - errorProbability) ? true: false; 
-            float min = value.getMin();  
-            float max = value.getMax();  
-            float currentValue = 0; 
+            boolean hasError = Utils.getRandomDouble(0, 1) >  ( 1 - errorProbability) ? true: false; 
+            double min = value.getMin();  
+            double max = value.getMax();  
+            double currentValue = 0; 
 
             if (hasError){
-                float randomDeviation = Utils.getRandomFloat(1, 20);
+                double randomDeviation = Utils.getRandomDouble(1, 20);
                 if (this.rnd.nextInt(1) == 0) 
                     currentValue = min - randomDeviation;  
                 else 
                     currentValue = max + randomDeviation; 
             }  else {
-                currentValue = Utils.getRandomFloat(min, max);
+                currentValue = Utils.getRandomDouble(min, max);
             }
             valuesJson.put(key, currentValue);
         });

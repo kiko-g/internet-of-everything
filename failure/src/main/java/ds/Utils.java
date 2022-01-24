@@ -10,26 +10,26 @@ public final class Utils {
     
     public static String getDateTime(){
         LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS");
 
         String formattedDate = myDateObj.format(myFormatObj);
         return formattedDate;
     }
 
     public static LocalDateTime parseDateTime(String str){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS");
         LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
         return dateTime;
     }
 
-    public static float getRandomFloat(float min, float max){
-        return round(min + rnd.nextFloat() * (max - min));
+    public static double getRandomDouble(double min, double max){
+        return round(min + rnd.nextDouble() * (max - min));
     } 
 
-    public static float round(float value) {
-        BigDecimal bd = new BigDecimal(Float.toString(value));
+    public static double round(double value) {
+        BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(4, RoundingMode.HALF_UP);
-        return bd.floatValue();
+        return bd.doubleValue();
     }
 
     public static String formatDouble(double value) {

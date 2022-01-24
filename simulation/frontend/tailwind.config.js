@@ -1,39 +1,10 @@
-const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
 
 module.exports = {
-  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: "class", // or "media" or "class"
+  darkMode: "class",
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        dark: "#1a202c",
-        white: "#ffffff",
-        transparent: "transparent",
-        current: "currentColor",
-        gray: colors.gray,
-        bluegray: colors.blueGray,
-        coolgray: colors.coolGray,
-        truegray: colors.trueGray,
-        warmgray: colors.warmGray,
-        red: colors.red,
-        orange: colors.orange,
-        amber: colors.amber,
-        yellow: colors.yellow,
-        lime: colors.lime,
-        green: colors.green,
-        emerald: colors.emerald,
-        teal: colors.teal,
-        cyan: colors.cyan,
-        sky: colors.sky,
-        blue: colors.blue,
-        indigo: colors.indigo,
-        violet: colors.violet,
-        purple: colors.purple,
-        fuchsia: colors.fuchsia,
-        pink: colors.pink,
-        rose: colors.rose,
-      },
       fontSize: {
         xxs: "0.6rem",
       },
@@ -60,29 +31,15 @@ module.exports = {
         "4/5": "80%",
         full: "100%",
       },
-      borderRadius: {
-        "4xl": "2rem",
-        "5xl": "3rem",
-        "6xl": "4rem",
-      },
       fontFamily: {
-        inter: ["Inter sans-serif", ...defaultTheme.fontFamily.sans],
-        plex: ["IBM Plex Sans", ...defaultTheme.fontFamily.sans],
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        mono: ["Fira Code", ...defaultTheme.fontFamily.mono],
+        source: ["Source Sans Pro", ...defaultTheme.fontFamily.sans],
+        "ubuntu-mono": ["Ubuntu Mono", ...defaultTheme.fontFamily.mono],
+        system: defaultTheme.fontFamily.sans,
+        flow: "Flow",
       },
     },
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [
-    require("@tailwindcss/forms"),
-    require("tailwindcss-font-inter")({
-      // default settings
-      a: -0.0223,
-      b: 0.185,
-      c: -0.1745,
-      baseFontSize: 16,
-      importFontFace: true,
-    }),
-  ],
+  plugins: [require("@tailwindcss/forms")],
 }

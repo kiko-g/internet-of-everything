@@ -1,4 +1,5 @@
 package ds.publisher;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
@@ -6,7 +7,7 @@ import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 
-import java.util.*; 
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -20,32 +21,96 @@ public class ProductSensor extends SensorSimulator {
         this.executor = new ScheduledThreadPoolExecutor(100);
     }
 
-    public void init(){
+    public void init() {
         super.init();
         this.machinesGraph = new Graph();
-        
-        MachineNode machine;
+        testTracking();
+
+        // MachineNode machine;
+        // try {
+        // machine = this.machinesGraph.getStartMachine();
+        // int time = this.rnd.nextInt(2000 - 1000) + 1000;
+        // executor.scheduleWithFixedDelay(new Thread(() ->
+        // this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+    }
+
+    private void testTracking() {
+        int productID = 1;
         try {
-            machine = this.machinesGraph.getStartMachine();
-            int time = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+            while (true) {
+                Thread.sleep(4000);
+                publishTrackingMessage("machine1", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine1", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "in", "IN", productID);
+                publishTrackingMessage("machine1", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "out", "OUT", productID);
+                publishTrackingMessage("machine1", "out", "OUT", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "in", "IN", productID+1);
+                publishTrackingMessage("machine3", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "out", "OUT", productID+1);
+                publishTrackingMessage("machine4", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "in", "IN", productID+1);
+                publishTrackingMessage("machine4", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "out", "OUT", productID+1);
+                publishTrackingMessage("machine5", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "out", "OUT", productID);
+                publishTrackingMessage("machine4", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine4", "out", "OUT", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "out", "OUT", productID+1);
+                productID+=2;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
-    private void simulateOutput(MachineNode startMachine){
+    private void publishTrackingMessage(String machineID, String sensorID, String action, int productID) {
+        String readTime = Utils.getDateTime();
+        JSONObject messageObject = new JSONObject();
+        messageObject.put("machineID", machineID);
+        messageObject.put("sensorID", sensorID);
+
+        JSONObject values = new JSONObject();
+        values.put("productID", String.valueOf(productID));
+        values.put("action", action);
+        values.put("defect", false);
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
+
+        this.publish(messageObject.toString());
+    }
+
+    private void simulateOutput(MachineNode startMachine) {
 
         // Simulate defective product
         boolean higherDefectProbability = (rnd.nextInt(20) == 0);
-        float defectProbability = 0;
+        double defectProbability = 0;
         if(higherDefectProbability){
-            float randomDeviation = Utils.getRandomFloat(10, 50);
+            double randomDeviation = Utils.getRandomDouble(10, 50);
             defectProbability = (startMachine.getDefectProbability() + randomDeviation)/100;
         } else {
-            defectProbability = startMachine.getDefectProbability()/100;
+            defectProbability = startMachine.getDefectProbability() / 100;
         }
-        boolean hasDefect = Utils.getRandomFloat(0, 1) >  ( 1 - defectProbability) ? true: false; 
+        boolean hasDefect = Utils.getRandomDouble(0, 1) >  ( 1 - defectProbability) ? true: false; 
 
         // Send output message
         String message = this.getOutputMessage(startMachine, hasDefect);
@@ -53,13 +118,13 @@ public class ProductSensor extends SensorSimulator {
 
         // Schedule next machine input message
         MachineNode nextMachine = startMachine.getNext();
-        if(nextMachine != null && !hasDefect){            
+        if (nextMachine != null && !hasDefect) {
             int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine)),timeIn,TimeUnit.MILLISECONDS);
+            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine)), timeIn, TimeUnit.MILLISECONDS);
         }
     }
 
-    private void simulateInputOutput(MachineNode machine){
+    private void simulateInputOutput(MachineNode machine) {
 
         // Send input message
         String message = this.getInputMessage(machine);
@@ -67,15 +132,14 @@ public class ProductSensor extends SensorSimulator {
 
         // Schedule output message
         int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
-        executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
+        executor.schedule(new Thread(() -> this.simulateOutput(machine)), timeOut, TimeUnit.MILLISECONDS);
     }
-
 
     /**
      * This method simulates reading of a product state
      */
-    protected String getOutputMessage(MachineNode machine, boolean hasDefect){
-        String readTime = Utils.getDateTime(); 
+    protected String getOutputMessage(MachineNode machine, boolean hasDefect) {
+        String readTime = Utils.getDateTime();
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
@@ -87,15 +151,15 @@ public class ProductSensor extends SensorSimulator {
         values.put("defect", hasDefect);
         messageObject.put("readingTime", readTime);
         messageObject.put("values", values);
-        
-        return messageObject.toString(); 
+
+        return messageObject.toString();
     }
 
-        /**
+    /**
      * This method simulates reading of a product state
      */
-    protected String getInputMessage(MachineNode machine){
-        String readTime = Utils.getDateTime(); 
+    protected String getInputMessage(MachineNode machine) {
+        String readTime = Utils.getDateTime();
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
@@ -107,13 +171,13 @@ public class ProductSensor extends SensorSimulator {
         values.put("defect", false);
         messageObject.put("readingTime", readTime);
         messageObject.put("values", values);
-        
-        return messageObject.toString(); 
+
+        return messageObject.toString();
     }
 
     public static void main(String[] args) {
 
-        if(args.length > 0){
+        if (args.length > 0) {
             System.err.println("Usage: java ProductSensor");
         }
 
