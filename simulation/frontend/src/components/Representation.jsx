@@ -277,7 +277,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     title="Clear input"
                     onClick={requestFindProduct}
                     className="flex items-center h-16 p-3 rounded text-sm duration-200
-                  bg-teal-400/80 hover:bg-teal-300 text-white"
+                  bg-cyan-500/80 hover:bg-cyan-400 text-white"
                   >
                     <span>Find product</span>
                   </button>
@@ -287,10 +287,10 @@ export default function Representation({ factoryInitialState, factoryFinalState 
           </div>
 
           {productionSelect.name === "Production" ? (
-            <div className="shadow overflow-hidden border-b border-gray-200 bg-sky-800/80 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
+            <div className="shadow overflow-hidden border-b border-gray-200 bg-gray-50 dark:bg-slate-600 sm:rounded col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 2xl:col-span-4 min-w-full">
               <table className="w-full divide-y divide-gray-200">
                 <thead className="w-full">
-                  <tr className="text-center text-xs text-white uppercase tracking-wide">
+                  <tr className="text-center text-xs text-gray-500 dark:text-white uppercase tracking-wide">
                     <th scope="col" className="px-6 py-3 font-medium text-left">
                       Machine
                     </th>
@@ -317,7 +317,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                     >
                       <td className="px-6 py-2 whitespace-nowrap text-left">
                         <div className="flex items-center">
-                          <span className="h-8 w-8 rounded-full bg-sky-600/75" />
+                          <span className="h-6 w-6 rounded-full bg-sky-600/75" />
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{machine.machineID}</div>
                             <div className="text-sm font-normal text-gray-500">
@@ -388,7 +388,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                       <tr className="text-center">
                         <td className="px-6 py-2 whitespace-nowrap text-left">
                           <div className="flex items-center">
-                            <span className="h-8 w-8 rounded-full bg-sky-600/75" />
+                            <span className="h-6 w-6 rounded-full bg-sky-600/75" />
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{productionState.machineID}</div>
                               <div className="text-sm font-normal text-gray-500">
@@ -472,11 +472,11 @@ export default function Representation({ factoryInitialState, factoryFinalState 
                       >
                         <td className="px-6 py-2 whitespace-nowrap text-left">
                           <div className="flex items-center">
-                            <span className="h-8 w-8 rounded-full bg-teal-400" />
+                            <span className="h-6 w-6 rounded-full bg-amber-500" />
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900 capitalize">{sensor.sensorID}</div>
                               <div className="text-xs font-normal text-gray-500">
-                                Associated with <span className="font-medium text-sky-600/75">{sensor.machineID}</span>
+                                Associated with <span className="font-medium text-amber-600/75">{sensor.machineID}</span>
                               </div>
                             </div>
                           </div>
