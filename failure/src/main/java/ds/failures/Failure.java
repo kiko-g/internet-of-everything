@@ -21,6 +21,10 @@ public class Failure {
         return this.message.toString();
     }
 
+    public JSONObject getJSONMessage(){
+        return this.message;
+    }
+
     public String getMachineID(){
         return this.machineID;
     }
