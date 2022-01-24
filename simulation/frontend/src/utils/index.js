@@ -30,17 +30,24 @@ export const colors = [
 export const jsonStyle = {
   overflowY: "auto",
   overflowX: "hidden",
-  padding: "1em",
+  padding: "1rem",
   width: "100%",
   fontSize: "small",
   lineHeight: 1,
   fontFamily: "JetBrains Mono, Consolas, sans-serif",
-  backgroundColor: "#3c4553",
+  backgroundColor: "inherit",
+  borderRadius: "0.75rem",
 }
 
 export const options = [
   { name: "Machines", color: "bg-blue-400" },
   { name: "Sensors", color: "bg-teal-400" },
+]
+
+export const productionOptions = [
+  { name: "Production", color: "bg-purple-400" },
+  { name: "State Tracking", color: "bg-cyan-400" },
+  { name: "Sensor Failure", color: "bg-amber-400" },
 ]
 
 const labels = [
@@ -54,7 +61,6 @@ const labels = [
 ]
 
 export const findColor = (type) => {
-
   for (let i = 0; i < labels.length; i++) {
     let condition = type.toLowerCase().trim() === labels[i].type.toLowerCase().trim()
     if (condition) return labels[i].color
@@ -62,3 +68,149 @@ export const findColor = (type) => {
 
   return "slate"
 }
+
+// should be replaced later
+export const productionMockArray = [
+  { productionRate: 1.2469087055009456 },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+  {
+    machineID: "machine1",
+    nDefects: 0,
+    defectRate: 0.0,
+    nProducts: 5,
+    meanProductionTime: 1616.6,
+    productionRate: 0.5825,
+  },
+  {
+    machineID: "machine2",
+    nDefects: 1,
+    defectRate: 1.0,
+    nProducts: 1,
+    meanProductionTime: 1476.6,
+    productionRate: 0.0,
+  },
+]
+
+// should be replaced later
+export const productionStateMockArray = [
+  {
+    date: { $date: 1642809222629 },
+    defect: false,
+    machineID: "machine1",
+    productID: "1",
+    action: "IN",
+    readTime: "21-01-2022 23:53:42.573",
+    _id: { $oid: "61eb4786c766e425edb72241" },
+  },
+  {
+    date: { $date: 1642809223663 },
+    defect: false,
+    machineID: "machine1",
+    productID: "2",
+    action: "OUT",
+    readTime: "21-01-2022 23:53:43.603",
+    _id: { $oid: "61eb4787c766e425edb72242" },
+  },
+  {
+    date: { $date: 1642809224865 },
+    defect: false,
+    machineID: "machine2",
+    productID: "3",
+    action: "IN",
+    readTime: "21-01-2022 23:53:44.637",
+    _id: { $oid: "61eb4788c766e425edb72243" },
+  },
+  {
+    date: { $date: 1642809226117 },
+    defect: false,
+    machineID: "machine2",
+    productID: "4",
+    action: "OUT",
+    readTime: "21-01-2022 23:53:45.865",
+    _id: { $oid: "61eb478ac766e425edb72245" },
+  },
+]
+
+export const sensorFailureMockArray = [
+  {
+    machineID: "machine1",
+    sensorID: "productionSpeed1",
+    action: "POWEROFF",
+    failureSeverity: "HIGH",
+    failureType: "UNDER_EXPECTED",
+    description: "Detected value: -11.3498",
+    readingTime: "01-01-2022 19:41:34",
+  },
+  {
+    machineID: "machine2",
+    sensorID: "productionSpeed2",
+    action: "DECREASE_FANS",
+    failureSeverity: "LOW",
+    failureType: "UNDER_EXPECTED",
+    description: "Detected value: -11.3498",
+    readingTime: "01-01-2022 19:41:44",
+  },
+]
