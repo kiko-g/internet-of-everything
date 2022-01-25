@@ -25,17 +25,7 @@ services:
       - ./data/:/data/
     container_name: "edge"
 
-<<<<<<< HEAD
   
-=======
-  # # Emulator Server
-  # emulator:
-  #   build: ./emulator/
-  #   ports:
-  #     - "9999:9999"
-  #   container_name: "emulator"
-
->>>>>>> e0deb89d334abc0476782253f71937b365caba42
   # Database to track product messages
   mongo:
     image: mongo:5.0.5
