@@ -15,6 +15,8 @@ services:
   edge:
     build: ./edge/
     command: sh -c "gradle run"
+    env_file:
+      - .env
     volumes:
       - ./edge/src:/edge/src
       - ./data/:/data/
@@ -70,6 +72,8 @@ services:
   products:
     build: ./failure/
     command: sh -c "gradle runProductSensors"
+    env_file:
+      - .env
     volumes:
       - ./failure/src/:/failure/src/
       - ./data/:/data/
@@ -81,30 +85,37 @@ services:
   chaos-engineering:
     build: ./chaos_engineering/
     command: sh -c "python3 src/mqtt_test.py"
+    env_file:
+      - .env
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
 
   # Simulation Backend
   # simulation-backend:
-  #   build: ./simulation/backend
+  #   build: ./simulation
+  #   env_file:
+  #    - .env
   #   ports:
   #     - "8080:8080"
 
   # Emulator Backend
   emulator-backend:
     build: ./emulator/
+    env_file:
+      - .env
     ports:
       - "9999:9999"
     container_name: "emulator-backend"
 
   # Frontend interface
   frontend:
-    build: ./simulation/frontend
+    build: ./frontend
     ports:
       - "3000:3000"
     volumes:
-      - "./simulation/frontend:/app"
-      - "/app/node_modules"
+        - './frontend:/app'
+        - '/app/node_modules'
     environment:
       - CHOKIDAR_USEPOLLING=true
+
