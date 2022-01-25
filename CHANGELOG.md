@@ -75,7 +75,7 @@
 - Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly
 - Develpoment of a MVP (Minimum Viable Product)
 
-## GLobal Sprint Estimated Total Effort
+## Global Sprint Estimated Total Effort
 - 1333
 
 
@@ -237,7 +237,7 @@ Simple CLI to select types of errors to simulate.
 ## Global Product Increment
 - Start integration between Emulator and Fault Analysis
 
-## Sprint Estimated Total Effort
+## Global Sprint Estimated Total Effort
 - 5719
 
 
@@ -358,18 +358,31 @@ Parse the fatory JSON and create a simulation representation based on it.
 
 ## Global Product Increment
 - Started deeply implementng each vertical seperately, without the integration phase
+- Verticals are still being considered independent
 
-## Sprint Estimated Total Effort
+## Global Sprint Estimated Total Effort
 - 2193
 
 
 # Sprint 1
 
-## Edge
 
-- technology setup
+### Closed PBIs
 
-## Emulator
+- Technology Setup
+  - Effort: 43
+
+## Sprint Estimated Total Effort
+- 43
+
+### Increment
+
+#### Edge Increment
+
+- Java project setup
+- MQTT (Mosquitto) setup for communication 
+
+#### Emulator Increment
 
 - technology setup
 
@@ -377,21 +390,36 @@ Parse the fatory JSON and create a simulation representation based on it.
 
 ### Closed PBIs
 - As a simulator, I want to be able to instantiate machines
+  - Effort: 86
 - As a user, I want to be able to see representations of the machines.
-- As a user, I want to have a button to be able to start a simulation. 
+  - Effort: 43
+- As a user, I want to have a button to be able to start a simulation.
+  - Effort: 43
 - As a simulator, I want to be able to create a representation of the factory floor
+  - Effort: 86
 - As a simulator, I want to loop through the machines and update them.
+  - Effort: 86
+- As a user, I want to have a clear-cut and complete UI so that I can have control over the simulation.
+  - Effort: 86
+
+## Sprint Estimated Total Effort
+- 430
 
 ### Increment
-Technology setup.
-Create a base structure of the factory and a base simulation.
+- Technology setup.
+- Create a base structure of the factory and a base simulation.
 
 ## Chaos Engineering
 
 ### Closed PBIs
 
 - As a chaos engineer, I want to send incoherent data to check if the system is capable of handling it.
+  - Effort: 43
 - As a chaos engineer, I want to delete a machine's data reading to see how the systems reacts.
+  - Effort: 43
+
+## Sprint Estimated Total Effort
+- 86
 
 ### Increment
 
@@ -401,9 +429,32 @@ Setup of mock server and endpoints representing the factory.
 
 ## Fault Analysis
 ### Closed PBIs
-- As a Machine, I want to be able to save all my previous states, so that my data can be analysed. 
+- As a Machine, I want to be able to save all my previous states, so that my data can be analysed.
+  - Effort: 86
 - As a Machine, I want to receive my data, so that my state can be updated.
+  - Effort: 86
 - As a Machine, I want to know if I am overheating, so that I can activate the cooling system.
+  - Effort: 129
+- Define an input and output message format to communicate with machines
+  - Effort: 43 
+
+## Sprint Estimated Total Effort
+- 344
+
 
 ### Increment
-Define an input and output message format to communicate with machines.
+- Define an input and output message format to communicate with machines.
+- Receive and store data
+
+
+## Global Product Increment
+- Initalizing the project, by deciding the tools to be used
+  - Use of Java for different verticals
+  - Use of MQTT for communication between machines
+  - Use of React as the interface tool
+  - Use of JSON to swap information between machines and verticals
+  - Use of docker to aggregate components
+
+
+## Global Sprint Estimated Total Effort
+- 903
