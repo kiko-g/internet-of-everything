@@ -85,30 +85,56 @@
 - parse the config file of each machine and create the necessary objects
 - parse the messages received by the machine's sensors
 
+### Closed PBIs
+
+
+
 ## Simulator
 
 ### Closed PBIs
 
 - As a simulator, I have to receive the user's input.
+  - Effort: 86
 - As a simulator, I have to be able to process the user's input to generate a simulation.
-- As a simulator, I want to be able to send the machine's information to the front-end. 
-- As a Machine, I want to be able to send batches to other machines. 
+  - Effort: 129
+- As a simulator, I want to be able to send the machine's information to the front-end.
+  - Effort: 172
+- As a Machine, I want to be able to send batches to other machines.
+  - Effort: 86
 - As a Machine, I want to be able to receive batches from other machines.
+  - Effort: 86
 - As a Simulator, I want to be able to manage the inputs and outputs of the machines.
+  - Effort: 172
 - As a Machine, I want to be able to represent my state in JSON.
-- Adjust factory representation in simulation UI 
+  - Effort: 172
+- Adjust factory representation in simulation UI
+  - Effort: 215
 - Readjust JSON Parser for new input
+  - Effort: 301
 - Create sensor abstraction for the machines
+  - Effort: 215
 - As a machine, I want to be able to generate my state based on a normal distribution after each batch.
-- Readjust machine structure 
-- Generate a final JSON representation of the factory
-- As a user, I want to toggle between the initial and final representation of the machines 
-- Create Batch class
+  - Effort: 172
+- Readjust machine structure.
+  - Effort: 86
+- Generate a final JSON representation of the factory.
+  - Effort: 215
+- As a user, I want to toggle between the initial and final representation of the machines.
+  - Effort: 215
+- Create Batch class.
+  - Effort: 215
 - Simulate sensors behaviour
+  - Effort: 258
 - As a Batch, I want to represent my state in JSON
-- As a Batch, I want to know in which machine an error occurred when I need to be discarded 
-- Presets radio allow user to change the initial factory configuration 
+  - Effort: 86
+- As a Batch, I want to know in which machine an error occurred when I need to be discarded.
+  - Effort: 172
+- Presets radio allow user to change the initial factory configuration
+  - Effort: 86
 - Upload a JSON file and it gets registered as a preset
+  - Effort: 86
+
+ 
 
 ### Increment
 Complete functioning of the factory simulation, generating sensors values and batches processing.
@@ -119,8 +145,11 @@ Functional GUI that allows for upload of a factory configuration and running sim
 ### Closed PBIs
 
 - As a chaos engineer, I want to target a specific machine to receive sequential errors. 
+  - Effort: 86
 - As a chaos engineer, i want to test the error handling mechanisms to see if they can correctly identify the errors injected.
+  - Effort: 129
 - As a chaos engineer, i want to be able to easily select the script to execute from a command.
+  - Effort: 86
 
 ### Increment 
 
@@ -134,12 +163,20 @@ Simple CLI to select types of errors to simulate.
 ## Fault Analysis
 ### Closed PBIs
 - As a programmer, I want to update the graph parser, once it was updated, so as to update internally the manufacturing structure.
+  - Effort: 129
 - As a failure detection vertical, I want to receive sensor updates according to the new format, so that I can correctly interpret the failures. 
+  - Effort: 129
 - As a User, I want to analyse the variance of the sensor measures so that I can prevent failures.
+  - Effort: 172
 - As a user, I want to be able to know the production rate of each machine, so that I can detect machines that are producing many defective products.
-- As a user, I want to know how many products passed the quality control, so that I can detect if the machines are generating too many defective products. 
-- As a User, I want to know if the machine measures are within the expected range, so that I can handle failures. 
-- As a User, I want to analyse the values of all the machine sensors, so that I can detect failures with more confidence. 
+  - Effort: 129
+- As a user, I want to know how many products passed the quality control, so that I can detect if the machines are generating too many defective products.
+  - Effort: 172
+- As a User, I want to know if the machine measures are within the expected range, so that I can handle failures.
+  - Effort: 129
+- As a User, I want to analyse the values of all the machine sensors, so that I can detect failures with more confidence.
+  - Effort: 258
+ 
 ### Increment
 - Add quality state in the product output message and discard defective products - getOutputMessage of the ProductSensor
 - Calculate rate of defective products based on the output messages:
