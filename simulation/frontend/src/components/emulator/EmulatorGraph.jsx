@@ -5,11 +5,14 @@ import axios from 'axios';
 
 
 export default function EmulatorGraph() {
-  const TIME_BETWEEN_FETCH = 600000
+  const TIME_BETWEEN_FETCH = 2000
   const [nodes, setNodes] = useState([])
   const [responseEdges, setResponseEdges] = useState([])
   const [edges, setEdges] = useState([])
   const [id, setId] = useState(0)
+  const [lastTime, setLastTime] = useState(0)
+  const [update, setUpdate] = useState(true)
+  const [currentTime, setCurrentTime] = useState(Date.now())
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
@@ -99,45 +102,46 @@ export default function EmulatorGraph() {
     },
   }
 
+
   useEffect(() => {
+    console.log(update);
+    console.log(Date.now());
+    if(!update) return
+
+    setUpdate(false)
+
+    console.log("here");
     instance.get()
     .then((res) => {
       console.log(res)
       let data = res.data
       let machines = data.machines
-      setNodes(() => {
-        if (machines.length === 0) {
-          return []
-        } 
-        let nodes = []
-        machines.forEach((machine, index) => {
-          let color = "#009900"
-          if(!machine.ok)
-            color = "#990000" 
-          if(!machine.on)
-            color = "#4d4d4d"
-          nodes.push({ 
-            id: index, 
-            label: machine.id, 
-            color: color,
-            isOn: machine.on,
-            isOK: machine.ok
-          })
+      
+      if (machines.length === 0) {
+        setNodes([])
+      } 
+      let nodes = []
+      machines.forEach((machine, index) => {
+        let color = "#009900"
+        if(!machine.ok)
+          color = "#990000" 
+        if(!machine.on)
+          color = "#4d4d4d"
+        nodes.push({ 
+          id: index, 
+          label: machine.id, 
+          color: color,
+          isOn: machine.on,
+          isOK: machine.ok
         })
-        return nodes
       })
-      setResponseEdges(data.edges)
-    })
-    .catch(err=>console.log(err))
-  }, [])
-
-  useEffect(() => {
-    setEdges(() => {
-      if (responseEdges.length === 0) {
-        return []
+      setNodes(nodes)
+      
+      if (data.edges.length === 0) {
+        setEdges([])
       } 
       let edges = []
-      responseEdges.forEach((edge, index) => {
+      data.edges.forEach((edge, index) => {
         let from
         let to
         for(let i=0; i<nodes.length; i++){
@@ -150,11 +154,23 @@ export default function EmulatorGraph() {
         }
         edges.push({ id: index, from: from, to: to })
       })
-      return edges
+      setEdges(edges)
+      
     })
-  }, [responseEdges])
+    .catch(err=>console.log(err))
+  }, [update])
 
-  useEffect(() => {}, [edges])
+
+
+  // when edges are updated (graph is displayed), wait some 
+  // time and then change update to true, so that new data
+  // can be fetched
+  useEffect(() => {
+    setTimeout(() => {
+      setUpdate(true)
+    }, 2000)
+  }, [edges])
+
 
 
   return (

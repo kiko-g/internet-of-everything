@@ -14,7 +14,6 @@ class Position2D {
     getDistance(pos) {
         return Math.sqrt(Math.pow(this.x - pos.x, 2) + Math.pow(this.y - pos.y, 2));
     }
-
 }
 
 module.exports = Position2D

@@ -12,7 +12,7 @@ class Sensor {
         this.latest_value = received;
     }
 
-    get getID() {
+    getID() {
         return this.id;
     }
 }

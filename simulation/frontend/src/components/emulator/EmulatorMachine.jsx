@@ -19,18 +19,18 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
     },
   })
 
-  useEffect(() => {
-    instance.get()
-    .then((res) => {
-      let data = res.data
-      setInput(data.input)
-      setOutput(data.output)
-      setSensors(data.sensors)
-    })
-    .catch(err=>console.log(err))
+  // useEffect(() => {
+  //   instance.get()
+  //   .then((res) => {
+  //     let data = res.data
+  //     setInput(data.input)
+  //     setOutput(data.output)
+  //     setSensors(data.sensors)
+  //   })
+  //   .catch(err=>console.log(err))
 
-    setTimeout(() => {}, TIME_BETWEEN_FETCH)
-  })
+  //   setTimeout(() => {}, TIME_BETWEEN_FETCH)
+  // })
 
 
   return (

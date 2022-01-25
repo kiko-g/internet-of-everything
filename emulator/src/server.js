@@ -14,10 +14,6 @@ app.use(function (req, res, next) {
 })
 
 const FACTORY_FLOOR_WIDTH = FACTORY_FLOOR_HEIGHT = 100;
-const MQTT_OPTIONS = {
-    clientId: "node_server",
-    clean: true
-};
 
 //const client = mqtt.connect('mqtt://localhost', MQTT_OPTIONS);
 const client  = new MQTTClient();
@@ -90,14 +86,13 @@ app.get('/graph', (req, res) => {
   const machines = floor.getMachines();
   let res_machines = [];
   let res_edges = [];
-  machines.forEach(machine => {
+  machines.forEach((machine, index) => {
     const id = machine.getID();
     const on = true;
     let ok = true;
     const sensors = machine.getSensors();
-    for(let i = 0; i < sensors.length; i++)
-    {
-      if (sensors[i].hasError)
+    for(let j = 0; j < sensors.length; j++){
+      if (sensors[j].hasError)
       {
         ok = false;
         break;
@@ -105,7 +100,7 @@ app.get('/graph', (req, res) => {
     }
     const connection = floor.getMachineConnections(id);
     res_machines.push({id: id, on: on, ok: ok});
-    res_edges.push({from: id, to: connection});
+    res_edges.push({from: id, to: Object.keys(connection)[0]});
   });
 
   res.send(
