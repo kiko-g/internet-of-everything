@@ -5,20 +5,23 @@ import java.util.Random;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
+import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
-
+import ds.graph.sensor.Sensor;
+import ds.graph.sensor.Values;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MachineSensor extends Sensor {
+public class MachineSensor extends SensorSimulator {
     private Graph machinesGraph;
     private List<String> machineIds;
     private Random rnd = new Random();
     private ScheduledThreadPoolExecutor executor;
 
     public MachineSensor() throws MqttException {
-        super("production/machine");
+        super("machine");
         this.machinesGraph = new Graph();
         this.machineIds = new ArrayList<String>(this.machinesGraph.getMachines());
         this.executor = new ScheduledThreadPoolExecutor(10);
@@ -27,7 +30,7 @@ public class MachineSensor extends Sensor {
     public void init(){
         super.init();
 
-        // Start Publishing with fixed delay
+        //Start Publishing with fixed delay
         Thread messageGenerator = new Thread(() -> this.sendMessage());
         executor.scheduleWithFixedDelay(messageGenerator, 0, 1500, TimeUnit.MILLISECONDS);
     }
@@ -39,25 +42,38 @@ public class MachineSensor extends Sensor {
         int machineIdx = this.rnd.nextInt(this.machineIds.size());
         MachineNode machine = this.machinesGraph.getMachineNode(this.machineIds.get(machineIdx));
         String readTime = Utils.getDateTime(); 
-
-        // Generate random temperature
-        float max = machine.getDefaults().get("temperature") + 3;
-        float min = machine.getDefaults().get("temperature") - 5;
-        float temperature =  Utils.getRandomFloat(min, max);
         
-        JSONObject propertiesObject = new JSONObject();
+        List<String> sensorIds = new ArrayList<String>(machine.getSensors().keySet());
+        int sensorIdx = this.rnd.nextInt(sensorIds.size());
+        Sensor sensor = machine.getSensor(sensorIds.get(sensorIdx));
+        
+        //Generate random values for each sensor
+        JSONObject valuesJson = new JSONObject(); 
+        double errorProbability = 0.3; 
+        ConcurrentHashMap<String, Values> values = sensor.getValues();  
+        values.forEach((key, value) -> {
+            boolean hasError = Utils.getRandomDouble(0, 1) >  ( 1 - errorProbability) ? true: false; 
+            double min = value.getMin();  
+            double max = value.getMax();  
+            double currentValue = 0; 
 
-        propertiesObject.put("temperature", temperature);
-        propertiesObject.put("piecesProduced", 0);
-        propertiesObject.put("volt",16);
-        propertiesObject.put("vibration", 35.1788);
-        propertiesObject.put("pressure",109.2486);
-        propertiesObject.put("rotate", 402.7474);
+            if (hasError){
+                double randomDeviation = Utils.getRandomDouble(1, 20);
+                if (this.rnd.nextInt(1) == 0) 
+                    currentValue = min - randomDeviation;  
+                else 
+                    currentValue = max + randomDeviation; 
+            }  else {
+                currentValue = Utils.getRandomDouble(min, max);
+            }
+            valuesJson.put(key, currentValue);
+        });
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
-        messageObject.put("reading-time", readTime);
-        messageObject.put("properties", propertiesObject);
+        messageObject.put("sensorID", sensor.getId());
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", valuesJson);
         
         this.publish(messageObject.toString());
     }

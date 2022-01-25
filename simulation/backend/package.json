@@ -5,10 +5,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon server.js",
-    "style:check": "npm run prettier --check .",
-    "style:write": "npm run prettier --write ."
+    "start": "node server.js",
+    "style:check": "npx prettier --check .",
+    "style:write": "npx prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -16,9 +17,11 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.15",
-    "package.json": "^2.0.1"
+    "package.json": "^2.0.1",
+    "random-normal": "^1.0.0"
   },
   "devDependencies": {
+    "jest": "^27.4.7",
     "prettier": "2.5.1"
   }
 }

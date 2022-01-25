@@ -1,104 +1,183 @@
 package ds.publisher;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
+import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.MachineNode;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProductSensor extends Sensor {
+public class ProductSensor extends SensorSimulator {
     private Graph machinesGraph;
     private ScheduledThreadPoolExecutor executor;
     private Random rnd = new Random();
 
     public ProductSensor() throws MqttException {
-        super("production/product");
+        super("product");
         this.executor = new ScheduledThreadPoolExecutor(100);
     }
 
-    public void init(){
+    public void init() {
         super.init();
         this.machinesGraph = new Graph();
-        
-        for(MachineNode machine: this.machinesGraph.getStartMachines()){
-            int time = this.rnd.nextInt(3000 - 2000) + 2000;
-            executor.scheduleWithFixedDelay(new Thread(() -> this.simulateOutput(machine)), time, time, TimeUnit.MILLISECONDS);
-        }
+        testTracking();
+
+        // MachineNode machine;
+        // try {
+        // machine = this.machinesGraph.getStartMachine();
+        // int time = this.rnd.nextInt(2000 - 1000) + 1000;
+        // executor.scheduleWithFixedDelay(new Thread(() ->
+        // this.simulateInputOutput(machine)), time, time, TimeUnit.MILLISECONDS);
+
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
     }
 
-    private void simulateOutput(MachineNode startMachine){
+    private void testTracking() {
+        int productID = 1;
+        try {
+            while (true) {
+                Thread.sleep(4000);
+                publishTrackingMessage("machine1", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine1", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "in", "IN", productID);
+                publishTrackingMessage("machine1", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "out", "OUT", productID);
+                publishTrackingMessage("machine1", "out", "OUT", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "in", "IN", productID+1);
+                publishTrackingMessage("machine3", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine2", "out", "OUT", productID+1);
+                publishTrackingMessage("machine4", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "in", "IN", productID+1);
+                publishTrackingMessage("machine4", "out", "OUT", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine3", "out", "OUT", productID+1);
+                publishTrackingMessage("machine5", "in", "IN", productID);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "out", "OUT", productID);
+                publishTrackingMessage("machine4", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine4", "out", "OUT", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "in", "IN", productID+1);
+                Thread.sleep(1000);
+                publishTrackingMessage("machine5", "out", "OUT", productID+1);
+                productID+=2;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void publishTrackingMessage(String machineID, String sensorID, String action, int productID) {
+        String readTime = Utils.getDateTime();
+        JSONObject messageObject = new JSONObject();
+        messageObject.put("machineID", machineID);
+        messageObject.put("sensorID", sensorID);
+
+        JSONObject values = new JSONObject();
+        values.put("productID", String.valueOf(productID));
+        values.put("action", action);
+        values.put("defect", false);
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
+
+        this.publish(messageObject.toString());
+    }
+
+    private void simulateOutput(MachineNode startMachine) {
+
+        // Simulate defective product
+        boolean higherDefectProbability = (rnd.nextInt(20) == 0);
+        double defectProbability = 0;
+        if(higherDefectProbability){
+            double randomDeviation = Utils.getRandomDouble(10, 50);
+            defectProbability = (startMachine.getDefectProbability() + randomDeviation)/100;
+        } else {
+            defectProbability = startMachine.getDefectProbability() / 100;
+        }
+        boolean hasDefect = Utils.getRandomDouble(0, 1) >  ( 1 - defectProbability) ? true: false; 
+
         // Send output message
-        String message = this.getOutputMessage(startMachine);
+        String message = this.getOutputMessage(startMachine, hasDefect);
         this.publish(message);
 
-        List<MachineNode> nextMachines = startMachine.getNext();
-
-        if(nextMachines.size() > 0){
-            // Get one of the next machines
-            Integer machineIdx = this.rnd.nextInt(nextMachines.size());
-            MachineNode nextMachine = nextMachines.get(machineIdx.intValue());
-            
-            // Schedule next machine input message
+        // Schedule next machine input message
+        MachineNode nextMachine = startMachine.getNext();
+        if (nextMachine != null && !hasDefect) {
             int timeIn = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine, startMachine.getOutput())),timeIn,TimeUnit.MILLISECONDS);
+            executor.schedule(new Thread(() -> this.simulateInputOutput(nextMachine)), timeIn, TimeUnit.MILLISECONDS);
         }
     }
 
-    private void simulateInputOutput(MachineNode machine, String product){
+    private void simulateInputOutput(MachineNode machine) {
+
         // Send input message
-        machine.addCurrentInput(product);
-        String message = this.getInputMessage(machine, product);
+        String message = this.getInputMessage(machine);
         this.publish(message);
 
-        // Received enough subproducts from all child machines to produce its product
-        if(machine.canProduce()){ 
-            // Reset inputs
-            machine.cleanProducedInput();
-
-            // Schedule output message
-            int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
-            executor.schedule(new Thread(() -> this.simulateOutput(machine)),timeOut,TimeUnit.MILLISECONDS);
-        }
+        // Schedule output message
+        int timeOut = this.rnd.nextInt(2000 - 1000) + 1000;
+        executor.schedule(new Thread(() -> this.simulateOutput(machine)), timeOut, TimeUnit.MILLISECONDS);
     }
-
 
     /**
      * This method simulates reading of a product state
      */
-    protected String getOutputMessage(MachineNode machine){
-        String readTime = Utils.getDateTime(); 
+    protected String getOutputMessage(MachineNode machine, boolean hasDefect) {
+        String readTime = Utils.getDateTime();
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
-        messageObject.put("reading-time", readTime);
-        messageObject.put("product", machine.getOutput());
-        messageObject.put("state", "out");
-        
-        return messageObject.toString(); 
+        messageObject.put("sensorID", "qrCodeOut");
+
+        JSONObject values = new JSONObject();
+        values.put("materialID", 0);
+        values.put("action", "OUT");
+        values.put("defect", hasDefect);
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
+
+        return messageObject.toString();
     }
 
-        /**
+    /**
      * This method simulates reading of a product state
      */
-    protected String getInputMessage(MachineNode machine, String product){
-        String readTime = Utils.getDateTime(); 
+    protected String getInputMessage(MachineNode machine) {
+        String readTime = Utils.getDateTime();
 
         JSONObject messageObject = new JSONObject();
         messageObject.put("machineID", machine.getId());
-        messageObject.put("reading-time", readTime);
-        messageObject.put("product", product);
-        messageObject.put("state", "in");
-        
-        return messageObject.toString(); 
+        messageObject.put("sensorID", "qrCodeIn");
+
+        JSONObject values = new JSONObject();
+        values.put("materialID", 0);
+        values.put("action", "IN");
+        values.put("defect", false);
+        messageObject.put("readingTime", readTime);
+        messageObject.put("values", values);
+
+        return messageObject.toString();
     }
 
     public static void main(String[] args) {
 
-        if(args.length > 0){
+        if (args.length > 0) {
             System.err.println("Usage: java ProductSensor");
         }
 

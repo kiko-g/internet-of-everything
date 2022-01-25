@@ -23,14 +23,14 @@ public class Parser {
 
     public static void main(String[] args) throws IOException {
 
-        final File folder = new File("src/main/java/machinesJSON");
+        final File folder = new File("../data");
         ArrayList<String> files = listFilesForFolder(folder);
 
         for (String file: files) {
             //JSON parser object to parse read file
             JSONParser jsonParser = new JSONParser();
 
-            try (FileReader reader = new FileReader("src/main/java/machinesJSON/" + file))
+            try (FileReader reader = new FileReader("../data/" + file))
             {
                 //Read JSON file
                 Object obj = jsonParser.parse(reader);

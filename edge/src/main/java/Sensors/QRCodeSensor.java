@@ -48,4 +48,5 @@ public class QRCodeSensor extends Sensor {
 
     @Override
     public void generateData() {}
+
 }
