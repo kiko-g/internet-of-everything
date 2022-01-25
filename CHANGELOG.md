@@ -72,7 +72,28 @@
 
 # Sprint 3
 
-## Edge
+### Closed PBIs
+
+- Implement a server to process data that comes fom the edge layer.
+  - Effort: 172
+- Define a machine configuration file and the respective parser.
+  - Effort: 86
+- Implement an object that emulates the state of a raw material.
+  - Effort: 43
+- Generate sensor data.
+  - Effort: 86
+- Send a machine's configuration file to the server once the machine and the server are first connected
+  - Effort: 43
+- Implement an MQTT Client on server
+  - Effort: 43
+- Create object to represent each sensor
+  - Effort: 86
+- Implement an object emulating a working machine.
+  - Effort: 86
+
+### Increment
+
+#### Edge Increment
 
 - added generated data by some sensors
 - that data is sent by MQTT to the topics defined in wiki (`machine/id` and `product/id`)
@@ -80,13 +101,10 @@
 - during boot of each machine that config file is sent via MQTT to the topic `startup`
 - the config file is parsed in order to create in runtime the necessary java objects to run the machines and the sensors
 
-## Emulator
+#### Emulator Increment
 
 - parse the config file of each machine and create the necessary objects
 - parse the messages received by the machine's sensors
-
-### Closed PBIs
-
 
 
 ## Simulator
@@ -133,8 +151,19 @@
   - Effort: 86
 - Upload a JSON file and it gets registered as a preset
   - Effort: 86
+- Parse Simulation response
+  - Effort: 172
+- Simulation graph is rebuilt and properly displayed.
+  - Effort: 43
+- Factory representation for the simulation follows the new specification.
+  - Effort: 43
+- New machine properties properly displayed.
+  - Effort: 86
+- Graph node shows machine properties on click
+  - Effort: 86 
 
- 
+    
+
 
 ### Increment
 Complete functioning of the factory simulation, generating sensors values and batches processing.
