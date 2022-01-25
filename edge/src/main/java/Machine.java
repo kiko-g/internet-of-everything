@@ -77,7 +77,6 @@ public class Machine extends MQTTClient implements Runnable {
         return sensors;
     }
 
-
     private void setQRMaterial(Material material, QRCodeSensor.Action action){
         for(QRCodeSensor sensor : getQRSensors(action)){
             sensor.setMaterial(material.materialID,material.defect);
@@ -131,7 +130,10 @@ public class Machine extends MQTTClient implements Runnable {
             for (Sensor sensor: this.sensors) {
                 if(sensor.hasNewData()) {
                     JSONObject data = sensor.readData();
-                    this.publishMessage(this.productTopic, data.toString().getBytes());
+                    if (sensor.getClass() == QRCodeSensor.class)
+                        this.publishMessage(this.productTopic, data.toString().getBytes());
+                    else
+                        this.publishMessage(this.machineTopic, data.toString().getBytes());
                 }
             }
         }
