@@ -48,7 +48,7 @@ class FactoryFloor {
         return this.machines_map[machine_id];
     }
 
-    get getMachines(){
+    getMachines(){
         return this.machines_map;
     }
 }

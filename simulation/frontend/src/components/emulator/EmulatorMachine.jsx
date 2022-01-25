@@ -13,8 +13,7 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
-    baseURL: "https://webhook.site/fecf4256-b6f5-4eeb-899e-26cba2d1b01e",
-    //baseURL: "https://emulator-backend/machine/" + id,
+    baseURL: "https://emulator-backend/machine/" + id,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },

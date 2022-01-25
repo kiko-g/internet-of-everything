@@ -7,6 +7,12 @@ const {Sensor, EnergySensor, OrientationSensor, VelocitySensor,
 const express = require('express');
 const app = express();
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000")
+  res.header("Access-Control-Allow-Headers", "*")
+  next()
+})
+
 const FACTORY_FLOOR_WIDTH = FACTORY_FLOOR_HEIGHT = 100;
 const MQTT_OPTIONS = {
     clientId: "node_server",
@@ -80,8 +86,8 @@ client.on('message', function (topic, message) {
 
 // === DASHBOARD ===
 
-app.get('/graph', function(req, res) {
-  const machines = FactoryFloor.getMachines();
+app.get('/graph', (req, res) => {
+  const machines = floor.getMachines();
   let res_machines = [];
   let res_edges = [];
   machines.forEach(machine => {
@@ -97,7 +103,7 @@ app.get('/graph', function(req, res) {
         break;
       }
     }
-    const connection = FactoryFloor.getMachineConnections(id);
+    const connection = floor.getMachineConnections(id);
     res_machines.push({id: id, on: on, ok: ok});
     res_edges.push({from: id, to: connection});
   });
@@ -111,9 +117,9 @@ app.get('/graph', function(req, res) {
 
 });
 
-app.get('/machine/:machine_id', function(req, res) {
+app.get('/machine/:machine_id', (req, res) => {
   const machine_id = req.params.machine_id;
-  const machine = FactoryFloor.getMachine(machine_id);
+  const machine = floor.getMachine(machine_id);
   const input = machine.input;
   const output = machine.output;
   let res_sensors = [];
@@ -135,6 +141,6 @@ app.get('/machine/:machine_id', function(req, res) {
   );
 });
 
-app.listen(8080, function() {
-  console.log('Listening for dashboard connections on port 8080');
+app.listen(8083, function() {
+  console.log('Listening for dashboard connections on port 8083');
 });

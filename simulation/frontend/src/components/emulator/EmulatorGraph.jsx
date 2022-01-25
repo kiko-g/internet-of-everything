@@ -13,8 +13,7 @@ export default function EmulatorGraph() {
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
-    baseURL: "https://webhook.site/edec4899-44a5-4ff5-a75f-6cdbf0e28b17",
-    //baseURL: "https://emulator-backend/graph",
+    baseURL: "http://localhost:8083/graph",
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
@@ -103,6 +102,7 @@ export default function EmulatorGraph() {
   useEffect(() => {
     instance.get()
     .then((res) => {
+      console.log(res)
       let data = res.data
       let machines = data.machines
       setNodes(() => {
