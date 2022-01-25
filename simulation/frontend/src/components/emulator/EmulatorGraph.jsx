@@ -7,12 +7,9 @@ import axios from 'axios';
 export default function EmulatorGraph() {
   const TIME_BETWEEN_FETCH = 2000
   const [nodes, setNodes] = useState([])
-  const [responseEdges, setResponseEdges] = useState([])
   const [edges, setEdges] = useState([])
   const [id, setId] = useState(0)
-  const [lastTime, setLastTime] = useState(0)
   const [update, setUpdate] = useState(true)
-  const [currentTime, setCurrentTime] = useState(Date.now())
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
@@ -104,8 +101,6 @@ export default function EmulatorGraph() {
 
 
   useEffect(() => {
-    console.log(update);
-    console.log(Date.now());
     if(!update) return
 
     setUpdate(false)
@@ -168,7 +163,7 @@ export default function EmulatorGraph() {
   useEffect(() => {
     setTimeout(() => {
       setUpdate(true)
-    }, 2000)
+    }, TIME_BETWEEN_FETCH)
   }, [edges])
 
 
