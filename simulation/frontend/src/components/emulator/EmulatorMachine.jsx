@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react"
 import { StatusOnlineIcon } from "@heroicons/react/outline"
 import axios from 'axios';
+import { resolveStatus } from "../../utils"
 
-export default function Machine({ id, classnames, isDetailed }) {
-  const [isOn, setIsOn] = useState(true)
-  const [isOk, setIsOk] = useState(true)
+export default function Machine({ id, on, ok, classnames, isDetailed }) {
+  const TIME_BETWEEN_FETCH = 300000
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [sensors, setSensors] = useState([])
+  const isOn = on
+  const isOk = ok
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
-    baseURL: "https://webhook.site/244b3fdb-d028-49af-ada8-569d004bf69e",
+    baseURL: "https://webhook.site/fecf4256-b6f5-4eeb-899e-26cba2d1b01e",
     //baseURL: "https://emulator-backend/machine/" + id,
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -21,10 +23,15 @@ export default function Machine({ id, classnames, isDetailed }) {
   useEffect(() => {
     instance.get()
     .then((res) => {
-
+      let data = res.data
+      setInput(data.input)
+      setOutput(data.output)
+      setSensors(data.sensors)
     })
     .catch(err=>console.log(err))
-  }, [])
+
+    setTimeout(() => {}, TIME_BETWEEN_FETCH)
+  })
 
 
   return (
@@ -35,16 +42,21 @@ export default function Machine({ id, classnames, isDetailed }) {
       {/* Headline */}
       <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
         <h5 className="mt-0 uppercase tracking-wide text-lg font-mono">{id}</h5>
-        <span className="flex items-start text-sm">
-          {isOn ? (
+        {console.log(isOn)}
+        {isOn ? (
+          <span className="flex items-start text-sm">
+            {"online"}
             <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-teal-400 dark:text-teal-400" />
-          ) : (
+          </span>
+        ) : (
+          <span className="flex items-start text-sm">
+            {"offline"}
             <StatusOnlineIcon className="h-6 w-6 ml-1 pb-0.5 text-rose-400 dark:text-rose-500" />
-          )}
-        </span>
+            </span>
+        )}
       </div>
 
-      {/* Sensors */}
+      {/* Sensors 
       {isDetailed ? (
         <ul className="space-y-[-3px]">
           {Object.keys(sensors).map((key, index) => (
@@ -75,6 +87,7 @@ export default function Machine({ id, classnames, isDetailed }) {
           ))}
         </ul>
       ) : null}
+      */}
     </div>
   )
 }

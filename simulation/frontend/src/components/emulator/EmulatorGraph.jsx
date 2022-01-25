@@ -3,8 +3,9 @@ import Graph from "react-graph-vis"
 import EmulatorMachine from "./EmulatorMachine"
 import axios from 'axios';
 
-let id = 0
+
 export default function EmulatorGraph() {
+  const TIME_BETWEEN_FETCH = 600000
   const [nodes, setNodes] = useState([])
   const [responseEdges, setResponseEdges] = useState([])
   const [edges, setEdges] = useState([])
@@ -12,7 +13,7 @@ export default function EmulatorGraph() {
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
-    baseURL: "https://webhook.site/244b3fdb-d028-49af-ada8-569d004bf69e",
+    baseURL: "https://webhook.site/edec4899-44a5-4ff5-a75f-6cdbf0e28b17",
     //baseURL: "https://emulator-backend/graph",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -115,7 +116,13 @@ export default function EmulatorGraph() {
             color = "#990000" 
           if(!machine.on)
             color = "#4d4d4d"
-          nodes.push({ id: index, label: machine.id, color: color })
+          nodes.push({ 
+            id: index, 
+            label: machine.id, 
+            color: color,
+            isOn: machine.on,
+            isOK: machine.ok
+          })
         })
         return nodes
       })
@@ -170,7 +177,14 @@ export default function EmulatorGraph() {
             }}
           />
           <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-            <EmulatorMachine id={nodes[id].label} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={true} />
+            <EmulatorMachine 
+              id={nodes[id].label} 
+              on={nodes[id].on}
+              ok={nodes[id].ok}
+              key={`graph-props-${id}`} 
+              classnames="col-span-1 min-w-full" 
+              isDetailed={true} 
+            />
           </div>
         </>
       ) : (
