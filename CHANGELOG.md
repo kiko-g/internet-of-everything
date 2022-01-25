@@ -243,17 +243,31 @@ Simple CLI to select types of errors to simulate.
 
 # Sprint 2
 
-## Edge
+### Closed PBIs
 
-- make the Edge a MQTT Client
+- Implement a server that knows the topology of the factory (machine's nodes graph)
+  - Effort: 129
+- Implement an MQTT Client on Edge layer
+  - Effort: 43 
+- Make an MQTT broker to allow communication between edge and server layers.
+  - Effort: 43
 
-## Mosquitto
+## Sprint Estimated Total Effort
+- 215
 
-- create a MQTT Broker using mosquitto
+### Increment
 
-## Emulator
+#### Edge Increment
 
-- make the emulator a MQTT Client
+- make the Edge an MQTT Client
+
+#### Mosquitto Increment
+
+- create an MQTT Broker using mosquitto
+
+#### Emulator Increment
+
+- make the emulator is a MQTT Client
 - store information relative to the factory topology
 
 
@@ -262,9 +276,23 @@ Simple CLI to select types of errors to simulate.
 ### Closed PBIs
 
 - As a user, I want to be able to change variables in a UI
+  - Effort: 43
 - As a user, I want to see the actual state of each machine before the simulation.
+  - Effort: 43
 - As a Simulator, I want to be able to read the representation of the factory floor from a JSON file.
-- As a user, I want to be able to see the layout of the factory floor. 
+  - Effort: 172
+- As a user, I want to be able to see the layout of the factory floor.
+  - Effort: 215
+- Machines show their input, output and links
+  - Effort: 86
+- Factory has an interactive graph representation
+  - Effort: 86
+ 
+
+
+## Sprint Estimated Total Effort
+- 645
+
 
 ### Increment
 
@@ -274,36 +302,66 @@ Parse the fatory JSON and create a simulation representation based on it.
 
 ### Closed PBIs
 - As a chaos engineer, I want to modify the data format to check if the system can handle it.
+  - Effort: 86 
 - As a chaos engineer, I want to cause a machine to display over-vibration to see if the system can detect it and react to it properly.
+  - Effort: 43
 - As a chaos engineer, I want to create new fake machine data readings to see if the system can detect them.
+  - Effort: 86 
 - As a chaos engineer, I want to cause a machine to display over-pressure to see if the system can detect it and react to it properly.
+  - Effort: 43 
 - As a chaos engineer, I want to cause a machine to display overheating to see if the system can detect it and react to it properly.
+  - Effort: 86
 - As a chaos engineer, i want to have a simple endpoint server to view my error injections.
+  - Effort: 86 
 - As a chaos engineer, i want to overload the system with messages, to simulate a Ddos attack.
+  - Effort: 86 
 - As a chaos engineer, I want cause a machine to display negative values where it doesn't make sense (ex.: vibration) to see if the system can react to it properly.
+  - Effort: 43
+- V4 feature /python-github-actions
+  - Effort: 43 
+
+## Sprint Estimated Total Effort
+- 602
 
 ### Increment
-Setup of github workflow run.
-Creation of scripts simulating various errors in json used in the communication.
-Improvements in the mock server and endpoints structure.
+- Setup of github workflow run.
+- Creation of scripts simulating various errors in json used in the communication.
+- Improvements in the mock server and endpoints structure.
 
 
 ## Fault Analysis
 ### Closed PBIs
 - As a User I want the product phases to be defined, so that I can have a reference of the production state of my product.
+  - Effort: 129
 - As a User I want to know the the location(production phase) of each product, so that I can give tracking information to the end user.
-- As a User, I want to be able to know the machine graph and visualise it, so that I can locate the products. 
+  - Effort: 215
+- As a User, I want to be able to know the machine graph and visualise it, so that I can locate the products.
+  - Effort: 258
 - As a User I want to know when a product enters/leaves a machine, so that the product can be tracked.
+  - Effort: 86
+- Define Github Actions in Java
+  - Effort: 43
+
+## Sprint Estimated Total Effort
+- 731
 
 
 ### Increment
-Add github workflow run
-Machine Graph as file
-Define the input and output for each machine and define the default values of the machine
-Receive messages
-Update machine product counter and inputs
-Update phase state
-Compute number of products in each phase
+- Add github workflow run
+- Machine Graph as file
+- Define the input and output for each machine and define the default values of the machine
+- Receive messages
+- Update machine product counter and inputs
+- Update phase state
+- Compute number of products in each phase
+
+
+## Global Product Increment
+- Started deeply implementng each vertical seperately, without the integration phase
+
+## Sprint Estimated Total Effort
+- 2193
+
 
 # Sprint 1
 
