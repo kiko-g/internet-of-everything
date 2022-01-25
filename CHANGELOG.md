@@ -15,8 +15,12 @@
 - Track Products around the Factory
   - Effort: 258
 
+## Sprint Estimated Total Effort
+- 258
 
 ### Increment
+
+
 
 ## Simulator
 
@@ -28,13 +32,15 @@
   - Effort: 172 
 - Fault Analysis Representation
   - Effort: 129   
-
 - As a user, I want to see the representation of the sensors in each machine
   - Effort: 43
 - As a user, I want to be able to see the final outcome of a simulation
   - Effort: 172
 - As a user, I want to be able upload my own JSON representation of the factory
   - Effort: 172
+
+## Sprint Estimated Total Effort
+- 860
 
 ### Increment
 
@@ -46,6 +52,9 @@
 
 - Refactor: display overvibration needs to work with mqtt
   - Effort: 43
+
+## Sprint Estimated Total Effort
+- 43
 
 ### Increment
 
@@ -66,7 +75,7 @@
 - Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly
 - Develpoment of a MVP (Minimum Viable Product)
 
-## Sprint Estimated Total Effort
+## GLobal Sprint Estimated Total Effort
 - 1333
 
 
@@ -90,6 +99,9 @@
   - Effort: 86
 - Implement an object emulating a working machine.
   - Effort: 86
+
+## Sprint Estimated Total Effort
+- 645
 
 ### Increment
 
@@ -162,6 +174,8 @@
 - Graph node shows machine properties on click
   - Effort: 86 
 
+## Sprint Estimated Total Effort
+- 3612
     
 
 
@@ -179,6 +193,9 @@ Functional GUI that allows for upload of a factory configuration and running sim
   - Effort: 129
 - As a chaos engineer, i want to be able to easily select the script to execute from a command.
   - Effort: 86
+
+## Sprint Estimated Total Effort
+- 301
 
 ### Increment 
 
@@ -205,6 +222,9 @@ Simple CLI to select types of errors to simulate.
   - Effort: 129
 - As a User, I want to analyse the values of all the machine sensors, so that I can detect failures with more confidence.
   - Effort: 258
+
+## Sprint Estimated Total Effort
+- 1118
  
 ### Increment
 - Add quality state in the product output message and discard defective products - getOutputMessage of the ProductSensor
@@ -216,6 +236,10 @@ Simple CLI to select types of errors to simulate.
 
 ## Global Product Increment
 - Start integration between Emulator and Fault Analysis
+
+## Sprint Estimated Total Effort
+- 5719
+
 
 # Sprint 2
 
