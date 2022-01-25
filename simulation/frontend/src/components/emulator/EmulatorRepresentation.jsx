@@ -21,14 +21,10 @@ export default function EmulatorRepresentation() {
   const Tab = (props) => <>{props.children}</>
 
   return (
-    <Tabs activeIndex={1}>
+    <Tabs activeIndex={0}>
       {/* Graph schema */}
       <Tab label="Graph">
-        <EmulatorGraph factory={factory} />
-        <div className={`absolute bottom-8 right-6 z-50`}>
-          {/* <PhaseSwitch hook={[phase, setPhase]} toggle={() => setPhase(!phase)} alt={true} /> */}
-          <span className="p-2 rounded bg-indigo-400/50 text-white">Displaying initial state</span>
-        </div>
+        <EmulatorGraph />
       </Tab>
 
       {/* Detailed list view */}

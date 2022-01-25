@@ -1,191 +1,184 @@
-import React, { Component } from "react"
+import React, { useEffect, useState } from "react"
 import Graph from "react-graph-vis"
-import { colors } from "../../utils"
-import Machine from "../Machine"
+import EmulatorMachine from "./EmulatorMachine"
+import axios from 'axios';
 
 let id = 0
+export default function EmulatorGraph() {
+  const [nodes, setNodes] = useState([])
+  const [responseEdges, setResponseEdges] = useState([])
+  const [edges, setEdges] = useState([])
+  const [id, setId] = useState(0)
 
-export default class EmulatorGraph extends Component {
-  constructor(props) {
-    super(props)
-    this.nodes = []
-    this.edges = []
-    this.factory = this.props.factory
-    this.colors = colors.sort(() => Math.random() - 0.5)
-    this.getRandomColor = () => {
-      return this.colors[Math.floor(Math.random() * this.colors.length)]
-    }
-    this.state = {
-      open: false,
-      options: {
-        clickToUse: false,
-        layout: {
-          hierarchical: {
-            enabled: false,
-            direction: "UD",
-            sortMethod: "hubsize",
-            shakeTowards: "roots",
-            levelSeparation: 150,
-            nodeSpacing: 150,
-            treeSpacing: 200,
-          },
+  const instance = axios.create({
+    timeout: process.env.TIMEOUT || 10000,
+    baseURL: "https://webhook.site/244b3fdb-d028-49af-ada8-569d004bf69e",
+    //baseURL: "https://emulator-backend/graph",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  })
+
+  const options = {
+    clickToUse: false,
+    layout: {
+      hierarchical: {
+        enabled: false,
+        direction: "UD",
+        sortMethod: "hubsize",
+        shakeTowards: "roots",
+        levelSeparation: 150,
+        nodeSpacing: 150,
+        treeSpacing: 200,
+      },
+    },
+    interaction: {
+      hover: true,
+      dragView: true,
+      keyboard: false,
+      multiselect: true,
+      tooltipDelay: 10000,
+      navigationButtons: true,
+      hoverConnectedEdges: false,
+    },
+    physics: {
+      enabled: true,
+      forceAtlas2Based: {
+        gravitationalConstant: -26,
+        centralGravity: 0.005,
+        springLength: 230,
+        springConstant: 0.18,
+        avoidOverlap: 1.5,
+      },
+      maxVelocity: 146,
+      solver: "forceAtlas2Based",
+      timestep: 0.1,
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        updateInterval: 25,
+      },
+    },
+    edges: {
+      width: 1.5,
+      length: 150,
+      color: "#273241",
+      smooth: {
+        enabled: true,
+        type: "dynamic",
+        roundness: 20,
+      },
+      arrows: {
+        from: {
+          enabled: false,
         },
-        interaction: {
-          hover: true,
-          dragView: true,
-          keyboard: false,
-          multiselect: true,
-          tooltipDelay: 10000,
-          navigationButtons: true,
-          hoverConnectedEdges: false,
-        },
-        physics: {
+        to: {
           enabled: true,
-          forceAtlas2Based: {
-            gravitationalConstant: -26,
-            centralGravity: 0.005,
-            springLength: 230,
-            springConstant: 0.18,
-            avoidOverlap: 1.5,
-          },
-          maxVelocity: 146,
-          solver: "forceAtlas2Based",
-          timestep: 0.1,
-          stabilization: {
-            enabled: true,
-            iterations: 1000,
-            updateInterval: 25,
-          },
-        },
-        edges: {
-          width: 1.5,
-          length: 150,
-          color: "#273241",
-          smooth: {
-            enabled: true,
-            type: "dynamic",
-            roundness: 20,
-          },
-          arrows: {
-            from: {
-              enabled: false,
-            },
-            to: {
-              enabled: true,
-              scaleFactor: 1,
-            },
-          },
-        },
-        nodes: {
-          color: "#334155",
-          font: {
-            face: "JetBrains Mono, Fira Code, Consolas",
-            color: "#fff",
-            size: 20,
-          },
-          shape: "box",
-          size: 25,
-          scaling: {
-            min: 10,
-            max: 60,
-            label: {
-              enabled: true,
-              min: 20,
-              max: 32,
-            },
-          },
+          scaleFactor: 1,
         },
       },
-      graph: {
-        nodes: this.createNodes(),
-        edges: this.createEdges(),
+    },
+    nodes: {
+      color: "#334155",
+      font: {
+        face: "JetBrains Mono, Fira Code, Consolas",
+        color: "#fff",
+        size: 20,
       },
-    }
+      shape: "box",
+      size: 25,
+      scaling: {
+        min: 10,
+        max: 60,
+        label: {
+          enabled: true,
+          min: 20,
+          max: 32,
+        },
+      },
+    },
   }
 
-  componentDidMount() {
-    document.addEventListener("click", (e) => {
-      this.setState({
-        open: !this.state.open,
+  useEffect(() => {
+    instance.get()
+    .then((res) => {
+      let data = res.data
+      let machines = data.machines
+      setNodes(() => {
+        if (machines.length === 0) {
+          return []
+        } 
+        let nodes = []
+        machines.forEach((machine, index) => {
+          let color = "#009900"
+          if(!machine.ok)
+            color = "#990000" 
+          if(!machine.on)
+            color = "#4d4d4d"
+          nodes.push({ id: index, label: machine.id, color: color })
+        })
+        return nodes
       })
+      setResponseEdges(data.edges)
     })
-  }
+    .catch(err=>console.log(err))
+  }, [])
 
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return
-    }
-  }
-
-  createNodes() {
-    if (this.factory.length === 0) return []
-    let order = 0
-    let startMachine
-    this.factory.forEach((machine, index) => {
-      if (machine.prevMachineID === "null") {
-        startMachine = machine
-        this.nodes.push({ id: order, label: machine.id, color: this.colors[order % this.colors.length] })
-      }
-    })
-
-    let nextID = startMachine.nextMachineID
-    while (nextID !== "null") {
-      this.edges.push({ from: order, to: order + 1 })
-
-      for (let i = 0; i < this.factory.length; i++) {
-        if (nextID !== this.factory[i].id) continue
-        else {
-          order++
-          nextID = this.factory[i].nextMachineID
-          this.nodes.push({
-            id: order,
-            label: this.factory[i].id,
-            color: this.colors[order % this.colors.length],
-          })
-          break
+  useEffect(() => {
+    setEdges(() => {
+      if (responseEdges.length === 0) {
+        return []
+      } 
+      let edges = []
+      responseEdges.forEach((edge, index) => {
+        let from
+        let to
+        for(let i=0; i<nodes.length; i++){
+          if (nodes[i].label == edge.from) {
+            from = nodes[i].id
+          }
+          if (nodes[i].label == edge.to) {
+            to = nodes[i].id
+          }
         }
-      }
-    }
+        edges.push({ id: index, from: from, to: to })
+      })
+      return edges
+    })
+  }, [responseEdges])
 
-    return this.nodes
-  }
+  useEffect(() => {}, [edges])
 
-  createEdges() {
-    if (this.factory.length === 0) return []
-    return this.edges
-  }
 
-  render() {
-    return (
-      <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
-        {this.state.graph.nodes.length !== 0 ? (
-          <>
-            <Graph
-              graph={this.state.graph}
-              options={this.state.options}
-              events={this.state.events}
-              getNetwork={(network) => {
-                network.on("click", function (properties) {
-                  if (properties.nodes[0] !== undefined) {
-                    document.getElementById("drawer").classList.remove("hidden")
-                    id = properties.nodes[0]
-                  } else {
-                    let drawer = document.getElementById("drawer")
-                    if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
-                  }
-                })
-              }}
-            />
-            <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-              <Machine data={this.factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
-            </div>
-          </>
-        ) : (
-          <div className="flex h-full items-center justify-center">
-            <p className="">Graph is empty!</p>
+  return (
+    <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
+      {nodes.length !== 0 ? (
+        <>
+          <Graph
+            graph={{nodes:nodes, edges:edges}}
+            options={options}
+            getNetwork={(network) => {
+              network.on("click", function (properties) {
+                if (properties.nodes[0] !== undefined) {
+                  document.getElementById("drawer").classList.remove("hidden")
+                  setId(properties.nodes[0])
+                } else {
+                  let drawer = document.getElementById("drawer")
+                  if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
+                }
+              })
+            }}
+          />
+          <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
+            <EmulatorMachine id={nodes[id].label} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={true} />
           </div>
-        )}
-      </div>
-    )
-  }
+        </>
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <p className="">No machines online!</p>
+        </div>
+      )}
+    </div>
+  )
 }
+
