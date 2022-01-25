@@ -13,6 +13,7 @@
 ### Closed PBIs
 
 - Track Products around the Factory
+  - Effort: 258
 
 
 ### Increment
@@ -22,42 +23,51 @@
 ### Closed PBIs
 
 - Retrieve information from sensor failure server
+  - Effort: 172
 - Create a unified page to accommodate other verticals work
+  - Effort: 172 
 - Fault Analysis Representation
+  - Effort: 129   
 
 - As a user, I want to see the representation of the sensors in each machine
+  - Effort: 43
 - As a user, I want to be able to see the final outcome of a simulation
+  - Effort: 172
 - As a user, I want to be able upload my own JSON representation of the factory
-
+  - Effort: 172
 
 ### Increment
+
+- Received and displayed information from the backend allowing integration with other verticals
 
 ## Chaos Engineering
 
 ### Closed PBIs
 
 - Refactor: display overvibration needs to work with mqtt
+  - Effort: 43
 
 ### Increment
+
+- Continued introducing more errors and sent them via MQTT
 
 ## Fault Analysis
 
 ### Closed PBIs
 
-- As a User, I want to handle malformed errors in JSON in order to have a secure way of detecting failures
-- As a Developer, I want to build a database to allow an efficient access to the state of a product, so that vertical 2 can display it in the front-end
-- As a User, I want to know the current state of a product, so that I can track it during production
-- As a Developer, I want to build an API to access product state and possible failures, so that the frontend can display the information
-
-
 
 ### Increment
 
-- Concluded the integration with other verticals by sending messages as http request to the server
+- Concluded the integration with other verticals by sending messages as http request to the server and helping API implementation
+- Added unity tests to automatically check if the code is working as expected
 
 ## Global Product Increment
 
-- Intregration between emulator and fault analysis allowing data to be correctly sent fro the backend to the frontend and displayed accordingly
+- Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly
+- Develpoment of a MVP (Minimum Viable Product)
+
+## Sprint Estimated Total Effort
+- 1333
 
 
 # Sprint 3
