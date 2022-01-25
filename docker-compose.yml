@@ -7,8 +7,8 @@ services:
       - "1883:1883"
     volumes:
       - ./mosquitto/:/mosquitto/
-      - ./mosquitto/data:/mosquitto/data 
-      - ./mosquitto/log:/mosquitto/log 
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
     container_name: "mosquitto"
 
   # Emulator Backend
@@ -25,11 +25,21 @@ services:
       - ./data/:/data/
     container_name: "edge"
 
+<<<<<<< HEAD
   
+=======
+  # # Emulator Server
+  # emulator:
+  #   build: ./emulator/
+  #   ports:
+  #     - "9999:9999"
+  #   container_name: "emulator"
+
+>>>>>>> e0deb89d334abc0476782253f71937b365caba42
   # Database to track product messages
-  mongo: 
+  mongo:
     image: mongo:5.0.5
-    restart: always  
+    restart: always
     env_file:
       - .env
     ports:
@@ -39,16 +49,31 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
 
   mongo-express:
-      image: mongo-express
-      env_file:
-        - .env
-      restart: always
-      ports:
-        - 8081:8081
-      environment:
-        ME_CONFIG_MONGODB_ADMINUSERNAME: "${DB_USERNAME}"
-        ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
-        ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
+    image: mongo-express
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: "${DB_USERNAME}"
+      ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
+      ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
+
+  # Failure Analysis
+  failure-service:
+    build: ./failure/
+    command: sh -c "gradle runFailureService"
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./failure/src/:/failure/src/
+      - ./data/:/data/
+    container_name: "failure-service"
+    depends_on:
+      - mongo
 
   # TODO: delete this when QRCode messages are ready
   products:
@@ -58,21 +83,8 @@ services:
       - ./failure/src/:/failure/src/
       - ./data/:/data/
     container_name: "product-sensors"
-
-  # Failure Analysis
-  failure-service:
-    build: ./failure/
-    command: sh -c "gradle runFailureService"
-    env_file:
-     - .env
-    ports: 
-      - ${SERVER_PORT}:${SERVER_PORT}
-    volumes:
-      - ./failure/src/:/failure/src/
-      - ./data/:/data/
-    container_name: "failure-service"
     depends_on:
-      - mongo
+      - failure-service
     
   # Chaos Engineering, intercepting messages
   chaos-engineering:
@@ -81,12 +93,12 @@ services:
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
-  
+
   # Simulation Backend
-  simulation-backend:
-    build: ./simulation/backend
-    ports:
-      - "8080:8080"
+  # simulation-backend:
+  #   build: ./simulation/backend
+  #   ports:
+  #     - "8080:8080"
 
   # Frontend interface
   frontend:
@@ -94,8 +106,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-        - './simulation/frontend:/app'
-        - '/app/node_modules'
+      - "./simulation/frontend:/app"
+      - "/app/node_modules"
     environment:
       - CHOKIDAR_USEPOLLING=true
     container_name: "frontend"

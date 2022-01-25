@@ -2,9 +2,11 @@ const Position2D = require('./Position2D');
 const Sensor = require('./Sensors/Sensor');
 
 class Machine {
-    constructor(id, x, y) {
+    constructor(id, x, y, input, output) {
         this.id = id;
         this.position = new Position2D(x, y);
+        this.input = input;
+        this.output = output;
         // Data structure for sensors
         this.Sensors = new Array();
     }

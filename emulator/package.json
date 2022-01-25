@@ -1,6 +1,7 @@
 {
     "main": "src/Dashboard/main.js",
     "dependencies": {
+        "express": "^4.17.2",
         "graph": "^0.2.0",
         "jest": "^27.4.5",
         "mqtt": "^4.2.8"

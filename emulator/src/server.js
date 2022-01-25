@@ -4,6 +4,8 @@ const Machine = require('./Machine.js');
 const MQTTClient = require('./MQTTClient.js');
 const {Sensor, EnergySensor, OrientationSensor, VelocitySensor, 
   PositionSensor, ProductionSpeedSensor, QRCodeSensor, TemperatureSensor, VibrationSensor} = require('./Sensors/Sensor.js');
+const express = require('express');
+const app = express();
 
 const FACTORY_FLOOR_WIDTH = FACTORY_FLOOR_HEIGHT = 100;
 const MQTT_OPTIONS = {
@@ -27,7 +29,7 @@ client.on('message', function (topic, message) {
     const json_config = JSON.parse(message.toString());
       //console.log(json_config);
 
-      var machine = new Machine(json_config.id, 1, 1);
+      var machine = new Machine(json_config.id, 1, 1, json_config.input, json_config.output);
 
       for(let i = 0; i < json_config.sensors.length; i++){
         let sensor = json_config.sensors[i];
@@ -69,6 +71,70 @@ client.on('message', function (topic, message) {
       const machineId = data.machineID;
       const sensorId = data.sensorID;
 
-      floor.getMachine(machineId).getSensor(sensorId).compareValues(data.values);
+      const sensor = floor.getMachine(machineId).getSensor(sensorId);
+      sensor.updateLatest(data.values);
+      sensor.compareValues(data.values);
   }
+});
+
+
+// === DASHBOARD ===
+
+app.get('/graph', function(req, res) {
+  const machines = FactoryFloor.getMachines();
+  let res_machines = [];
+  let res_edges = [];
+  machines.forEach(machine => {
+    const id = machine.getID();
+    const on = true;
+    let ok = true;
+    const sensors = machine.getSensors();
+    for(let i = 0; i < sensors.length; i++)
+    {
+      if (sensors[i].hasError)
+      {
+        ok = false;
+        break;
+      }
+    }
+    const connection = FactoryFloor.getMachineConnections(id);
+    res_machines.push({id: id, on: on, ok: ok});
+    res_edges.push({from: id, to: connection});
+  });
+
+  res.send(
+    {
+      machines: res_machines,
+      edges: res_edges
+    }
+  );
+
+});
+
+app.get('/machine/:machine_id', function(req, res) {
+  const machine_id = req.params.machine_id;
+  const machine = FactoryFloor.getMachine(machine_id);
+  const input = machine.input;
+  const output = machine.output;
+  let res_sensors = [];
+
+  const sensors = machine.getSensors();
+  sensors.forEach(sensor => {
+    const id = sensor.id;
+    const type = sensor.constructor.name;
+    const latest_reading = sensor.latest_value;
+    res_sensors.push({id, type, latest_reading});
+  });
+
+  res.send(
+    {
+      sensors: res_sensors,
+      input: input,
+      output: output
+    }
+  );
+});
+
+app.listen(8080, function() {
+  console.log('Listening for dashboard connections on port 8080');
 });
