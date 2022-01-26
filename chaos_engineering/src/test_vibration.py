@@ -16,12 +16,15 @@ def test_over(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["vibration"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "ABOVE_EXPECTED",
-        "value": base_payload["values"]["vibration"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 
@@ -37,12 +40,15 @@ def test_under(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["vibration"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "UNDER_EXPECTED",
-        "value": base_payload["values"]["vibration"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 

@@ -4,6 +4,7 @@ This module creates, sends and tests a null data reading in a machine topic
 import time
 from mqtt_handler.mqtt_handler import MQTTHandler
 from print_color import print_color, TerminalColor
+from utils import test_result
 
 
 def test(mqtt, machine_id, test_number, **kwargs):
@@ -29,10 +30,19 @@ def test(mqtt, machine_id, test_number, **kwargs):
     mqtt.publish(machine_topic, payload)
     time.sleep(kwargs['delay'])
 
-    print_color(
-        f'Test #{test_number}: Cant yet verify this result', TerminalColor.WARNING
-    )
-    return -1
+    expected_values = {
+        "severity": "LOW",
+        "readingTime": None,
+        "machineID": None,
+        "failureType": "FORMAT",
+        "action": "WARNING",
+        "description": "Invalid format for machineID or sensorID",
+        "sensorID": None
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
 
 
 def main():
