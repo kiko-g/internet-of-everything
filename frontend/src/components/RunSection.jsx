@@ -1,6 +1,6 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
-import { PlayIcon } from "@heroicons/react/solid"
+import { PlayIcon, ArrowNarrowRightIcon } from "@heroicons/react/solid"
 import AboutModal from "./utilities/AboutModal"
 import InputBox from "./utilities/InputBox"
 import { Link } from "react-router-dom"
