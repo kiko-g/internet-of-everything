@@ -14,30 +14,33 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 def print_statistics(statistics):
     """ Print the statistics """
 
-    print("|      Test Name       | Number of Tests | Aborted | Aborted (%) " +
+    print("|      Test Name       | Number of Tests | Aborted | Aborted (%) "\
           "| Passed | Passed (%) | Failed | Failed (%) |")
     print()
     for key in statistics:
         no_tests = sum(statistics[key])
         if no_tests == 0:
-            print("| " + "{:<20}".format(key) +
-                  " | " + "{:<15}".format(str(no_tests)) +
-                  " | " + "{:<7}".format(str(statistics[key][0])) +
-                  " | " + "{:<11}".format(str(0)) +
-                  " | " + "{:<6}".format(str(statistics[key][1])) +
-                  " | " + "{:<10}".format(str(0)) +
-                  " | " + "{:<6}".format(str(statistics[key][2])) +
-                  " | " + "{:<10}".format(str(0)) + " |")
+            print(f"| {key:<20}"\
+                  f" | {str(no_tests):<15}"\
+                  f" | {str(statistics[key][0]):<7}"\
+                  f" | {str(0):<11}"\
+                  f" | {str(statistics[key][1]):<6}"\
+                  f" | {str(0):<10}"\
+                  f" | {str(statistics[key][2]):<6}"\
+                  f" | {str(0):<10} |")
         else:
-            print("| " + "{:<20}".format(key) +
-                  " | " + "{:<15}".format(str(no_tests)) +
-                  " | " + "{:<7}".format(str(statistics[key][0])) +
-                  " | " + "{:<11}".format(str("{:.2f}".format(statistics[key][0] / no_tests))) +
-                  " | " + "{:<6}".format(str(statistics[key][1])) +
-                  " | " + "{:<10}".format(str("{:.2f}".format(statistics[key][1] / no_tests))) +
-                  " | " + "{:<6}".format(str(statistics[key][2])) +
-                  " | " + "{:<10}".format(str("{:.2f}".format(statistics[key][2] / no_tests))) +
-                  " |")
+            aborted = str(f"{statistics[key][0] / no_tests:.2f}")
+            passed = str(f"{statistics[key][1] / no_tests:.2f}")
+            failed = str(f"{statistics[key][2] / no_tests:.2f}")
+            print(f"| {key:<20}"\
+                  f" | {str(no_tests):<15}"\
+                  f" | {str(statistics[key][0]):<7}"\
+                  f" | {aborted:<11}"\
+                  f" | {str(statistics[key][1]):<6}"\
+                  f" | {passed:<10}"\
+                  f" | {str(statistics[key][2]):<6}"\
+                  f" | {failed:<10} |")
+
         print()
         statistics[key] = [0, 0, 0]
 
@@ -112,12 +115,7 @@ def main():
         args = test[1]
         success = func(mqtt, machine_id, i, **args)
 
-        if success == -1:  # aborted
-            statistics[func.__name__][0] += 1
-        elif success == 0:  # passed
-            statistics[func.__name__][1] += 1
-        else:  # failed
-            statistics[func.__name__][2] += 1
+        statistics[func.__name__][success + 1] += 1
 
         time.sleep(config['test_delay_seconds'])
         print()
