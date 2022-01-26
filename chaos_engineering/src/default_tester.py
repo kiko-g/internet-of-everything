@@ -14,35 +14,27 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 def print_statistics(statistics):
     """ Print the statistics """
 
-    print("|      Test Name       | Number of Tests | Aborted | Aborted (%) "\
+    print("|      Test Name       | Number of Tests | Aborted | Aborted (%) "
           "| Passed | Passed (%) | Failed | Failed (%) |")
     print()
-    for key in statistics:
-        no_tests = sum(statistics[key])
-        if no_tests == 0:
-            print(f"| {key:<20}"\
-                  f" | {str(no_tests):<15}"\
-                  f" | {str(statistics[key][0]):<7}"\
-                  f" | {str(0):<11}"\
-                  f" | {str(statistics[key][1]):<6}"\
-                  f" | {str(0):<10}"\
-                  f" | {str(statistics[key][2]):<6}"\
-                  f" | {str(0):<10} |")
-        else:
-            aborted = str(f"{statistics[key][0] / no_tests:.2f}")
-            passed = str(f"{statistics[key][1] / no_tests:.2f}")
-            failed = str(f"{statistics[key][2] / no_tests:.2f}")
-            print(f"| {key:<20}"\
-                  f" | {str(no_tests):<15}"\
-                  f" | {str(statistics[key][0]):<7}"\
-                  f" | {aborted:<11}"\
-                  f" | {str(statistics[key][1]):<6}"\
-                  f" | {passed:<10}"\
-                  f" | {str(statistics[key][2]):<6}"\
-                  f" | {failed:<10} |")
+
+    for test_name, values in statistics.items():
+        no_tests = sum(values)
+        aborted = values[0] * 100 / no_tests if no_tests else 0
+        passed = values[1] * 100 / no_tests if no_tests else 0
+        failed = values[2] * 100 / no_tests if no_tests else 0
+
+        print(f"| {test_name:<20}"
+              f" | {no_tests:<15}"
+              f" | {values[0]:<7}"
+              f" | {aborted:<11.2f}"
+              f" | {values[1]:<6}"
+              f" | {passed:<10.2f}"
+              f" | {values[2]:<6}"
+              f" | {failed:<10.2f} |")
 
         print()
-        statistics[key] = [0, 0, 0]
+        values = [0, 0, 0]
 
     return statistics
 
