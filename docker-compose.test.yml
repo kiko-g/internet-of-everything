@@ -7,8 +7,4 @@ services:
       dockerfile: Dockerfile.test
     env_file:
      - .env
-    volumes:
-      - ./failure/src/:/failure/src/
-      - ./failure/build/reports/:/failure/build/reports
-      - ./data/:/data/
     container_name: "failure-test"

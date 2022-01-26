@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ProductionStateTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-26T12:24:30" hostname="LAPTOP-EILQL0GL" time="0.009">
-  <properties/>
-  <testcase name="testGetProductionTimeNoOutputs()" classname="ProductionStateTest" time="0.009"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
