@@ -12,10 +12,10 @@ mosquitto/log/mosquitto.log
 Output/*
 
 # Edge
-build/*
-bin/*
-.idea/*
-.gradle/*
+**/build/*
+**/bin/*
+**/.idea/*
+**/.gradle/*
 
 # Frontend
 node_modules/*

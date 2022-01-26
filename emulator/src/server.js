@@ -7,11 +7,13 @@ const {Sensor, EnergySensor, OrientationSensor, VelocitySensor,
 const express = require('express');
 const app = express();
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000")
+  res.header("Access-Control-Allow-Headers", "*")
+  next()
+})
+
 const FACTORY_FLOOR_WIDTH = FACTORY_FLOOR_HEIGHT = 100;
-const MQTT_OPTIONS = {
-    clientId: "node_server",
-    clean: true
-};
 
 //const client = mqtt.connect('mqtt://localhost', MQTT_OPTIONS);
 const client  = new MQTTClient();
@@ -80,26 +82,25 @@ client.on('message', function (topic, message) {
 
 // === DASHBOARD ===
 
-app.get('/graph', function(req, res) {
-  const machines = FactoryFloor.getMachines();
+app.get('/graph', (req, res) => {
+  const machines = floor.getMachines();
   let res_machines = [];
   let res_edges = [];
-  machines.forEach(machine => {
+  machines.forEach((machine, index) => {
     const id = machine.getID();
     const on = true;
     let ok = true;
     const sensors = machine.getSensors();
-    for(let i = 0; i < sensors.length; i++)
-    {
-      if (sensors[i].hasError)
+    for(let j = 0; j < sensors.length; j++){
+      if (sensors[j].hasError)
       {
         ok = false;
         break;
       }
     }
-    const connection = FactoryFloor.getMachineConnections(id);
+    const connection = floor.getMachineConnections(id);
     res_machines.push({id: id, on: on, ok: ok});
-    res_edges.push({from: id, to: connection});
+    res_edges.push({from: id, to: Object.keys(connection)[0]});
   });
 
   res.send(
@@ -111,9 +112,9 @@ app.get('/graph', function(req, res) {
 
 });
 
-app.get('/machine/:machine_id', function(req, res) {
+app.get('/machine/:machine_id', (req, res) => {
   const machine_id = req.params.machine_id;
-  const machine = FactoryFloor.getMachine(machine_id);
+  const machine = floor.getMachine(machine_id);
   const input = machine.input;
   const output = machine.output;
   let res_sensors = [];
@@ -123,7 +124,8 @@ app.get('/machine/:machine_id', function(req, res) {
     const id = sensor.id;
     const type = sensor.constructor.name;
     const latest_reading = sensor.latest_value;
-    res_sensors.push({id, type, latest_reading});
+    const error = sensor.hasError;
+    res_sensors.push({id, type, error, latest_reading});
   });
 
   res.send(
@@ -135,6 +137,6 @@ app.get('/machine/:machine_id', function(req, res) {
   );
 });
 
-app.listen(8080, function() {
-  console.log('Listening for dashboard connections on port 8080');
+app.listen(8083, function() {
+  console.log('Listening for dashboard connections on port 8083');
 });

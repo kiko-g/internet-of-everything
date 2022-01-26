@@ -8,6 +8,7 @@ class MQTTClient {
         };
 
         this.client = mqtt.connect('tcp://mosquitto:1883', MQTT_OPTIONS);
+        //this.client = mqtt.connect('tcp://localhost:1883', MQTT_OPTIONS);
         
         this.client.on('connect', function () {
             console.log("[MQTT] Connected.");
