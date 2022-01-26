@@ -27,7 +27,7 @@ export default function Header({ currentLocation }) {
                 </Disclosure.Button>
               </div>
               <div className="flex-1 flex items-center justify-between md:items-stretch md:justify-between md:mx-2">
-                <div className="text-slate-600 dark:text-white hover:opacity-80 duration-200 relative hidden md:inline-flex h-auto py-0.5 ml-4 md:mx-2 space-x-12">
+                <div className="text-slate-600 dark:text-white hover:opacity-80 duration-200 relative inline-flex h-auto py-0.5 ml-4 md:mx-2 space-x-12">
                   <Link to="/" className="flex items-center space-x-2">
                     <h2 className="font-bold text-white tracking-tighter duration-150 hover:text-blue-200">
                       Internet of Everything
@@ -60,6 +60,18 @@ export default function Header({ currentLocation }) {
                 <span key="nav-dark-mode" className="rounded-xl text-lg font-medium h-auto mb-4">
                   <DarkModeSwitch />
                 </span>
+                {links.map((location, index) => (
+                  <span className="rounded text-lg font-medium h-auto mb-4">
+                    <Link to={location.location} key={`location-${index}`}>
+                      <button
+                        type="button"
+                        className="text-sky-50 dark:text-white hover:bg-slate-400/50 hover:text-white font-medium tracking-wider uppercase px-1.5 py-0.5 rounded duration-200"
+                      >
+                        <span className={currentLocation === location.title ? "underline" : ""}>{location.title}</span>
+                      </button>
+                    </Link>
+                  </span>
+                ))}
               </div>
             </Disclosure.Panel>
           </>
