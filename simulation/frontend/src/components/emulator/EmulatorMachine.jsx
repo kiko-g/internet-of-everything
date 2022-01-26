@@ -1,36 +1,76 @@
 import React, { useEffect, useState } from "react"
 import { StatusOnlineIcon } from "@heroicons/react/outline"
 import axios from 'axios';
-import { resolveStatus } from "../../utils"
+
+
+function getSensorType(type) {
+  return type.replace('Sensor', '')
+}
+
+function getUnits(type) {
+  switch(type){
+    case "vibration":
+      return "Hz"
+    case "temperature":
+      return "ºC"
+    case "position":
+      return "m"
+    case "energy":
+      return "W"
+    case "velocity":
+      return "m/s"
+    case "orientation":
+      return "º"
+    default:
+      return ""
+  }
+}
+
+function round(value, precision) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
 
 export default function Machine({ id, on, ok, classnames, isDetailed }) {
-  const TIME_BETWEEN_FETCH = 300000
+  const TIME_BETWEEN_FETCH = 1000
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [sensors, setSensors] = useState([])
+  const [updateSensors, setUpdateSensors] = useState(true)
   const isOn = on
   const isOk = ok
 
   const instance = axios.create({
     timeout: process.env.TIMEOUT || 10000,
-    baseURL: "https://emulator-backend/machine/" + id,
+    baseURL: "http://localhost:8083/machine/" + id,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
   })
 
-  // useEffect(() => {
-  //   instance.get()
-  //   .then((res) => {
-  //     let data = res.data
-  //     setInput(data.input)
-  //     setOutput(data.output)
-  //     setSensors(data.sensors)
-  //   })
-  //   .catch(err=>console.log(err))
+  useEffect(() => {
+    if(!updateSensors) return
 
-  //   setTimeout(() => {}, TIME_BETWEEN_FETCH)
-  // })
+    setUpdateSensors(false)
+
+    instance.get()
+    .then((res) => {
+      //console.log(res);
+      let data = res.data
+      setInput(data.input)
+      setOutput(data.output)
+      let sensors = data.sensors
+      sensors.sort((a,b) => (a.type > b.type ? 1 : -1))
+      setSensors(sensors)
+    })
+    .catch(err=>console.log(err))
+  }, [updateSensors])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setUpdateSensors(true)
+    }, TIME_BETWEEN_FETCH)
+  }, [sensors])
 
 
   return (
@@ -41,7 +81,6 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
       {/* Headline */}
       <div className="flex items-start justify-between border-b-2 pb-0.5 mb-2">
         <h5 className="mt-0 uppercase tracking-wide text-lg font-mono">{id}</h5>
-        {console.log(isOn)}
         {isOn ? (
           <span className="flex items-start text-sm">
             {"online"}
@@ -55,38 +94,53 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
         )}
       </div>
 
-      {/* Sensors 
-      {isDetailed ? (
-        <ul className="space-y-[-3px]">
-          {Object.keys(sensors).map((key, index) => (
-            <ul key={`sensor-${id}-${index}`}>
-              {Object.keys(sensors[key])
-                .filter((k, i) => k === "type")
-                .map((k, i) => (
-                  <li className="flex justify-between" key={`sensor-type-${id}-${index}-${k}`}>
-                    <div className="space-x-1">
-                      <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded">
-                        {`sensor`}
-                      </span>
-                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-1 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-                        {`${sensors[key][k]}`}
-                      </span>
-                    </div>
-                    <div className="space-x-1">
-                      <span className="lowercase bg-violet-600/50 text-white dark:bg-violet-400 dark:text-white text-xs font-medium px-1 py-0.5 rounded">
-                        {`id`}
-                      </span>
-                      <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700">
-                        {`${sensors[key]["id"][0]}${sensors[key]["id"][sensors[key]["id"].length - 1]}`}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          ))}
-        </ul>
-      ) : null}
-      */}
+      {/* Sensors */}
+      
+      <ul className="space-y-[-3px]">
+        {sensors.map((sensor, index) => (
+          <ul key={`sensor-${id}-${index}`}>
+            <li className="flex justify-between" key={`sensor-type-${sensor.id}-${index}`}>
+              <div className="space-x-1">
+                <span className="uppercase bg-slate-400 text-white dark:bg-slate-400 dark:text-white text-xs font-medium px-2 py-0.5 rounded" key={`sensor-type-span-${sensor.id}-${index}`}>
+                  {getSensorType(sensor.type)}
+                </span>
+                <span className="lowercase text-right bg-gray-100 text-gray-700 text-xs font-normal px-1 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700" key={`sensor-id-${sensor.id}-${index}`}>
+                  {`${sensor.id}`}
+                </span>
+              </div>
+              <div className="space-x-1">
+                {sensor.error
+                ? (sensor.latest_reading
+                  ? ( Object.keys(sensor.latest_reading).map((key, val) => (
+                    <span className="text-right bg-red-300 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700" key={`sensor-reading-${sensor.id}-${key}`}>
+                      {`${round(sensor.latest_reading[key], 1)} ${getUnits(key)}`}
+                    </span>
+                  )))
+                  : (
+                    <span className="text-right bg-red-300 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700" key={`sensor-reading-${sensor.id}-null`}>
+                      {"null"}
+                    </span>
+                  )
+                ): (sensor.latest_reading
+                  ? ( Object.keys(sensor.latest_reading).map((key, val) => (
+                    <span className="text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700" key={`sensor-reading-${sensor.id}-${key}`}>
+                      {`${round(sensor.latest_reading[key], 1)} ${getUnits(key)}`}
+                    </span>
+                  )))
+                  : (
+                    <span className="text-right bg-gray-100 text-gray-700 text-xs font-normal px-2 py-0.5 rounded dark:bg-gray-100 dark:text-gray-700" key={`sensor-reading-${sensor.id}-null`}>
+                      {"null"}
+                    </span>
+                  )
+                )}
+              </div>
+            </li>
+              
+          </ul>
+        ))}
+      </ul>
+      
+      
     </div>
   )
 }

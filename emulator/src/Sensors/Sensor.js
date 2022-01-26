@@ -32,7 +32,7 @@ class EnergySensor extends Sensor {
     compareValues(received) {
         if(received.energy > this.max || received.energy < this.min){
             this.hasError = true;
-            console.log("Error has occured in energy sensor...");
+            console.log("Error has ocurred in energy sensor...");
         }
         else this.hasError = false;
     }

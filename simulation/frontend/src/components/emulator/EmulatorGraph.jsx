@@ -105,10 +105,9 @@ export default function EmulatorGraph() {
 
     setUpdate(false)
 
-    console.log("here");
     instance.get()
     .then((res) => {
-      console.log(res)
+      //console.log(res)
       let data = res.data
       let machines = data.machines
       
@@ -190,8 +189,8 @@ export default function EmulatorGraph() {
           <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
             <EmulatorMachine 
               id={nodes[id].label} 
-              on={nodes[id].on}
-              ok={nodes[id].ok}
+              on={nodes[id].isOn}
+              ok={nodes[id].isOk}
               key={`graph-props-${id}`} 
               classnames="col-span-1 min-w-full" 
               isDetailed={true} 

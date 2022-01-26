@@ -124,7 +124,8 @@ app.get('/machine/:machine_id', (req, res) => {
     const id = sensor.id;
     const type = sensor.constructor.name;
     const latest_reading = sensor.latest_value;
-    res_sensors.push({id, type, latest_reading});
+    const error = sensor.hasError;
+    res_sensors.push({id, type, error, latest_reading});
   });
 
   res.send(
