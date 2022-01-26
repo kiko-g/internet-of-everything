@@ -2,7 +2,7 @@ import Select from "./Select"
 import Sensor from "./Sensor"
 import Machine from "./Machine"
 import Tabs from "./utilities/Tabs"
-import ForceGraph from "./ForceGraph"
+import SimulationGraph from "./SimulationGraph"
 import ReactJson from "react-json-view"
 import InputBox from "./utilities/InputBox"
 import Scrollbar from "react-scrollbars-custom"
@@ -36,7 +36,7 @@ export default function Representation({ factoryInitialState, factoryFinalState 
     <Tabs activeIndex={1}>
       {/* Simulation graph schema */}
       <Tab label="Graph">
-        <ForceGraph factory={factoryInitial} phaseHook={[phase, setPhase]} />
+        <SimulationGraph factory={factoryInitial} />
         <div className={`absolute bottom-8 right-6 z-50`}>
           <span className="p-2 rounded bg-indigo-500/75 text-white">Displaying initial state</span>
         </div>

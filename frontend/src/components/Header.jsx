@@ -62,7 +62,7 @@ export default function Header({ currentLocation }) {
                   <DarkModeSwitch />
                 </span>
                 {links.map((location, index) => (
-                  <span className="rounded text-lg font-medium h-auto mb-4">
+                  <span className="rounded text-lg font-medium h-auto mb-4" key={`mobile-nav-${index}`}>
                     <Link to={location.location} key={`location-${index}`}>
                       <button
                         type="button"
