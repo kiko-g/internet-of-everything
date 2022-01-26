@@ -21,7 +21,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Set the env variables
       run: |
-        export $(xargs <.env)
+        cat .env >> $GITHUB_ENV
+    - name: Test
+      run: echo $DB_PORT
     - name: "Run Docker"
       working-directory: ./failure
       run: docker-compose up -d
