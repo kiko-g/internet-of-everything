@@ -2,13 +2,7 @@
 
 # Sprint 4
 
-## Edge
-
-### Closed PBIs
-
-### Increment
-
-## Emulator
+## Edge and Emulator
 
 ### Closed PBIs
 
@@ -19,8 +13,7 @@
 - 258
 
 ### Increment
-
-
+- Helped integration with other verticals.
 
 ## Simulator
 
@@ -40,7 +33,7 @@
   - Effort: 43
 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 860
 
 ### Increment
@@ -54,7 +47,7 @@
 - Refactor: display overvibration needs to work with mqtt.
   - Effort: 43
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 43
 
 ### Increment
@@ -65,22 +58,38 @@
 
 ### Closed PBIs
 
+- As a Developer, I want to build an API to access product state and possible failures, so that the frontend can display the information.
+  - Effort: 258
+- As a User, I want to know the current state of a product, so that I can track it during production.
+  - Effort: 215
+- As a Developer, I want to build a database to allow an efficient access to the state of a product, so that vertical 2 can display it in the front-end. #211
+  - Effort: 215
+- As a User, I want to handle malformed errors in JSON in order to have a secure way of detecting failures.
+  - Effort: 86
+- As a Developer, I want to send the failure output messages to Vertical 1, so that they can perform an action in the production line. #207
+  - Effort: 86
+
+### Sprint Estimated Total Effort
+- 782
+
 
 ### Increment
 
 - Concluded the integration with other verticals by sending messages as http request to the server and helping API implementation.
 - Added unity tests to automatically check if the code is working as expected.
 
-## Global Product Increment
+### Global Product Increment
 
 - Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly.
 - Develpoment of a MVP (Minimum Viable Product).
 
-## Global Sprint Estimated Total Effort
-- 1333
+### Global Sprint Estimated Total Effort
+- 2115
 
 
 # Sprint 3
+
+## Edge and Emulator
 
 ### Closed PBIs
 
@@ -102,7 +111,7 @@
   - Effort: 43
 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 645
 
 ### Increment
@@ -177,7 +186,7 @@
   - Effort: 43
 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 3612
     
 
@@ -197,7 +206,7 @@ Functional GUI that allows for upload of a factory configuration and running sim
 - As a chaos engineer, i want to be able to easily select the script to execute from a command.
   - Effort: 86
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 301
 
 ### Increment 
@@ -228,7 +237,7 @@ Functional GUI that allows for upload of a factory configuration and running sim
   - Effort: 129
 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 1118
  
 ### Increment
@@ -239,14 +248,16 @@ Functional GUI that allows for upload of a factory configuration and running sim
 - Add more sensors - Voltage, Vibration, Pressure, Rotation - add failure detection for these sensors.
 - Update the states to fit the new graph input.
 
-## Global Product Increment
+### Global Product Increment
 - Start integration between Emulator and Fault Analysis.
 
-## Global Sprint Estimated Total Effort
+### Global Sprint Estimated Total Effort
 - 5719
 
 
 # Sprint 2
+
+## Edge and Emulator
 
 ### Closed PBIs
 
@@ -257,7 +268,7 @@ Functional GUI that allows for upload of a factory configuration and running sim
 - Make an MQTT broker to allow communication between edge and server layers.
   - Effort: 43
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 215
 
 ### Increment
@@ -295,7 +306,7 @@ Functional GUI that allows for upload of a factory configuration and running sim
  
 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 645
 
 
@@ -325,7 +336,7 @@ Parse the fatory JSON and create a simulation representation based on it.
 - V4 feature /python-github-actions.
   - Effort: 43 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 602
 
 ### Increment
@@ -348,7 +359,7 @@ Parse the fatory JSON and create a simulation representation based on it.
 - Define Github Actions in Java.
   - Effort: 43
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 731
 
 
@@ -362,16 +373,17 @@ Parse the fatory JSON and create a simulation representation based on it.
 - Compute number of products in each phase.
 
 
-## Global Product Increment
+### Global Product Increment
 - Started deeply implementng each vertical seperately, without the integration phase.
 - Verticals are still being considered independent.
 
-## Global Sprint Estimated Total Effort
+### Global Sprint Estimated Total Effort
 - 2193
 
 
 # Sprint 1
 
+## Edge and Emulator
 
 ### Closed PBIs
 
@@ -408,7 +420,7 @@ Parse the fatory JSON and create a simulation representation based on it.
 - As a user, I want to have a button to be able to start a simulation.
   - Effort: 43
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 430
 
 ### Increment
@@ -424,7 +436,7 @@ Parse the fatory JSON and create a simulation representation based on it.
 - As a chaos engineer, I want to delete a machine's data reading to see how the systems reacts.
   - Effort: 43
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 86
 
 ### Increment
@@ -445,7 +457,7 @@ Setup of mock server and endpoints representing the factory.
 - Define an input and output message format to communicate with machines.
   - Effort: 43 
 
-## Sprint Estimated Total Effort
+### Sprint Estimated Total Effort
 - 344
 
 
@@ -454,7 +466,7 @@ Setup of mock server and endpoints representing the factory.
 - Receive and store data.
 
 
-## Global Product Increment
+### Global Product Increment
 - Initalizing the project, by deciding the tools to be used.
   - Use of Java for different verticals.
   - Use of MQTT for communication between machines.
@@ -463,5 +475,5 @@ Setup of mock server and endpoints representing the factory.
   - Use of docker to aggregate components.
 
 
-## Global Sprint Estimated Total Effort
+### Global Sprint Estimated Total Effort
 - 903
