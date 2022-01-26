@@ -88,7 +88,7 @@ public class ProductionState {
 
         LocalDateTime firstInputDt = this.firstTimes.get(machine.getId());
         long timeUntilNow = ChronoUnit.MILLIS.between(firstInputDt, LocalDateTime.now());
-        System.out.println(timeUntilNow);
+        
         return (double) (1000*qualityProducts)/timeUntilNow;
     }
 
