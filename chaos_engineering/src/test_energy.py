@@ -8,7 +8,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 from utils import get_payload_with_term, test_result, publish_payload
 
 
-def test_over(mqtt, machine_id, test_number, **kwargs):
+def overenergy_test(mqtt, machine_id, test_number, **kwargs):
     """ Test energy too high """
 
     base_payload = test(mqtt, machine_id, test_number,
@@ -30,7 +30,7 @@ def test_over(mqtt, machine_id, test_number, **kwargs):
     return test_result(mqtt, expected_values, failure_topic, test_number)
 
 
-def test_under(mqtt, machine_id, test_number, **kwargs):
+def underenergy_test(mqtt, machine_id, test_number, **kwargs):
     """ Test energy too low """
     base_payload = test(mqtt, machine_id, test_number,
                         kwargs["delay"], -random.randint(70, 100))
@@ -50,7 +50,7 @@ def test_under(mqtt, machine_id, test_number, **kwargs):
 
     return test_result(mqtt, expected_values, failure_topic, test_number)
 
-def test_null(mqtt, machine_id, test_number, **kwargs):
+def nullenergy_test(mqtt, machine_id, test_number, **kwargs):
     """ Test energy to have no voltage """
     base_payload = test(mqtt, machine_id, test_number,
                         kwargs["delay"], 0)
@@ -107,10 +107,10 @@ def main():
     mqtt.subscribe(f"machine/{machine_id}")
     mqtt.subscribe(f"failure/{machine_id}")
     # publish a single message to machine_1
-    test_under(mqtt, machine_id, 0, delay=2)
-    test_over(mqtt, machine_id, 0, delay=2)
-    test_under(mqtt, machine_id, 0, delay=2)
-    test_null(mqtt, machine_id, 0, delay=2)
+    underenergy_test(mqtt, machine_id, 0, delay=2)
+    overenergy_test(mqtt, machine_id, 0, delay=2)
+    underenergy_test(mqtt, machine_id, 0, delay=2)
+    nullenergy_test(mqtt, machine_id, 0, delay=2)
 
     # stop mqtt thread in the background
     mqtt.stop()

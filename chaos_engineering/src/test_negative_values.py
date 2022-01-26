@@ -7,7 +7,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 from print_color import print_color, TerminalColor
 
 
-def test(mqtt, machine_id, test_number, **kwargs):
+def negative_data_test(mqtt, machine_id, test_number, **kwargs):
     """ Test machine sensor with negative values"""
     test_msg = f'Test #{test_number}: starting negative value reading test on {machine_id}'
     print_color(test_msg, TerminalColor.OKBLUE)
@@ -48,7 +48,7 @@ def main():
     mqtt.subscribe(f"failure/{machine_id}")
     # publish a single message to machine_1
 
-    test(mqtt, machine_id, 0, **{'delay': 2})
+    negative_data_test(mqtt, machine_id, 0, **{'delay': 2})
 
     # stop mqtt thread in the background
     mqtt.stop()
