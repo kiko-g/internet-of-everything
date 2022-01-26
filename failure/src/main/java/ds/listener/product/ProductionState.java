@@ -38,7 +38,6 @@ public class ProductionState {
         }
     }
 
-
     public void saveProductionTime(MachineNode machine, String productID, LocalDateTime outputDt){
         String machineID = machine.getId();
 

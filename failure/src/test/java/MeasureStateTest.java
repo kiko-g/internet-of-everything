@@ -1,4 +1,3 @@
-import ds.graph.MachineNode;
 import ds.graph.sensor.Values;
 import ds.state.sensor.MeasureState;
 import org.junit.jupiter.api.BeforeEach;
