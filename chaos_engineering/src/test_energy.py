@@ -16,12 +16,15 @@ def overenergy_test(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["energy"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "ABOVE_EXPECTED",
-        "value": base_payload["values"]["energy"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 
@@ -37,12 +40,15 @@ def underenergy_test(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["energy"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "UNDER_EXPECTED",
-        "value": base_payload["values"]["energy"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 
@@ -58,15 +64,17 @@ def nullenergy_test(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["energy"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "UNDER_EXPECTED",
-        "value": base_payload["values"]["energy"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
-
     failure_topic = f"failure/{machine_id}"
 
     return test_result(mqtt, expected_values, failure_topic, test_number)

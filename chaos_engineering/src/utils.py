@@ -11,7 +11,8 @@ def generate_expected_result(result):
         f'"readingTime":"{result["readingTime"]}",'\
         f'"machineID":"{result["machineID"]}",'\
         f'"failureType":"{result["failureType"]}",'\
-        f'"description":"Detected value: {float(result["value"])}",'\
+        f'"action":"{result["action"]}",'\
+        f'"description":"{result["description"]}",'\
         f'"sensorID":"{result["sensorID"]}"'\
         '}'
 

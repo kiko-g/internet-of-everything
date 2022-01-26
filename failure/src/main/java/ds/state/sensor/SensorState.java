@@ -29,6 +29,10 @@ public class SensorState{
         return measureStates.get(measureType);
     }
 
+    public boolean findMeasureState(String measureType){
+        return measureStates.containsKey(measureType);
+    }
+
     /**
      * Updates the sensor state by adding a new measure to it. 
      * @param measureType The type of measure (e.g, temperature, vibration) 

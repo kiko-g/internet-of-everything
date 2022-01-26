@@ -6,6 +6,7 @@
     "output": "material6",
     "timePerBatch": 2000,
     "nextMachineID": "null",
+    "prevMachineID": "machine4",
     "sensors": [
       { 
         "id": "temperature5",
@@ -63,6 +64,22 @@
             "avg": 3.2, 
             "standardDeviation": 1
           }
+        }
+      },
+      { 
+        "id": "qrcodein5",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "IN"
+        }
+      },
+      { 
+        "id": "qrcodeout5",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "OUT"
         }
       }
     ]

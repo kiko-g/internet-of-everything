@@ -1,4 +1,5 @@
 package ds.listener;
+import ds.Utils;
 import ds.graph.Graph;
 import ds.graph.sensor.*;
 import ds.state.*; 
@@ -6,59 +7,119 @@ import ds.state.sensor.*;
 import ds.failures.*;
 
 import java.util.*;
+
+
+import com.mongodb.client.MongoCollection;
+
+import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
 import org.json.JSONObject;
+import io.github.cdimascio.dotenv.Dotenv;
 
+/**
+ * Listens to the messages of the sensors, detects failures and reports them back to the machines
+ */
 public class MachineListener extends Listener {
-    private State state; // Stores the current state of all machines.
-    public static final Integer INFO_SIZE = 5; // Number of previous states to save 
-    public static final Integer FUTURE_BEHAVIOR = 2; // Number of previous with increasing/decreasing values to send an alert
+    private final State state; // Stores the current state of all machines.
 
-    private FailurePublisher failurePublisher; 
+    public static final Integer INFO_SIZE = Integer.parseInt(Dotenv.load().get("INFO_SIZE")); // Number of previous states to save
+    public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(Dotenv.load().get("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
+    private MongoCollection<Document> collection;
 
-    public MachineListener(Graph graph) {
+    private final FailurePublisher failurePublisher;
+
+    public MachineListener(Graph graph, MongoCollection<Document> collection) {
         super("machine/#", graph);
         this.state = new State(graph); 
-        // TODO: perhaps in the future implement send to the machine topic.
+        this.collection = collection;
         this.failurePublisher = new FailurePublisher("failure");
         this.failurePublisher.init();
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage message) throws Exception {
-        JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
+    public void messageArrived(String topic, MqttMessage message){
         try {
+            JSONObject messageParsed = new JSONObject(new String(message.getPayload()));
             this.updateState(messageParsed);
+        } catch(JSONException e){
+            this.sendGeneralFailure("Invalid message format", FailureType.FORMAT);
         } catch(Exception e){
-            e.printStackTrace();
+            this.sendGeneralFailure(e.getMessage(), FailureType.UNKNOWN);
         }
     }
 
     /**
-     * Updates a machine state.
+     * Update the state of a machine
      * @param messageParsed JSONObject with the message content.
      */
-    public void updateState(JSONObject messageParsed){
-        String machineID = messageParsed.get("machineID").toString(); 
-        String sensorID = messageParsed.get("sensorID").toString();
-        SensorState sensorState = this.state.getMachineState(machineID).getSensorState(sensorID);
-        JSONObject measureValues  = messageParsed.getJSONObject("values"); 
+    public void updateState(JSONObject messageParsed) throws Exception {
 
-        measureValues.keySet().forEach((key) -> {
-            try {
-                double measureValue = measureValues.getDouble(key);
-                boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
+        // Parse machine/sensor identification
+        final String machineID;
+        final String sensorID;
+        try {
+            machineID = messageParsed.getString("machineID"); 
+            sensorID = messageParsed.getString("sensorID");
+        } catch(JSONException e){
+            this.sendGeneralFailure("Invalid format for machineID or sensorID", FailureType.FORMAT);
+            return;
+        }
 
-                if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
-                else analyseFutureBehavior(messageParsed, sensorState, key);   
-            }
-            catch (Exception e) {
-                // e.printStackTrace();
-                System.out.println("Error Reading sensor " + sensorID + " from machine " + machineID);
-            }
-        });
+        // Verify if machine exists
+        if(!this.state.findMachine(machineID)){
+            this.sendGeneralFailure("Unknown machineID", FailureType.UNKNOWN);
+            return;
+        }
+
+        MachineState machineState = this.state.getMachineState(machineID);
+        // Verify if sensor exists
+        if(!machineState.findSensor(sensorID)){
+            this.sendParseFailure(machineID, sensorID, "Unknow sensorID", FailureType.UNKNOWN);
+            return;
+        }
+
+        // Verify reading time
+        try {
+            String readingTime = messageParsed.getString("readingTime");
+            Utils.parseDateTime(readingTime);  
+        } catch(Exception e){
+            this.sendParseFailure(machineID, sensorID, "Invalid readingTime", FailureType.FORMAT);
+            return;
+        }
+
+        // Parse sensor values
+        SensorState sensorState = machineState.getSensorState(sensorID);
+        try {
+            JSONObject measureValues  = messageParsed.getJSONObject("values"); 
+            measureValues.keySet().forEach((key) -> {
+                try {
+                    
+                    // Check if measure exists
+                    if(!sensorState.findMeasureState(key)){
+                        this.sendParseFailure(machineID, sensorID, String.format("Unknow value '%s'", key), FailureType.UNKNOWN);
+                        return;
+                    }
+
+                    double measureValue = measureValues.getDouble(key);
+                    boolean isMeasureAllowed = sensorState.updateMeasureState(key, measureValue);
+
+                    if (!isMeasureAllowed) sendFailure(messageParsed, sensorState, key);
+                    else analyseFutureBehavior(messageParsed, sensorState, key);     
+
+                } catch (JSONException e) {
+                    this.sendParseFailure(machineID, sensorID, String.format("Invalid format for value '%s'", key), FailureType.FORMAT);
+                } 
+            });
+        } catch (JSONException e) {
+            this.sendParseFailure(machineID, sensorID, "Invalid values format", FailureType.FORMAT);
+            return;
+        }
     }
 
+    /**
+     * Detect an error in the near future
+     */
     private void analyseFutureBehavior(JSONObject messageParsed, SensorState sensorState, String measureType){  
         String machineID = messageParsed.get("machineID").toString(); 
         String readingTime = messageParsed.get("readingTime").toString();
@@ -88,12 +149,13 @@ public class MachineListener extends Listener {
             prevVal = currentVal;
         }
 
-        // System.out.println("\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Increase = " + numIncrease + 
-        //     "\nMachine " + machineID + " :: Sensor "  + sensorState.getId() + " :: Consecutive Decrease = " + numDecrease + "\n");
-        
         this.sendFailureFuture(measureState, failure, numIncrease, numDecrease);
     }
 
+    
+     /**
+     * Send prediction/warning of a possible failure relative to the value of a sensor
+     */ 
     private void sendFailureFuture(MeasureState measureState, Failure failure, int numIncrease, int numDecrease){
         double upperLimit = measureState.getExpectedValues().max;
         double downLimit = measureState.getExpectedValues().min;
@@ -119,14 +181,34 @@ public class MachineListener extends Listener {
             log = "decreasing";
         } 
 
+        String sensorName = failure.getSensorID();
         // Sensor value near the limit
         if (proximity < interval) {
+            
             if (numConsecutive >= FUTURE_BEHAVIOR) {          
                 failure.setFailureType(type);
+
+                if(sensorName.contains("temperature")) {
+                    failure.setFailureAction(FailureAction.INCREASE_FANS);
+                } else if(sensorName.contains("vibration")) {
+                    failure.setFailureAction(FailureAction.DECREASE_GEAR_SPEED);
+                } else {
+                    failure.setFailureAction(FailureAction.WARNING);
+                }
+
                 failure.setFailureSeverity(FailureSeverity.MEDIUM);
                 failure.setDescription("Values " + log + " too fast and near the limit");
             } else {
                 failure.setFailureType(type);
+
+                if(sensorName.contains("temperature")) {
+                    failure.setFailureAction(FailureAction.DECREASE_FANS);
+                } else if(sensorName.contains("vibration")) {
+                    failure.setFailureAction(FailureAction.INCREASE_GEAR_SPEED);
+                } else {
+                    failure.setFailureAction(FailureAction.WARNING);
+                }
+
                 failure.setFailureSeverity(FailureSeverity.LOW);
                 failure.setDescription("Values near the limit");
             }
@@ -134,31 +216,90 @@ public class MachineListener extends Listener {
             return;
         }
 
-        System.out.println(failure.getMessage());
+        // Add failure to the database and publish it to the machine
+        this.insertIntoDatabase(failure.getJSONMessage());
         this.failurePublisher.publish(failure.getMessage(), failure.getMachineID());
     }
 
+     /**
+     * Send a failure relative to the value of a sensor
+     */ 
     public void sendFailure(JSONObject messageParsed, SensorState sensorState, String measureType){  
-        String machineID = messageParsed.get("machineID").toString(); 
-        String readingTime = messageParsed.get("readingTime").toString();
+        String machineID = messageParsed.getString("machineID"); 
+        String readingTime = messageParsed.getString("readingTime");
         double measureValue = messageParsed.getJSONObject("values").getDouble(measureType);
         Failure failure = new Failure(sensorState, machineID, readingTime); 
         Values expectedValues = sensorState.getMeasureState(measureType).getExpectedValues();
 
-        //TODO: change severity according to what the clients considers high priority.
         if (measureValue > expectedValues.getMax()) {
             failure.setFailureType(FailureType.ABOVE_EXPECTED);
+            failure.setFailureAction(FailureAction.POWEROFF);
             failure.setFailureSeverity(FailureSeverity.HIGH);
             failure.setDescription("Detected value: " + measureValue);
         }
         else if (measureValue < expectedValues.getMin()) {
             failure.setFailureType(FailureType.UNDER_EXPECTED);
+            failure.setFailureAction(FailureAction.POWEROFF);
             failure.setFailureSeverity(FailureSeverity.HIGH);
             failure.setDescription("Detected value: " + measureValue);
         }
 
-        System.out.println(failure.getMessage());
+        // Add failure to the database and publish it to the machine
+        this.insertIntoDatabase(failure.getJSONMessage());
         this.failurePublisher.publish(failure.getMessage(), machineID);
     }
 
+     /**
+     * Send a failure that is not related to any particular machine
+     */  
+    public void sendGeneralFailure(String description, FailureType failureType){  
+        JSONObject failureMessage = new JSONObject(); 
+        failureMessage.put("machineID", "null");
+        failureMessage.put("sensorID", "null");
+        failureMessage.put("action", FailureAction.WARNING);
+        failureMessage.put("failureSeverity",  FailureSeverity.LOW);
+        failureMessage.put("failureType",  failureType);
+        failureMessage.put("description", description);
+        failureMessage.put("readingTime", Utils.getDateTime());
+
+        this.failurePublisher.publishUnknowFailure(failureMessage.toString());
+    }
+
+    /**
+     * Send a failure of a specific machine, that occured due to a format or unknow error in the message
+     */ 
+    public void sendParseFailure(String machineID, String sensorID, String description, FailureType failureType){  
+        JSONObject failureMessage = new JSONObject(); 
+        failureMessage.put("machineID", machineID);
+        failureMessage.put("sensorID", sensorID);
+        failureMessage.put("action", FailureAction.WARNING);
+        failureMessage.put("failureSeverity",  FailureSeverity.LOW);
+        failureMessage.put("failureType",  failureType);
+        failureMessage.put("description", description);
+        failureMessage.put("readingTime", Utils.getDateTime());
+
+        // Add failure to the database and publish it to the machine
+        this.insertIntoDatabase(failureMessage);
+        this.failurePublisher.publish(failureMessage.toString(), machineID);
+    }
+
+    /**
+     * Add a failure to the database
+     */
+    public void insertIntoDatabase(JSONObject message){
+        try {
+            this.collection.insertOne(new Document()
+                    .append("machineID", message.getString("machineID"))
+                    .append("sensorID", message.getString("sensorID"))
+                    .append("action", ((FailureAction) message.get("action")).name())
+                    .append("failureType", ((FailureType) message.get("failureType")).name())
+                    .append("failureSeverity", ((FailureSeverity) message.get("failureSeverity")).name())
+                    .append("description", message.getString("description"))
+                    .append("readingTime", message.getString("readingTime"))
+                    .append("dateFailure", new Date()));
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 }

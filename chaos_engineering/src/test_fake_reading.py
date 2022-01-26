@@ -5,6 +5,7 @@ import time
 import random
 from print_color import print_color, TerminalColor
 from mqtt_handler.mqtt_handler import MQTTHandler
+from utils import test_result
 
 
 def fake_data_test(mqtt, machine_id, test_number, **kwargs):
@@ -16,10 +17,10 @@ def fake_data_test(mqtt, machine_id, test_number, **kwargs):
     #failure_topic = f"failure/{machine_id}"
 
     payload = {
-        "machineID": random.randint(0, 1000),
-        "readingTime": random.randint(0, 100000000000),
+        "machineID": machine_id,
+        "readingTime": "26-01-2022 17:44:37.811368",
         "values": {
-            "vibration": random.randint(0, 1000),
+            "vibration": random.randint(10, 1000),
         },
         "sensorID": f"vibration{random.randint(0, 50)}"
     }
@@ -30,10 +31,19 @@ def fake_data_test(mqtt, machine_id, test_number, **kwargs):
     mqtt.publish(machine_topic, payload)
     time.sleep(kwargs['delay'])
 
-    print_color(
-        f'Test #{test_number}: Cant yet verify this result', TerminalColor.WARNING
-    )
-    return -1
+    expected_values = {
+        "severity": "LOW",
+        "readingTime": payload["readingTime"],
+        "machineID": machine_id,
+        "failureType": "UNKNOWN",
+        "action": "WARNING",
+        "description": "unknow sensorID",
+        "sensorID": payload["sensorID"]
+    }
+
+    failure_topic = f"failure/{machine_id}"
+
+    return test_result(mqtt, expected_values, failure_topic, test_number)
 
 
 def main():

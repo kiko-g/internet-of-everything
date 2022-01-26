@@ -17,12 +17,15 @@ def overheating_test(mqtt, machine_id, test_number, **kwargs):
     if base_payload is None:
         return -1
 
+    description = f'Detected value: {float(base_payload["values"]["temperature"])}'
+
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "ABOVE_EXPECTED",
-        "value": base_payload["values"]["temperature"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 
@@ -34,16 +37,19 @@ def overheating_test(mqtt, machine_id, test_number, **kwargs):
 def underheating_test(mqtt, machine_id, test_number, **kwargs):
     """ Test temperature too low """
     base_payload = test(mqtt, machine_id, test_number,
-                        kwargs["delay"], -random.randint(70, 100))
+                        kwargs["delay"], -random.randint(50, 70))
     if base_payload is None:
         return -1
+
+    description = f'Detected value: {float(base_payload["values"]["temperature"])}'
 
     expected_values = {
         "severity": "HIGH",
         "readingTime": base_payload["readingTime"],
         "machineID": machine_id,
         "failureType": "UNDER_EXPECTED",
-        "value": base_payload["values"]["temperature"],
+        "action": "POWEROFF",
+        "description": description,
         "sensorID": base_payload["sensorID"]
     }
 
