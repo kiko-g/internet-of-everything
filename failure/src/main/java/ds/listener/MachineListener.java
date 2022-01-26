@@ -15,15 +15,24 @@ import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
+import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Listens to the messages of the sensors, detects failures and reports them back to the machines
  */
 public class MachineListener extends Listener {
     private final State state; // Stores the current state of all machines.
+<<<<<<< HEAD
     public static final Integer INFO_SIZE = Integer.parseInt(System.getenv("INFO_SIZE")); // Number of previous states to save 
     public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(System.getenv("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
     private MongoCollection<Document> collection;
+=======
+
+    public static final Integer INFO_SIZE = Integer.parseInt(Dotenv.load().get("INFO_SIZE")); // Number of previous states to save
+    public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(Dotenv.load().get("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
+    private MongoCollection<Document> collection;
+
+>>>>>>> dev
     private final FailurePublisher failurePublisher;
 
     public MachineListener(Graph graph, MongoCollection<Document> collection) {

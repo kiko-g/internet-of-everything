@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ds.graph.MachineNode;
+<<<<<<< HEAD
+=======
+import io.github.cdimascio.dotenv.Dotenv;
+>>>>>>> dev
 
 /**
  * Information regarding the production
@@ -25,7 +29,12 @@ public class ProductionState {
         this.accountedProductionTimes = new ConcurrentHashMap<>();
         this.firstTimes = new ConcurrentHashMap<>();
 
+<<<<<<< HEAD
         this.startTime = LocalDateTime.now().plusSeconds(Integer.parseInt(System.getenv("START_DELAY")));
+=======
+        Dotenv dotenv = Dotenv.load();
+        this.startTime = LocalDateTime.now().plusSeconds(Integer.parseInt(dotenv.get("START_DELAY")));
+>>>>>>> dev
         this.endMachine = endMachine;
 
         this.init(machineIds);
@@ -38,7 +47,10 @@ public class ProductionState {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
     public void saveProductionTime(MachineNode machine, String productID, LocalDateTime outputDt){
         String machineID = machine.getId();
 

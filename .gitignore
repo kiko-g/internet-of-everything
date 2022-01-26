@@ -7,6 +7,12 @@ mosquitto/log/mosquitto.log
 
 .vscode/*
 
+<<<<<<< HEAD
+=======
+failure/.gradle/*
+failure/.idea/*
+failure/.vscode/*
+>>>>>>> dev
 # Chaos Engineering
 *.pyc
 Output/*

@@ -15,13 +15,22 @@ on:
 jobs:
   docker_build:
     runs-on: self-hosted
+<<<<<<< HEAD
     name: "Vertical 3: Test Workflow"
+=======
+    name: "Vertical 3: Run Unit Tests"
+>>>>>>> dev
     
     steps:
     - uses: actions/checkout@v2
     - name: Set the env variables
       run: |
         cat .env >> $GITHUB_ENV
+<<<<<<< HEAD
     - name: "Run docker compose"
       working-directory: ./failure
       run: docker-compose up -d
+=======
+    - name: "Run unit tests"
+      run: docker-compose -f docker-compose.test.yml up
+>>>>>>> dev
