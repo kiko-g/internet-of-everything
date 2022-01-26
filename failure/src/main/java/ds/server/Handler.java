@@ -26,7 +26,6 @@ interface Handler extends HttpHandler {
     }
 
     default void sendHeader(HttpExchange httpExchange, String jsonResponse) throws IOException {
-        // TODO: change the port to env
         Headers header = httpExchange.getResponseHeaders();
         header.add("Content-Type", "application/json"); 
         header.add("Access-Control-Allow-Origin", "*"); 

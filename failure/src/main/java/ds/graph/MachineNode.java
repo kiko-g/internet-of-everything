@@ -74,7 +74,8 @@ public class MachineNode {
 
     public void addSensor(JSONObject sensorJson){
         String id = sensorJson.getString("id");
-        this.sensorProperties.put(id, new Sensor(id,sensorJson.getJSONObject("attributes")));
+        if(!sensorJson.getString("type").equals("QR_CODE"))
+            this.sensorProperties.put(id, new Sensor(id,sensorJson.getJSONObject("attributes")));
     }
 
     public void setNext(MachineNode nextMachine){

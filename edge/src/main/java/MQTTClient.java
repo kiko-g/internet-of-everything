@@ -65,7 +65,7 @@ public abstract class MQTTClient implements MqttCallback {
         MqttMessage message = new MqttMessage(messageContent);
         message.setQos(qos);
         try {
-            System.out.println("[MQTT] Publishing message to \"" + topic + "\": " + message);
+            //System.out.println("[MQTT] Publishing message to \"" + topic + "\": " + message);
             client.publish(topic, message);
         } catch (MqttException e) {
             System.err.println("[MQTT] Exception Occured whilst publishing the message: " + e.getMessage());

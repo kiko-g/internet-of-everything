@@ -4,7 +4,7 @@ public class QRCodeSensor extends Sensor {
     public enum Action {IN, OUT}
 
     Type type;
-    Integer materialID;
+    String materialID;
     Action action;
     boolean defect;
 
@@ -20,7 +20,7 @@ public class QRCodeSensor extends Sensor {
         return action;
     }
 
-    public void setMaterial(int id, boolean defect){
+    public void setMaterial(String id, boolean defect){
         this.setNewData(true);
         this.materialID = id;
         this.defect = defect;

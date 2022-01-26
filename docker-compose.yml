@@ -11,22 +11,6 @@ services:
       - ./mosquitto/log:/mosquitto/log
     container_name: "mosquitto"
 
-  # Edge Layer
-  edge:
-    build: ./edge/
-    command: sh -c "gradle run"
-    volumes:
-      - ./edge/src:/edge/src
-      - ./data/:/data/
-    container_name: "edge"
-
-  # # Emulator Server
-  # emulator:
-  #   build: ./emulator/
-  #   ports:
-  #     - "9999:9999"
-  #   container_name: "emulator"
-
   # Database to track product messages
   mongo:
     image: mongo:5.0.5
@@ -65,17 +49,24 @@ services:
     container_name: "failure-service"
     depends_on:
       - mongo
-
-  # TODO: delete this when QRCode messages are ready
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
+  
+  # Edge Layer
+  edge:
+    build: ./edge/
+    command: sh -c "gradle run"
     volumes:
-      - ./failure/src/:/failure/src/
+      - ./edge/src:/edge/src
       - ./data/:/data/
-    container_name: "product-sensors"
+    container_name: "edge"
     depends_on:
       - failure-service
+
+  # Emulator Server
+  emulator:
+    build: ./emulator/
+    ports:
+      - "9999:9999"
+    container_name: "emulator"
     
   # Chaos Engineering, intercepting messages
   chaos-engineering:
@@ -86,17 +77,17 @@ services:
     container_name: "chaos_engineering"
 
   # Simulation Backend
-  # simulation-backend:
-  #   build: ./simulation/backend
-  #   ports:
-  #     - "8080:8080"
+  simulation-backend:
+    build: ./simulation/backend
+    ports:
+      - "8080:8080"
 
   # Emulator Backend
-  emulator-backend:
-    build: ./emulator/
-    ports:
-      - "9999:9999"
-    container_name: "emulator-backend"
+  # emulator-backend:
+  #   build: ./emulator/
+  #   ports:
+  #     - "9999:9999"
+  #   container_name: "emulator-backend"
 
   # Frontend interface
   frontend:

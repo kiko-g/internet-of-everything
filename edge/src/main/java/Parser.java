@@ -90,6 +90,7 @@ public class Parser {
         Long machineTimePerBatch = (Long) machineInfo.get("timePerBatch");
 
         String prevMachineID = (String) machineInfo.get("prevMachineID");
+        System.out.println("MACHINE " + machineID + " has prevMachineID=" + prevMachineID);
 
         //Get machine output
         String nextMachineID = (String) machineInfo.get("nextMachineID");

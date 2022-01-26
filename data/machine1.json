@@ -4,8 +4,9 @@
     "defectProbability": 2,
     "input": "material1",
     "output": "material2",
-    "timePerBatch": 1000,
+    "timePerBatch": 2000,
     "nextMachineID": "machine2",
+    "prevMachineID": "null",
     "sensors": [
       { 
         "id": "temperature1",
@@ -102,6 +103,22 @@
             "avg": 95, 
             "standardDeviation": 2 
           }
+        }
+      },
+      { 
+        "id": "qrcodein1",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "IN"
+        }
+      },
+      { 
+        "id": "qrcodeout1",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "OUT"
         }
       }
     ]
