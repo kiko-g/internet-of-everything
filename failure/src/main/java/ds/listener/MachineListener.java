@@ -53,40 +53,17 @@ public class MachineListener extends Listener {
      * Update the state of a machine
      * @param messageParsed JSONObject with the message content.
      */
-    public void updateState(JSONObject messageParsed) throws Exception {
+    public void updateState(JSONObject messageParsed) {
+        FailureMessageBuilder failureMessageBuilder = new FailureMessageBuilder(messageParsed, this.state);
+        if (failureMessageBuilder.containsError()){
+            this.sendParseFailure(failureMessageBuilder.getFailureMessage());
+            return;
+        }
 
         // Parse machine/sensor identification
-        final String machineID;
-        final String sensorID;
-        try {
-            machineID = messageParsed.getString("machineID"); 
-            sensorID = messageParsed.getString("sensorID");
-        } catch(JSONException e){
-            this.sendGeneralFailure("Invalid format for machineID or sensorID", FailureType.FORMAT);
-            return;
-        }
-
-        // Verify if machine exists
-        if(!this.state.findMachine(machineID)){
-            this.sendGeneralFailure("Unknown machineID", FailureType.UNKNOWN);
-            return;
-        }
-
+        final String machineID = messageParsed.getString("machineID");
+        final String sensorID = messageParsed.getString("sensorID");
         MachineState machineState = this.state.getMachineState(machineID);
-        // Verify if sensor exists
-        if(!machineState.findSensor(sensorID)){
-            this.sendParseFailure(machineID, sensorID, "Unknow sensorID", FailureType.UNKNOWN);
-            return;
-        }
-
-        // Verify reading time
-        try {
-            String readingTime = messageParsed.getString("readingTime");
-            Utils.parseDateTime(readingTime);  
-        } catch(Exception e){
-            this.sendParseFailure(machineID, sensorID, "Invalid readingTime", FailureType.FORMAT);
-            return;
-        }
 
         // Parse sensor values
         SensorState sensorState = machineState.getSensorState(sensorID);
@@ -94,10 +71,10 @@ public class MachineListener extends Listener {
             JSONObject measureValues  = messageParsed.getJSONObject("values"); 
             measureValues.keySet().forEach((key) -> {
                 try {
-                    
                     // Check if measure exists
                     if(!sensorState.findMeasureState(key)){
-                        this.sendParseFailure(machineID, sensorID, String.format("Unknow value '%s'", key), FailureType.UNKNOWN);
+                        failureMessageBuilder.setGenericError(String.format("Unknow value '%s'", key), FailureType.UNKNOWN, FailureAction.WARNING);
+                        this.sendParseFailure(failureMessageBuilder.getFailureMessage());
                         return;
                     }
 
@@ -108,12 +85,13 @@ public class MachineListener extends Listener {
                     else analyseFutureBehavior(messageParsed, sensorState, key);     
 
                 } catch (JSONException e) {
-                    this.sendParseFailure(machineID, sensorID, String.format("Invalid format for value '%s'", key), FailureType.FORMAT);
-                } 
+                    failureMessageBuilder.setGenericError(String.format("Invalid format for value '%s'", key), FailureType.FORMAT, FailureAction.WARNING);
+                    this.sendParseFailure(failureMessageBuilder.getFailureMessage());
+                }
             });
         } catch (JSONException e) {
-            this.sendParseFailure(machineID, sensorID, "Invalid values format", FailureType.FORMAT);
-            return;
+            failureMessageBuilder.setGenericError("Invalid values format", FailureType.FORMAT, FailureAction.WARNING);
+            this.sendParseFailure(failureMessageBuilder.getFailureMessage());
         }
     }
 
@@ -268,19 +246,10 @@ public class MachineListener extends Listener {
     /**
      * Send a failure of a specific machine, that occured due to a format or unknow error in the message
      */ 
-    public void sendParseFailure(String machineID, String sensorID, String description, FailureType failureType){  
-        JSONObject failureMessage = new JSONObject(); 
-        failureMessage.put("machineID", machineID);
-        failureMessage.put("sensorID", sensorID);
-        failureMessage.put("action", FailureAction.WARNING);
-        failureMessage.put("failureSeverity",  FailureSeverity.LOW);
-        failureMessage.put("failureType",  failureType);
-        failureMessage.put("description", description);
-        failureMessage.put("readingTime", Utils.getDateTime());
-
+    public void sendParseFailure(JSONObject failureMessage){
         // Add failure to the database and publish it to the machine
         this.insertIntoDatabase(failureMessage);
-        this.failurePublisher.publish(failureMessage.toString(), machineID);
+        this.failurePublisher.publish(failureMessage.toString(), failureMessage.getString("machineID"));
     }
 
     /**
