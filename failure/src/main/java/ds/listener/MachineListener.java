@@ -149,7 +149,7 @@ public class MachineListener extends Listener {
         this.sendFailureFuture(measureState, failure, numIncrease, numDecrease);
     }
 
-    // TODO: Add action
+    
      /**
      * Send prediction/warning of a possible failure relative to the value of a sensor
      */ 
