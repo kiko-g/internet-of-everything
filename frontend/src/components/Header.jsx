@@ -8,6 +8,7 @@ export default function Header({ currentLocation }) {
   const links = [
     { title: "Emulator", location: "/emulator" },
     { title: "Simulation", location: "/" },
+    { title: "About", location: "/about" },
   ]
 
   return (
