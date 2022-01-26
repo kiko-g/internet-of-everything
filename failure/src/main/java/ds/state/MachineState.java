@@ -40,8 +40,8 @@ public class MachineState  {
         return this.sensorsState.get(sensorId);
     }
 
-    public void updateSensorState(String sensorId, String propertyName, double value){
-
+    public boolean findSensor(String sensorId){
+        return this.sensorsState.containsKey(sensorId);
     }
 
     @Override

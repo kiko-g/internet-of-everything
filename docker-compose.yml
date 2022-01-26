@@ -1,48 +1,105 @@
 version: "3"
 services:
-  # Edge Broker
+  # Mosquitto Communication
   mosquitto:
     image: eclipse-mosquitto:1.6
     ports:
       - "1883:1883"
     volumes:
       - ./mosquitto/:/mosquitto/
-      - ./mosquitto/data:/mosquitto/data 
-      - ./mosquitto/log:/mosquitto/log 
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
     container_name: "mosquitto"
 
-  edge:
-    build: ./edge/
-    command: sh -c "gradle run"
-    volumes:
-      - ./edge/src:/edge/src
-      - ./data/:/data/
-    container_name: "edge"
+  # Emulator Backend
+  emulator-backend:
+    build: ./emulator/
+    ports:
+      - 8083:8083
+    depends_on:
+      - "mosquitto"
+    container_name: "emulator-backend"
 
-  # Emulator Server
-  # TODO
+  # Database to track product messages
+  mongo:
+    image: mongo:5.0.5
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${DB_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
+
+  mongo-express:
+    image: mongo-express
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: "${DB_USERNAME}"
+      ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
+      ME_CONFIG_MONGODB_URL: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongo:${DB_PORT}"
 
   # Failure Analysis
   failure-service:
     build: ./failure/
     command: sh -c "gradle runFailureService"
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./failure/src/:/failure/src/
       - ./data/:/data/
     container_name: "failure-service"
-
-  # TODO: delete this when QRCode messages are ready
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
+    depends_on:
+      - mongo
+      
+  # Edge Layer
+  edge:
+    build: ./edge/
+    command: sh -c "gradle run"
+    env_file:
+      - .env
     volumes:
-      - ./failure/src/:/failure/src/
+      - ./edge/src:/edge/src
       - ./data/:/data/
-    container_name: "product-sensors"
-
+    depends_on:
+      - "emulator-backend"
+      - "mosquitto"
+      - "failure-service"
+    container_name: "edge"
+    
+  # Chaos Engineering, intercepting messages
   chaos-engineering:
     build: ./chaos_engineering/
     command: sh -c "python3 -u src/default_tester.py"
+    env_file:
+      - .env
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
+
+  # Simulation Backend
+  # simulation-backend:
+  #   build: ./simulation
+  #   env_file:
+  #    - .env
+  #   ports:
+  #     - "8080:8080"
+
+  # Frontend interface
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+        - './frontend:/app'
+        - '/app/node_modules'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    container_name: "frontend"
