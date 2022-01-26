@@ -5,12 +5,10 @@ on:
     branches:
       - main
       - dev
-      - V3-Fault-Analysis
   pull_request:
     branches: 
       - main
       - dev
-      - V3-Fault-Analysis
 
   workflow_dispatch:
 
@@ -21,6 +19,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Set the env variables
+      run: |
+        export $(xargs <.env)
     - name: "Run Docker"
       working-directory: ./failure
       run: docker-compose up -d
