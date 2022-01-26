@@ -6,7 +6,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 from print_color import print_color, TerminalColor
 
 
-def test(mqtt, machine_id, test_number, **kwargs):
+def null_data_test(mqtt, machine_id, test_number, **kwargs):
     """ Test machine sensor overheating"""
     test_msg = f'Test #{test_number}: starting null reading test on {machine_id}'
     print_color(test_msg, TerminalColor.OKBLUE)
@@ -47,7 +47,7 @@ def main():
     mqtt.subscribe(f"failure/{machine_id}")
     # publish a single message to machine_1
 
-    test(mqtt, machine_id, 0, **{'delay': 2})
+    null_data_test(mqtt, machine_id, 0, **{'delay': 2})
 
     # stop mqtt thread in the background
     mqtt.stop()
