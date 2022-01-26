@@ -11,15 +11,6 @@ services:
       - ./mosquitto/log:/mosquitto/log
     container_name: "mosquitto"
 
-  # Emulator Backend
-  emulator-backend:
-    build: ./emulator/
-    ports:
-      - 8083:8083
-    depends_on:
-      - "mosquitto"
-    container_name: "emulator-backend"
-
   # Database to track product messages
   mongo:
     image: mongo:5.0.5
@@ -84,13 +75,22 @@ services:
       - ./chaos_engineering/src:/chaos_engineering/src
     container_name: "chaos_engineering"
 
+  # Emulator Backend
+  emulator-backend:
+    build: ./emulator/
+    ports:
+      - 8083:8083
+    depends_on:
+      - "mosquitto"
+    container_name: "emulator-backend"
+
   # Simulation Backend
-  # simulation-backend:
-  #   build: ./simulation
-  #   env_file:
-  #    - .env
-  #   ports:
-  #     - "8080:8080"
+  simulation-backend:
+    build: ./simulation
+    env_file:
+     - .env
+    ports:
+      - "8080:8080"
 
   # Frontend interface
   frontend:
