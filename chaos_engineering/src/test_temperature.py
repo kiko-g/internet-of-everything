@@ -9,7 +9,7 @@ from mqtt_handler.mqtt_handler import MQTTHandler
 from utils import get_payload_with_term, test_result
 
 
-def test_over(mqtt, machine_id, test_number, **kwargs):
+def overheating_test(mqtt, machine_id, test_number, **kwargs):
     """ Test temperature too high """
 
     base_payload = test(mqtt, machine_id, test_number,
@@ -34,7 +34,7 @@ def test_over(mqtt, machine_id, test_number, **kwargs):
     return test_result(mqtt, expected_values, failure_topic, test_number)
 
 
-def test_under(mqtt, machine_id, test_number, **kwargs):
+def underheating_test(mqtt, machine_id, test_number, **kwargs):
     """ Test temperature too low """
     base_payload = test(mqtt, machine_id, test_number,
                         kwargs["delay"], -random.randint(50, 70))
@@ -98,9 +98,9 @@ def main():
     mqtt.subscribe(f"failure/{machine_id}")
     # publish a single message to machine_1
 
-    test_over(mqtt, machine_id, 0, delay=2)
+    overheating_test(mqtt, machine_id, 0, delay=2)
 
-    test_under(mqtt, machine_id, 0, delay=2)
+    underheating_test(mqtt, machine_id, 0, delay=2)
 
     # stop mqtt thread in the background
     mqtt.stop()
