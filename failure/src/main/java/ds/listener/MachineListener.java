@@ -22,9 +22,9 @@ import io.github.cdimascio.dotenv.Dotenv;
  */
 public class MachineListener extends Listener {
     private final State state; // Stores the current state of all machines.
-    static Dotenv dotenv = Dotenv.load();
-    public static final Integer INFO_SIZE = Integer.parseInt(dotenv.get("INFO_SIZE")); // Number of previous states to save
-    public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(dotenv.get("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
+
+    public static final Integer INFO_SIZE = Integer.parseInt(Dotenv.load().get("INFO_SIZE")); // Number of previous states to save
+    public static final Integer FUTURE_BEHAVIOR = Integer.parseInt(Dotenv.load().get("FUTURE_BEHAVIOUR")); // Number of previous with increasing/decreasing values to send an alert
     private MongoCollection<Document> collection;
 
     private final FailurePublisher failurePublisher;
