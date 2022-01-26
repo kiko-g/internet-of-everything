@@ -4,9 +4,15 @@ class Sensor {
         this.updateInterval = updateInterval;
         this.attributes = attributes;
         this.hasError = false;
+        this.latest_value = null;
     }
 
-    get getID() {
+    updateLatest(received)
+    {
+        this.latest_value = received;
+    }
+
+    getID() {
         return this.id;
     }
 }
@@ -26,8 +32,9 @@ class EnergySensor extends Sensor {
     compareValues(received) {
         if(received.energy > this.max || received.energy < this.min){
             this.hasError = true;
-            console.log("Error has occured in energy sensor...");
+            console.log("Error has ocurred in energy sensor...");
         }
+        else this.hasError = false;
     }
 }
 
@@ -48,6 +55,7 @@ class OrientationSensor extends Sensor {
             this.hasError = true;
             console.log("Error has occured in orientation sensor...");
         }
+        else this.hasError = false;
     }
 }
 
@@ -68,6 +76,7 @@ class VelocitySensor extends Sensor {
             this.hasError = true;
             console.log("Error has occured in velocity sensor...");
         }
+        else this.hasError = false;
     }
 }
 
@@ -114,6 +123,7 @@ class ProductionSpeedSensor extends Sensor {
             this.hasError = true;
             console.log("Error has occured in production speed sensor...");
         }
+        else this.hasError = false;
     }
 }
 
@@ -156,6 +166,7 @@ class TemperatureSensor extends Sensor {
             this.hasError = true;
             console.log("Error has occured in temperature sensor...");
         }
+        else this.hasError = false;
     }
 }
 
@@ -176,6 +187,7 @@ class VibrationSensor extends Sensor {
             this.hasError = true;
             console.log("Error has occured in vibration sensor...");
         }
+        else this.hasError = false;
     }
 }
 

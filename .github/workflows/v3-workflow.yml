@@ -1,0 +1,26 @@
+name: v3-docker-workflow
+ 
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches: 
+      - main
+      - dev
+
+  workflow_dispatch:
+
+jobs:
+  docker_build:
+    runs-on: self-hosted
+    name: "Vertical 3: Run Unit Tests"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set the env variables
+      run: |
+        cat .env >> $GITHUB_ENV
+    - name: "Run unit tests"
+      run: docker-compose -f docker-compose.test.yml up

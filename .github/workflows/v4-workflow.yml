@@ -1,0 +1,31 @@
+name: v4-tester-workflow
+ 
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches: 
+      - main
+      - dev
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    name: "Vertical 3: Test Workflow"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set the env variables
+      run: |
+        cat .env >> $GITHUB_ENV
+    - name: Install dependencies
+      working-directory: ./chaos_engineering
+      run: |
+        #python -m pip install --upgrade pip 
+        #pip install -r requirements.txt --disable-pip-version-check -> Not working, but all packages are installed
+        pylint src/*.py
+        pylint src/**/*.py

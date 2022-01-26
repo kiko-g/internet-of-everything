@@ -5,22 +5,23 @@ on:
     branches:
       - main
       - dev
-      - V2-Simulation
   pull_request:
     branches: 
       - main
       - dev
-      - V2-Simulation
 
   workflow_dispatch:
 
 jobs:
   docker_build:
-    runs-on: ubuntu-latest
-    name: "Vertical 2: Test docker-compose"
+    runs-on: self-hosted
+    name: "Vertical 2: Test workflow"
     
     steps:
     - uses: actions/checkout@v2
-    - name: "Run Docker"
+    - name: Set the env variables
+      run: |
+        cat .env >> $GITHUB_ENV
+    - name: "Run docker compose"
       working-directory: ./simulation
       run: docker-compose up -d

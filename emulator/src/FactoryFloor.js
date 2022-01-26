@@ -7,13 +7,13 @@ class FactoryFloor {
         this.width = width;
         this.height = height;
         this.machines = new Graph.Graph();
-        this.machines_map = [];
+        this.machines_map = new Map();
     }
 
     isValidMachineAddition(machine) {
         const machine_id = machine.getID();
         const is_valid_id = !(machine_id in this.machines_map);
-        const is_valid_position = machine.getPosition.isInside(new Position2D(0,0), new Position2D(this.width, this.height));
+        const is_valid_position = machine.getPosition().isInside(new Position2D(0,0), new Position2D(this.width, this.height));
 
         return is_valid_id && is_valid_position;
     }
@@ -23,16 +23,16 @@ class FactoryFloor {
             return;
 
         const machine_id = machine.getID();
-        this.machines_map[machine_id] = machine;
+        this.machines_map.set(machine_id, machine);
 
         if (incoming_machine_ids)
             incoming_machine_ids.forEach(id => {
-                this.machines.set(id, machine_id);
+                this.machines.dir(id, machine_id);
             });
         
         if (outgoing_machine_ids)
             outgoing_machine_ids.forEach(id => {
-                this.machines.set(machine_id, id);
+                this.machines.dir(machine_id, id);
             });
     }
 
@@ -45,10 +45,10 @@ class FactoryFloor {
     }
 
     getMachine(machine_id) {
-        return this.machines_map[machine_id];
+        return this.machines_map.get(machine_id);
     }
 
-    get getMachines(){
+    getMachines(){
         return this.machines_map;
     }
 }

@@ -29,13 +29,17 @@ public class SensorState{
         return measureStates.get(measureType);
     }
 
+    public boolean findMeasureState(String measureType){
+        return measureStates.containsKey(measureType);
+    }
+
     /**
      * Updates the sensor state by adding a new measure to it. 
      * @param measureType The type of measure (e.g, temperature, vibration) 
      * @param newMeasure The measure value. 
      * @return True if the measure is between the min and max values allowed. False otherwise. 
      */
-    public boolean updateMeasureState(String measureType, float newMeasure){
+    public boolean updateMeasureState(String measureType, double newMeasure){
         MeasureState measureState = this.measureStates.get(measureType); 
         return measureState.add(newMeasure);
     }

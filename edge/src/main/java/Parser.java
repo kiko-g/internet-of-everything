@@ -23,14 +23,14 @@ public class Parser {
 
     public static void main(String[] args) throws IOException {
 
-        final File folder = new File("src/main/java/machinesJSON");
+        final File folder = new File("../data");
         ArrayList<String> files = listFilesForFolder(folder);
 
         for (String file: files) {
             //JSON parser object to parse read file
             JSONParser jsonParser = new JSONParser();
 
-            try (FileReader reader = new FileReader("src/main/java/machinesJSON/" + file))
+            try (FileReader reader = new FileReader("../data/" + file))
             {
                 //Read JSON file
                 Object obj = jsonParser.parse(reader);
@@ -89,6 +89,9 @@ public class Parser {
         //Get machine timePerBatch
         Long machineTimePerBatch = (Long) machineInfo.get("timePerBatch");
 
+        String prevMachineID = (String) machineInfo.get("prevMachineID");
+        System.out.println("MACHINE " + machineID + " has prevMachineID=" + prevMachineID);
+
         //Get machine output
         String nextMachineID = (String) machineInfo.get("nextMachineID");
 
@@ -100,8 +103,8 @@ public class Parser {
 
         //Iterate over employee array
         sensorList.forEach( sensor -> parseSensorObject( (JSONObject) sensor, machineID, sensors));
-
-        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, nextMachineID, config);
+    
+        Machine newMachine = new Machine(machineID, machineStatus, machineDefectProbability, machineInput, machineOutput, machineTimePerBatch, prevMachineID, nextMachineID, config);
         machines.add(newMachine);
 
         newMachine.setSensors(sensors);

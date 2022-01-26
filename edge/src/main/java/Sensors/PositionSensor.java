@@ -12,6 +12,8 @@ public class PositionSensor extends Sensor {
     Double yAvg;
     Double xStandardDeviation;
     Double yStandardDeviation;
+    Double x;
+    Double y;
 
     public PositionSensor(String name, String machineId, double xMax, double xMin, double xAvg, double yMax, double yMin, double yAvg, double xStandardDeviation, double yStandardDeviation, double updateInterval) {
         super(name, machineId, updateInterval);
@@ -24,25 +26,28 @@ public class PositionSensor extends Sensor {
         this.yAvg = yAvg;
         this.xStandardDeviation = xStandardDeviation;
         this.yStandardDeviation = yStandardDeviation;
+        this.x = xAvg;
+        this.y = yAvg;
     }
 
     @Override
     public void generateData() {
-        System.err.println("Generate of data " + this.getName() + " not implemented.");
+        this.setNewData(true);
+        //System.err.println("Generate of data " + this.getName() + " not implemented.");
     }
 
     public JSONObject readData() {
         this.setNewData(false);
 
         JSONObject values = new JSONObject();
-        /*if (!this.isOn || this.x == null || this.y == null){
+        if (!this.isOn || this.x == null || this.y == null){
             values.put("x", "null");
             values.put("y", "null");
         }
         else {
             values.put("x", this.x);
             values.put("y", this.y);
-        }*/
+        }
 
         JSONObject obj = createBaseJSON();
         obj.put("values", values);

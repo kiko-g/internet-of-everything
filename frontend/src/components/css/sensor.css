@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card-slate {
+  @apply bg-slate-500/70;
+}
+
+.pill-slate {
+  @apply bg-slate-100 text-slate-800;
+}
+
+.pill-fail {
+  @apply bg-slate-400 text-white;
+}
+
+.card-indigo {
+  @apply bg-indigo-400/70;
+}
+
+.pill-indigo {
+  @apply bg-indigo-100 text-indigo-800;
+}
+
+.card-teal {
+  @apply bg-teal-400/70;
+}
+
+.pill-teal {
+  @apply bg-teal-100 text-teal-800;
+}
+
+.card-purple {
+  @apply bg-purple-400/70;
+}
+
+.pill-purple {
+  @apply bg-purple-100 text-purple-800;
+}
+
+.card-orange {
+  @apply bg-orange-400/70;
+}
+
+.pill-orange {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.card-sky {
+  @apply bg-sky-400/70;
+}
+
+.pill-sky {
+  @apply bg-sky-100 text-sky-800;
+}
+
+.card-lime {
+  @apply bg-lime-400/70;
+}
+
+.pill-lime {
+  @apply bg-lime-100 text-lime-800;
+}
+
+.card-red {
+  @apply bg-red-500/70;
+}
+
+.pill-red {
+  @apply bg-red-100 text-red-800;
+}
