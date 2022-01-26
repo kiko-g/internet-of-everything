@@ -15,15 +15,13 @@ on:
 jobs:
   docker_build:
     runs-on: self-hosted
-    name: "Vertical 3: Test docker-compose"
+    name: "Vertical 3: Test Workflow"
     
     steps:
     - uses: actions/checkout@v2
     - name: Set the env variables
       run: |
         cat .env >> $GITHUB_ENV
-    - name: Test
-      run: echo $DB_PORT
-    - name: "Run Docker"
+    - name: "Run docker compose"
       working-directory: ./failure
       run: docker-compose up -d
