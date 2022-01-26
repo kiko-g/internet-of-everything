@@ -50,6 +50,7 @@ def underenergy_test(mqtt, machine_id, test_number, **kwargs):
 
     return test_result(mqtt, expected_values, failure_topic, test_number)
 
+
 def nullenergy_test(mqtt, machine_id, test_number, **kwargs):
     """ Test energy to have no voltage """
     base_payload = test(mqtt, machine_id, test_number,
