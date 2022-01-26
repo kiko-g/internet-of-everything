@@ -83,13 +83,13 @@ public class ProductionState {
         if(machine.getOutCount() == 0 || !this.firstTimes.containsKey(machine.getId())){
             return 0;
         }
-     
+    
+        // Number of non-defective products produced by the machine since it started working
         int qualityProducts = machine.getOutCount().intValue() - machine.getDefectiveCount().intValue();
 
         LocalDateTime firstInputDt = this.firstTimes.get(machine.getId());
         long timeUntilNow = ChronoUnit.MILLIS.between(firstInputDt, LocalDateTime.now());
-
-        // Number of non-defective products produced by the machine since it started working
+        
         return (double) (1000*qualityProducts)/timeUntilNow;
     }
 

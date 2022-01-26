@@ -5,13 +5,14 @@ import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 import org.json.JSONObject;
-import java.io.IOException;
-import java.io.File;
-import java.nio.file.Files;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Machine extends MQTTClient implements Runnable {
+    public static final double FAILURE_RATE = 0.05;
+
     Thread thread;
     String name;
 
@@ -20,12 +21,20 @@ public class Machine extends MQTTClient implements Runnable {
     String input;
     String output;
     Long timePerBatch;
+    String prevMachineID;
     String nextMachineID;
     String machineTopic;
     String productTopic;
     ArrayList<Sensor> sensors; // maybe change to hashmap with sensor's names
+    Set<String> idSet = new HashSet<>();
+    Queue<Material> items = new LinkedList<>();
+    private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+    private Material materialInProduction;
+    private QRCodeSensor inSensor;
+    private QRCodeSensor outSensor;
 
-    Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String nextMachine, byte[] config) {
+
+    Machine(String id, Long machineStatus, Long defectProb, String machineInput, String machineOutput, Long timeBatch, String prevMachineID, String nextMachine, byte[] config) {
         super(id);
         this.name = id;
         this.status = machineStatus;
@@ -33,17 +42,40 @@ public class Machine extends MQTTClient implements Runnable {
         this.input = machineInput;
         this.output = machineOutput;
         this.timePerBatch = timeBatch;
+        this.prevMachineID = prevMachineID;
         this.nextMachineID = nextMachine;
         this.machineTopic = "machine/" + id;
         this.productTopic = "product/" + id;
+        this.materialInProduction = null;
         this.publishMessage("startup", config);
         this.subscribeTopic("failure/" + id);
     }
 
+    private QRCodeSensor getQRSensors(QRCodeSensor.Action action){
+        for(Sensor sensor: this.sensors){
+            if(sensor.getClass() == QRCodeSensor.class) {
+                if(((QRCodeSensor) sensor).getAction() == action)
+                    return (QRCodeSensor) sensor;
+            }
+        }
+        return null;
+    }
+
+    public void setSensors(ArrayList<Sensor> sensors){
+        this.sensors = sensors;
+
+        this.inSensor = this.getQRSensors(QRCodeSensor.Action.IN);
+        this.outSensor = this.getQRSensors(QRCodeSensor.Action.OUT);
+    }
+
+    private ArrayList<Sensor> getSensors() {
+        return this.sensors;
+    }
 
     public void start() {
         System.out.println("Machine " + this.name + " started working.");
-
+        if(this.prevMachineID != null)
+            this.subscribeTopic(this.name);
         if(this.thread == null) {
             this.thread = new Thread (this, this.name);
             this.thread.start(); //this calls run() in a new Thread
@@ -61,33 +93,95 @@ public class Machine extends MQTTClient implements Runnable {
         }
     }
 
-    private void checkSensorsForNewDataForeverAndPublish() {
-        while(true) {
-            for (Sensor sensor: this.sensors) {
-                if(sensor.hasNewData()) {
-                    JSONObject data = sensor.readData();
-                    if(sensor.getClass() == QRCodeSensor.class)
-                        this.publishMessage(this.productTopic, data.toString().getBytes());
-                    else
-                        this.publishMessage(this.machineTopic, data.toString().getBytes());
-                }
-            }
+    private void setOutMaterial(Material material){
+        this.outSensor.setMaterial(material.materialID,material.defect);
+    }
+
+    private void setInMaterial(Material material){
+        this.inSensor.setMaterial(material.materialID,material.defect);
+    }
+
+    private boolean isStartMachine(){
+        return this.prevMachineID.equals("null");
+    }
+
+    private boolean isEndMachine(){
+        return this.nextMachineID.equals("null");
+    }
+
+    private String getRandomId(){
+        int id;
+        do{
+            id = (int)(Math.random()*1000);
+        } while (this.idSet.contains(String.valueOf(id)));
+        
+        return String.valueOf(id);
+    }
+
+    private void queueNewMaterial(){
+        String id = this.getRandomId();
+        idSet.add(id);
+        Material material = new Material(id, false);
+        items.add(material);
+    }
+
+    private void startProducingMaterial() {
+        // Get item from queue 
+        Material item = this.items.poll();
+        if(item != null){
+            // Set new product in production
+            this.materialInProduction = item;
+            this.setInMaterial(item);
+            JSONObject data = inSensor.readData();
+        
+            this.publishMessage(this.productTopic, data.toString().getBytes());
         }
     }
 
-    // private byte[] getConfigContent() throws IOException{
-    //     String file_name = "machine1_TEMPORARY.json"; //TODO: CHANGE THIS
-    //     File file = new File(file_name);     
-    //     byte[] bytes = Files.readAllBytes(file.toPath());
-    //     return bytes;
-    // }
+    private void dispatchMaterial(){
+        // Set defect
+        if(Math.random() < FAILURE_RATE)
+            this.materialInProduction.defect = true;
+        
+        // Finish production of current product
+        this.setOutMaterial(this.materialInProduction);
+        JSONObject data = outSensor.readData();
 
-    private ArrayList<Sensor> getSensors() {
-        return this.sensors;
+        this.publishMessage(this.productTopic, data.toString().getBytes());
+
+        if(!this.isEndMachine())
+            this.publishMessage(this.nextMachineID, this.materialInProduction.toString().getBytes());
+        this.materialInProduction = null;
     }
 
-    public void setSensors(ArrayList<Sensor> sensors){
-        this.sensors = sensors;
+    private void checkSensorsForNewDataForeverAndPublish() {
+        long last_time = System.currentTimeMillis();
+        
+        // Simulate incoming products in the start machine
+        if(this.isStartMachine())
+            this.executor.scheduleWithFixedDelay(new Thread(() -> this.queueNewMaterial()), 2000, 3000, TimeUnit.MILLISECONDS);
+
+        while(true) {
+            long curr_time = System.currentTimeMillis();
+
+            if((curr_time - last_time) > this.timePerBatch){
+                last_time = curr_time;
+                
+                // Dispatch item if there is one being produced
+                if(this.materialInProduction != null)
+                    this.dispatchMaterial();
+                // Start producing new item if there is one available
+                else 
+                    this.startProducingMaterial();     
+            }
+
+            for (Sensor sensor: this.sensors) {
+                if(sensor.hasNewData() && sensor.getClass() != QRCodeSensor.class) {
+                    JSONObject data = sensor.readData();
+                    this.publishMessage(this.machineTopic, data.toString().getBytes());
+                }
+            }
+        }
     }
 
     @Override
@@ -115,10 +209,17 @@ public class Machine extends MQTTClient implements Runnable {
         // System.out.println("--");
         // System.out.println("messageArrived()");
         // System.out.println("topic: " + s);
-        System.out.println("message: " + mqttMessage.toString());
+        //System.out.println("message: " + mqttMessage.toString());
         // System.out.println("--");
 
-        //TODO: handle message
+        if(s.equals(this.name)){
+            Material material = new Material(mqttMessage.toString());
+    
+            if(!material.defect)
+                items.add(material);
+            else
+                System.out.println("Item received with defect, id:" + material.materialID);
+        }
     }
 
     @Override
@@ -127,8 +228,6 @@ public class Machine extends MQTTClient implements Runnable {
         // System.out.println("deliveryComplete()");
         // System.out.println("token: " + iMqttToken.toString());
         // System.out.println("--");
-
-        //TODO: handle delivery complete
     }
 
     @Override

@@ -4,8 +4,9 @@
     "defectProbability": 10,
     "input": "material2",
     "output": "material3",
-    "timePerBatch": 1000,
+    "timePerBatch": 2000,
     "nextMachineID": "machine3",
+    "prevMachineID": "machine1",
     "sensors": [
       {
         "id": "position2", 
@@ -63,6 +64,22 @@
             "avg": 40,
             "standardDeviation": 9
           }
+        }
+      },
+      { 
+        "id": "qrcodein2",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "IN"
+        }
+      },
+      { 
+        "id": "qrcodeout2",
+        "type": "QR_CODE",
+        "updateInterval": 1,
+        "attributes": {
+          "action": "OUT"
         }
       }
     ]

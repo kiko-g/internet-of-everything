@@ -20,21 +20,6 @@ services:
       - "mosquitto"
     container_name: "emulator-backend"
 
-  # Edge Layer
-  edge:
-    build: ./edge/
-    command: sh -c "gradle run"
-    env_file:
-      - .env
-    volumes:
-      - ./edge/src:/edge/src
-      - ./data/:/data/
-    depends_on:
-      - "emulator-backend"
-      - "mosquitto"
-    container_name: "edge"
-
-  
   # Database to track product messages
   mongo:
     image: mongo:5.0.5
@@ -73,19 +58,21 @@ services:
     container_name: "failure-service"
     depends_on:
       - mongo
-
-  # TODO: delete this when QRCode messages are ready
-  products:
-    build: ./failure/
-    command: sh -c "gradle runProductSensors"
+      
+  # Edge Layer
+  edge:
+    build: ./edge/
+    command: sh -c "gradle run"
     env_file:
       - .env
     volumes:
-      - ./failure/src/:/failure/src/
+      - ./edge/src:/edge/src
       - ./data/:/data/
-    container_name: "product-sensors"
     depends_on:
-      - failure-service
+      - "emulator-backend"
+      - "mosquitto"
+      - "failure-service"
+    container_name: "edge"
     
   # Chaos Engineering, intercepting messages
   chaos-engineering:

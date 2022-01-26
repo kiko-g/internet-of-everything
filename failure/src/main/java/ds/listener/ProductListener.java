@@ -30,7 +30,7 @@ public class ProductListener extends Listener {
     public static ProductionTable productionTable;
 
     public ProductListener(Graph graph, MongoCollection<Document> collection) {
-        super("product", graph);
+        super("product/#", graph);
 
         try {
             MachineNode endMachine = this.machinesGraph.getEndMachine();
@@ -63,7 +63,7 @@ public class ProductListener extends Listener {
             String action = messageParsed.getJSONObject("values").getString("action");
             boolean defect = messageParsed.getJSONObject("values").getBoolean("defect");
             String readTimeStr = messageParsed.getString("readingTime");
-            String productID = messageParsed.getJSONObject("values").getString("productID");
+            String productID = messageParsed.getJSONObject("values").getString("materialID");
             LocalDateTime readTime = Utils.parseDateTime(readTimeStr);
 
             MachineNode machine = this.machinesGraph.getMachineNode(machineID);
