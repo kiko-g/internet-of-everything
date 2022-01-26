@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  failure-test:
+    build: 
+      context: ./failure
+      dockerfile: Dockerfile.test
+    env_file:
+     - .env
+    container_name: "failure-test"
