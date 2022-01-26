@@ -2,9 +2,11 @@ const Position2D = require('./Position2D');
 const Sensor = require('./Sensors/Sensor');
 
 class Machine {
-    constructor(id, x, y) {
+    constructor(id, x, y, input, output) {
         this.id = id;
         this.position = new Position2D(x, y);
+        this.input = input;
+        this.output = output;
         // Data structure for sensors
         this.Sensors = new Array();
     }
@@ -13,15 +15,11 @@ class Machine {
         return this.id;
     }
 
-    // get getID() {
-    //     return this.id;
-    // }
-
-    get getPosition() {
+    getPosition() {
         return this.position;
     }
 
-    get getSensors(){
+    getSensors(){
         return this.Sensors;
     }
 
@@ -31,7 +29,7 @@ class Machine {
 
     getSensor(sensor) {
         for(let i = 0; i < this.Sensors.length; i++){
-            if(this.Sensors[i].getID == sensor){
+            if(this.Sensors[i].getID() == sensor){
                 return this.Sensors[i];
             }
         }

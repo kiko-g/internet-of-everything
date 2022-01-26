@@ -3,16 +3,13 @@ name: V1-workflow
 on:
   push:
     branches:
-      - V1-Emulator
       - main
       - dev
-      - bind/V1-V3
+
   pull_request:
     branches: 
       - main
       - dev
-      - V1-Emulator
-
   workflow_dispatch:
 
 jobs:
@@ -22,6 +19,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Set the env variables
+      run: |
+        cat .env >> $GITHUB_ENV
     - name: "Run Docker"
       run: docker-compose up -d
      
@@ -31,6 +31,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Set the env variables
+      run: |
+        cat .env >> $GITHUB_ENV
     - name: "Run Docker"
       run: docker-compose up -d
     - name: "Build and Test Edge"
