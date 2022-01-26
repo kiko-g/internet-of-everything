@@ -1,11 +1,10 @@
 import React from "react"
 import { Disclosure } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
-import PropTypes from "prop-types"
 import DarkModeSwitch from "./utilities/switches/DarkModeSwitch"
 import { Link } from "react-router-dom"
 
-export default function Header({ siteTitle = "IOE", location }) {
+export default function Header({ location }) {
   return (
     <Disclosure as="nav" className="bg-slate-700 dark:bg-slate-700 text-white space-x-4">
       {({ open }) => {
@@ -27,21 +26,20 @@ export default function Header({ siteTitle = "IOE", location }) {
                 <div className="flex-1 flex items-center justify-between md:items-stretch md:justify-between md:mx-2 duration-150">
                   <div className="text-md font-medium h-auto py-1 ml-4 md:mx-2">
                     <div className="flex items-center space-x-2">
-                      <Link to="/" className="flex items-center space-x-2 hover:opacity-90">
-                        <h2
-                          className="text-blue-400 text-lg tracking-wider uppercase 
-                        hover:underline hover:decoration-2 hover:decoration-blue-500 "
-                        >
-                          {siteTitle}
+                      <Link to="/" className="flex items-center space-x-2">
+                        <h2 className="font-bold text-white tracking-tighter duration-150 hover:text-blue-200">
+                          Internet of Everything
                         </h2>
                       </Link>
-                      <span aria-hidden="true">&middot;</span>
-                      <span className="font-light text-sm">{location}</span>
+                      <span className="hidden md:block">
+                        <span aria-hidden="true">&middot;&nbsp;</span>
+                        <span className="font-light text-sm">{location}</span>
+                      </span>
                     </div>
                   </div>
                   <div className="hidden md:block md:ml-6">
                     <div className="flex space-x-2 mr-2">
-                      <span key="nav-dark-mode" className="px-2 pt-1 pb-0.5 rounded-xl h-auto divide-x-2 divide-red-400 mr-1w">
+                      <span key="nav-dark-mode" className="px-2 pt-1 pb-0.5 rounded-xl h-auto">
                         <DarkModeSwitch />
                       </span>
                     </div>
@@ -63,8 +61,4 @@ export default function Header({ siteTitle = "IOE", location }) {
       }}
     </Disclosure>
   )
-}
-
-Header.propTypes = {
-  siteTitle: PropTypes.string.isRequired,
 }

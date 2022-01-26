@@ -30,17 +30,24 @@ export const colors = [
 export const jsonStyle = {
   overflowY: "auto",
   overflowX: "hidden",
-  padding: "1em",
+  padding: "1rem",
   width: "100%",
   fontSize: "small",
   lineHeight: 1,
   fontFamily: "JetBrains Mono, Consolas, sans-serif",
-  backgroundColor: "#3c4553",
+  backgroundColor: "inherit",
+  borderRadius: "0.75rem",
 }
 
 export const options = [
   { name: "Machines", color: "bg-blue-400" },
   { name: "Sensors", color: "bg-teal-400" },
+]
+
+export const productionOptions = [
+  { name: "Production", color: "bg-purple-400" },
+  { name: "State Tracking", color: "bg-cyan-400" },
+  { name: "Sensor Failure", color: "bg-amber-400" },
 ]
 
 const labels = [
@@ -54,7 +61,6 @@ const labels = [
 ]
 
 export const findColor = (type) => {
-
   for (let i = 0; i < labels.length; i++) {
     let condition = type.toLowerCase().trim() === labels[i].type.toLowerCase().trim()
     if (condition) return labels[i].color
