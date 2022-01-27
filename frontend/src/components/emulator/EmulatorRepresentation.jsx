@@ -6,7 +6,7 @@ import Stat from "../Stat"
 import { productionOptions } from "../../utils"
 import InputBox from "../utilities/InputBox"
 
-const requestPath = "http://localhost:9000" // TODO: change to env path.
+const requestPath = "http://localhost:9000"
 
 export default function EmulatorRepresentation() {
   // production states
@@ -82,7 +82,7 @@ export default function EmulatorRepresentation() {
                   <InputBox
                     label=""
                     classnames="flex-1 h-16"
-                    placeholder={`Type your product ID`}
+                    placeholder={`Type your product or material ID`}
                     state={[searchProductValue, setSearchProductValue]}
                   />
                   <button
@@ -127,7 +127,7 @@ export default function EmulatorRepresentation() {
                       Machine
                     </th>
                     <th scope="col" className="px-6 py-3 font-medium">
-                      Defect Rate <span className="normal-case dark:text-gray-100">(%)</span>
+                      Defect Rate
                     </th>
                     <th scope="col" className="px-6 py-3 font-medium">
                       Mean Production Time <span className="normal-case dark:text-gray-100">(ms)</span>

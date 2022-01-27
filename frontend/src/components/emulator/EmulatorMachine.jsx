@@ -66,9 +66,13 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
   }, [id, updateSensors])
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setUpdateSensors(true)
     }, TIME_BETWEEN_FETCH)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
   }, [sensors])
 
   return (

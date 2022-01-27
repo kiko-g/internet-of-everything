@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react"
 import Graph from "react-graph-vis"
 import EmulatorMachine from "./EmulatorMachine"
-import axios from 'axios';
+import axios from "axios"
 
+const instance = axios.create({
+  timeout: process.env.TIMEOUT || 10000,
+  baseURL: "http://localhost:8083",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
+})
 
 export default function EmulatorGraph() {
   const TIME_BETWEEN_FETCH = 2000
@@ -10,14 +17,6 @@ export default function EmulatorGraph() {
   const [edges, setEdges] = useState([])
   const [id, setId] = useState(0)
   const [update, setUpdate] = useState(true)
-
-  const instance = axios.create({
-    timeout: process.env.TIMEOUT || 10000,
-    baseURL: "http://localhost:8083/graph",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  })
 
   const options = {
     clickToUse: false,
@@ -99,80 +98,77 @@ export default function EmulatorGraph() {
     },
   }
 
-
   useEffect(() => {
-    if(!update) return
+    if (!update) return
 
     setUpdate(false)
 
-    instance.get()
-    .then((res) => {
-      //console.log(res)
-      let data = res.data
-      let machines = data.machines
-      
-      if (machines.length === 0) {
-        setNodes([])
-      } 
-      let nodes = []
-      machines.forEach((machine, index) => {
-        let color = "#009900"
-        if(!machine.ok)
-          color = "#990000" 
-        if(!machine.on)
-          color = "#4d4d4d"
-        nodes.push({ 
-          id: index, 
-          label: machine.id, 
-          color: color,
-          isOn: machine.on,
-          isOK: machine.ok
-        })
-      })
-      setNodes(nodes)
-      
-      if (data.edges.length === 0) {
-        setEdges([])
-      } 
-      let edges = []
-      data.edges.forEach((edge, index) => {
-        let from
-        let to
-        for(let i=0; i<nodes.length; i++){
-          if (nodes[i].label == edge.from) {
-            from = nodes[i].id
-          }
-          if (nodes[i].label == edge.to) {
-            to = nodes[i].id
-          }
+    instance
+      .get("/graph")
+      .then((res) => {
+        //console.log(res)
+        let data = res.data
+        let machines = data.machines
+
+        if (machines.length === 0) {
+          setNodes([])
         }
-        edges.push({ id: index, from: from, to: to })
+        let nodes = []
+        machines.forEach((machine, index) => {
+          let color = "#009900"
+          if (!machine.ok) color = "#990000"
+          if (!machine.on) color = "#4d4d4d"
+          nodes.push({
+            id: index,
+            label: machine.id,
+            color: color,
+            isOn: machine.on,
+            isOK: machine.ok,
+          })
+        })
+        setNodes(nodes)
+
+        if (data.edges.length === 0) {
+          setEdges([])
+        }
+        let edges = []
+        data.edges.forEach((edge, index) => {
+          let from
+          let to
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].label === edge.from) {
+              from = nodes[i].id
+            }
+            if (nodes[i].label === edge.to) {
+              to = nodes[i].id
+            }
+          }
+          edges.push({ id: index, from: from, to: to })
+        })
+        setEdges(edges)
       })
-      setEdges(edges)
-      
-    })
-    .catch(err=>console.log(err))
+      .catch((err) => console.log(err))
   }, [update])
 
-
-
-  // when edges are updated (graph is displayed), wait some 
+  // when edges are updated (graph is displayed), wait some
   // time and then change update to true, so that new data
   // can be fetched
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setUpdate(true)
     }, TIME_BETWEEN_FETCH)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
   }, [edges])
-
-
 
   return (
     <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
       {nodes.length !== 0 ? (
         <>
           <Graph
-            graph={{nodes:nodes, edges:edges}}
+            graph={{ nodes: nodes, edges: edges }}
             options={options}
             getNetwork={(network) => {
               network.on("click", function (properties) {
@@ -187,13 +183,13 @@ export default function EmulatorGraph() {
             }}
           />
           <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-            <EmulatorMachine 
-              id={nodes[id].label} 
+            <EmulatorMachine
+              id={nodes[id].label}
               on={nodes[id].isOn}
               ok={nodes[id].isOk}
-              key={`graph-props-${id}`} 
-              classnames="col-span-1 min-w-full" 
-              isDetailed={true} 
+              key={`graph-props-${id}`}
+              classnames="col-span-1 min-w-full"
+              isDetailed={true}
             />
           </div>
         </>
@@ -205,4 +201,3 @@ export default function EmulatorGraph() {
     </div>
   )
 }
-
