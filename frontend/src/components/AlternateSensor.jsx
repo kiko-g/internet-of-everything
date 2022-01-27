@@ -36,7 +36,7 @@ export default function AlternateSensor({ data, parent, classnames, isDetailed }
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>{attributes[attribute]}</span>
+                <span>{parseFloat(attributes[attribute]).toFixed(2)}</span>
               </div>
             </div>
           ) : attributeIdx !== Object.keys(attributes).length - 1 ? (
@@ -47,7 +47,7 @@ export default function AlternateSensor({ data, parent, classnames, isDetailed }
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>{attributes[attribute]}</span>
+                <span>{parseFloat(attributes[attribute]).toFixed(2)}</span>
               </div>
             </div>
           ) : (
@@ -58,7 +58,7 @@ export default function AlternateSensor({ data, parent, classnames, isDetailed }
                 className="flex items-center text-gray-700 space-x-1 p-1 font-normal text-xs"
               >
                 <span className="font-medium text-slate-400 px-1 py-0.5 rounded-xl">{attribute}</span>
-                <span>{attributes[attribute]}</span>
+                <span>{parseFloat(attributes[attribute]).toFixed(2)}</span>
               </div>
             </div>
           )
