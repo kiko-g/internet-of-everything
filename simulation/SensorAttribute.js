@@ -34,3 +34,4 @@ export default class SensorAttribute {
     return this.value
   }
 }
+

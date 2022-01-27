@@ -29,6 +29,10 @@ node_modules/*
 /.pnp
 .pnp.js
 
+# simulation
+simulation/node_modules/*
+simulation/coverage/*
+
 # testing
 /coverage
 
