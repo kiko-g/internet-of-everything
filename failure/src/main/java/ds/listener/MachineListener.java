@@ -250,6 +250,8 @@ public class MachineListener extends Listener {
         if (!failureMessage.get("machineID").equals("null")) {
             this.insertIntoDatabase(failureMessage);
             this.failurePublisher.publish(failureMessage.toString(), failureMessage.getString("machineID"));
+        } else {
+            this.failurePublisher.publishUnknowFailure(failureMessage.toString());
         }
     }
 
