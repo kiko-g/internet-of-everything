@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Graph from "react-graph-vis"
 import { colors } from "../utils"
 import Machine from "./Machine"
 
 export default function SimulationGraph({ factory }) {
-  const [id, setId] = useState(0)
+  const [machine, setMachine] = useState(factory[0])
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
   const options = {
@@ -121,6 +121,11 @@ export default function SimulationGraph({ factory }) {
 
     setNodes(nodesArr)
     setEdges(edgesArr)
+
+    return function cleanup() {
+      let drawer = document.getElementById("drawer")
+      if (drawer) if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
+    }
   }, [factory])
 
   return (
@@ -134,7 +139,7 @@ export default function SimulationGraph({ factory }) {
               network.on("click", function (properties) {
                 if (properties.nodes[0] !== undefined) {
                   document.getElementById("drawer").classList.remove("hidden")
-                  setId(properties.nodes[0])
+                  setMachine(factory[properties.nodes[0]])
                 } else {
                   let drawer = document.getElementById("drawer")
                   if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
@@ -143,7 +148,7 @@ export default function SimulationGraph({ factory }) {
             }}
           />
           <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-            <Machine data={factory[id]} key={`graph-props-${id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
+            <Machine data={machine} key={`graph-props-${machine.id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
           </div>
         </>
       ) : (

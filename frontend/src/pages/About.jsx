@@ -8,7 +8,7 @@ export default function About() {
 
   return (
     <div className="homepage min-h-screen bg-slate-200 dark:bg-slate-700 font-sans font-medium">
-      <Header currentLocation="Emulator" />
+      <Header currentLocation="About" />
       <div className="min-h-adjusted mx-auto px-12 py-8 space-y-10">
         <div className="space-y-2">
           <h3 className="sm:text-2xl sm:leading-snug font-semibold tracking-wide uppercase text-slate-600 dark:text-white">
