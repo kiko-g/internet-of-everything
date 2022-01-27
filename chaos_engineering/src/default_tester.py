@@ -5,9 +5,6 @@ from utils import get_config
 from test_temperature import overheating_test, underheating_test
 from test_vibration import undervibration_test, overvibration_test
 from test_energy import underenergy_test, overenergy_test, nullenergy_test
-from test_fake_reading import fake_data_test
-from test_null_values import null_data_test
-from test_negative_values import negative_data_test
 from mqtt_handler.mqtt_handler import MQTTHandler
 
 
@@ -72,9 +69,6 @@ def main():
         (overenergy_test, delay_only_args),
         (underenergy_test, delay_only_args),
         (nullenergy_test, delay_only_args),
-        (fake_data_test, delay_only_args),
-        (null_data_test, delay_only_args),
-        (negative_data_test, delay_only_args)
     ]
 
     start = time.time()
@@ -86,9 +80,6 @@ def main():
         'overenergy_test': [0, 0, 0],
         'underenergy_test': [0, 0, 0],
         'nullenergy_test': [0, 0, 0],
-        'fake_data_test': [0, 0, 0],
-        'null_data_test': [0, 0, 0],
-        'negative_data_test': [0, 0, 0],
     }
 
     # Execute random tests on a loop
