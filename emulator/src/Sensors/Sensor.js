@@ -102,7 +102,7 @@ class PositionSensor extends Sensor {
         //     console.log("Error has occured in vibration sensor...");
         // }
 
-        console.log("POSITION SENSOR YET TO BE IMPLEMENTED");
+        //console.log("POSITION SENSOR YET TO BE IMPLEMENTED");
     }
 }
 
@@ -145,7 +145,7 @@ class QRCodeSensor extends Sensor {
         //     console.log("Error has occured in vibration sensor...");
         // }
 
-        console.log("QR CODE SENSOR YET TO BE IMPLEMENTED");
+        //console.log("QR CODE SENSOR YET TO BE IMPLEMENTED");
     }
 }
 
