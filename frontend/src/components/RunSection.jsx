@@ -54,7 +54,6 @@ export default function RunSection({ factoryInitialState, factoryFinalState }) {
         },
       })
       .then(function (response) {
-        console.log(response.data)
         setFactoryFinal(response.data)
       })
       .catch(function (error) {

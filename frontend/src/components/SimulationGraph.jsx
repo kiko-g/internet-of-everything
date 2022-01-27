@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from "react"
 import Graph from "react-graph-vis"
-import EmulatorMachine from "./EmulatorMachine"
-import axios from "axios"
+import { colors } from "../utils"
+import Machine from "./Machine"
 
-const instance = axios.create({
-  timeout: process.env.TIMEOUT || 10000,
-  baseURL: "http://localhost:8083",
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
-})
-
-export default function EmulatorGraph() {
-  const TIME_BETWEEN_FETCH = 2000
+export default function SimulationGraph({ factory }) {
+  const [machine, setMachine] = useState(factory[0])
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
-  const [id, setId] = useState(0)
-  const [update, setUpdate] = useState(true)
-
   const options = {
     clickToUse: false,
     layout: {
@@ -99,68 +88,45 @@ export default function EmulatorGraph() {
   }
 
   useEffect(() => {
-    if (!update) return
+    let nodesArr = []
+    let edgesArr = []
+    if (factory.length === 0) return []
+    let order = 0
+    let startMachine
+    factory.forEach((machine, index) => {
+      if (machine.prevMachineID === "null") {
+        startMachine = machine
+        nodesArr.push({ id: order, label: machine.id, color: colors[order % colors.length] })
+      }
+    })
 
-    setUpdate(false)
+    let nextID = startMachine.nextMachineID
+    while (nextID !== "null") {
+      edgesArr.push({ from: order, to: order + 1 })
 
-    instance
-      .get("/graph")
-      .then((res) => {
-        let data = res.data
-        let machines = data.machines
-
-        if (machines.length === 0) {
-          setNodes([])
-        }
-        let nodes = []
-        machines.forEach((machine, index) => {
-          let color = "#009900"
-          if (!machine.ok) color = "#990000"
-          if (!machine.on) color = "#4d4d4d"
-          nodes.push({
-            id: index,
-            label: machine.id,
-            color: color,
-            isOn: machine.on,
-            isOK: machine.ok,
+      for (let i = 0; i < factory.length; i++) {
+        if (nextID !== factory[i].id) continue
+        else {
+          order++
+          nextID = factory[i].nextMachineID
+          nodesArr.push({
+            id: order,
+            label: factory[i].id,
+            color: colors[order % colors.length],
           })
-        })
-        setNodes(nodes)
-
-        if (data.edges.length === 0) {
-          setEdges([])
+          break
         }
-        let edges = []
-        data.edges.forEach((edge, index) => {
-          let from
-          let to
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].label === edge.from) {
-              from = nodes[i].id
-            }
-            if (nodes[i].label === edge.to) {
-              to = nodes[i].id
-            }
-          }
-          edges.push({ id: index, from: from, to: to })
-        })
-        setEdges(edges)
-      })
-      .catch((err) => console.log(err))
-  }, [update])
-
-  // when edges are updated (graph is displayed), wait some
-  // time and then change update to true, so that new data
-  // can be fetched
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setUpdate(true)
-    }, TIME_BETWEEN_FETCH)
-
-    return () => {
-      clearTimeout(timeoutId)
+      }
     }
-  }, [edges])
+
+    setNodes(nodesArr)
+    setEdges(edgesArr)
+
+    return function cleanup() {
+      let drawer = document.getElementById("drawer")
+      if (drawer) if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
+    }
+  }, [factory])
 
   return (
     <div id="graph" className="relative group w-full bg-slate-200 dark:bg-slate-300 rounded-md" style={{ height: "65vh" }}>
@@ -173,7 +139,7 @@ export default function EmulatorGraph() {
               network.on("click", function (properties) {
                 if (properties.nodes[0] !== undefined) {
                   document.getElementById("drawer").classList.remove("hidden")
-                  setId(properties.nodes[0])
+                  setMachine(factory[properties.nodes[0]])
                 } else {
                   let drawer = document.getElementById("drawer")
                   if (!drawer.classList.contains("hidden")) drawer.classList.add("hidden")
@@ -181,20 +147,15 @@ export default function EmulatorGraph() {
               })
             }}
           />
-          <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-            <EmulatorMachine
-              id={nodes[id].label}
-              on={nodes[id].isOn}
-              ok={nodes[id].isOk}
-              key={`graph-props-${id}`}
-              classnames="col-span-1 min-w-full"
-              isDetailed={true}
-            />
-          </div>
+          {machine ? (
+            <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
+              <Machine data={machine} key={`graph-props-${machine.id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
+            </div>
+          ) : null}
         </>
       ) : (
         <div className="flex h-full items-center justify-center">
-          <p className="">No machines online!</p>
+          <p className="">Graph is empty!</p>
         </div>
       )}
     </div>

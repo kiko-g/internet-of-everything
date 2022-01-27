@@ -1601,7 +1601,7 @@ export const factories = [
   ],
   [
     {
-      id: "0",
+      id: "machineX",
       status: 0,
       defectProbability: 52,
       input: "material1",
