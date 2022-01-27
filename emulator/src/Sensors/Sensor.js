@@ -97,12 +97,7 @@ class PositionSensor extends Sensor {
     }
 
     compareValues(received) {
-        // if(received.vibration > this.max || received.vibration < this.min){
-        //     this.hasError = true;
-        //     console.log("Error has occured in vibration sensor...");
-        // }
-
-        //console.log("POSITION SENSOR YET TO BE IMPLEMENTED");
+        console.log("Checking Position Sensor");
     }
 }
 
@@ -140,12 +135,7 @@ class QRCodeSensor extends Sensor {
     }
 
     compareValues(received) {
-        // if(received.vibration > this.max || received.vibration < this.min){
-        //     this.hasError = true;
-        //     console.log("Error has occured in vibration sensor...");
-        // }
-
-        //console.log("QR CODE SENSOR YET TO BE IMPLEMENTED");
+        console.log("Checking QRCodeSensor");
     }
 }
 
