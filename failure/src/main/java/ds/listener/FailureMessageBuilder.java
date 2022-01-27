@@ -80,9 +80,9 @@ public class FailureMessageBuilder {
      */
     private boolean existSensorID(String sensorID){
         // Comparation doesn't make sense if machineID is wrong.
-        if (!this.containsError()) return true;
+        if (this.containsError()) return true;
         MachineState machineState = this.state.getMachineState(this.failureMessage.getString("machineID"));
-        return !machineState.findSensor(sensorID);
+        return machineState.findSensor(sensorID);
     }
 
     private void setReadingTime(){

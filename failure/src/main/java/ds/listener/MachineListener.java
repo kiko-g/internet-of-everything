@@ -247,9 +247,10 @@ public class MachineListener extends Listener {
      * Send a failure of a specific machine, that occured due to a format or unknow error in the message
      */ 
     public void sendParseFailure(JSONObject failureMessage){
-        // Add failure to the database and publish it to the machine
-        this.insertIntoDatabase(failureMessage);
-        this.failurePublisher.publish(failureMessage.toString(), failureMessage.getString("machineID"));
+        if (!failureMessage.get("machineID").equals("null")) {
+            this.insertIntoDatabase(failureMessage);
+            this.failurePublisher.publish(failureMessage.toString(), failureMessage.getString("machineID"));
+        }
     }
 
     /**
