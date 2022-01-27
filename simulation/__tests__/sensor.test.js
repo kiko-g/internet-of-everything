@@ -1,4 +1,4 @@
-import SensorAttribute from "../SensorAttribute.js"
+
 import Sensor from "../Sensor.js"
 
 

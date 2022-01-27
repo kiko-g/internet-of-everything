@@ -25,3 +25,10 @@ jobs:
     - name: "Run docker compose"
       working-directory: ./simulation
       run: docker-compose up -d
+    - name: "Run tests"
+      working-directory: ./simulation
+      run: npm test
+    - name: "Run linter"
+      working-directory: ./simulation
+      run: npm run lint
+   
