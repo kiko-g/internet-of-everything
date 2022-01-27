@@ -34,9 +34,29 @@
 #### Closed PBIs
 - Refactor: display overvibration needs to work with mqtt.
   - Effort: 43
+- As a chaos engineer, i want to able to manipulate the values of a Production Speed Sensor to see if the system can detect them.  
+  - Effort: 43
+- As a chaos engineer, i want to able to manipulate the values of a Machine Orientation Sensor to see if the system can detect them.
+  - Effort: 43
+- As a chaos engineer, i want to able to manipulate the values of a Machine Velocity Sensor to see if the system can detect them.
+  - Effort: 43
+- As a chaos engineer, i want to refactor all scripts that have a low/high threshold so i can specify which error i want to inject.
+  - Effort: 43
+- As a chaos engineer, i want to coordinate with V3 the error handlings and thresholds.
+  - Effort: 86
+- As a chaos engineer, i want to able to manipulate the values of a Energy Sensor to see if the system can detect them. 
+  - Effort: 43
+- As a chaos engineer, i want to know where and what errors were injected in the received data readings.
+  - Effort 86
+- As a chaos engineer, I want to cause a machine to display that is working without any voltage to see if the system can properly react to it.
+  - Effort 43
+- Refactor: display overheating needs to work with mqtt
+  - Effort 43    
 #### Increment
 - Continued introducing more errors and sent them via MQTT.
-#### Sprint Estimated Total Effort: 43
+- Added more tests for the system to detect
+- Continuation to integrate with other verticals
+#### Sprint Estimated Total Effort: 516
 
 <br/>
 
