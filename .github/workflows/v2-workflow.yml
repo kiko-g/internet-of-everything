@@ -25,11 +25,21 @@ jobs:
     - name: "Run docker compose"
       working-directory: ./simulation
       run: docker-compose up -d
+    - name: "Install jest"
+      working-directory: ./simulation
+      run: npm install -g jest
+    - name: "Install ts-jest"
+      working-directory: ./simulation
+      run: npm add jest ts-jest @types/jest --dev
+    - name: "Init jest"
+      working-directory: ./simulation
+      run: npx jest --init
+    - name: "Init babel"
+      working-directory: ./simulation
+      run: npm i -D @babel/preset-env
     - name: "Run tests"
       working-directory: ./simulation
-      run: |
-        npm install -g jest
-        npm test
+      run: npm test
     - name: "Run linter"
       working-directory: ./simulation
       run: |
