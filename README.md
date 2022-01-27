@@ -7,20 +7,17 @@ After that, run the following command on terminal, under the root:
 ```bash
 docker-compose up -d
 ```
+It is possible to visualize what is happening under localhost:FRONTEND_PORT (default: localhost:3000)
 
 # Modules
-## Emulator
-The goal of this vertical is to emulate a factory, combining the information obtained from the machines in the factory floor and displaying it in real time in a organized dashboard.
-
-## Simulator
-
-TODO: adicionar descrição
+## Emulator and Simulator, the Digital Twin
+A virtual representation of the factory that spans its lifecycle and is updated from real-time data. It also simulates how the factory should work if perfect conditions were met.
 
 ## Fault Analysis
-It's necessary to analyse every machine output, to guarantee that no error occured or is going to occur in a near future.
+It's necessary to analyse every machine output, to guarantee that no error occured or is going to occur in a near future. It also ensures the self healing of the machines.
 
 ## Chaos Engineering
-Sending
+Sending non standardized messages to test if the project is resilient to the errors.
 
 # Architeture Overview
 TODO
