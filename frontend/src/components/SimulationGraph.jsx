@@ -147,9 +147,11 @@ export default function SimulationGraph({ factory }) {
               })
             }}
           />
-          <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
-            <Machine data={machine} key={`graph-props-${machine.id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
-          </div>
+          {machine ? (
+            <div id="drawer" className={`hidden absolute bottom-4 left-4 min-w-1/4 opacity-80`}>
+              <Machine data={machine} key={`graph-props-${machine.id}`} classnames="col-span-1 min-w-full" isDetailed={false} />
+            </div>
+          ) : null}
         </>
       ) : (
         <div className="flex h-full items-center justify-center">

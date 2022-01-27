@@ -25,7 +25,7 @@ export default function EmulatorRepresentation() {
    * @brief installs periodic production fetch when component is mounted
    */
   useEffect(() => {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       fetch(requestPath + "/production")
         .then((response) => response.json())
         .then((data) => {
@@ -33,6 +33,10 @@ export default function EmulatorRepresentation() {
         })
         .catch((error) => console.error(error))
     }, 8000)
+
+    return () => {
+      clearTimeout(intervalId)
+    }
   }, [])
 
   const requestFindProduct = () => {

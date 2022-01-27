@@ -54,7 +54,6 @@ export default function Machine({ id, on, ok, classnames, isDetailed }) {
     instance
       .get(`/${id}`)
       .then((res) => {
-        //console.log(res);
         let data = res.data
         setInput(data.input)
         setOutput(data.output)
