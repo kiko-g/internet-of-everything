@@ -184,6 +184,7 @@ public class Machine extends MQTTClient implements Runnable {
         }
     }
 
+
     @Override
     public void disconnected(MqttDisconnectResponse mqttDisconnectResponse) {
         // System.out.println("--");
@@ -219,6 +220,66 @@ public class Machine extends MQTTClient implements Runnable {
                 items.add(material);
             else
                 System.out.println("Item received with defect, id:" + material.materialID);
+        }
+        else if(s.equals("failure/" + this.name)){
+            parseErrors(mqttMessage.toString());
+        }
+
+    }
+
+    public void parseErrors(String message){
+        String[] arrOfStr = message.split(",");
+
+        String action_str = arrOfStr[4];
+
+        String[] arrOfStr2 = action_str.split(":");
+
+        String action = arrOfStr2[1].replace("\"", "");
+
+        switch(action){
+            case "WARNING":
+                System.out.println(this.name + " Warning\n");
+                break;
+            case "POWEROFF":
+                handlePowerOff();
+                break;
+            case "INCREASE_FANS":
+                handleFanSpeed("INCREASE_FANS");
+                break;
+            case "DECREASE_FANS":
+                handleFanSpeed("DECREASE_FANS");
+                break;
+            case "INCREASE_GEAR_SPEED":
+                handleGearSpeed("INCREASE_GEAR_SPEED");
+                break;
+            case "DECREASE_GEAR_SPEED":
+                handleGearSpeed("DECREASE_GEAR_SPEED");
+                break;
+        }
+
+    }
+
+    //These functions can be used for future implementation of real error handling
+
+    public void handlePowerOff(){
+        System.out.println(this.name + " is powering off\n");
+    }
+
+    public void handleFanSpeed(String fan_action){
+        if(fan_action.equals("INCREASE_FANS")){
+            System.out.println(this.name + " is increasing fan speed\n");
+        }
+        else if(fan_action.equals("DECREASE_FANS")){
+            System.out.println(this.name + " is decreasing fan speed\n");
+        }
+    }
+
+    public void handleGearSpeed(String gear_action){
+        if(gear_action.equals("INCREASE_GEAR_SPEED")){
+            System.out.println(this.name + " is increasing gear speed\n");
+        }
+        else if(gear_action.equals("DECREASE_GEAR_SPEED")){
+            System.out.println(this.name + " is decreasing gear speed\n");
         }
     }
 
