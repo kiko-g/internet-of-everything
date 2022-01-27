@@ -140,6 +140,8 @@ public class MachineListener extends Listener {
         double interval = (upperLimit - downLimit) / 8; 
         
         FailureType type;
+        FailureAction action = FailureAction.WARNING;
+
         String log;
         int numConsecutive;
         double proximity;
@@ -147,46 +149,41 @@ public class MachineListener extends Listener {
         double proximityMax = measureState.getMaxProximity();
         double proximityMin = measureState.getMinProximity();
         
+        String sensorName = failure.getSensorID();
         if (proximityMax < proximityMin) {
             proximity = proximityMax;
             numConsecutive = numIncrease;
             type = FailureType.ABOVE_EXPECTED;
+            if (sensorName.contains("temperature")) {
+                action = FailureAction.INCREASE_FANS;
+            } else if(sensorName.contains("vibration")) {
+                action = FailureAction.DECREASE_GEAR_SPEED;
+            }
+
             log = "increasing";
         } else {
             proximity = proximityMin;
             numConsecutive = numDecrease;
             type = FailureType.UNDER_EXPECTED;
+            if (sensorName.contains("temperature")) {
+                action = FailureAction.DECREASE_FANS;
+            } else if(sensorName.contains("vibration")) {
+                action = FailureAction.INCREASE_GEAR_SPEED;
+            } 
+            
             log = "decreasing";
         } 
 
-        String sensorName = failure.getSensorID();
         // Sensor value near the limit
         if (proximity < interval) {
-            
             if (numConsecutive >= FUTURE_BEHAVIOR) {          
                 failure.setFailureType(type);
-
-                if(sensorName.contains("temperature")) {
-                    failure.setFailureAction(FailureAction.INCREASE_FANS);
-                } else if(sensorName.contains("vibration")) {
-                    failure.setFailureAction(FailureAction.DECREASE_GEAR_SPEED);
-                } else {
-                    failure.setFailureAction(FailureAction.WARNING);
-                }
-
+                failure.setFailureAction(action);
                 failure.setFailureSeverity(FailureSeverity.MEDIUM);
                 failure.setDescription("Values " + log + " too fast and near the limit");
             } else {
                 failure.setFailureType(type);
-
-                if(sensorName.contains("temperature")) {
-                    failure.setFailureAction(FailureAction.DECREASE_FANS);
-                } else if(sensorName.contains("vibration")) {
-                    failure.setFailureAction(FailureAction.INCREASE_GEAR_SPEED);
-                } else {
-                    failure.setFailureAction(FailureAction.WARNING);
-                }
-
+                failure.setFailureAction(action);
                 failure.setFailureSeverity(FailureSeverity.LOW);
                 failure.setDescription("Values near the limit");
             }
