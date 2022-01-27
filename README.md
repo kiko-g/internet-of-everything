@@ -23,5 +23,5 @@ It's necessary to analyse every machine output, to guarantee that no error occur
 Sending non standardized messages to test if the project is resilient to the errors.
 
 # Architeture Overview
-![Architeture Overview](https://i.imgur.com/qMnuFii.png)
+![Architeture Overview](https://i.imgur.com/kBvuDSL.png)
 
