@@ -39,7 +39,7 @@ def get_payload_with_term(mqtt, machine_topic, term, test_number, max_attempts):
         if attempts > max_attempts:
             error_msg = f"Test #{test_number} failed to run, perhaps edge layer not running "\
                 "or machine does not have required sensor"
-            print_color(error_msg, TerminalColor.FAIL)
+            print_color(error_msg, TerminalColor.ORAGE_WARNING)
             return None
         time.sleep(1)
         for log in mqtt.logs[machine_topic][::-1]:
