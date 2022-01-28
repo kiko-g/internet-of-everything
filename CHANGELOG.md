@@ -15,15 +15,15 @@
 - Have tests and lint in the workflow
   - Effort: 129
 - Retrieve live information of the machines from the emulator server
-  - Effort: 301   
+  - Effort: 301
+- Backend simulation result improvement 
+  - Effort: 258 
 - Test batches behaviour 
   - Effort: 215
 - Test machine behaviour 
   - Effort: 215
 - Test sensors behaviour 
   - Effort: 215
-- Backend simulation result improvement 
-  - Effort: 258 
 - Retrieve information from sensor failure server.
   - Effort: 172
 - Create a unified page to accommodate other verticals work.
@@ -68,14 +68,14 @@
 ### Increment
 - Concluded the integration with other verticals by sending messages as http request to the server and helping API implementation.
 - Added unity tests to automatically check if the code is working as expected.
-#### Sprint Estimated Total Effort: 782
+#### Sprint Estimated Total Effort: 860
 
 <br/>
 
 ## Global Product Increment
 - Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly.
 - Develpoment of a MVP (Minimum Viable Product).
-#### Global Sprint Estimated Total Effort: 2115
+#### Global Sprint Estimated Total Effort: 3354
 ---
 
 # Sprint 3
