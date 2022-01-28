@@ -97,7 +97,8 @@ def test(mqtt, machine_id, test_number, delay, value):
     if base_payload['values']['energy'] == 'null':
         base_payload['values']['energy'] = 0
 
-    base_payload['values']['energy'] += value
+    base_payload['values']['energy'] += value if value else - \
+        base_payload['values']['energy']
 
     publish_payload(mqtt, base_payload, test_number, machine_topic)
 
