@@ -5,12 +5,14 @@ import App from "./pages/App"
 import Emulator from "./pages/Emulator"
 import reportWebVitals from "./test/reportWebVitals"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import About from "./pages/About"
 
 ReactDOM.render(
   <Router>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/emulator" element={<Emulator />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   </Router>,
   document.getElementById("root")

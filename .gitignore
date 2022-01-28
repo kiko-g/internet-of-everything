@@ -26,8 +26,13 @@ node_modules/*
 
 # dependencies
 /node_modules
+**/node_modules/**
 /.pnp
 .pnp.js
+
+# simulation
+simulation/node_modules/*
+simulation/coverage/*
 
 # testing
 /coverage

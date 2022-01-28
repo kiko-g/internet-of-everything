@@ -1,40 +1,27 @@
 # Internet of Everything
 
-## Vertical 1
+# Setup Instructions
+To run our project you need to have `Docker` installed.
 
-TODO: adicionar descrição
+After that, run the following command on terminal, under the root:
+```bash
+docker-compose up -d
+```
+It is possible to visualize what is happening under localhost:FRONTEND_PORT (default: localhost:3000)
 
-## Vertical 2
+# Modules
+## Edge Layer
+Simulates the industry floor.
 
-TODO: adicionar descrição
-
-## Vertical 3
-
-TODO: adicionar descrição
-
-## Vertical 4
-
-TODO: adicionar descrição
-
-# Instructions
-
-## Edge
-
-TODO: adicionar descrição
-
-## Emulator
-
-TODO: adicionar descrição
-
-## Simulator
-
-TODO: adicionar descrição
-
-## Chaos Engineering
-
-TODO: adicionar descrição
+## Emulator and Simulator, the Digital Twin
+A virtual representation of the factory that spans its lifecycle and is updated from the edge layer. It also simulates how the factory should work if perfect conditions were met.
 
 ## Fault Analysis
+It's necessary to analyse every machine output, to guarantee that no error occured or is going to occur in a near future. It also ensures the self healing of the machines.
 
-TODO: adicionar descrição
+## Chaos Engineering
+Sending non standardized messages to test if the project is resilient to the errors.
+
+# Architeture Overview
+![Architeture Overview](https://i.imgur.com/kBvuDSL.png)
 
