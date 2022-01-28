@@ -1,31 +1,12 @@
+#pylint: skip-file
 """
-null means that the field is optional,
-may not be present depending on the other fields
-ex.: If the status is ok, there's no error description
-{
-    //Unique identifyer of each machine
-    "machineID": int
-    //Danger level
-    //OK - No error
-    //Warning - Error may occur in the future
-    //Critical - An error is about to occur
-    //Failed - With the current reading the machine should already have failed
-    "status": "Ok" | "Warning" | "Critical" | "Failed",
-    //Estimated time to fail if error is not fixed
-    //Null if the current state will not lead to fail
-    "time-untill-failure": null | datetime
-    //Unique identifier of common errors
-    "errorID": int
-    //Description
-    //Null if status is ok, there's no description needed
-    "description": null | string
-}
+incoherent_output_data
 """
-import json
+import sys
 import random
 import string
 import datetime
-import requests
+from mqtt_handler import MQTTHandler
 
 
 def add_hours(hours):
@@ -35,10 +16,12 @@ def add_hours(hours):
     future_date_and_time = current_date_and_time + hours_added
     return future_date_and_time
 
+
 def get_random_string():
     """ random string with random length between 1 and 40 """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(random.randint(1, 40)))
+
 
 def generate_machine_id(number_machines):
     """ generates random machine id """
@@ -52,20 +35,8 @@ def generate_machine_id(number_machines):
         return bool(random.randint(1, 2) == 1)
     return None
 
-def get_random_status():
-    """ return a random machine status """
-    rand = random.randint(1, 4)
-    if rand == 1:
-        return "OK"
-    if rand == 2:
-        return "Critical"
-    if rand == 3:
-        return "Warning"
-    if rand == 4:
-        return "Failure"
-    return None
 
-def generate_estimate_fail():
+def generate_estimate_time():
     """ return estimated time until failure """
     rand = random.randint(1, 6)
     if rand in (1, 2):
@@ -80,18 +51,6 @@ def generate_estimate_fail():
         return False
     return None
 
-def generate_error_id():
-    """ generates a random error id """
-    rand = random.randint(1, 6)
-    if rand in (1, 3):
-        return random.randint(1, 1000)
-    if rand == 4:
-        return get_random_string()
-    if rand == 5:
-        if random.randint(1, 2) == 1:
-            return True
-        return False
-    return None
 
 def generate_description():
     """ generates a random machine description """
@@ -108,19 +67,95 @@ def generate_description():
         return False
     return None
 
+
+def generate_sensor_id():
+    """ generates a random sensor id """
+    number = random.randint(1, 5)
+    if number in (1, 2):
+        return get_random_string()
+    if number == 3:
+        return None
+    if number == 4:
+        return random.randint(1, 1000)
+    if number == 5:
+        if random.randint(1, 2) == 1:
+            return True
+        return False
+    return None
+
+
+def generate_failure_severity():
+    """ generates a random failure severity value """
+    number = random.randint(1, 10)
+    if number in (1, 6):
+        number2 = random.randint(1, 4)
+        if number2 == 1:
+            return "LOW"
+        if number2 == 2:
+            return "MEDIUM"
+        if number2 == 3:
+            return "HIGH"
+        if number2 == 4:
+            return "CRITICAL"
+    if number == 7:
+        return get_random_string()
+    if number == 8:
+        return None
+    if number == 9:
+        return random.randint(1, 1000)
+    if number == 10:
+        if random.randint(1, 2) == 1:
+            return True
+        return False
+    return None
+
+
+def generate_failure_type():
+    """generate failure type"""
+    number = random.randint(1, 10)
+    if number in (1, 6):
+        number2 = random.randint(1, 3)
+        if number2 == 1:
+            return "UNKNOWN"
+        if number2 == 2:
+            return "UNDER_EXPECTED"
+        if number2 == 3:
+            return "ABOVE_EXPECTED"
+    if number == 7:
+        return get_random_string()
+    if number == 8:
+        return None
+    if number == 9:
+        return random.randint(1, 1000)
+    if number == 10:
+        if random.randint(1, 2) == 1:
+            return True
+        return False
+    return None
+
+
 def main():
     """ launches incoherent data POST """
     number_machines = 5000
 
     data = {
         "machineID": generate_machine_id(number_machines),
-        "status": get_random_status(),
-        "time-untill-failure": generate_estimate_fail(),
-        "errorID": generate_error_id(),
-        "description": generate_description()
+        "sensorID": generate_sensor_id(),
+        "failureSeverity": generate_failure_severity(),
+        "failureType": generate_failure_type(),
+        "description": generate_description(),
+        "readingTime": generate_estimate_time()
     }
 
-    requests.post('http://localhost:8000/fault', json.dumps(data))
+    machine_1 = f'm{sys.argv[1]}'
+    mqtt = MQTTHandler(1883, True)
+    mqtt.start()
+    mqtt.subscribe(f"machine/{machine_1}")
+
+    mqtt.publish(f"machine/{machine_1}", data, 10, 1, 50)
+
+    mqtt.stop()  # stop mqtt thread in the background
+
 
 if __name__ == '__main__':
     main()

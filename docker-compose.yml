@@ -68,11 +68,15 @@ services:
   # Chaos Engineering, intercepting messages
   chaos-engineering:
     build: ./chaos_engineering/
-    command: sh -c "python3 src/mqtt_test.py"
+    command: sh -c "python3 -u src/default_tester.py"
     env_file:
       - .env
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
+    depends_on:
+      - "mosquitto"
+      - "edge"
+      - "failure-service"
     container_name: "chaos_engineering"
 
   # Emulator Backend
