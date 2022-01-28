@@ -4,9 +4,20 @@
 #### Closed PBIs
 - Track Products around the Factory.
   - Effort: 258
+- Define route to send data to frontend.
+  - Effort: 86
+- Develop a dashboard to see the current state of the factory .
+  - Effort: 215
+- Generate QR codes readings that make sense.
+  - Effort: 172
+- Handle action messages received by machines.
+  - Effort: 129
 #### Increment
 - Helped integration with other verticals.
-#### Sprint Estimated Total Effort: 258
+- Improved emulator server.
+- Developed a dashboard to see the factory in real time.
+- Machines now print a message when they receive an action message.
+#### Sprint Estimated Total Effort: 860
 
 <br/>
 
@@ -74,8 +85,9 @@
 
 ## Global Product Increment
 - Intregration between emulator and fault analysis allowing data to be correctly sent from the backend to the frontend and displayed accordingly.
+- Created a dashboard to see he current state of the factory.
 - Develpoment of a MVP (Minimum Viable Product).
-#### Global Sprint Estimated Total Effort: 3354
+#### Global Sprint Estimated Total Effort: 3956
 ---
 
 # Sprint 3
