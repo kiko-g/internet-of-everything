@@ -73,6 +73,10 @@ services:
       - .env
     volumes:
       - ./chaos_engineering/src:/chaos_engineering/src
+    depends_on:
+      - "mosquitto"
+      - "edge"
+      - "failure-service"
     container_name: "chaos_engineering"
 
   # Emulator Backend
