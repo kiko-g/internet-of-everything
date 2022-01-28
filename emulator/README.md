@@ -1,7 +1,6 @@
-# Server - Digital Model
+# Emulator
 
-Install packages:  
-`npm install`
+Make sure you have [NodeJS](https://nodejs.org/en/) installed.
 
-Run server:  
-`npm start`
+Install packages: `npm install`
+Run server: `npm start`
