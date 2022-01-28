@@ -4,14 +4,14 @@
 #### Closed PBIs
 - Track Products around the Factory.
   - Effort: 258
-- Define route to send data to frontend.
-  - Effort: 86
 - Develop a dashboard to see the current state of the factory .
   - Effort: 215
 - Generate QR codes readings that make sense.
   - Effort: 172
 - Handle action messages received by machines.
   - Effort: 129
+- Define route to send data to frontend.
+  - Effort: 86
 #### Increment
 - Helped integration with other verticals.
 - Improved emulator server.
